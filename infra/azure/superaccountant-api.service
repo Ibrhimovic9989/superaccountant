@@ -8,13 +8,18 @@ Wants=network-online.target
 Type=simple
 User=azureuser
 Group=azureuser
-WorkingDirectory=/home/azureuser/superaccountant/apps/api
+WorkingDirectory=/home/azureuser/superaccountant
 # The API loads its env from the repo-root .env via main.ts. We also pass
 # PORT explicitly so it binds to the same loopback port nginx proxies to.
 Environment=NODE_ENV=production
 Environment=PORT=4000
 Environment=SA_REPO_ROOT=/home/azureuser/superaccountant
-ExecStart=/usr/bin/node dist/main.js
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# We run the API with tsx (TypeScript runtime) instead of compiling to JS
+# because workspace packages (@sa/db, @sa/email, etc.) are TypeScript-source
+# and live behind workspace symlinks. tsx transparently transpiles all of
+# them on require — no two-step build, no missing dist/ subtleties.
+ExecStart=/usr/bin/pnpm --filter @sa/api start:prod
 Restart=always
 RestartSec=5
 KillSignal=SIGTERM

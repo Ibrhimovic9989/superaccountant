@@ -23,11 +23,9 @@ echo "▸ pnpm install"
 pnpm install --frozen-lockfile=false
 echo "▸ regenerate prisma client"
 pnpm --filter @sa/db generate || true
-echo "▸ build api"
-pnpm --filter @sa/api build
-echo "▸ restart service"
+echo "▸ restart service (runs via tsx — no build step)"
 sudo systemctl restart superaccountant-api
-sleep 1
+sleep 2
 sudo systemctl status superaccountant-api --no-pager -l | head -n 15
 REMOTE
 

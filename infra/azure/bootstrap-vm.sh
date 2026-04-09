@@ -74,14 +74,14 @@ else
   git clone "$REPO_URL" "$REPO_DIR"
 fi
 
-# 5. Install + build the API and its workspace deps
+# 5. Install + generate Prisma client. We do NOT pre-build the API because
+#    workspace packages (@sa/db etc.) are consumed as TS source — the API
+#    runs via tsx in production (see superaccountant-api.service).
 log "Installing dependencies…"
 cd "$REPO_DIR"
 pnpm install --frozen-lockfile=false
 log "Generating Prisma client…"
 pnpm --filter @sa/db generate || true
-log "Building API…"
-pnpm --filter @sa/api build
 cd ~
 
 # 6. systemd service

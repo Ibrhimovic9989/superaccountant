@@ -12,7 +12,11 @@
     "sourceMap": true,
     "verbatimModuleSyntax": false,
     "exactOptionalPropertyTypes": false,
-    "noUncheckedIndexedAccess": false
+    "noUncheckedIndexedAccess": false,
+    // Disable incremental — `pnpm typecheck` (tsc --noEmit) and `nest build`
+    // share a .tsbuildinfo file. The noEmit run poisons the cache so the
+    // subsequent build silently skips emit and produces no dist/.
+    "incremental": false
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
