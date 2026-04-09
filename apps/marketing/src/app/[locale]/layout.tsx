@@ -95,7 +95,7 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${mono.variable}`}
     >
-      <body>{children}</body>
+      <body className="overflow-x-hidden">{children}</body>
     </html>
   )
 }

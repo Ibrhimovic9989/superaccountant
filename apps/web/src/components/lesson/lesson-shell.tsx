@@ -63,19 +63,17 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
   const [mcqResult, setMcqResult] = useState({ correct: 0, total: 0 })
   const [completing, setCompleting] = useState(false)
   const [completed, setCompleted] = useState<{ mastery: number } | null>(null)
-  const [videoFailed, setVideoFailed] = useState(false)
+  const [videoError, setVideoError] = useState(false)
 
   const t = LABELS[locale]
   const title = locale === 'ar' ? lesson.titleAr : lesson.titleEn
   const markdown = locale === 'ar' ? lesson.contentArMdx : lesson.contentEnMdx
 
-  const hasRealVideo =
-    !!lesson.videoUrl &&
-    (lesson.videoUrl.startsWith('/api/') || lesson.videoUrl.startsWith('http'))
+  const hasRealVideo = !!lesson.videoUrl && lesson.videoUrl.length > 0
   const localizedVideoUrl =
     hasRealVideo && lesson.videoUrl
       ? locale === 'ar'
-        ? lesson.videoUrl.replace(/\/en\.mp4$/, '/ar.mp4')
+        ? lesson.videoUrl.replace(/\/en\.mp4/, '/ar.mp4')
         : lesson.videoUrl
       : null
 
@@ -85,7 +83,7 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
         if (s === 'flow') return !!lesson.flowchartMermaid
         if (s === 'map') return !!lesson.mindmapMermaid
         if (s === 'try') return lesson.assessmentItems.length > 0
-        if (s === 'watch') return hasRealVideo && !videoFailed
+        if (s === 'watch') return hasRealVideo
         return true
       }),
     [
@@ -93,7 +91,6 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
       lesson.mindmapMermaid,
       lesson.assessmentItems.length,
       hasRealVideo,
-      videoFailed,
     ],
   )
 
@@ -204,22 +201,37 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
 
         {/* ── Sections ───────────────────────────────────── */}
         <div className="mt-10 space-y-12 sm:mt-12 sm:space-y-16">
-          {hasRealVideo && localizedVideoUrl && !videoFailed && (
+          {hasRealVideo && localizedVideoUrl && (
             <BlurFade delay={0.16}>
               <section id="watch" className="scroll-mt-24">
                 <SectionHeader label={t.watch} />
-                <div className="overflow-hidden rounded-xl border border-border bg-black">
-                  <video
-                    controls
-                    playsInline
-                    preload="metadata"
-                    src={localizedVideoUrl}
-                    className="aspect-video w-full"
-                    onError={() => setVideoFailed(true)}
-                  >
-                    <track kind="captions" />
-                  </video>
-                </div>
+                {videoError ? (
+                  <div className="flex aspect-video items-center justify-center rounded-xl border border-border bg-bg-elev text-center">
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+                        {locale === 'ar' ? 'الفيديو غير متاح حالياً' : 'Video unavailable'}
+                      </p>
+                      <p className="mt-2 text-sm text-fg-muted">
+                        {locale === 'ar'
+                          ? 'يرجى الاطلاع على المحتوى المكتوب أدناه'
+                          : 'Please refer to the written content below'}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="overflow-hidden rounded-xl border border-border bg-black">
+                    <video
+                      controls
+                      playsInline
+                      preload="metadata"
+                      src={localizedVideoUrl}
+                      className="aspect-video w-full"
+                      onError={() => setVideoError(true)}
+                    >
+                      <track kind="captions" />
+                    </video>
+                  </div>
+                )}
               </section>
             </BlurFade>
           )}
