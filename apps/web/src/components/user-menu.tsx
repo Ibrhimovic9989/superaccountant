@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { LayoutDashboard, LogOut, User } from 'lucide-react'
+import { LayoutDashboard, LogOut, Map, User } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import { signOutAction } from '@/lib/actions/auth'
 import { resetIdentity, track } from '@/lib/analytics'
@@ -15,8 +15,8 @@ type Props = {
 }
 
 const COPY = {
-  en: { dashboard: 'Dashboard', profile: 'Profile', signOut: 'Sign out' },
-  ar: { dashboard: 'لوحة التحكم', profile: 'الملف الشخصي', signOut: 'تسجيل الخروج' },
+  en: { dashboard: 'Dashboard', roadmap: 'Roadmap', profile: 'Profile', signOut: 'Sign out' },
+  ar: { dashboard: 'لوحة التحكم', roadmap: 'خريطة الطريق', profile: 'الملف الشخصي', signOut: 'تسجيل الخروج' },
 } as const
 
 /**
@@ -87,6 +87,15 @@ export function UserMenu({ locale, userName, userEmail }: Props) {
               >
                 <LayoutDashboard className="h-3.5 w-3.5 text-fg-muted" />
                 {t.dashboard}
+              </Link>
+              <Link
+                href={`/${locale}/roadmap`}
+                role="menuitem"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-fg transition-colors hover:bg-bg-overlay"
+              >
+                <Map className="h-3.5 w-3.5 text-fg-muted" />
+                {t.roadmap}
               </Link>
               <Link
                 href={`/${locale}/profile`}

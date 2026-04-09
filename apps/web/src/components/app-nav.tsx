@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Command, LayoutDashboard } from 'lucide-react'
+import { Command, LayoutDashboard, Map } from 'lucide-react'
 import { ThemeToggle } from './theme-toggle'
 import { LocaleToggle } from './locale-toggle'
 import { UserMenu } from './user-menu'
@@ -11,8 +11,8 @@ type Props = {
 }
 
 const COPY = {
-  en: { dashboard: 'Dashboard' },
-  ar: { dashboard: 'لوحة التحكم' },
+  en: { dashboard: 'Dashboard', roadmap: 'Roadmap' },
+  ar: { dashboard: 'لوحة التحكم', roadmap: 'خريطة الطريق' },
 } as const
 
 /**
@@ -38,6 +38,13 @@ export function AppNav({ locale, userName, userEmail }: Props) {
           >
             <LayoutDashboard className="h-3.5 w-3.5" />
             {t.dashboard}
+          </Link>
+          <Link
+            href={`/${locale}/roadmap`}
+            className="hidden items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-fg-muted transition-colors hover:bg-bg-elev hover:text-fg sm:inline-flex"
+          >
+            <Map className="h-3.5 w-3.5" />
+            {t.roadmap}
           </Link>
         </div>
 
