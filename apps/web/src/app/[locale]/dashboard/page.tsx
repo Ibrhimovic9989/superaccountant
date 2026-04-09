@@ -10,8 +10,10 @@ import {
   Sparkles,
   Target,
 } from 'lucide-react'
+import { Trophy } from 'lucide-react'
 import { auth } from '@/lib/auth'
 import { getDashboardSnapshot } from '@/lib/data/dashboard'
+import { getAchievements, type Badge as AchievementBadge } from '@/lib/data/achievements'
 import { getUserProfile } from '@/lib/data/profile'
 import { AppNav } from '@/components/app-nav'
 import { Badge } from '@/components/ui/badge'
@@ -37,7 +39,10 @@ export default async function Dashboard({
   if (!u?.preferredTrack) redirect(`/${locale}/welcome`)
   if (!u.profileCompletedAt) redirect(`/${locale}/welcome/profile`)
 
-  const snap = await getDashboardSnapshot(session.user.id)
+  const [snap, badges] = await Promise.all([
+    getDashboardSnapshot(session.user.id),
+    getAchievements(session.user.id, u.preferredTrack),
+  ])
   const firstName =
     session.user.name?.split(' ')[0] ?? session.user.email?.split('@')[0] ?? ''
   const trackLabel =
@@ -309,12 +314,67 @@ export default async function Dashboard({
             </div>
           </BlurFade>
         </div>
+
+        {/* ── Achievements ─────────────────────────────────── */}
+        <BlurFade delay={0.35}>
+          <div className="mt-8 rounded-xl border border-border bg-bg-elev p-6">
+            <div className="mb-5 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Trophy className="h-4 w-4 text-fg-muted" />
+                <h3 className="text-sm font-semibold">
+                  {locale === 'ar' ? 'الإنجازات' : 'Achievements'}
+                </h3>
+              </div>
+              <Badge variant="default">
+                {badges.filter((b) => b.earned).length}/{badges.length}
+              </Badge>
+            </div>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
+              {badges.map((badge) => (
+                <AchievementTile key={badge.id} badge={badge} locale={locale} />
+              ))}
+            </div>
+          </div>
+        </BlurFade>
       </main>
     </div>
   )
 }
 
 // ─── Sub-components ────────────────────────────────────────
+
+function AchievementTile({
+  badge,
+  locale,
+}: {
+  badge: AchievementBadge
+  locale: 'en' | 'ar'
+}) {
+  const name = locale === 'ar' ? badge.nameAr : badge.nameEn
+  const desc = locale === 'ar' ? badge.descAr : badge.descEn
+  return (
+    <div
+      title={`${name} — ${desc}`}
+      className={cn(
+        'group relative flex flex-col items-center gap-1.5 rounded-xl border p-3 text-center transition-all',
+        badge.earned
+          ? 'border-accent/30 bg-accent-soft'
+          : 'border-border bg-bg opacity-50 grayscale',
+      )}
+    >
+      <span className="text-2xl">{badge.emoji}</span>
+      <span className="text-[10px] font-medium leading-tight">{name}</span>
+      {!badge.earned && badge.progress > 0 && (
+        <div className="h-0.5 w-full overflow-hidden rounded-full bg-bg-overlay">
+          <div
+            className="h-full rounded-full bg-accent"
+            style={{ width: `${Math.round(badge.progress * 100)}%` }}
+          />
+        </div>
+      )}
+    </div>
+  )
+}
 
 function StatTile({
   label,

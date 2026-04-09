@@ -80,8 +80,18 @@ export const getDashboardSnapshot = cache(
       progress.length > 0
         ? progress.reduce((a, p) => a + p.mastery, 0) / progress.length
         : 0
-    const hoursStudied = Math.round(progress.length * 0.25 * 10) / 10
-    // Streak — naive: count consecutive days with lastReviewedAt back from today.
+    // Hours = lessons reviewed × 0.25h + tutor session time.
+    const sessionRows = await prisma.$queryRaw<{ totalMinutes: number }[]>`
+      SELECT COALESCE(
+        SUM(EXTRACT(EPOCH FROM (COALESCE("endedAt", NOW()) - "startedAt")) / 60),
+        0
+      )::float as "totalMinutes"
+      FROM "TutoringSession"
+      WHERE "userId" = ${userId}
+    `
+    const tutorHours = (sessionRows[0]?.totalMinutes ?? 0) / 60
+    const hoursStudied = Math.round((progress.length * 0.25 + tutorHours) * 10) / 10
+    // Streak — count consecutive days with lastReviewedAt back from today.
     const streakDays = computeStreak(progress.map((p) => p.lastReviewedAt))
 
     // 5. Today's items — read the most recent daily attempt

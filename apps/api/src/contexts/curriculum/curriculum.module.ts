@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common'
+import { CurriculumSearchController } from './interface/search.controller'
 
 @Module({
-  imports: [],
-  controllers: [],
-  providers: [],
-  exports: [],
+  controllers: [CurriculumSearchController],
 })
 export class CurriculumModule {}
