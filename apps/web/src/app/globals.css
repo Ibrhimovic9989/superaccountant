@@ -265,6 +265,8 @@ body {
   font-size: 15px;
   line-height: 1.7;
   max-width: 70ch;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .prose h1,
 .prose h2,

@@ -125,7 +125,7 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
   }
 
   return (
-    <div className="mx-auto grid max-w-5xl gap-x-10 gap-y-4 px-4 py-8 sm:px-6 sm:py-12 md:grid-cols-[120px_minmax(0,1fr)] md:gap-y-0">
+    <div className="mx-auto grid max-w-5xl gap-x-10 gap-y-4 overflow-hidden px-4 py-8 sm:px-6 sm:py-12 md:grid-cols-[120px_minmax(0,1fr)] md:gap-y-0">
       {/* ── Mobile breadcrumb (shows on narrow screens before the rail) ── */}
       <div className="md:hidden">
         <Link
@@ -147,7 +147,7 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
       </BlurFade>
 
       {/* ── Body ──────────────────────────────────────────── */}
-      <article className="min-w-0">
+      <article className="min-w-0 overflow-hidden">
         {/* Mobile horizontal nav strip */}
         <div className="mb-6 md:hidden">
           <LessonNav sections={visible} locale={locale} />

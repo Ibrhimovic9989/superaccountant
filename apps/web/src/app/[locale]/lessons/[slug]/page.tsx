@@ -17,7 +17,7 @@ export default async function LessonPage({
   if (!lesson) notFound()
 
   return (
-    <div className="min-h-screen bg-bg text-fg">
+    <div className="min-h-screen overflow-x-hidden bg-bg text-fg">
       <AppNav
         locale={locale}
         userName={session.user.name ?? null}

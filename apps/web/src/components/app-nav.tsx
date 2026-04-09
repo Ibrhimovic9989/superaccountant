@@ -23,13 +23,13 @@ export function AppNav({ locale, userName, userEmail }: Props) {
   const t = COPY[locale]
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
-        <div className="flex items-center gap-5">
-          <Link href={`/${locale}/dashboard`} className="group flex items-center gap-2.5">
-            <span className="relative inline-flex h-6 w-6 items-center justify-center rounded-md bg-fg text-bg">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-3 sm:px-6">
+        <div className="flex min-w-0 items-center gap-3 sm:gap-5">
+          <Link href={`/${locale}/dashboard`} className="group flex shrink-0 items-center gap-2">
+            <span className="relative inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-fg text-bg">
               <span className="font-mono text-[11px] font-bold leading-none">SA</span>
             </span>
-            <span className="text-sm font-semibold tracking-tight">SuperAccountant</span>
+            <span className="text-sm font-semibold tracking-tight max-[420px]:hidden">SuperAccountant</span>
           </Link>
 
           <Link
@@ -41,7 +41,7 @@ export function AppNav({ locale, userName, userEmail }: Props) {
           </Link>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <button
             type="button"
             className="hidden h-8 items-center gap-1.5 rounded-md border border-border bg-bg-elev px-2.5 font-mono text-[11px] text-fg-muted transition-colors hover:bg-bg-overlay hover:text-fg sm:inline-flex"
