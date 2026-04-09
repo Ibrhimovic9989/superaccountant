@@ -1,0 +1,305 @@
+// SuperAccountant Prisma schema
+// One schema, models namespaced by bounded context (CLAUDE.md §8).
+// pgvector for embeddings.
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [pgvector(map: "vector")]
+}
+
+// ─── Identity ──────────────────────────────────────────────
+enum Locale {
+  en
+  ar
+}
+
+enum MarketTrack {
+  india
+  ksa
+}
+
+enum UserRole {
+  student
+  instructor
+  admin
+}
+
+model IdentityUser {
+  id              String      @id @default(cuid())
+  email           String      @unique
+  // NextAuth v5 expects this field name; we keep our own emailVerifiedAt below
+  // for the audit timestamp, and write both on first verification.
+  emailVerified   DateTime?
+  emailVerifiedAt DateTime?
+  name            String?
+  image           String?
+  locale          Locale      @default(en)
+  preferredTrack  MarketTrack?
+  role            UserRole    @default(student)
+
+  // ── Profile (collected after market pick, used to personalize tutoring) ──
+  phone               String?
+  country             String?
+  city                String?
+  currentRole         String?
+  currentEmployer     String?
+  experienceYears     Int?
+  examGoal            String?
+  studyHoursPerWeek   Int?
+  targetExamDate      DateTime?
+  motivation          String?
+  profileCompletedAt  DateTime?
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  deletedAt       DateTime?
+
+  accounts        IdentityAccount[]
+  authSessions    IdentityAuthSession[]
+  enrollments     LearningEnrollment[]
+  attempts        AssessmentAttempt[]
+  sessions        TutoringSession[]
+  certificates    CertificationCertificate[]
+}
+
+// ─── NextAuth v5 adapter tables ──────────────────────────────
+// Names match @auth/prisma-adapter expectations via @@map.
+// We namespace them under the identity context per CLAUDE.md §8.
+model IdentityAccount {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user IdentityUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("Account")
+}
+
+model IdentityAuthSession {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         IdentityUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("Session")
+}
+
+model IdentityVerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("VerificationToken")
+}
+
+// ─── Curriculum ────────────────────────────────────────────
+model CurriculumTrack {
+  id        String          @id @default(cuid())
+  market    MarketTrack     @unique
+  titleEn   String
+  titleAr   String
+  phases    CurriculumPhase[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model CurriculumPhase {
+  id        String   @id @default(cuid())
+  trackId   String
+  track     CurriculumTrack @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  order     Int
+  titleEn   String
+  titleAr   String
+  modules   CurriculumModule[]
+
+  @@unique([trackId, order])
+}
+
+model CurriculumModule {
+  id        String   @id @default(cuid())
+  phaseId   String
+  phase     CurriculumPhase @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  order     Int
+  titleEn   String
+  titleAr   String
+  lessons   CurriculumLesson[]
+
+  @@unique([phaseId, order])
+}
+
+// Created by raw SQL migration (20260407_pgvector). Modelled here so
+// Prisma knows about it and `db push` won't drop it. The vector column
+// uses Unsupported because Prisma can't represent pgvector natively.
+model CurriculumLessonChunk {
+  id        String   @id
+  lessonId  String
+  locale    String
+  heading   String
+  body      String   @db.Text
+  embedding Unsupported("vector(1536)")
+  createdAt DateTime @default(now()) @db.Timestamptz()
+
+  lesson    CurriculumLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([lessonId])
+}
+
+model CurriculumLesson {
+  id                  String   @id @default(cuid())
+  moduleId            String
+  module              CurriculumModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  order               Int
+  slug                String
+  titleEn             String
+  titleAr             String
+  contentEnMdx        String   @db.Text
+  contentArMdx        String   @db.Text
+  learningObjectives  Json     // string[]
+  prerequisiteIds     String[] @default([])
+  videoUrl            String?
+  flowchartMermaid    String?  @db.Text
+  mindmapMermaid      String?  @db.Text
+  assessmentBlueprint Json
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  // pgvector — set up via raw SQL migration after `prisma migrate dev`:
+  // ALTER TABLE "CurriculumLesson" ADD COLUMN embedding vector(1536);
+  // CREATE INDEX ON "CurriculumLesson" USING hnsw (embedding vector_cosine_ops);
+
+  chunks CurriculumLessonChunk[]
+
+  @@unique([moduleId, order])
+  @@unique([slug])
+}
+
+// ─── Assessment ────────────────────────────────────────────
+enum AssessmentKind {
+  entry
+  daily
+  grand
+}
+
+enum AttemptStatus {
+  in_progress
+  submitted
+  graded
+  abandoned
+}
+
+model AssessmentAttempt {
+  id          String         @id @default(cuid())
+  userId      String
+  user        IdentityUser   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind        AssessmentKind
+  trackId     String
+  lessonId    String?
+  status      AttemptStatus  @default(in_progress)
+  startedAt   DateTime       @default(now())
+  submittedAt DateTime?
+  gradedAt    DateTime?
+  score       Float?
+  rubric      Json?
+  payload     Json           // questions + answers
+  audit       Json?          // proctoring trace for grand test
+
+  @@index([userId, kind])
+}
+
+// ─── Learning ──────────────────────────────────────────────
+model LearningEnrollment {
+  id        String      @id @default(cuid())
+  userId    String
+  user      IdentityUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trackId   String
+  enrolledAt DateTime   @default(now())
+  completedAt DateTime?
+  progress  LearningProgress[]
+
+  @@unique([userId, trackId])
+}
+
+model LearningProgress {
+  id            String   @id @default(cuid())
+  enrollmentId  String
+  enrollment    LearningEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  lessonId      String
+  mastery       Float    @default(0) // 0..1
+  lastReviewedAt DateTime?
+  nextDueAt     DateTime?
+  updatedAt     DateTime @updatedAt
+
+  @@unique([enrollmentId, lessonId])
+}
+
+// ─── Tutoring (the agent) ──────────────────────────────────
+model TutoringSession {
+  id        String   @id @default(cuid())
+  userId    String
+  user      IdentityUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  locale    Locale
+  trackId   String
+  startedAt DateTime @default(now())
+  endedAt   DateTime?
+  turns     TutoringTurn[]
+  memories  TutoringSessionMemory[]
+  costUsd   Float    @default(0)
+  tokensIn  Int      @default(0)
+  tokensOut Int      @default(0)
+}
+
+model TutoringTurn {
+  id        String   @id @default(cuid())
+  sessionId String
+  session   TutoringSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  role      String   // user | assistant | tool
+  blocks    Json     // content blocks (text, tool_use, tool_result, thinking)
+  createdAt DateTime @default(now())
+
+  @@index([sessionId, createdAt])
+}
+
+model TutoringSessionMemory {
+  id        String   @id @default(cuid())
+  sessionId String
+  session   TutoringSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  kind      String   // student | course | scratch
+  bodyMd    String   @db.Text
+  // embedding vector(1536) — added via raw SQL migration
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Certification ─────────────────────────────────────────
+model CertificationCertificate {
+  id          String   @id @default(cuid())
+  userId      String
+  user        IdentityUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trackId     String
+  attemptId   String   @unique
+  score       Float
+  issuedAt    DateTime @default(now())
+  hash        String   @unique // HMAC over (userId, trackId, issuedAt, score)
+  pdfUrl      String
+  hijriDate   String?
+}

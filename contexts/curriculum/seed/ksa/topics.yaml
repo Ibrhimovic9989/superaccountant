@@ -1,0 +1,1022 @@
+# SuperAccountant — KSA Track ("Mu'tamad Path")
+# Built fresh by CCO as a true peer to the India track (not a translation).
+# Schema: docs/curriculum-pipeline.md
+#
+# Anchors: IFRS as adopted in KSA, ZATCA regulations, VAT Implementing Regs,
+#          RETT, Zakat Bylaws, Saudi Companies Law, GOSI / Saudization.
+
+track: ksa
+title:
+  en: Mu'tamad Path — Accounting for the Saudi Market
+  ar: مسار مُعتمَد — المحاسبة للسوق السعودي
+
+phases:
+  # ════════════════════════════════════════════════════════════
+  - phase: 1
+    title:
+      en: Foundation (IFRS-First)
+      ar: الأساسيات (وفق المعايير الدولية)
+    modules:
+      - module: Introduction to Accounting
+        lessons:
+          - slug: ksa-intro-what-is-accounting
+            title:
+              en: What is Accounting? Why Saudi Arabia Adopted IFRS
+              ar: ما هي المحاسبة؟ ولماذا تبنت المملكة العربية السعودية معايير IFRS
+            learning_objectives:
+              - Define accounting and its role in the Saudi economy
+              - Explain the SOCPA-led IFRS convergence (2017 listed, 2018 SMEs)
+          - slug: ksa-intro-stakeholders
+            title:
+              en: Stakeholders in Saudi Business — From Owners to ZATCA
+              ar: أصحاب المصلحة في الأعمال السعودية
+            learning_objectives:
+              - Identify internal and external users of financial information in KSA
+              - Map each stakeholder to the report they consume
+          - slug: ksa-intro-regulatory-bodies
+            title:
+              en: SOCPA, ZATCA, MOC, SAMA, CMA — Who Regulates What
+              ar: SOCPA و ZATCA و MOC و SAMA و CMA
+            learning_objectives:
+              - Match each authority to its mandate
+              - Know which body to contact for which compliance question
+
+      - module: Fundamental Concepts
+        lessons:
+          - slug: ksa-fund-accounting-cycle
+            title:
+              en: The Accounting Cycle from Source Document to Financial Statement
+              ar: الدورة المحاسبية من المستند المصدر إلى البيان المالي
+            learning_objectives:
+              - List the eight steps of the cycle
+              - Trace one transaction through every step
+          - slug: ksa-fund-ifrs-concepts
+            title:
+              en: Conceptual Framework — Going Concern, Accrual, Materiality, Prudence
+              ar: الإطار المفاهيمي
+            learning_objectives:
+              - Explain each concept with a Saudi example
+              - Apply materiality judgement under IFRS
+          - slug: ksa-fund-elements
+            title:
+              en: Elements of Financial Statements under IFRS
+              ar: عناصر البيانات المالية وفق IFRS
+            learning_objectives:
+              - Define asset, liability, equity, income, expense per the IFRS framework
+              - Build the accounting equation
+          - slug: ksa-fund-double-entry
+            title:
+              en: Double-Entry — Debit and Credit Logic
+              ar: القيد المزدوج
+            learning_objectives:
+              - Apply debit/credit rules to common transactions
+              - Maintain the equation through any entry
+
+      - module: Source Documents and Vouchers
+        lessons:
+          - slug: ksa-source-documents
+            title:
+              en: Source Documents in KSA — ZATCA Evidentiary Requirements
+              ar: المستندات المصدرية ومتطلبات ZATCA
+            learning_objectives:
+              - List documents ZATCA expects to be retained for audit
+              - State retention period (6 years per ZATCA)
+          - slug: ksa-voucher-types
+            title:
+              en: Voucher Types — Payment, Receipt, Journal, Sales, Purchase
+              ar: أنواع السندات
+            learning_objectives:
+              - Pick the correct voucher for any transaction
+              - Build a voucher with all mandatory fields
+          - slug: ksa-credit-debit-notes
+            title:
+              en: Credit Notes and Debit Notes under VAT Implementing Regulations
+              ar: إشعارات الائتمان والمدين
+            learning_objectives:
+              - Issue ZATCA-compliant credit and debit notes
+              - Link them back to the original tax invoice
+
+      - module: IFRS Standards (Essentials)
+        lessons:
+          - slug: ksa-ifrs-landscape
+            title:
+              en: IFRS as Endorsed by SOCPA — Full IFRS vs IFRS for SMEs
+              ar: معايير IFRS المعتمدة من SOCPA
+            learning_objectives:
+              - Distinguish full IFRS from IFRS for SMEs
+              - State which class of entity uses which framework
+          - slug: ksa-ifrs15-revenue
+            title:
+              en: IFRS 15 — Revenue from Contracts with Customers (5-Step Model)
+              ar: المعيار 15 — الإيرادات من العقود
+            learning_objectives:
+              - Apply the five-step revenue recognition model
+              - Identify performance obligations in a multi-element contract
+          - slug: ksa-ifrs16-leases
+            title:
+              en: IFRS 16 — Leases on the Balance Sheet
+              ar: المعيار 16 — عقود الإيجار
+            learning_objectives:
+              - Recognise a right-of-use asset and lease liability
+              - Compute interest and depreciation for a simple lease
+          - slug: ksa-ifrs9-financial-instruments
+            title:
+              en: IFRS 9 — Financial Instruments and ECL Basics
+              ar: المعيار 9 — الأدوات المالية
+            learning_objectives:
+              - Classify a financial instrument into the right IFRS 9 bucket
+              - Apply the simplified expected credit loss model to trade receivables
+
+      - module: Bookkeeping
+        lessons:
+          - slug: ksa-bk-importance
+            title:
+              en: Why Bookkeeping is the Backbone of ZATCA Compliance
+              ar: أهمية مسك الدفاتر للامتثال لـ ZATCA
+            learning_objectives:
+              - Connect bookkeeping quality to audit readiness
+              - List records ZATCA can demand
+          - slug: ksa-bk-classification
+            title:
+              en: Classification of Accounts and the Saudi Chart of Accounts
+              ar: تصنيف الحسابات
+            learning_objectives:
+              - Build a chart of accounts aligned to IFRS line items
+              - Group accounts to ease ZATCA reporting
+
+  # ════════════════════════════════════════════════════════════
+  - phase: 2
+    title:
+      en: Core — Bookkeeping, ERP, and the Trial Balance
+      ar: الأساسي — مسك الدفاتر و ERP وميزان المراجعة
+    modules:
+      - module: ERP for KSA Accountants
+        lessons:
+          - slug: ksa-erp-landscape
+            title:
+              en: ERP Landscape in KSA — SAP B1, Odoo, Zoho Books, Microsoft Dynamics
+              ar: منظومة ERP في المملكة
+            learning_objectives:
+              - Compare common ERPs used by Saudi SMEs and enterprises
+              - Pick the right tool for the right business size
+          - slug: ksa-erp-company-setup
+            title:
+              en: Setting Up a Company for KSA — VAT Number, Currency, Calendar
+              ar: إعداد شركة للمملكة في ERP
+            learning_objectives:
+              - Configure VAT registration number, SAR currency, Hijri/Gregorian calendars
+              - Enable bilingual (Arabic + English) document templates
+          - slug: ksa-erp-chart-of-accounts
+            title:
+              en: Building a ZATCA-Friendly Chart of Accounts
+              ar: بناء دليل حسابات متوافق مع ZATCA
+            learning_objectives:
+              - Map accounts to VAT codes and IFRS line items
+              - Add Zakat-relevant accounts from day one
+          - slug: ksa-erp-vouchers
+            title:
+              en: Recording Vouchers in ERP — Sales, Purchase, Payment, Receipt, Journal
+              ar: تسجيل السندات في ERP
+            learning_objectives:
+              - Pass each voucher type with VAT applied correctly
+              - Generate the audit trail ZATCA requires
+
+      - module: Journal Entries
+        lessons:
+          - slug: ksa-je-format
+            title:
+              en: Journal Entries — Format and Best Practice
+              ar: قيود اليومية
+            learning_objectives:
+              - Write a standard-format entry with description in Arabic and English
+              - Use consistent narration so an auditor can follow
+          - slug: ksa-je-common-entries
+            title:
+              en: 25 Most Common Entries Every Saudi Accountant Sees
+              ar: أكثر القيود اليومية شيوعًا
+            learning_objectives:
+              - Pass entries for sales (with VAT), purchases (with VAT and import VAT), salaries (with GOSI)
+              - Handle reverse-charge import services
+          - slug: ksa-je-rectification
+            title:
+              en: Rectification of Errors and Adjusting Misposted Entries
+              ar: تصحيح الأخطاء
+            learning_objectives:
+              - Identify error types (omission, commission, principle)
+              - Pass rectification entries cleanly
+
+      - module: Posting and Ledger
+        lessons:
+          - slug: ksa-ledger-posting
+            title:
+              en: Posting to the General Ledger and Sub-Ledgers
+              ar: الترحيل إلى دفتر الأستاذ
+            learning_objectives:
+              - Post entries from journal to ledgers
+              - Balance ledger accounts at month-end
+          - slug: ksa-ledger-reconciliation
+            title:
+              en: GL to Sub-Ledger Reconciliation
+              ar: تسوية دفتر الأستاذ مع الدفاتر الفرعية
+            learning_objectives:
+              - Reconcile customer, vendor, and inventory sub-ledgers
+              - Investigate and resolve reconciling items
+
+      - module: Trial Balance and Adjusting Entries
+        lessons:
+          - slug: ksa-tb-purpose
+            title:
+              en: Trial Balance — Purpose and Limitations
+              ar: ميزان المراجعة
+            learning_objectives:
+              - Prepare a TB and check arithmetical accuracy
+              - Identify errors that the TB will NOT catch
+          - slug: ksa-adj-accruals-deferrals
+            title:
+              en: Accruals, Deferrals, Prepayments — The Accrual Backbone of IFRS
+              ar: الاستحقاقات والتأجيلات
+            learning_objectives:
+              - Pass adjusting entries for accrued income, accrued expenses, prepayments, deferred revenue
+              - Reverse adjustments at the start of the next period when needed
+          - slug: ksa-adj-depreciation
+            title:
+              en: Depreciation under IAS 16 — Methods and Useful Life Estimates
+              ar: الإهلاك وفق IAS 16
+            learning_objectives:
+              - Compute depreciation under straight-line and reducing-balance
+              - Document useful life justification for the auditor
+          - slug: ksa-adj-impairment
+            title:
+              en: Impairment of Receivables and Assets — IFRS 9 ECL and IAS 36
+              ar: انخفاض القيمة
+            learning_objectives:
+              - Apply expected credit loss to trade receivables
+              - Test a non-financial asset for impairment indicators
+
+      - module: Inventory Valuation
+        lessons:
+          - slug: ksa-inv-classification
+            title:
+              en: Inventory Classification under IAS 2
+              ar: تصنيف المخزون
+            learning_objectives:
+              - Classify items into raw materials, WIP, finished goods
+              - Apply the IAS 2 cost formula
+          - slug: ksa-inv-fifo-wac
+            title:
+              en: FIFO and Weighted Average — Methods Permitted under IAS 2
+              ar: FIFO والمتوسط المرجح
+            learning_objectives:
+              - Compute closing inventory under FIFO and WAC
+              - Explain why LIFO is prohibited under IFRS
+          - slug: ksa-inv-cost-or-nrv
+            title:
+              en: Lower of Cost or Net Realisable Value (IAS 2)
+              ar: التكلفة أو صافي القيمة القابلة للتحقق
+            learning_objectives:
+              - Apply the lower-of-cost-or-NRV test item by item
+              - Pass write-down and reversal entries
+
+      - module: Bank Reconciliation
+        lessons:
+          - slug: ksa-brs-introduction
+            title:
+              en: Why Bank Statements and Books Differ
+              ar: لماذا تختلف الكشوف المصرفية
+            learning_objectives:
+              - List five common reasons for differences
+              - Distinguish timing differences from errors
+          - slug: ksa-brs-preparation
+            title:
+              en: Preparing a Bank Reconciliation Statement
+              ar: إعداد بيان التسوية المصرفية
+            learning_objectives:
+              - Build a BRS from cash book and bank statement
+              - Identify items needing book correction
+
+  # ════════════════════════════════════════════════════════════
+  - phase: 3
+    title:
+      en: Compliance — VAT, ZATCA E-Invoicing, Zakat, WHT, Payroll
+      ar: الامتثال — ضريبة القيمة المضافة وZATCA والزكاة والاستقطاع وكشوف الرواتب
+    modules:
+      - module: VAT in KSA
+        lessons:
+          - slug: ksa-vat-introduction
+            title:
+              en: VAT in Saudi Arabia — From 5% to 15%, the Story and the Mechanism
+              ar: مقدمة في ضريبة القيمة المضافة
+            learning_objectives:
+              - Explain the VAT mechanism (output minus input)
+              - State the registration threshold (SAR 375,000 mandatory, 187,500 voluntary)
+          - slug: ksa-vat-supply-types
+            title:
+              en: Standard, Zero-Rated, Exempt, and Out-of-Scope Supplies
+              ar: أنواع التوريدات
+            learning_objectives:
+              - Classify any supply into the four buckets
+              - Explain the impact of each on input VAT recovery
+          - slug: ksa-vat-place-of-supply
+            title:
+              en: Place of Supply for Goods and Services
+              ar: مكان التوريد
+            learning_objectives:
+              - Apply place-of-supply rules for B2B, B2C, intra-GCC, and exports
+              - Resolve common edge cases (digital services, transportation)
+          - slug: ksa-vat-time-of-supply
+            title:
+              en: Time of Supply (Tax Point) Rules
+              ar: وقت التوريد
+            learning_objectives:
+              - Determine tax point for goods, services, continuous supplies, and advances
+              - Apply early-invoice and early-payment rules
+          - slug: ksa-vat-import-rcm
+            title:
+              en: Import VAT and Reverse Charge Mechanism
+              ar: ضريبة الاستيراد والشحن العكسي
+            learning_objectives:
+              - Apply RCM on imported services
+              - Reconcile import VAT paid at customs with VAT return
+          - slug: ksa-vat-input-recovery
+            title:
+              en: Input VAT Recovery — Conditions and Blocked Items
+              ar: استرداد ضريبة المدخلات
+            learning_objectives:
+              - List the conditions for input VAT recovery
+              - Identify blocked items (entertainment, certain vehicles)
+          - slug: ksa-vat-partial-exemption
+            title:
+              en: Partial Exemption Method for Mixed Supplies
+              ar: الإعفاء الجزئي
+            learning_objectives:
+              - Apply the standard apportionment method
+              - Decide when to apply for a special method
+          - slug: ksa-vat-returns
+            title:
+              en: VAT Returns — Monthly and Quarterly Filing on the ZATCA Portal
+              ar: الإقرارات الضريبية
+            learning_objectives:
+              - Decide monthly vs quarterly filing eligibility
+              - Walk through filing on the ZATCA portal end to end
+          - slug: ksa-vat-groups
+            title:
+              en: VAT Groups — When to Form One and How
+              ar: مجموعات ضريبة القيمة المضافة
+            learning_objectives:
+              - State eligibility conditions for VAT grouping
+              - Explain the implications for intra-group supplies
+
+      - module: ZATCA E-Invoicing (Fatoora)
+        lessons:
+          - slug: ksa-fatoora-overview
+            title:
+              en: Fatoora Overview — Phase 1 (Generation) and Phase 2 (Integration)
+              ar: نظرة عامة على فاتورة
+            learning_objectives:
+              - Distinguish Phase 1 from Phase 2 obligations
+              - State the rollout waves and how taxpayers were notified
+          - slug: ksa-fatoora-invoice-types
+            title:
+              en: Standard Tax Invoice vs Simplified Tax Invoice
+              ar: الفاتورة الضريبية القياسية والمبسطة
+            learning_objectives:
+              - Pick the right invoice type by transaction (B2B vs B2C)
+              - List mandatory fields for each
+          - slug: ksa-fatoora-xml-structure
+            title:
+              en: The Invoice XML — UBL 2.1, UUID, Hash, QR Code
+              ar: بنية ملف XML للفاتورة
+            learning_objectives:
+              - Identify the key UBL fields in a Fatoora XML
+              - Explain the role of UUID and previous-invoice hash
+          - slug: ksa-fatoora-cryptographic-stamp
+            title:
+              en: Cryptographic Stamp Identifiers (CSID) and Onboarding
+              ar: المعرف الرقمي للختم
+            learning_objectives:
+              - Walk through the CSID issuance flow on Fatoora portal
+              - Renew and revoke a CSID
+          - slug: ksa-fatoora-clearance-vs-reporting
+            title:
+              en: Clearance Mode (Standard) vs Reporting Mode (Simplified)
+              ar: وضع التخليص ووضع التبليغ
+            learning_objectives:
+              - Explain the real-time clearance flow for B2B
+              - Explain the within-24-hours reporting for B2C
+          - slug: ksa-fatoora-integration-readiness
+            title:
+              en: Phase 2 Integration Readiness — What Your ERP Must Do
+              ar: جاهزية تكامل المرحلة 2
+            learning_objectives:
+              - Audit an ERP for Phase 2 compliance
+              - Build a remediation plan for missing capabilities
+          - slug: ksa-fatoora-credit-debit-notes
+            title:
+              en: E-Credit and E-Debit Notes — Linking and Sequencing
+              ar: إشعارات الائتمان والمدين الإلكترونية
+            learning_objectives:
+              - Issue ZATCA-compliant e-credit notes referencing the original invoice
+              - Maintain the hash chain across documents
+          - slug: ksa-fatoora-error-handling
+            title:
+              en: Common Fatoora Rejection Codes and How to Fix Them
+              ar: أكواد رفض فاتورة الشائعة
+            learning_objectives:
+              - Decode the most common ZATCA rejection messages
+              - Build a remediation playbook for each
+          - slug: ksa-fatoora-archival
+            title:
+              en: E-Invoice Archival — Storage, Retention and Audit Access
+              ar: أرشفة الفواتير الإلكترونية
+            learning_objectives:
+              - Apply the 6-year retention rule to e-invoice XML and QR
+              - Provide audit access without exporting raw XML
+          - slug: ksa-vat-correction-and-amendment
+            title:
+              en: Correcting Errors in Filed VAT Returns
+              ar: تصحيح الأخطاء في الإقرارات
+            learning_objectives:
+              - Correct errors below and above the materiality threshold
+              - Submit a voluntary disclosure to ZATCA
+          - slug: ksa-vat-export-rules
+            title:
+              en: Exports and the GCC — Direct, Indirect, and Intra-GCC Supplies
+              ar: الصادرات وقواعد دول الخليج
+            learning_objectives:
+              - Apply zero rating to direct exports with proof of export
+              - Distinguish intra-GCC supplies until Electronic Services System is fully live
+          - slug: ksa-vat-special-sectors
+            title:
+              en: VAT for Special Sectors — Real Estate, Financial Services, Healthcare, Education
+              ar: ضريبة القيمة المضافة للقطاعات الخاصة
+            learning_objectives:
+              - Apply sector-specific rules (exemptions, zero rating)
+              - Identify the VAT trap in each sector
+          - slug: ksa-vat-audit-by-zatca
+            title:
+              en: ZATCA VAT Audit — Documentation Pack and Common Findings
+              ar: تدقيق ZATCA لضريبة القيمة المضافة
+            learning_objectives:
+              - Prepare an audit-ready documentation pack
+              - Anticipate and pre-empt common findings
+
+      - module: Zakat
+        lessons:
+          - slug: ksa-zakat-overview
+            title:
+              en: Zakat in KSA — Who Pays, Who Doesn't, and Why
+              ar: الزكاة في المملكة
+            learning_objectives:
+              - Distinguish Zakat-payers from corporate income tax payers
+              - Identify mixed entities subject to both
+          - slug: ksa-zakat-base-computation
+            title:
+              en: Zakat Base — Assets-Less-Liabilities Approach
+              ar: وعاء الزكاة
+            learning_objectives:
+              - Compute the Zakat base for a typical SME
+              - Apply additions and deductions per the Zakat Bylaws
+          - slug: ksa-zakat-filing
+            title:
+              en: Filing the Zakat Return on the ZATCA Portal
+              ar: تقديم إقرار الزكاة
+            learning_objectives:
+              - Walk through Zakat return filing
+              - Calculate and pay Zakat instalments
+          - slug: ksa-zakat-mixed-entities
+            title:
+              en: Mixed Entities — Zakat for Saudi/GCC Owners and CIT for Foreign Owners
+              ar: الكيانات المختلطة
+            learning_objectives:
+              - Allocate base between Zakat and CIT components
+              - Avoid double counting in mixed entities
+
+      - module: Withholding Tax (KSA)
+        lessons:
+          - slug: ksa-wht-overview
+            title:
+              en: Withholding Tax in KSA — Rates and Triggers
+              ar: ضريبة الاستقطاع
+            learning_objectives:
+              - State WHT rates (5%, 15%, 20%) and what triggers each
+              - Identify payments to non-residents requiring WHT
+          - slug: ksa-wht-dtaa
+            title:
+              en: Applying Double Taxation Treaties to Reduce WHT
+              ar: تطبيق اتفاقيات تجنب الازدواج الضريبي
+            learning_objectives:
+              - Look up the relevant DTAA article and rate
+              - Document beneficial ownership for treaty relief
+          - slug: ksa-wht-filing
+            title:
+              en: WHT Filing and Payment to ZATCA
+              ar: تقديم ودفع ضريبة الاستقطاع
+            learning_objectives:
+              - File monthly and annual WHT returns
+              - Issue a WHT certificate to the non-resident payee
+
+      - module: Excise and RETT
+        lessons:
+          - slug: ksa-excise-overview
+            title:
+              en: Excise Tax — Tobacco, Sugary Drinks, Energy Drinks
+              ar: الضريبة الانتقائية
+            learning_objectives:
+              - List excisable goods and their rates
+              - Explain registration and reporting obligations
+          - slug: ksa-rett-overview
+            title:
+              en: Real Estate Transaction Tax (RETT)
+              ar: ضريبة التصرفات العقارية
+            learning_objectives:
+              - State the 5% RETT rate and exemptions
+              - Walk through RETT registration on a property transaction
+
+      - module: Payroll, GOSI and Saudization
+        lessons:
+          - slug: ksa-payroll-components
+            title:
+              en: Saudi Payroll Components — Basic, Housing, Transport, Allowances
+              ar: مكونات الراتب
+            learning_objectives:
+              - Build a typical Saudi salary structure
+              - Distinguish components subject to GOSI from those that aren't
+          - slug: ksa-gosi-rates
+            title:
+              en: GOSI Contributions — Rates for Saudis vs Non-Saudis
+              ar: مساهمات التأمينات الاجتماعية
+            learning_objectives:
+              - Compute GOSI for Saudi employees (current employee/employer split) and for non-Saudis
+              - File the monthly GOSI return
+          - slug: ksa-saudization-nitaqat
+            title:
+              en: Saudization (Nitaqat) — Bands and Their Implications
+              ar: السعودة (نطاقات)
+            learning_objectives:
+              - Compute a company's Saudization percentage
+              - Identify the Nitaqat band and its commercial implications
+          - slug: ksa-payroll-wps
+            title:
+              en: Wage Protection System (WPS) — Compliance Workflow
+              ar: نظام حماية الأجور
+            learning_objectives:
+              - Generate a WPS file from payroll data
+              - Resolve common WPS rejection reasons
+          - slug: ksa-payroll-end-of-service
+            title:
+              en: End of Service Benefit — Computation under Saudi Labour Law
+              ar: مكافأة نهاية الخدمة
+            learning_objectives:
+              - Compute EOSB for a sample tenure
+              - Account for EOSB liability under IAS 19
+
+  # ════════════════════════════════════════════════════════════
+  - phase: 4
+    title:
+      en: Reporting and Analysis
+      ar: التقارير والتحليل
+    modules:
+      - module: Financial Statements under IFRS
+        lessons:
+          - slug: ksa-ifrs-statement-of-pl
+            title:
+              en: Statement of Profit or Loss and Other Comprehensive Income
+              ar: قائمة الربح أو الخسارة والدخل الشامل الآخر
+            learning_objectives:
+              - Prepare a P&L by function and by nature
+              - Distinguish profit or loss items from OCI items
+          - slug: ksa-ifrs-statement-of-fp
+            title:
+              en: Statement of Financial Position (Balance Sheet)
+              ar: قائمة المركز المالي
+            learning_objectives:
+              - Classify assets and liabilities as current vs non-current
+              - Disclose related-party balances
+          - slug: ksa-ifrs-cash-flow
+            title:
+              en: Statement of Cash Flows under IAS 7
+              ar: قائمة التدفقات النقدية
+            learning_objectives:
+              - Prepare a cash flow statement under the indirect method
+              - Classify items into operating, investing, financing
+          - slug: ksa-ifrs-equity-changes
+            title:
+              en: Statement of Changes in Equity
+              ar: قائمة التغيرات في حقوق الملكية
+            learning_objectives:
+              - Build the SOCE for a typical year
+              - Reconcile opening and closing equity components
+          - slug: ksa-ifrs-disclosures
+            title:
+              en: Notes to Financial Statements and Significant Policies
+              ar: الإيضاحات على البيانات المالية
+            learning_objectives:
+              - Draft significant accounting policies note
+              - Disclose key estimates and judgements
+
+      - module: Accounts Receivable and Payable
+        lessons:
+          - slug: ksa-ar-process
+            title:
+              en: Accounts Receivable Process — Order to Cash in KSA
+              ar: عملية الحسابات المدينة
+            learning_objectives:
+              - Walk through the order-to-cash flow with VAT and Fatoora
+              - Identify control points
+          - slug: ksa-ar-credit-control
+            title:
+              en: Credit Control, Ageing and Collections
+              ar: التحكم في الائتمان والتحصيل
+            learning_objectives:
+              - Build a customer ageing report
+              - Apply IFRS 9 ECL to ageing buckets
+          - slug: ksa-ap-process
+            title:
+              en: Accounts Payable Process — Procure to Pay
+              ar: عملية الحسابات الدائنة
+            learning_objectives:
+              - Walk through PO → GRN → vendor invoice → payment
+              - Apply the three-way match
+          - slug: ksa-ap-vendor-master-vat
+            title:
+              en: Vendor Master and VAT Validation
+              ar: البيانات الرئيسية للمورد
+            learning_objectives:
+              - Validate vendor VAT registration on the ZATCA portal
+              - Set up VAT-relevant vendor fields
+          - slug: ksa-ap-capital-vs-revenue
+            title:
+              en: Capital vs Revenue Expenditure under IFRS
+              ar: النفقات الرأسمالية مقابل الإيرادية
+            learning_objectives:
+              - Decide capitalisation vs expense per IAS 16 / IAS 38
+              - Apply the recognition criteria
+
+      - module: Ratio Analysis and MIS
+        lessons:
+          - slug: ksa-ratio-introduction
+            title:
+              en: Ratio Analysis — Building Insight from the Numbers
+              ar: تحليل النسب
+            learning_objectives:
+              - Name the five families of ratios
+              - Use ratios to compare performance period over period
+          - slug: ksa-ratio-liquidity-solvency
+            title:
+              en: Liquidity and Solvency Ratios
+              ar: نسب السيولة والملاءة
+            learning_objectives:
+              - Compute and interpret current ratio, quick ratio, debt-equity, interest coverage
+              - Spot warning signs of liquidity stress
+          - slug: ksa-ratio-profitability-efficiency
+            title:
+              en: Profitability and Efficiency Ratios
+              ar: نسب الربحية والكفاءة
+            learning_objectives:
+              - Compute GP, NP, ROE, ROCE, asset turnover, inventory days
+              - Build a one-page profitability dashboard
+          - slug: ksa-mis-reporting
+            title:
+              en: Monthly MIS for Saudi CFOs — What Actually Matters
+              ar: تقارير MIS الشهرية
+            learning_objectives:
+              - Build a one-page monthly MIS pack
+              - Choose KPIs aligned to Vision 2030 sectors
+
+      - module: Excel for Saudi Accountants
+        lessons:
+          - slug: ksa-excel-formulas
+            title:
+              en: Essential Excel — VLOOKUP, INDEX-MATCH, XLOOKUP, SUMIFS
+              ar: صيغ Excel الأساسية
+            learning_objectives:
+              - Use lookup formulas to merge data from multiple sources
+              - Choose the right formula for the right job
+          - slug: ksa-excel-pivot-power-query
+            title:
+              en: Pivot Tables and Power Query
+              ar: PivotTable و Power Query
+            learning_objectives:
+              - Build pivot tables from raw transactional data
+              - Use Power Query to clean and merge data
+          - slug: ksa-excel-vat-workbook
+            title:
+              en: Building a VAT Working File and Reconciliation Workbook
+              ar: ملف عمل ضريبة القيمة المضافة
+            learning_objectives:
+              - Build a VAT working file that ties to the ZATCA return
+              - Reconcile output VAT to sales and input VAT to purchases
+          - slug: ksa-excel-financial-statements
+            title:
+              en: Financial Statements in Excel under IFRS Layout
+              ar: البيانات المالية في Excel
+            learning_objectives:
+              - Link a trial balance to IFRS-format P&L and SOFP
+              - Build a self-checking spreadsheet that errors out on imbalance
+
+  # ════════════════════════════════════════════════════════════
+  - phase: 5
+    title:
+      en: Compliance, Ethics and Career Skills
+      ar: الامتثال والأخلاقيات ومهارات المهنة
+    modules:
+      - module: Saudi Companies Law and MOC Filings
+        lessons:
+          - slug: ksa-companies-law-entity-types
+            title:
+              en: Saudi Companies Law — LLC, JSC, Branch of Foreign Company
+              ar: قانون الشركات السعودي
+            learning_objectives:
+              - Distinguish entity types and their accounting implications
+              - State minimum capital and reserve requirements
+          - slug: ksa-statutory-reserves
+            title:
+              en: Statutory Reserve, Board Reporting and AGM Requirements
+              ar: الاحتياطي النظامي
+            learning_objectives:
+              - Compute and transfer to statutory reserve
+              - Prepare board pack inputs
+          - slug: ksa-moc-filings
+            title:
+              en: MOC Filings, Commercial Register Renewal, AGM Filing
+              ar: إيداعات وزارة التجارة
+            learning_objectives:
+              - Walk through the annual MOC filing flow
+              - State due dates and penalties
+
+      - module: Internal Control and Audit Readiness
+        lessons:
+          - slug: ksa-internal-control
+            title:
+              en: Internal Controls for Saudi SMEs — A Practical Framework
+              ar: الرقابة الداخلية
+            learning_objectives:
+              - Design segregation of duties for AR, AP, payroll, treasury
+              - Build a basic risk-and-controls matrix
+          - slug: ksa-audit-readiness
+            title:
+              en: Audit Readiness — What External Auditors Will Ask For
+              ar: الجاهزية للتدقيق
+            learning_objectives:
+              - Prepare the audit PBC list
+              - Reconcile common audit queries before they're raised
+
+      - module: Ethics and Soft Skills
+        lessons:
+          - slug: ksa-ethics-socpa
+            title:
+              en: Professional Ethics — The SOCPA Code of Ethics
+              ar: أخلاقيات المهنة
+            learning_objectives:
+              - State the five fundamental principles
+              - Recognise threats to independence and objectivity
+          - slug: ksa-soft-client-communication
+            title:
+              en: Client Communication in Bilingual Workplaces
+              ar: التواصل مع العملاء
+            learning_objectives:
+              - Frame uncomfortable conversations professionally in Arabic and English
+              - Translate jargon for non-financial stakeholders
+
+      - module: AI for Accountants
+        lessons:
+          - slug: ksa-ai-using-superaccountant
+            title:
+              en: Using SuperAccountant to Speed Up Daily Compliance Work
+              ar: استخدام SuperAccountant
+            learning_objectives:
+              - Use the tutoring agent to validate VAT entries and explain ZATCA rules
+              - Recognise when to trust AI output and when to verify
+          - slug: ksa-ai-document-extraction
+            title:
+              en: AI Document Extraction for Arabic and English Invoices
+              ar: استخراج المستندات بالذكاء الاصطناعي
+            learning_objectives:
+              - Use OCR on a scanned Arabic vendor invoice
+              - Validate extracted fields against the source
+
+  # ════════════════════════════════════════════════════════════
+  # Phase 6 — Specialisation Picker. Each student picks EXACTLY TWO.
+  - phase: 6
+    title:
+      en: Specialisation (Pick Any Two)
+      ar: التخصص (اختر اثنين)
+    pick: 2
+    modules:
+      - module: Spec — IFRS Deep Dive
+        track_code: IFRS-DEEP
+        lessons:
+          - slug: ksa-spec-ifrs15-revenue
+            title:
+              en: IFRS 15 Mastery — Performance Obligations, Variable Consideration, Costs
+              ar: إتقان IFRS 15
+            learning_objectives:
+              - Apply the five-step model to long-term contracts
+              - Account for variable consideration and contract costs
+          - slug: ksa-spec-ifrs16-leases-deep
+            title:
+              en: IFRS 16 in Depth — Modifications, Sub-Leases, Sale-and-Leaseback
+              ar: إتقان IFRS 16
+            learning_objectives:
+              - Account for lease modifications
+              - Walk through sale-and-leaseback transactions
+          - slug: ksa-spec-ifrs9-hedging
+            title:
+              en: IFRS 9 — Hedge Accounting and Documentation
+              ar: محاسبة التحوط
+            learning_objectives:
+              - Designate and document a hedge relationship
+              - Account for cash-flow and fair-value hedges
+          - slug: ksa-spec-ifrs17-insurance
+            title:
+              en: IFRS 17 — Insurance Contracts (Overview for Saudi Insurers)
+              ar: عقود التأمين
+            learning_objectives:
+              - Walk through the General Measurement Model
+              - Identify when PAA simplification applies
+          - slug: ksa-spec-ifrs-business-combinations
+            title:
+              en: IFRS 3 — Business Combinations and Goodwill
+              ar: اندماجات الأعمال
+            learning_objectives:
+              - Apply the acquisition method
+              - Allocate purchase price and recognise goodwill
+
+      - module: Spec — ZATCA Audit and Disputes
+        track_code: ZATCA-AUDIT
+        lessons:
+          - slug: ksa-spec-zatca-audit-process
+            title:
+              en: The ZATCA Audit Process from Notice to Closure
+              ar: عملية تدقيق ZATCA
+            learning_objectives:
+              - Walk through every stage of a ZATCA audit
+              - Manage information requests under timeline pressure
+          - slug: ksa-spec-zatca-objections
+            title:
+              en: Filing Objections and Appeals to ZATCA Decisions
+              ar: الاعتراضات والاستئنافات
+            learning_objectives:
+              - Draft an objection letter with legal grounds
+              - Walk through GSTC and TVDC appeal levels
+          - slug: ksa-spec-zatca-voluntary-disclosure
+            title:
+              en: Voluntary Disclosure — Reducing Penalties Before Discovery
+              ar: الإفصاح الطوعي
+            learning_objectives:
+              - Decide when voluntary disclosure is the right move
+              - Quantify penalty savings
+          - slug: ksa-spec-zatca-penalty-matrix
+            title:
+              en: ZATCA Penalty Matrix — VAT, Zakat, WHT, E-Invoicing
+              ar: مصفوفة العقوبات
+            learning_objectives:
+              - Look up the penalty for each violation type
+              - Build a risk-rated compliance calendar
+          - slug: ksa-spec-zatca-tax-rulings
+            title:
+              en: Requesting and Relying on ZATCA Tax Rulings
+              ar: القرارات الضريبية
+            learning_objectives:
+              - Draft a ruling request letter
+              - Apply a ruling consistently across the business
+
+      - module: Spec — Transfer Pricing in KSA
+        track_code: KSA-TP
+        lessons:
+          - slug: ksa-spec-tp-overview
+            title:
+              en: KSA TP Bylaws — Scope, Documentation Thresholds, and Forms
+              ar: لوائح تسعير المعاملات السعودية
+            learning_objectives:
+              - Determine whether an entity is in scope
+              - Walk through the TP disclosure form
+          - slug: ksa-spec-tp-arms-length
+            title:
+              en: Arm's Length Principle and the Five OECD Methods
+              ar: مبدأ السعر المحايد
+            learning_objectives:
+              - Pick the right method for each transaction type
+              - Document a benchmarking study at SME scale
+          - slug: ksa-spec-tp-local-file
+            title:
+              en: Preparing the Local File
+              ar: إعداد الملف المحلي
+            learning_objectives:
+              - Build the Local File from a templated outline
+              - Address ZATCA's preferred content
+          - slug: ksa-spec-tp-master-file
+            title:
+              en: The Master File and Group-Wide Documentation
+              ar: الملف الرئيسي
+            learning_objectives:
+              - Coordinate Master File preparation with the global TP team
+              - Identify country-specific add-ons KSA needs
+          - slug: ksa-spec-tp-cbcr
+            title:
+              en: Country-by-Country Reporting (CbCR) and Notifications
+              ar: تقارير CbCR
+            learning_objectives:
+              - Determine CbCR filing obligations for the Saudi entity
+              - File CbCR notifications on time
+
+      - module: Spec — Real Estate, Construction and RETT
+        track_code: REAL-ESTATE
+        lessons:
+          - slug: ksa-spec-re-rett-deep
+            title:
+              en: RETT in Depth — Computation, Exemptions, and Common Pitfalls
+              ar: ضريبة التصرفات العقارية بالتفصيل
+            learning_objectives:
+              - Compute RETT on diverse transaction structures
+              - Apply exemptions correctly
+          - slug: ksa-spec-re-vat-on-real-estate
+            title:
+              en: VAT vs RETT on Real Estate — When Each Applies
+              ar: ضريبة القيمة المضافة وضريبة التصرفات العقارية
+            learning_objectives:
+              - Decide whether a transaction attracts VAT or RETT
+              - Avoid double taxation
+          - slug: ksa-spec-re-construction-revenue
+            title:
+              en: Construction Contract Revenue under IFRS 15
+              ar: إيرادات عقود الإنشاء
+            learning_objectives:
+              - Apply IFRS 15 to long-term construction contracts
+              - Compute percentage of completion
+          - slug: ksa-spec-re-developer-accounting
+            title:
+              en: Developer Accounting — Land, WIP, Cost Allocation
+              ar: محاسبة المطور العقاري
+            learning_objectives:
+              - Track land cost, infrastructure, and unit allocations
+              - Recognise revenue at the right trigger
+          - slug: ksa-spec-re-leasing
+            title:
+              en: Real Estate Leasing under IFRS 16 (Lessor and Lessee)
+              ar: تأجير العقارات
+            learning_objectives:
+              - Account for operating vs finance leases as a lessor
+              - Account for the same transaction as the lessee
+
+      - module: Spec — Treasury, Banking and FX
+        track_code: TREASURY
+        lessons:
+          - slug: ksa-spec-treasury-cash-management
+            title:
+              en: Cash Management for Saudi Corporates — Pooling, Sweeps, MMFs
+              ar: إدارة النقدية
+            learning_objectives:
+              - Design a cash pooling structure for a multi-entity group
+              - Manage idle balances safely
+          - slug: ksa-spec-treasury-fx-hedging
+            title:
+              en: FX Hedging — When SAR Pegging Stops Helping
+              ar: التحوط من العملات الأجنبية
+            learning_objectives:
+              - Identify FX exposures beyond USD
+              - Use forwards and options to hedge
+          - slug: ksa-spec-treasury-trade-finance
+            title:
+              en: Trade Finance — LCs, Bank Guarantees, Discounting
+              ar: تمويل التجارة
+            learning_objectives:
+              - Account for LCs, BGs, and bill discounting
+              - Negotiate facility terms with banks
+          - slug: ksa-spec-treasury-sukuk
+            title:
+              en: Sukuk and Islamic Finance Basics for Accountants
+              ar: الصكوك والتمويل الإسلامي
+            learning_objectives:
+              - Distinguish key sukuk structures (Ijara, Murabaha, Wakala)
+              - Account for them under IFRS
+          - slug: ksa-spec-treasury-sama-reporting
+            title:
+              en: SAMA Reporting Requirements for Corporates
+              ar: متطلبات تقارير SAMA
+            learning_objectives:
+              - Identify SAMA reporting obligations relevant to corporates
+              - File the required returns
+
+  # ════════════════════════════════════════════════════════════
+  - phase: 7
+    title:
+      en: Capstone and Grand Test
+      ar: المشروع الختامي والاختبار الكبير
+    modules:
+      - module: Capstone Project
+        lessons:
+          - slug: ksa-capstone-full-year-close
+            title:
+              en: Capstone — Full-Year Close for a Fictional KSA LLC
+              ar: المشروع الختامي
+            learning_objectives:
+              - Take 12 months of bilingual transactions and produce IFRS financials
+              - Submit mock VAT returns, Zakat return, WHT returns, and ZATCA Phase 2 invoices
+          - slug: ksa-capstone-grand-test
+            title:
+              en: Grand Test — Proctored, Bilingual, ZATCA-Centric
+              ar: الاختبار الكبير
+            learning_objectives:
+              - Apply everything learned in a 3-hour timed assessment
+              - Earn the SuperAccountant Mu'tamad Path Certificate

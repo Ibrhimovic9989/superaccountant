@@ -1,0 +1,1155 @@
+# SuperAccountant — India Track ("Chartered Path")
+# Edited by CCO. Schema: docs/curriculum-pipeline.md
+#
+# Notes:
+# - Each lesson auto-generates video, MDX, flowchart, mindmap, MCQ + scenario + Tally exercise.
+# - Do NOT list "Module Introduction" / "Video Based" / "Tally Practice" as lessons — the pipeline produces them.
+# - Phase 0 = Entry Test (adaptive, generated separately from a question bank derived from these objectives).
+# - Sources left empty → ResearchTopicTool sources via Perplexity.
+
+track: india
+title:
+  en: Chartered Path — Accounting for the Indian Market
+  ar: المسار المعتمد — المحاسبة للسوق الهندي
+
+phases:
+  # ════════════════════════════════════════════════════════════
+  - phase: 1
+    title:
+      en: Foundation
+      ar: الأساسيات
+    modules:
+      - module: Introduction to Accounting
+        lessons:
+          - slug: in-intro-what-is-accounting
+            title:
+              en: What is Accounting? Purpose, Scope and Why It Matters
+              ar: ما هي المحاسبة؟ الغرض والنطاق وأهميتها
+            learning_objectives:
+              - Define accounting as a system of identifying, recording, and communicating financial information
+              - Distinguish accounting from bookkeeping
+              - Explain why every business — from kirana store to listed company — needs accounting
+          - slug: in-intro-accounting-activities
+            title:
+              en: Core Accounting Activities and the Information Flow
+              ar: الأنشطة المحاسبية الأساسية وتدفق المعلومات
+            learning_objectives:
+              - List the four core activities (record, classify, summarise, interpret)
+              - Trace how a single transaction flows from source document to financial statement
+          - slug: in-intro-stakeholders-and-objectives
+            title:
+              en: Users of Accounting Information and the Objectives of Accounting
+              ar: مستخدمو المعلومات المحاسبية وأهداف المحاسبة
+            learning_objectives:
+              - Identify internal vs external users (owners, lenders, regulators, employees, tax authorities)
+              - "State the four objectives: record-keeping, decision-making, compliance, stewardship"
+
+      - module: Fundamental Concepts
+        lessons:
+          - slug: in-fund-accounting-cycle
+            title:
+              en: The Accounting Cycle End-to-End
+              ar: دورة المحاسبة من البداية إلى النهاية
+            learning_objectives:
+              - List the 8 steps of the accounting cycle
+              - Map each step to its output document
+          - slug: in-fund-principles-and-conventions
+            title:
+              en: Accounting Principles, Concepts and Conventions
+              ar: المبادئ والمفاهيم والاتفاقيات المحاسبية
+            learning_objectives:
+              - Explain entity, going-concern, accrual, matching, prudence, consistency
+              - Apply each concept to a real example
+          - slug: in-fund-elements
+            title:
+              en: Elements of Accounting — Assets, Liabilities, Capital, Income, Expense
+              ar: عناصر المحاسبة — الأصول والخصوم ورأس المال والدخل والمصروفات
+            learning_objectives:
+              - Define each element with examples relevant to Indian SMEs
+              - Build the accounting equation and prove it always balances
+          - slug: in-fund-double-entry
+            title:
+              en: Double-Entry System and the Golden Rules
+              ar: نظام القيد المزدوج والقواعد الذهبية
+            learning_objectives:
+              - State the three golden rules (personal, real, nominal)
+              - Apply golden rules to common transactions
+
+      - module: Vouchers and Source Documents
+        lessons:
+          - slug: in-voucher-source-documents
+            title:
+              en: Source Documents — Invoices, Receipts, Bills, Contracts
+              ar: المستندات المصدرية — الفواتير والإيصالات والعقود
+            learning_objectives:
+              - Identify the source document for each common transaction type
+              - Explain why source documents are the legal anchor of an entry
+          - slug: in-voucher-types
+            title:
+              en: Voucher Types — Receipt, Payment, Journal, Contra, Sales, Purchase
+              ar: أنواع السندات — قبض ودفع ويومية ومقابل وبيع وشراء
+            learning_objectives:
+              - Pick the correct voucher type for any given transaction
+              - Prepare each voucher with all mandatory fields
+          - slug: in-voucher-debit-credit-notes
+            title:
+              en: Debit Notes, Credit Notes and Delivery Challans
+              ar: إشعارات الخصم والائتمان وأوامر التسليم
+            learning_objectives:
+              - Distinguish a debit note from a credit note
+              - Explain when to issue a delivery challan vs a tax invoice
+
+      - module: Book Keeping
+        lessons:
+          - slug: in-bk-importance-and-process
+            title:
+              en: Why Book-Keeping Matters and the Book-Keeping Process
+              ar: أهمية مسك الدفاتر وعملية المسك
+            learning_objectives:
+              - Articulate three legal and three managerial reasons for book-keeping
+              - Walk through the steps from voucher to ledger
+          - slug: in-bk-classification-of-accounts
+            title:
+              en: Classification of Accounts — Personal, Real, Nominal
+              ar: تصنيف الحسابات — شخصية وحقيقية واسمية
+            learning_objectives:
+              - Classify any account into the right category
+              - Apply the right golden rule based on classification
+          - slug: in-bk-record-retention-india
+            title:
+              en: Record Retention Rules in India (Companies Act, IT Act, GST Act)
+              ar: قواعد الاحتفاظ بالسجلات في الهند
+            learning_objectives:
+              - State the retention period under each statute (8 yrs Companies Act, 6 yrs IT Act, 6 yrs GST)
+              - Identify which records must be retained in physical vs digital form
+
+      - module: Accounting Standards (India)
+        lessons:
+          - slug: in-as-overview
+            title:
+              en: Indian Accounting Standards Landscape — AS, Ind AS, ICDS
+              ar: مشهد المعايير المحاسبية الهندية
+            learning_objectives:
+              - Distinguish AS, Ind AS, and ICDS and when each applies
+              - Identify which class of company follows which framework
+          - slug: in-as-key-standards
+            title:
+              en: The Standards Every Accountant Must Know — AS 1, 2, 9, 10, 22
+              ar: المعايير الأساسية التي يجب على كل محاسب معرفتها
+            learning_objectives:
+              - Summarise AS 1 (disclosure), AS 2 (inventory), AS 9 (revenue), AS 10 (PPE), AS 22 (deferred tax)
+              - Apply each standard to a typical SME transaction
+          - slug: in-as-ind-as-overview
+            title:
+              en: Ind AS — When and Why a Company Converts
+              ar: نظرة عامة على المعايير الهندية المتقاربة مع IFRS
+            learning_objectives:
+              - State the Ind AS applicability roadmap (net worth thresholds, listed status)
+              - List the top 5 differences between AS and Ind AS
+
+  # ════════════════════════════════════════════════════════════
+  - phase: 2
+    title:
+      en: Core — Books, Tally, and the Trial Balance
+      ar: الأساسي — الدفاتر وتالي وميزان المراجعة
+    modules:
+      - module: Tally Prime Mastery
+        lessons:
+          - slug: in-tally-what-and-features
+            title:
+              en: What is Tally Prime and Why It Dominates Indian Accounting
+              ar: ما هو تالي برايم
+            learning_objectives:
+              - List the core features of Tally Prime
+              - Explain why 80%+ of Indian SMEs run on Tally
+          - slug: in-tally-company-creation
+            title:
+              en: Creating a Company in Tally Prime — Books Beginning, Financial Year, Features
+              ar: إنشاء شركة في تالي برايم
+            learning_objectives:
+              - Create a new company file with correct statutory settings for India
+              - Configure books-beginning date, financial year, and base currency
+          - slug: in-tally-groups-and-ledgers
+            title:
+              en: Groups and Ledgers — Building the Chart of Accounts in Tally
+              ar: المجموعات ودفاتر الأستاذ في تالي
+            learning_objectives:
+              - Differentiate primary groups from sub-groups
+              - Create single and multiple ledgers under correct groups
+          - slug: in-tally-accounting-vouchers
+            title:
+              en: Accounting Vouchers in Tally — F4 to F9 Walkthrough
+              ar: السندات المحاسبية في تالي
+            learning_objectives:
+              - Use each accounting voucher (Contra F4, Payment F5, Receipt F6, Journal F7, Sales F8, Purchase F9)
+              - Pick the right voucher under pressure
+          - slug: in-tally-inventory-vouchers
+            title:
+              en: Inventory Vouchers in Tally — Stock Items, Units, Godowns
+              ar: سندات المخزون في تالي
+            learning_objectives:
+              - Set up stock items, units of measure, and godowns
+              - Record receipt notes, delivery notes, and stock journals
+
+      - module: Journal Entries
+        lessons:
+          - slug: in-je-meaning-and-format
+            title:
+              en: Journal Entries — Format, Narration, and Best Practice
+              ar: قيود اليومية
+            learning_objectives:
+              - Write a journal entry with debit, credit, and narration in standard format
+              - Explain why narration is non-negotiable
+          - slug: in-je-common-entries
+            title:
+              en: 25 Most Common Journal Entries Every Accountant Sees
+              ar: أكثر القيود اليومية شيوعًا
+            learning_objectives:
+              - Pass entries for sales, purchases, expenses, depreciation, drawings, capital introduction
+              - Identify the document trail behind each entry
+          - slug: in-je-compound-and-rectification
+            title:
+              en: Compound Entries and Rectification of Errors
+              ar: القيود المركبة وتصحيح الأخطاء
+            learning_objectives:
+              - Pass compound entries with multiple debits/credits
+              - Rectify errors of omission, commission, principle, and compensating errors
+
+      - module: Posting and Ledger
+        lessons:
+          - slug: in-ledger-posting
+            title:
+              en: Posting Journal Entries to the General Ledger
+              ar: ترحيل قيود اليومية إلى دفتر الأستاذ
+            learning_objectives:
+              - Post entries from journal to ledger accounts
+              - Balance a ledger account at month-end
+          - slug: in-ledger-gl-reconciliation
+            title:
+              en: General Ledger Reconciliation — Process and Pitfalls
+              ar: تسوية دفتر الأستاذ العام
+            learning_objectives:
+              - Reconcile sub-ledgers (AR, AP, inventory) to the general ledger
+              - Investigate and resolve reconciling items
+
+      - module: Trial Balance
+        lessons:
+          - slug: in-tb-purpose-and-format
+            title:
+              en: Trial Balance — Purpose, Format, and What It Proves
+              ar: ميزان المراجعة
+            learning_objectives:
+              - Prepare a trial balance from ledger balances
+              - Explain why a balanced TB does NOT prove correctness
+          - slug: in-tb-errors-and-suspense
+            title:
+              en: Errors That Affect (and Don't Affect) the Trial Balance
+              ar: الأخطاء في ميزان المراجعة
+            learning_objectives:
+              - List errors that don't disturb the TB (omission, principle, compensating)
+              - Use a suspense account to balance and resolve
+
+      - module: Adjusting Entries
+        lessons:
+          - slug: in-adj-purpose-and-types
+            title:
+              en: Why Adjusting Entries Exist — Accrual Drives Everything
+              ar: لماذا توجد قيود التسوية
+            learning_objectives:
+              - Explain how accrual accounting forces adjustments
+              - Categorise adjustments into accruals, deferrals, estimates
+          - slug: in-adj-accrued-income-expense
+            title:
+              en: Accrued Income and Accrued Expenses
+              ar: الإيرادات والمصروفات المستحقة
+            learning_objectives:
+              - Pass entries for income earned but not received
+              - Pass entries for expenses incurred but not paid
+          - slug: in-adj-deferred-prepaid
+            title:
+              en: Deferred Income and Prepaid Expenses
+              ar: الإيرادات المؤجلة والمصروفات المدفوعة مقدمًا
+            learning_objectives:
+              - Distinguish liability method from income method for unearned revenue
+              - Pass and reverse prepayment entries
+          - slug: in-adj-depreciation
+            title:
+              en: Depreciation — Concept, Methods (SLM, WDV) and Companies Act vs IT Act
+              ar: الإهلاك — المفهوم والطرق
+            learning_objectives:
+              - Compute depreciation under SLM and WDV
+              - Reconcile depreciation per Companies Act Schedule II vs Income Tax Act
+          - slug: in-adj-bad-debts
+            title:
+              en: Bad Debts and Provision for Doubtful Debts
+              ar: الديون المعدومة والمخصصات
+            learning_objectives:
+              - Pass entries for direct write-off and provision approach
+              - Decide which approach the business should use
+
+      - module: Inventory Valuation
+        lessons:
+          - slug: in-inv-what-is-inventory
+            title:
+              en: What Counts as Inventory — Raw Materials, WIP, Finished Goods
+              ar: ما هو المخزون
+            learning_objectives:
+              - Classify items into raw material, WIP, finished goods, stores
+              - Identify items that are NOT inventory (capital goods)
+          - slug: in-inv-fifo-lifo-wac
+            title:
+              en: FIFO, LIFO and Weighted Average — Methods and Tax Impact
+              ar: طرق تقييم المخزون
+            learning_objectives:
+              - Compute closing stock under all three methods on the same data
+              - Explain why LIFO is not permitted under Ind AS / AS 2
+          - slug: in-inv-as2-lower-of-cost-nrv
+            title:
+              en: AS 2 / Ind AS 2 — Lower of Cost or Net Realisable Value
+              ar: المعيار 2 — التكلفة أو صافي القيمة القابلة للتحقق أيهما أقل
+            learning_objectives:
+              - Apply the lower-of-cost-or-NRV rule item by item
+              - Pass write-down entries
+
+      - module: Bank Reconciliation
+        lessons:
+          - slug: in-brs-introduction
+            title:
+              en: Why Bank Books and Pass Books Disagree
+              ar: لماذا تختلف الدفاتر المصرفية
+            learning_objectives:
+              - List the five common reasons for disagreement
+              - Explain timing differences vs errors
+          - slug: in-brs-preparation
+            title:
+              en: Preparing a Bank Reconciliation Statement Step by Step
+              ar: إعداد بيان التسوية المصرفية
+            learning_objectives:
+              - Start from cash book balance and arrive at pass book balance (and vice versa)
+              - Identify items needing book correction vs items that auto-resolve
+          - slug: in-brs-tally-bank-recon
+            title:
+              en: Bank Reconciliation in Tally Prime
+              ar: التسوية المصرفية في تالي
+            learning_objectives:
+              - Use Tally's BRS feature with bank statement import
+              - Resolve unreconciled items inside Tally
+
+  # ════════════════════════════════════════════════════════════
+  - phase: 3
+    title:
+      en: Compliance — Tax, GST, TDS, TCS, Payroll
+      ar: الامتثال — الضرائب وضريبة السلع والخدمات وخصم الضريبة من المنبع وكشوف الرواتب
+    modules:
+      - module: Indian Taxation Foundations
+        lessons:
+          - slug: in-tax-direct-vs-indirect
+            title:
+              en: Direct vs Indirect Tax — The Indian Tax Map
+              ar: الضرائب المباشرة وغير المباشرة في الهند
+            learning_objectives:
+              - Distinguish direct from indirect taxes with examples
+              - Map each tax to the authority that collects it
+          - slug: in-tax-residential-status
+            title:
+              en: Residential Status and Scope of Total Income
+              ar: حالة الإقامة الضريبية
+            learning_objectives:
+              - Determine residential status (ROR, RNOR, NR) using day-count tests
+              - Map residential status to scope of taxable income
+          - slug: in-tax-five-heads
+            title:
+              en: The Five Heads of Income — A Tour
+              ar: رؤوس الدخل الخمسة
+            learning_objectives:
+              - Name the five heads and what falls under each
+              - Pick the right head for ambiguous income
+          - slug: in-tax-salary-income
+            title:
+              en: Income from Salary — Components, Allowances, Perquisites
+              ar: الدخل من الرواتب
+            learning_objectives:
+              - Compute taxable salary including HRA, LTA, perquisites
+              - Apply standard deduction and claim exemptions
+          - slug: in-tax-house-property
+            title:
+              en: Income from House Property — Self-Occupied, Let-Out, Deemed Let-Out
+              ar: الدخل من الممتلكات المنزلية
+            learning_objectives:
+              - Compute annual value, deductions u/s 24, and net taxable income
+              - Apply interest cap on self-occupied property
+          - slug: in-tax-pgbp
+            title:
+              en: Profits and Gains from Business or Profession (PGBP)
+              ar: الأرباح والمكاسب من الأعمال أو المهنة
+            learning_objectives:
+              - List allowable and disallowable expenses under PGBP
+              - Apply Section 40A(3), 43B, presumptive taxation u/s 44AD/44ADA
+          - slug: in-tax-capital-gains
+            title:
+              en: Capital Gains — STCG, LTCG, Indexation, Exemptions
+              ar: مكاسب رأس المال
+            learning_objectives:
+              - Distinguish STCG vs LTCG by asset class and holding period
+              - Apply indexation and exemptions u/s 54, 54F, 54EC
+          - slug: in-tax-other-sources
+            title:
+              en: Income from Other Sources
+              ar: الدخل من مصادر أخرى
+            learning_objectives:
+              - List items taxable under "other sources"
+              - Apply gift taxation rules u/s 56(2)(x)
+          - slug: in-tax-deductions-80c-onwards
+            title:
+              en: Chapter VI-A Deductions — 80C, 80D, 80G and the Rest
+              ar: خصومات الفصل السادس أ
+            learning_objectives:
+              - Use 80C, 80CCD, 80D, 80E, 80G, 80TTA effectively
+              - Compare old vs new tax regime for a sample taxpayer
+          - slug: in-tax-advance-tax
+            title:
+              en: Advance Tax — Instalments, Interest u/s 234B/C
+              ar: الضريبة المقدمة
+            learning_objectives:
+              - Calculate advance tax instalments and due dates
+              - Compute interest under 234A/B/C
+
+      - module: TDS (Tax Deducted at Source)
+        lessons:
+          - slug: in-tds-objective-and-mechanism
+            title:
+              en: TDS — Why It Exists and How It Works
+              ar: خصم الضريبة من المنبع
+            learning_objectives:
+              - Explain the TDS mechanism and its role in tax collection
+              - Identify deductor, deductee, and the section that applies
+          - slug: in-tds-key-sections
+            title:
+              en: Key TDS Sections — 192, 194A, 194C, 194H, 194I, 194J, 194Q, 195
+              ar: الأقسام الرئيسية لخصم الضريبة من المنبع
+            learning_objectives:
+              - Match each section to the type of payment it covers
+              - Apply correct rate and threshold for each section
+          - slug: in-tds-non-compliance
+            title:
+              en: Consequences of Non-Compliance — Disallowance, Interest, Penalty
+              ar: عواقب عدم الامتثال
+            learning_objectives:
+              - Explain Section 40(a)(ia) disallowance
+              - Compute interest u/s 201(1A) for late deduction/payment
+          - slug: in-tds-certificates-and-returns
+            title:
+              en: TDS Certificates (Form 16, 16A) and Returns (24Q, 26Q, 27Q)
+              ar: شهادات وإقرارات خصم الضريبة من المنبع
+            learning_objectives:
+              - Match each form to its purpose
+              - Walk through TRACES portal for download/correction
+          - slug: in-tds-in-tally
+            title:
+              en: TDS Setup and Recording in Tally Prime
+              ar: إعداد TDS في تالي
+            learning_objectives:
+              - Enable TDS, configure nature of payment, and pass entries
+              - Generate TDS payable report in Tally
+
+      - module: TCS (Tax Collected at Source)
+        lessons:
+          - slug: in-tcs-overview
+            title:
+              en: TCS — When the Seller Collects Tax
+              ar: ضريبة محصلة من المنبع
+            learning_objectives:
+              - Distinguish TCS from TDS
+              - List the goods/services and thresholds covered under Section 206C
+          - slug: in-tcs-tally-and-entries
+            title:
+              en: TCS in Tally — Setup, Entries, and Returns
+              ar: TCS في تالي
+            learning_objectives:
+              - Enable TCS in Tally and create TCS-applicable ledgers
+              - Pass sale entries with TCS and generate the TCS report
+
+      - module: GST End-to-End
+        lessons:
+          - slug: in-gst-introduction-and-benefits
+            title:
+              en: GST — One Nation, One Tax (Why GST Replaced VAT/Excise/Service Tax)
+              ar: مقدمة في ضريبة السلع والخدمات
+            learning_objectives:
+              - State the four key benefits of GST over the legacy regime
+              - Explain the dual GST model (Centre + State)
+          - slug: in-gst-terminology-and-design
+            title:
+              en: GST Terminology and Design — Supply, Levy, Registration Threshold
+              ar: مصطلحات GST وتصميمها
+            learning_objectives:
+              - Define supply, taxable person, aggregate turnover
+              - State the registration threshold for goods vs services and special category states
+          - slug: in-gst-types-cgst-sgst-igst-utgst
+            title:
+              en: CGST, SGST, IGST, UTGST — Which One Applies?
+              ar: أنواع GST
+            learning_objectives:
+              - Pick the correct GST type for a given supply
+              - Apply place-of-supply rules to inter-state vs intra-state
+          - slug: in-gst-place-of-supply
+            title:
+              en: Place of Supply Rules for Goods and Services
+              ar: مكان التوريد بموجب GST
+            learning_objectives:
+              - Apply place-of-supply rules for B2B, B2C, services, e-commerce
+              - Resolve common edge cases (transportation, telecom, OIDAR)
+          - slug: in-gst-time-and-value-of-supply
+            title:
+              en: Time of Supply and Value of Supply
+              ar: وقت وقيمة التوريد
+            learning_objectives:
+              - Determine time of supply for goods, services, and reverse charge
+              - Compute taxable value including/excluding discounts and incidental expenses
+          - slug: in-gst-rates-and-hsn-sac
+            title:
+              en: GST Rate Slabs and HSN / SAC Classification
+              ar: شرائح GST وتصنيف HSN/SAC
+            learning_objectives:
+              - List the rate slabs (0, 5, 12, 18, 28%) and special rates
+              - Look up HSN for goods and SAC for services
+          - slug: in-gst-input-tax-credit
+            title:
+              en: Input Tax Credit — Eligibility, Conditions, Blocked Credits
+              ar: ائتمان ضريبة المدخلات
+            learning_objectives:
+              - Apply the four conditions for ITC eligibility
+              - Identify blocked credits under Section 17(5)
+          - slug: in-gst-rcm
+            title:
+              en: Reverse Charge Mechanism — When the Buyer Pays GST
+              ar: آلية الشحن العكسي
+            learning_objectives:
+              - List notified RCM supplies (legal, GTA, director services, import of services)
+              - Pass RCM entries and claim corresponding ITC
+          - slug: in-gst-composition-scheme
+            title:
+              en: Composition Scheme — When and Why a Small Business Opts In
+              ar: مخطط التركيب
+            learning_objectives:
+              - State eligibility, rates, and restrictions of the composition scheme
+              - Compare effective tax cost vs regular scheme for a sample
+          - slug: in-gst-registration
+            title:
+              en: GST Registration — Who, When, and How (GST Portal Walkthrough)
+              ar: التسجيل في GST
+            learning_objectives:
+              - Determine mandatory vs voluntary registration
+              - Decode the 15-digit GSTIN structure
+          - slug: in-gst-invoice-and-bill-of-supply
+            title:
+              en: Tax Invoice, Bill of Supply, Receipt Voucher and Refund Voucher
+              ar: الفاتورة الضريبية وفاتورة التوريد
+            learning_objectives:
+              - List mandatory fields on a tax invoice
+              - Pick the right document type for any transaction
+          - slug: in-gst-eway-bill
+            title:
+              en: E-Way Bill — When Required, How to Generate, Penalties
+              ar: فاتورة الطريق الإلكترونية
+            learning_objectives:
+              - Identify when an e-way bill is mandatory (₹50,000 threshold and exceptions)
+              - Generate and update an e-way bill on the portal
+          - slug: in-gst-e-invoicing
+            title:
+              en: E-Invoicing under GST — IRN, QR Code, IRP Portal
+              ar: الفوترة الإلكترونية تحت GST
+            learning_objectives:
+              - State current e-invoicing turnover threshold and exclusions
+              - Walk through IRN generation and QR code on the invoice
+          - slug: in-gst-returns-gstr1
+            title:
+              en: GSTR-1 — Outward Supplies Return
+              ar: GSTR-1
+            learning_objectives:
+              - Map invoice data to GSTR-1 tables
+              - File GSTR-1 monthly vs quarterly under QRMP
+          - slug: in-gst-returns-gstr3b
+            title:
+              en: GSTR-3B — The Self-Assessed Monthly Return
+              ar: GSTR-3B
+            learning_objectives:
+              - Reconcile GSTR-3B with books and GSTR-1
+              - Pay tax through the electronic cash and credit ledgers
+          - slug: in-gst-returns-gstr2a-2b
+            title:
+              en: GSTR-2A vs GSTR-2B — Reading the Auto-Drafted ITC Statements
+              ar: GSTR-2A و GSTR-2B
+            learning_objectives:
+              - Distinguish GSTR-2A from GSTR-2B
+              - Reconcile purchase register with 2B and resolve mismatches
+          - slug: in-gst-annual-return-gstr9
+            title:
+              en: GSTR-9 and GSTR-9C — Annual Return and Reconciliation Statement
+              ar: GSTR-9 و GSTR-9C
+            learning_objectives:
+              - Identify who must file GSTR-9 and 9C
+              - Walk through key tables and common errors
+          - slug: in-gst-payment-and-refunds
+            title:
+              en: GST Payment, Cash Ledger, Credit Ledger, and Refund Process
+              ar: الدفع والمبالغ المستردة في GST
+            learning_objectives:
+              - Pay GST via challan and offset against credit ledger
+              - File a refund application for export, inverted duty, excess balance
+          - slug: in-gst-tally-setup
+            title:
+              en: Enabling and Using GST in Tally Prime
+              ar: إعداد GST في تالي
+            learning_objectives:
+              - Enable GST and configure HSN/SAC at company and stock-item level
+              - Pass GST sales/purchase entries and generate GSTR-1/3B reports
+          - slug: in-gst-export-and-lut
+            title:
+              en: Exports under GST — Zero-Rated Supply, LUT, and Refund of Unutilised ITC
+              ar: الصادرات بموجب GST
+            learning_objectives:
+              - Distinguish export with payment of IGST vs export under LUT
+              - File LUT and claim refund of accumulated ITC
+          - slug: in-gst-job-work
+            title:
+              en: Job Work under GST — ITC-04 and Movement Without Tax
+              ar: العمل المقاولي بموجب GST
+            learning_objectives:
+              - Send goods on job work without payment of tax
+              - File ITC-04 and reconcile job-work stock
+          - slug: in-gst-tds-tcs-under-gst
+            title:
+              en: GST TDS and GST TCS — Sections 51 and 52
+              ar: TDS و TCS بموجب GST
+            learning_objectives:
+              - Identify deductors under Section 51 and e-commerce operators under Section 52
+              - File GSTR-7 and GSTR-8 returns
+          - slug: in-gst-notices-and-assessments
+            title:
+              en: GST Notices, Assessments, and the Adjudication Process
+              ar: الإشعارات والتقييمات في GST
+            learning_objectives:
+              - Recognise common GST notices (ASMT-10, DRC-01, scrutiny notices)
+              - Draft a structured reply with documentary backing
+          - slug: in-gst-audit-by-department
+            title:
+              en: Departmental GST Audit — How to Prepare and What to Expect
+              ar: تدقيق GST من قبل المصلحة
+            learning_objectives:
+              - Prepare a departmental audit file (sales, purchase, ITC, returns)
+              - Reconcile books with returns to pre-empt findings
+          - slug: in-gst-qrmp-scheme
+            title:
+              en: QRMP Scheme — Quarterly Returns with Monthly Payment
+              ar: مخطط QRMP
+            learning_objectives:
+              - Determine QRMP eligibility and opt-in
+              - Use IFF (Invoice Furnishing Facility) and PMT-06 challans
+          - slug: in-gst-imports-and-customs
+            title:
+              en: Imports under GST — IGST at Customs, Bill of Entry, ITC Recovery
+              ar: الواردات بموجب GST
+            learning_objectives:
+              - Compute IGST on imports based on assessable value plus BCD
+              - Recover IGST as ITC against the bill of entry
+          - slug: in-gst-place-of-business-and-isd
+            title:
+              en: Multiple Place of Business, Input Service Distributor (ISD), and Cross-Charge
+              ar: تعدد أماكن العمل و ISD
+            learning_objectives:
+              - Decide between ISD registration and cross-charge mechanism
+              - Distribute common ITC across registrations
+
+      - module: Payroll
+        lessons:
+          - slug: in-payroll-intro
+            title:
+              en: Indian Payroll — Components, Statutory Deductions, Compliance
+              ar: كشوف الرواتب
+            learning_objectives:
+              - List salary components (basic, HRA, DA, special, allowances)
+              - Identify statutory deductions (PF, ESI, PT, TDS)
+          - slug: in-payroll-pf-esi-pt
+            title:
+              en: PF, ESI, Professional Tax, and Gratuity — Rules and Rates
+              ar: PF و ESI والضريبة المهنية والمكافأة
+            learning_objectives:
+              - Compute PF, ESI, and PT contributions for a sample salary
+              - State applicability thresholds and filing dates
+          - slug: in-payroll-tally-setup
+            title:
+              en: Payroll in Tally Prime — Employees, Salary Structure, Pay Slips
+              ar: كشوف الرواتب في تالي
+            learning_objectives:
+              - Enable payroll, create employees and pay heads
+              - Process payroll and generate pay slips and statutory reports
+
+  # ════════════════════════════════════════════════════════════
+  - phase: 4
+    title:
+      en: Reporting and Analysis
+      ar: التقارير والتحليل
+    modules:
+      - module: Final Accounts and Schedule III
+        lessons:
+          - slug: in-final-pl-statement
+            title:
+              en: Statement of Profit and Loss under Schedule III
+              ar: بيان الربح والخسارة وفق الجدول الثالث
+            learning_objectives:
+              - Prepare a P&L in Schedule III format
+              - Map trial balance lines to Schedule III line items
+          - slug: in-final-balance-sheet
+            title:
+              en: Balance Sheet under Schedule III
+              ar: الميزانية العمومية وفق الجدول الثالث
+            learning_objectives:
+              - Prepare a balance sheet with Schedule III classification
+              - Disclose contingent liabilities and commitments
+          - slug: in-final-cash-flow
+            title:
+              en: Cash Flow Statement — Direct vs Indirect Method
+              ar: قائمة التدفقات النقدية
+            learning_objectives:
+              - Prepare a cash flow statement under the indirect method (AS 3)
+              - Classify items into operating, investing, and financing
+          - slug: in-final-notes-and-disclosures
+            title:
+              en: Notes to Accounts and Significant Accounting Policies
+              ar: الملاحظات على الحسابات
+            learning_objectives:
+              - Draft significant accounting policies note
+              - Cross-reference notes to face of financials
+
+      - module: Accounts Receivable and Payable
+        lessons:
+          - slug: in-ar-process
+            title:
+              en: Accounts Receivable Process — Order to Cash
+              ar: عملية الحسابات المدينة
+            learning_objectives:
+              - Walk through the order-to-cash cycle end to end
+              - Identify control points in the AR process
+          - slug: in-ar-credit-and-collections
+            title:
+              en: Credit Control, Ageing, and Collections Strategy
+              ar: التحكم في الائتمان والتحصيل
+            learning_objectives:
+              - Build a customer ageing report and act on it
+              - Set credit limits and dunning policy
+          - slug: in-ar-customer-master
+            title:
+              en: Customer Master Data and AR Reconciliation
+              ar: البيانات الرئيسية للعميل
+            learning_objectives:
+              - Set up clean customer master data
+              - Reconcile customer ledger to control account
+          - slug: in-ap-process
+            title:
+              en: Accounts Payable Process — Procure to Pay
+              ar: عملية الحسابات الدائنة
+            learning_objectives:
+              - Walk through PO → GRN → vendor invoice → payment
+              - Apply the three-way match
+          - slug: in-ap-vendor-master-and-recon
+            title:
+              en: Vendor Master, Vendor Statement Reconciliation, and Risks
+              ar: البيانات الرئيسية للمورد
+            learning_objectives:
+              - Build vendor master with PAN, GSTIN, bank details
+              - Identify common AP risks (duplicate payment, fictitious vendor)
+          - slug: in-ap-capital-vs-revenue
+            title:
+              en: Capital Expenditure vs Revenue Expenditure — The Distinction That Matters
+              ar: النفقات الرأسمالية مقابل الإيرادية
+            learning_objectives:
+              - Classify expenses as capital or revenue with examples
+              - Explain the impact on P&L vs balance sheet
+
+      - module: Ratio Analysis and MIS
+        lessons:
+          - slug: in-ratio-introduction
+            title:
+              en: Ratio Analysis — What Ratios Reveal and What They Hide
+              ar: تحليل النسب
+            learning_objectives:
+              - State the five families of ratios
+              - Avoid the most common interpretation traps
+          - slug: in-ratio-liquidity-solvency
+            title:
+              en: Liquidity and Solvency Ratios
+              ar: نسب السيولة والملاءة
+            learning_objectives:
+              - Compute current ratio, quick ratio, debt-equity, interest coverage
+              - Interpret each ratio in context
+          - slug: in-ratio-profitability-efficiency
+            title:
+              en: Profitability and Efficiency Ratios
+              ar: نسب الربحية والكفاءة
+            learning_objectives:
+              - Compute GP margin, NP margin, ROCE, ROE, asset turnover, inventory days
+              - Build a one-page profitability dashboard
+          - slug: in-ratio-market-value
+            title:
+              en: Market Value Ratios for Listed Companies
+              ar: نسب القيمة السوقية
+            learning_objectives:
+              - Compute EPS, P/E, dividend yield, book value per share
+              - Read these ratios from a published annual report
+          - slug: in-mis-reporting
+            title:
+              en: MIS Reporting — What CFOs Actually Want Every Monday
+              ar: تقارير MIS
+            learning_objectives:
+              - Build a one-page monthly MIS pack
+              - Pick KPIs that drive decisions, not vanity metrics
+
+      - module: Excel for Accountants
+        lessons:
+          - slug: in-excel-essential-formulas
+            title:
+              en: Essential Excel Formulas — VLOOKUP, INDEX-MATCH, XLOOKUP, SUMIFS
+              ar: صيغ Excel الأساسية
+            learning_objectives:
+              - Use lookup formulas to merge data from multiple sources
+              - Choose the right formula for the right job
+          - slug: in-excel-pivot-and-power-query
+            title:
+              en: Pivot Tables and Power Query for Accountants
+              ar: PivotTable و Power Query
+            learning_objectives:
+              - Build a pivot table from raw transaction data
+              - Use Power Query to clean and merge data sources
+          - slug: in-excel-cash-and-petty-cash-book
+            title:
+              en: Cash Book and Petty Cash Book in Excel
+              ar: دفتر النقد والمصاريف النثرية
+            learning_objectives:
+              - Build a self-balancing cash book in Excel
+              - Track petty cash with the imprest system
+          - slug: in-excel-financial-statements
+            title:
+              en: Financial Statements in Excel — From Trial Balance to Final Accounts
+              ar: البيانات المالية في Excel
+            learning_objectives:
+              - Link a trial balance to P&L and balance sheet via formulas
+              - Build a self-checking spreadsheet that errors out on imbalance
+
+  # ════════════════════════════════════════════════════════════
+  - phase: 5
+    title:
+      en: Compliance, Ethics and Career Skills
+      ar: الامتثال والأخلاقيات ومهارات المهنة
+    modules:
+      - module: Companies Act and MCA Filings
+        lessons:
+          - slug: in-coa-applicability
+            title:
+              en: Companies Act 2013 — What Every Accountant Must Know
+              ar: قانون الشركات 2013
+            learning_objectives:
+              - State the difference between OPC, Pvt Ltd, Public Ltd, LLP
+              - List statutory registers a company must maintain
+          - slug: in-coa-aoc4-mgt7
+            title:
+              en: MCA Annual Filings — AOC-4 and MGT-7
+              ar: الإيداعات السنوية لـ MCA
+            learning_objectives:
+              - Walk through AOC-4 and MGT-7 filing flow on MCA portal
+              - State due dates, late fees, and disqualification consequences
+          - slug: in-coa-caro-2020
+            title:
+              en: CARO 2020 — Auditor's Report Companion Every Accountant Should Read
+              ar: CARO 2020
+            learning_objectives:
+              - List the key reporting clauses under CARO 2020
+              - Prepare the documentation an auditor will request
+
+      - module: Income Tax Return Filing
+        lessons:
+          - slug: in-itr-what-and-when
+            title:
+              en: ITR Filing — Who Must File, When, and Consequences of Skipping
+              ar: تقديم الإقرار الضريبي
+            learning_objectives:
+              - Determine filing obligation by income, residency, and asset thresholds
+              - State due dates and penalties under Section 234F
+          - slug: in-itr-forms
+            title:
+              en: ITR Forms 1 to 7 — Picking the Right Form
+              ar: نماذج ITR من 1 إلى 7
+            learning_objectives:
+              - Match each ITR form to the eligible taxpayer category
+              - Identify common form-selection mistakes
+          - slug: in-itr-portal-walkthrough
+            title:
+              en: Filing on the Income Tax Portal — A Practical Walkthrough
+              ar: الإيداع على بوابة ضريبة الدخل
+            learning_objectives:
+              - Pre-fill data, validate, and submit ITR
+              - E-verify via Aadhaar OTP, net banking, or DSC
+
+      - module: Ethics and Soft Skills
+        lessons:
+          - slug: in-ethics-icai-code
+            title:
+              en: Professional Ethics — The ICAI Code Every Accountant Should Live By
+              ar: أخلاقيات المهنة
+            learning_objectives:
+              - State the five fundamental ethical principles
+              - Recognise threats to independence and objectivity
+          - slug: in-soft-client-communication
+            title:
+              en: Client Communication for Accountants — Saying No, Asking for Documents, Explaining Numbers
+              ar: التواصل مع العملاء
+            learning_objectives:
+              - Frame uncomfortable conversations professionally
+              - Translate jargon into language a non-accountant founder understands
+
+      - module: AI for Accountants
+        lessons:
+          - slug: in-ai-using-superaccountant
+            title:
+              en: Using SuperAccountant — Letting an AI Agent Help with Your Daily Work
+              ar: استخدام SuperAccountant
+            learning_objectives:
+              - Use the tutoring agent to validate journal entries and explain regulations
+              - Recognise when to trust AI output and when to verify
+          - slug: in-ai-document-extraction
+            title:
+              en: AI Document Extraction — Invoices, Bank Statements, Vendor Bills
+              ar: استخراج المستندات بالذكاء الاصطناعي
+            learning_objectives:
+              - Use OCR to extract data from a scanned vendor invoice
+              - Validate AI extractions against the source
+
+  # ════════════════════════════════════════════════════════════
+  # Phase 6 is the Specialisation Picker. Each student chooses
+  # EXACTLY TWO of the five specialisation tracks below. The
+  # entry-test agent recommends a default pair based on the
+  # student's stated career goal (CA aspirant, SME accountant,
+  # startup finance, audit firm, MNC subsidiary).
+  - phase: 6
+    title:
+      en: Specialisation (Pick Any Two)
+      ar: التخصص (اختر اثنين)
+    pick: 2
+    modules:
+      - module: Spec — Ind AS Deep Dive
+        track_code: IND-AS
+        lessons:
+          - slug: in-spec-indas-framework
+            title:
+              en: Ind AS Framework, Carve-Outs, and First-Time Adoption (Ind AS 101)
+              ar: إطار Ind AS
+            learning_objectives:
+              - Walk through the Ind AS conceptual framework and India-specific carve-outs
+              - Apply Ind AS 101 to a first-time adopter
+          - slug: in-spec-indas-115-revenue
+            title:
+              en: Ind AS 115 — Revenue from Contracts with Customers
+              ar: المعيار 115
+            learning_objectives:
+              - Apply the five-step revenue model
+              - Identify performance obligations in multi-element contracts
+          - slug: in-spec-indas-116-leases
+            title:
+              en: Ind AS 116 — Leases on the Balance Sheet
+              ar: المعيار 116
+            learning_objectives:
+              - Recognise right-of-use asset and lease liability
+              - Compute interest, depreciation, and remeasurement
+          - slug: in-spec-indas-109-financial-instruments
+            title:
+              en: Ind AS 109 — Financial Instruments and ECL
+              ar: المعيار 109
+            learning_objectives:
+              - Classify instruments under amortised cost / FVOCI / FVTPL
+              - Apply the simplified ECL model to trade receivables
+          - slug: in-spec-indas-19-employee-benefits
+            title:
+              en: Ind AS 19 — Employee Benefits and Actuarial Valuation
+              ar: المعيار 19
+            learning_objectives:
+              - Distinguish defined contribution from defined benefit plans
+              - Read and account for an actuarial valuation report
+
+      - module: Spec — Audit and Assurance
+        track_code: AUDIT
+        lessons:
+          - slug: in-spec-audit-types
+            title:
+              en: Statutory, Tax, Internal, and Concurrent Audits — A Tour
+              ar: أنواع التدقيق
+            learning_objectives:
+              - Distinguish each audit type by mandate and scope
+              - Identify which engagement letter applies
+          - slug: in-spec-audit-44ab
+            title:
+              en: Tax Audit u/s 44AB — Form 3CA/3CB and 3CD
+              ar: التدقيق الضريبي
+            learning_objectives:
+              - Determine 44AB applicability with current thresholds
+              - Walk through every clause of Form 3CD
+          - slug: in-spec-audit-sa-standards
+            title:
+              en: Standards on Auditing — SA 200, 230, 315, 330, 700 Essentials
+              ar: معايير التدقيق
+            learning_objectives:
+              - Apply SA 315 risk assessment to a sample client
+              - Document audit evidence per SA 230
+          - slug: in-spec-audit-internal-controls
+            title:
+              en: Internal Controls Testing and IFC Reporting
+              ar: اختبار الرقابة الداخلية
+            learning_objectives:
+              - Walk through the test of design vs test of operating effectiveness
+              - Prepare an IFC report for a private company
+          - slug: in-spec-audit-fraud
+            title:
+              en: Fraud Risk and Forensic Red Flags
+              ar: مخاطر الاحتيال
+            learning_objectives:
+              - Identify fraud red flags in books and bank statements
+              - Apply Benford's law and other analytical procedures
+
+      - module: Spec — Startup Finance
+        track_code: STARTUP
+        lessons:
+          - slug: in-spec-startup-incorporation
+            title:
+              en: Incorporating a Startup — Pvt Ltd vs LLP vs OPC, DPIIT Recognition
+              ar: تأسيس شركة ناشئة
+            learning_objectives:
+              - Pick the right entity type for an early-stage startup
+              - Walk through DPIIT recognition for tax benefits
+          - slug: in-spec-startup-esops
+            title:
+              en: ESOPs — Grant, Vesting, Exercise, and Tax Treatment
+              ar: خيارات الأسهم للموظفين
+            learning_objectives:
+              - Set up an ESOP pool and grant schedule
+              - Account for ESOP expense under Ind AS 102 / IGAAP
+          - slug: in-spec-startup-funding-instruments
+            title:
+              en: SAFE, CCD, CCPS, Convertible Notes — Accounting and Tax
+              ar: أدوات تمويل الشركات الناشئة
+            learning_objectives:
+              - Classify each instrument as debt or equity
+              - Account for conversion and valuation events
+          - slug: in-spec-startup-cap-table
+            title:
+              en: Cap Table Management and Dilution Modelling
+              ar: جدول الملكية
+            learning_objectives:
+              - Build a cap table from incorporation to Series A
+              - Model dilution across funding rounds
+          - slug: in-spec-startup-burn-runway
+            title:
+              en: Burn Rate, Runway, and Founder MIS
+              ar: معدل الحرق والعمر التشغيلي
+            learning_objectives:
+              - Compute burn and runway from monthly financials
+              - Build a founder-friendly MIS one-pager
+
+      - module: Spec — Forensic and Internal Audit
+        track_code: FORENSIC
+        lessons:
+          - slug: in-spec-forensic-intro
+            title:
+              en: Forensic Accounting — When Numbers Tell the Truth Anyway
+              ar: المحاسبة الجنائية
+            learning_objectives:
+              - Distinguish forensic from statutory audit objectives
+              - Plan a forensic engagement
+          - slug: in-spec-forensic-data-analytics
+            title:
+              en: Data Analytics for Forensic Investigation
+              ar: تحليل البيانات الجنائي
+            learning_objectives:
+              - Apply Benford's law, ratio outliers, and duplicate-payment tests
+              - Build a forensic data extraction workflow
+          - slug: in-spec-forensic-fraud-schemes
+            title:
+              en: Common Fraud Schemes — Vendor, Payroll, Inventory, Revenue
+              ar: مخططات الاحتيال الشائعة
+            learning_objectives:
+              - Recognise the patterns of each scheme
+              - Design controls that block them
+          - slug: in-spec-forensic-evidence
+            title:
+              en: Evidence Gathering, Chain of Custody, and Expert Witness Reports
+              ar: جمع الأدلة
+            learning_objectives:
+              - Document evidence per chain-of-custody standards
+              - Draft an expert witness report
+          - slug: in-spec-forensic-pmla-feoa
+            title:
+              en: PMLA, FEOA, and Indian Forensic Statutory Framework
+              ar: الإطار القانوني الجنائي
+            learning_objectives:
+              - Identify reporting obligations under PMLA
+              - Walk through a recent enforcement action
+
+      - module: Spec — International Tax and Transfer Pricing
+        track_code: INTL-TAX
+        lessons:
+          - slug: in-spec-intl-treaty
+            title:
+              en: DTAA Basics — Treaty Override, MLI, and Tie-Breaker Rules
+              ar: اتفاقيات تجنب الازدواج الضريبي
+            learning_objectives:
+              - Read a DTAA article and apply it to a payment
+              - Understand the impact of MLI and PPT
+          - slug: in-spec-intl-section-195
+            title:
+              en: Section 195, Form 15CA/CB, and Foreign Remittance Compliance
+              ar: المادة 195 والنماذج 15CA/CB
+            learning_objectives:
+              - Determine TDS rate on foreign remittances
+              - Issue Form 15CA/CB with treaty rate
+          - slug: in-spec-intl-tp-overview
+            title:
+              en: Indian Transfer Pricing Regime — Form 3CEB and Documentation
+              ar: تسعير المعاملات الهندية
+            learning_objectives:
+              - Identify international transactions and SDTs
+              - Walk through Form 3CEB
+          - slug: in-spec-intl-tp-methods
+            title:
+              en: TP Methods — CUP, RPM, CPM, TNMM, PSM
+              ar: طرق تسعير المعاملات
+            learning_objectives:
+              - Pick the most appropriate method for each transaction type
+              - Document a benchmarking study
+          - slug: in-spec-intl-bepps-pillar2
+            title:
+              en: BEPS, Pillar Two, and the Indian Equalisation Levy
+              ar: BEPS والركيزة الثانية
+            learning_objectives:
+              - Explain Pillar Two GloBE rules at a high level
+              - Apply equalisation levy to digital services
+
+  # ════════════════════════════════════════════════════════════
+  - phase: 7
+    title:
+      en: Capstone and Grand Test
+      ar: المشروع الختامي والاختبار الكبير
+    modules:
+      - module: Capstone Project
+        lessons:
+          - slug: in-capstone-full-year-close
+            title:
+              en: Capstone — Full-Year Close for a Fictional Pvt Ltd
+              ar: المشروع الختامي
+            learning_objectives:
+              - Take 12 months of vouchers and produce trial balance, Schedule III financials, and tax computation
+              - File mock GSTR-1, 3B, 9, and ITR-6
+          - slug: in-capstone-grand-test
+            title:
+              en: Grand Test — Proctored, Bilingual, Mixed Format
+              ar: الاختبار الكبير
+            learning_objectives:
+              - Apply everything learned in a 3-hour timed assessment
+              - Earn the SuperAccountant Chartered Path Certificate

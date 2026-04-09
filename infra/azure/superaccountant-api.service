@@ -1,0 +1,41 @@
+[Unit]
+Description=SuperAccountant API (NestJS)
+Documentation=https://github.com/Ibrhimovic9989/superaccountant
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=azureuser
+Group=azureuser
+WorkingDirectory=/home/azureuser/superaccountant/apps/api
+# The API loads its env from the repo-root .env via main.ts. We also pass
+# PORT explicitly so it binds to the same loopback port nginx proxies to.
+Environment=NODE_ENV=production
+Environment=PORT=4000
+Environment=SA_REPO_ROOT=/home/azureuser/superaccountant
+ExecStart=/usr/bin/node dist/main.js
+Restart=always
+RestartSec=5
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# Security hardening — sane defaults from systemd best practices.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/azureuser/superaccountant
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=superaccountant-api
+
+[Install]
+WantedBy=multi-user.target

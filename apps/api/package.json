@@ -1,0 +1,46 @@
+{
+  "name": "@sa/api",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "nest build",
+    "start": "node dist/main.js",
+    "lint": "biome check src",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "generate:lesson": "tsx src/cli/generate-lesson.ts",
+    "generate:track": "tsx src/cli/generate-lesson.ts --all"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.4.15",
+    "@nestjs/config": "^3.3.0",
+    "@nestjs/core": "^10.4.15",
+    "@nestjs/platform-express": "^10.4.15",
+    "@nestjs/throttler": "^6.5.0",
+    "@react-pdf/renderer": "^4.1.6",
+    "@resvg/resvg-js": "^2.6.2",
+    "@sa/ai": "workspace:*",
+    "@sa/config": "workspace:*",
+    "@sa/db": "workspace:*",
+    "@sa/email": "workspace:*",
+    "@sa/types": "workspace:*",
+    "ffmpeg-static": "^5.2.0",
+    "pino": "^9.5.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "yaml": "^2.6.1",
+    "zod": "^3.24.1",
+    "zod-to-json-schema": "^3.24.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.4.9",
+    "@nestjs/schematics": "^10.2.3",
+    "@nestjs/testing": "^10.4.15",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}

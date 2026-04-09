@@ -1,0 +1,27 @@
+{
+  "name": "superaccountant",
+  "version": "0.0.1",
+  "private": true,
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "db:generate": "pnpm --filter @sa/db generate",
+    "db:migrate": "pnpm --filter @sa/db migrate",
+    "db:studio": "pnpm --filter @sa/db studio",
+    "format": "biome format --write .",
+    "check": "biome check ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@playwright/test": "^1.59.1",
+    "turbo": "^2.3.0",
+    "typescript": "^5.6.3"
+  }
+}

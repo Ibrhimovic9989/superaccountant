@@ -1,0 +1,18 @@
+{
+  "name": "@sa/email",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "biome check src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@sa/config": "workspace:*",
+    "resend": "^4.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

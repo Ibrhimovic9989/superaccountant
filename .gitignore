@@ -1,0 +1,51 @@
+# deps
+node_modules
+.pnpm-store
+
+# env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# local IDE / MCP config — contains API keys, never commit
+.mcp.json
+.claude/
+.cursor/
+
+# build
+.next
+dist
+build
+out
+.turbo
+*.tsbuildinfo
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# os
+.DS_Store
+Thumbs.db
+
+# editors
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea
+
+# prisma
+prisma/migrations/dev.db*
+
+# test
+coverage
+
+# claude-code source (vendored for inspiration only — not part of build)
+# keep it tracked or untrack — your call. For now, tracked.
+
+# generated curriculum artifacts (large)
+contexts/curriculum/seed/**/generated/
+*.mp4
+*.mkv

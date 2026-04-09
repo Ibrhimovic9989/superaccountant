@@ -1,0 +1,61 @@
+{
+  "app": {
+    "name": "SuperAccountant",
+    "tagline": "AI tutor for accountants. India and KSA."
+  },
+  "nav": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "dashboard": "Dashboard"
+  },
+  "welcome": {
+    "title": "Welcome to SuperAccountant",
+    "subtitle": "Two questions and we'll place you in the right starting phase.",
+    "step1": "Which market do you work in?",
+    "marketIndia": "India",
+    "marketIndiaSub": "Companies Act, Income Tax, GST, Tally",
+    "marketKsa": "Saudi Arabia",
+    "marketKsaSub": "ZATCA, VAT, Zakat, IFRS",
+    "step2": "What's your goal?",
+    "goalCa": "CA / SOCPA candidate",
+    "goalSme": "SME accountant or bookkeeper",
+    "goalAudit": "Audit firm staff",
+    "goalStartup": "Startup finance",
+    "goalCurious": "Just curious",
+    "continue": "Continue",
+    "startTest": "Start placement test",
+    "testTitle": "Placement test",
+    "testProgress": "Question {index} of {total}",
+    "testSubmit": "Submit",
+    "testNext": "Next",
+    "doneTitle": "You're placed!",
+    "doneScore": "You scored {score}%",
+    "donePlaced": "We're starting you in Phase {phase}.",
+    "doneGo": "Go to dashboard"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign in to SuperAccountant",
+      "subtitle": "Use your Google account or your work email.",
+      "googleButton": "Continue with Google",
+      "or": "or",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "you@firm.com",
+      "emailButton": "Send sign-in link",
+      "termsNote": "By continuing you agree to the terms of use and privacy policy."
+    },
+    "verifyRequest": {
+      "title": "Check your email",
+      "body": "We sent you a sign-in link. Click it to finish signing in. The link expires in 24 hours.",
+      "tip": "If you don't see it, check your spam folder."
+    },
+    "error": {
+      "title": "Authentication error",
+      "default": "Something went wrong. Please try signing in again.",
+      "configuration": "Server configuration error. Contact support.",
+      "accessDenied": "Access denied.",
+      "verification": "The sign-in link is invalid or has expired. Request a new one.",
+      "back": "Back to sign in"
+    }
+  }
+}

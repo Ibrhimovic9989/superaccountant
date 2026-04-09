@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "plugins": [{ "name": "next" }],
+    "paths": { "@/*": ["./src/*"] },
+    "exactOptionalPropertyTypes": false,
+    "noUncheckedIndexedAccess": false,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowJs": true
+  },
+  "include": ["next-env.d.ts", "src/**/*", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

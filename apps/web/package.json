@@ -1,0 +1,46 @@
+{
+  "name": "@sa/web",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "biome check src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@auth/prisma-adapter": "^2.7.4",
+    "@sa/ai": "workspace:*",
+    "@sa/config": "workspace:*",
+    "@sa/db": "workspace:*",
+    "@sa/email": "workspace:*",
+    "@sa/i18n": "workspace:*",
+    "@sa/types": "workspace:*",
+    "@sa/ui": "workspace:*",
+    "@radix-ui/react-slot": "^1.1.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.469.0",
+    "mermaid": "^11.4.1",
+    "motion": "^12.0.0",
+    "next": "^16.0.0",
+    "next-auth": "5.0.0-beta.25",
+    "next-themes": "^0.4.4",
+    "nodemailer": "^6.9.16",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0",
+    "tailwind-merge": "^2.6.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.6.3"
+  }
+}
