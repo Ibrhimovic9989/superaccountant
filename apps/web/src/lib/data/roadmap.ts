@@ -71,7 +71,7 @@ export async function getRoadmap(
     JOIN "CurriculumModule" m ON l."moduleId" = m.id
     JOIN "CurriculumPhase" p ON m."phaseId" = p.id
     JOIN "CurriculumTrack" t ON p."trackId" = t.id
-    WHERE t.market = ${market}
+    WHERE t.market::text = ${market}
     ORDER BY p."order", m."order", l."order"
   `
 
