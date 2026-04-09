@@ -429,7 +429,7 @@ export default async function Landing({
       <MarketingNav locale={locale} />
 
       {/* ─── Hero ──────────────────────────────────────────── */}
-      <main className="relative z-10 mx-auto max-w-5xl px-6 pt-12 pb-20 text-center sm:pt-20">
+      <main className="relative z-10 mx-auto max-w-5xl px-4 pt-8 pb-16 text-center sm:px-6 sm:pt-20 sm:pb-20">
         <BlurFade delay={0.05}>
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev/80 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted backdrop-blur">
             <Sparkles className="h-3 w-3 text-accent" />
@@ -438,7 +438,7 @@ export default async function Landing({
         </BlurFade>
 
         <BlurFade delay={0.12}>
-          <h1 className="mt-6 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+          <h1 className="mt-5 text-[2.25rem] font-semibold leading-[1.08] tracking-tight sm:mt-6 sm:text-6xl lg:text-7xl">
             {t.titleA}
             <br />
             <span className="aurora-text">{t.titleB}</span>
@@ -446,7 +446,7 @@ export default async function Landing({
         </BlurFade>
 
         <BlurFade delay={0.18}>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg">
+          <p className="mx-auto mt-5 max-w-2xl text-[15px] leading-relaxed text-fg-muted sm:mt-6 sm:text-lg">
             {t.subtitle}
           </p>
         </BlurFade>
@@ -465,9 +465,14 @@ export default async function Landing({
         </BlurFade>
 
         <BlurFade delay={0.3}>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <div className="relative inline-flex">
-              <Button asChild variant="accent" size="lg" className="relative overflow-hidden">
+          <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="relative inline-flex w-full sm:w-auto">
+              <Button
+                asChild
+                variant="accent"
+                size="lg"
+                className="relative w-full overflow-hidden sm:w-auto"
+              >
                 <a href={appLink(locale, '/sign-in')}>
                   {t.primaryCta}
                   <ArrowRight className="h-4 w-4 rtl:rotate-180" />
@@ -475,7 +480,7 @@ export default async function Landing({
                 </a>
               </Button>
             </div>
-            <Button asChild variant="secondary" size="lg">
+            <Button asChild variant="secondary" size="lg" className="w-full sm:w-auto">
               <Link href={`/${locale}/features`}>
                 {t.secondaryCta}
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" />
@@ -486,7 +491,7 @@ export default async function Landing({
 
         {/* Stats inline under CTA */}
         <BlurFade delay={0.4}>
-          <div className="mx-auto mt-16 grid max-w-3xl grid-cols-3 divide-x divide-border rounded-2xl border border-border bg-bg-elev/50 backdrop-blur rtl:divide-x-reverse">
+          <div className="mx-auto mt-12 grid max-w-3xl grid-cols-3 divide-x divide-border rounded-2xl border border-border bg-bg-elev/50 backdrop-blur sm:mt-16 rtl:divide-x-reverse">
             <StatInline
               value={280}
               suffix="+"
@@ -526,10 +531,10 @@ export default async function Landing({
       </section>
 
       {/* ─── How it works ──────────────────────────────────── */}
-      <section className="relative z-10 mx-auto max-w-6xl px-6 py-28">
+      <section className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-28">
         <BlurFade delay={0.05}>
           <SectionEyebrow text={t.howLabel} />
-          <h2 className="mt-4 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h2 className="mt-4 max-w-2xl text-3xl font-semibold tracking-tight sm:text-5xl">
             {t.howTitle}
           </h2>
           <p className="mt-4 max-w-2xl text-base text-fg-muted">{t.howSubtitle}</p>
@@ -561,14 +566,14 @@ export default async function Landing({
       {/* ─── The agent ─────────────────────────────────────── */}
       <section
         id="agent"
-        className="relative z-10 border-y border-border bg-bg-elev/30 py-28 backdrop-blur"
+        className="relative z-10 border-y border-border bg-bg-elev/30 py-16 backdrop-blur sm:py-28"
       >
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
             <div>
               <BlurFade delay={0.05}>
                 <SectionEyebrow text={t.agentLabel} icon={<Brain className="h-3 w-3" />} />
-                <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+                <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">
                   {t.agentTitle}
                 </h2>
                 <p className="mt-4 text-base leading-relaxed text-fg-muted">{t.agentSubtitle}</p>
@@ -655,10 +660,10 @@ export default async function Landing({
       </section>
 
       {/* ─── Tracks ────────────────────────────────────────── */}
-      <section id="tracks" className="relative z-10 mx-auto max-w-6xl px-6 py-28">
+      <section id="tracks" className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-28">
         <BlurFade delay={0.05}>
           <SectionEyebrow text={t.tracksLabel} />
-          <h2 className="mt-4 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h2 className="mt-4 max-w-2xl text-3xl font-semibold tracking-tight sm:text-5xl">
             {t.tracksTitle}
           </h2>
           <p className="mt-4 max-w-2xl text-base text-fg-muted">{t.tracksSubtitle}</p>
@@ -727,13 +732,13 @@ export default async function Landing({
       </section>
 
       {/* ─── Bilingual + Certificate split ─────────────────── */}
-      <section className="relative z-10 border-y border-border bg-bg-elev/30 py-28 backdrop-blur">
+      <section className="relative z-10 border-y border-border bg-bg-elev/30 py-16 backdrop-blur sm:py-28">
         <div className="mx-auto max-w-6xl space-y-24 px-6">
           {/* Bilingual */}
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
             <BlurFade delay={0.05}>
               <SectionEyebrow text={t.bilingualLabel} icon={<Languages className="h-3 w-3" />} />
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+              <h2 className="mt-4 text-[1.625rem] font-semibold tracking-tight sm:text-4xl">
                 {t.bilingualTitle}
               </h2>
               <p className="mt-4 text-base leading-relaxed text-fg-muted">{t.bilingualBody}</p>
@@ -816,7 +821,7 @@ export default async function Landing({
 
             <BlurFade delay={0.05} className="order-1 lg:order-2">
               <SectionEyebrow text={t.certLabel} icon={<Award className="h-3 w-3" />} />
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+              <h2 className="mt-4 text-[1.625rem] font-semibold tracking-tight sm:text-4xl">
                 {t.certTitle}
               </h2>
               <p className="mt-4 text-base leading-relaxed text-fg-muted">{t.certBody}</p>
@@ -834,17 +839,17 @@ export default async function Landing({
       </section>
 
       {/* ─── Comparison ────────────────────────────────────── */}
-      <section className="relative z-10 mx-auto max-w-5xl px-6 py-28">
+      <section className="relative z-10 mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-28">
         <BlurFade delay={0.05}>
           <SectionEyebrow text={t.compareLabel} icon={<Target className="h-3 w-3" />} />
-          <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">
             {t.compareTitle}
           </h2>
         </BlurFade>
 
         <BlurFade delay={0.15}>
-          <div className="mt-12 overflow-hidden rounded-2xl border border-border bg-bg-elev/50 backdrop-blur">
-            <table className="w-full">
+          <div className="-mx-4 mt-10 overflow-x-auto border-y border-border bg-bg-elev/50 backdrop-blur sm:mx-0 sm:mt-12 sm:overflow-hidden sm:rounded-2xl sm:border">
+            <table className="w-full min-w-[520px]">
               <thead>
                 <tr className="border-b border-border">
                   <th className="px-6 py-4 text-start font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
@@ -887,11 +892,11 @@ export default async function Landing({
       </section>
 
       {/* ─── FAQ ───────────────────────────────────────────── */}
-      <section className="relative z-10 border-t border-border bg-bg-elev/30 py-28 backdrop-blur">
+      <section className="relative z-10 border-t border-border bg-bg-elev/30 py-16 backdrop-blur sm:py-28">
         <div className="mx-auto max-w-3xl px-6">
           <BlurFade delay={0.05}>
             <SectionEyebrow text={t.faqLabel} />
-            <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">
               {t.faqTitle}
             </h2>
           </BlurFade>
@@ -917,16 +922,16 @@ export default async function Landing({
       </section>
 
       {/* ─── Final CTA ─────────────────────────────────────── */}
-      <section className="relative z-10 mx-auto max-w-4xl px-6 py-28">
+      <section className="relative z-10 mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-28">
         <BlurFade delay={0.05}>
-          <div className="relative overflow-hidden rounded-3xl border border-border bg-bg-elev/50 p-12 text-center backdrop-blur sm:p-16">
+          <div className="relative overflow-hidden rounded-3xl border border-border bg-bg-elev/50 p-6 text-center backdrop-blur sm:p-12 lg:p-16">
             <div className="absolute inset-0 bg-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,white,transparent_70%)]" />
             <div className="relative">
               <div className="inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted">
                 <Zap className="h-3 w-3 text-accent" />
                 {t.finalLabel}
               </div>
-              <h2 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">
+              <h2 className="mt-6 text-3xl font-semibold tracking-tight sm:text-5xl">
                 {t.finalTitle}
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-base text-fg-muted">{t.finalSubtitle}</p>
@@ -986,15 +991,17 @@ function StatInline({
   label: string
 }) {
   return (
-    <div className="px-4 py-6 text-center">
+    <div className="px-2 py-5 text-center sm:px-4 sm:py-6">
       <div className="flex items-baseline justify-center gap-1">
         <NumberTicker
           value={value}
-          className="font-mono text-3xl font-medium tracking-tight sm:text-4xl"
+          className="font-mono text-2xl font-medium tracking-tight sm:text-4xl"
         />
-        <span className="font-mono text-xl text-fg-subtle">{suffix}</span>
+        <span className="font-mono text-base text-fg-subtle sm:text-xl">{suffix}</span>
       </div>
-      <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">{label}</p>
+      <p className="mt-1 font-mono text-[9px] uppercase tracking-wider text-fg-subtle sm:text-[10px]">
+        {label}
+      </p>
     </div>
   )
 }

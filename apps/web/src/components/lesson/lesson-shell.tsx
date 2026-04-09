@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, ArrowRight, Check, Loader2, Sparkles } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react'
 import { LessonContent } from './lesson-content'
 import { MermaidBlock } from './mermaid-block'
 import { Practice } from './practice'
@@ -63,6 +63,7 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
   const [mcqResult, setMcqResult] = useState({ correct: 0, total: 0 })
   const [completing, setCompleting] = useState(false)
   const [completed, setCompleted] = useState<{ mastery: number } | null>(null)
+  const [videoFailed, setVideoFailed] = useState(false)
 
   const t = LABELS[locale]
   const title = locale === 'ar' ? lesson.titleAr : lesson.titleEn
@@ -84,10 +85,16 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
         if (s === 'flow') return !!lesson.flowchartMermaid
         if (s === 'map') return !!lesson.mindmapMermaid
         if (s === 'try') return lesson.assessmentItems.length > 0
-        if (s === 'watch') return hasRealVideo
+        if (s === 'watch') return hasRealVideo && !videoFailed
         return true
       }),
-    [lesson.flowchartMermaid, lesson.mindmapMermaid, lesson.assessmentItems.length, hasRealVideo],
+    [
+      lesson.flowchartMermaid,
+      lesson.mindmapMermaid,
+      lesson.assessmentItems.length,
+      hasRealVideo,
+      videoFailed,
+    ],
   )
 
   const askTutor = useCallback((text: string) => tutorRef.current?.ask(text), [])
@@ -121,7 +128,7 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
   }
 
   return (
-    <div className="mx-auto grid max-w-5xl gap-x-10 gap-y-4 px-6 py-12 md:grid-cols-[120px_minmax(0,1fr)] md:gap-y-0">
+    <div className="mx-auto grid max-w-5xl gap-x-10 gap-y-4 px-4 py-8 sm:px-6 sm:py-12 md:grid-cols-[120px_minmax(0,1fr)] md:gap-y-0">
       {/* ── Mobile breadcrumb (shows on narrow screens before the rail) ── */}
       <div className="md:hidden">
         <Link
@@ -164,7 +171,7 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
               {locale === 'ar' ? lesson.module.titleAr : lesson.module.titleEn}
             </span>
           </div>
-          <h1 className="text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl lg:text-5xl">
+          <h1 className="text-[1.625rem] font-semibold leading-[1.15] tracking-tight sm:text-4xl lg:text-5xl">
             {title}
           </h1>
         </BlurFade>
@@ -196,17 +203,22 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
         })()}
 
         {/* ── Sections ───────────────────────────────────── */}
-        <div className="mt-12 space-y-16">
-          {hasRealVideo && localizedVideoUrl && (
+        <div className="mt-10 space-y-12 sm:mt-12 sm:space-y-16">
+          {hasRealVideo && localizedVideoUrl && !videoFailed && (
             <BlurFade delay={0.16}>
               <section id="watch" className="scroll-mt-24">
                 <SectionHeader label={t.watch} />
                 <div className="overflow-hidden rounded-xl border border-border bg-black">
                   <video
                     controls
+                    playsInline
+                    preload="metadata"
                     src={localizedVideoUrl}
                     className="aspect-video w-full"
-                  />
+                    onError={() => setVideoFailed(true)}
+                  >
+                    <track kind="captions" />
+                  </video>
                 </div>
               </section>
             </BlurFade>

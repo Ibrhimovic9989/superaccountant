@@ -69,7 +69,7 @@ export function Practice({ items, locale, onAskTutor, onMcqResult }: Props) {
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-bg-elev">
       {/* Header strip */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border bg-bg-overlay px-5 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border bg-bg-overlay px-4 py-3 sm:px-5">
         <div className="flex flex-wrap items-center gap-2">
           <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted">
             {locale === 'ar' ? `سؤال` : `Question`}{' '}
@@ -91,8 +91,8 @@ export function Practice({ items, locale, onAskTutor, onMcqResult }: Props) {
       </div>
 
       {/* Body */}
-      <div className="space-y-6 p-6">
-        <p className="text-base leading-relaxed text-fg sm:text-lg">{promptText}</p>
+      <div className="space-y-5 p-4 sm:space-y-6 sm:p-6">
+        <p className="text-[15px] leading-relaxed text-fg sm:text-lg">{promptText}</p>
 
         {isMcq ? (
           <div className="grid gap-2">
