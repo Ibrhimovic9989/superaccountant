@@ -4,11 +4,13 @@ import {
   Award,
   BookOpen,
   Brain,
+  Calendar,
   Check,
   CircleDot,
   ClipboardList,
   FileCheck2,
   Languages,
+  Shield,
   Sparkles,
   Target,
   Wrench,
@@ -77,6 +79,54 @@ const COPY = {
         title: 'Earn a verifiable certificate',
         body: 'Pass the proctored grand test and ship a HMAC-signed certificate with a public verification page.',
         icon: 'cert',
+      },
+    ],
+
+    // ── Agents
+    agentsLabel: '5 agents',
+    agentsTitle: 'Five specialized agents. Working for you.',
+    agentsSubtitle:
+      "This isn't one chatbot doing everything. It's five purpose-built agents, each with its own tools and permissions, collaborating behind the scenes to move you forward.",
+    agents: [
+      {
+        icon: 'tutor',
+        name: 'AI Tutor',
+        role: 'Your daily study partner',
+        body: 'Streams real-time answers grounded in your curriculum. Searches lessons, grades your written answers with rubrics, generates practice questions tuned to your gaps, and remembers what you struggled with yesterday.',
+        tools: ['search_curriculum', 'assess_answer', 'generate_practice', 'record_memory', 'recommend_next'],
+        color: 'accent',
+      },
+      {
+        icon: 'placement',
+        name: 'Placement Proctor',
+        role: 'Calibrates your starting point',
+        body: 'Runs your entry assessment — 20–30 adaptive questions from a 560-question bank. Estimates your skill in real time and places you in the right phase so you never waste time on what you already know.',
+        tools: ['adaptive_question_selection', 'skill_estimation', 'phase_placement'],
+        color: 'warning',
+      },
+      {
+        icon: 'daily',
+        name: 'Daily Planner',
+        role: 'Builds your plan every morning',
+        body: 'Wakes up at dawn and generates a personalized 3-item plan: one spaced-repetition review, one weak-area drill, and one new lesson. Each day adapts to what you got wrong yesterday.',
+        tools: ['mastery_analysis', 'spaced_repetition', 'lesson_recommendation'],
+        color: 'success',
+      },
+      {
+        icon: 'grand',
+        name: 'Grand Test Proctor',
+        role: 'Guards the final exam',
+        body: 'Administers a proctored 30-question exam with a 3-hour time limit. Server-graded with deterministic scoring — the model does not grade the grand test, the rubric does. Pass mark: 70%.',
+        tools: ['question_pool_assembly', 'time_enforcement', 'rubric_grading'],
+        color: 'danger',
+      },
+      {
+        icon: 'cert',
+        name: 'Certificate Issuer',
+        role: 'Signs your achievement',
+        body: 'Generates a bilingual PDF certificate with an HMAC-signed hash. Anyone with the link can verify it on a public page — no login, no API key. Only fires after the Grand Test Proctor confirms you passed.',
+        tools: ['hmac_signing', 'pdf_generation', 'qr_verification', 'public_page_publish'],
+        color: 'accent',
       },
     ],
 
@@ -271,6 +321,53 @@ const COPY = {
       },
     ],
 
+    agentsLabel: '٥ وكلاء',
+    agentsTitle: 'خمسة وكلاء متخصصين. يعملون من أجلك.',
+    agentsSubtitle:
+      'هذا ليس روبوت دردشة واحداً يفعل كل شيء. إنها خمسة وكلاء مبنيين لغرض محدد، لكل منهم أدواته وصلاحياته، يتعاونون خلف الكواليس لدفعك للأمام.',
+    agents: [
+      {
+        icon: 'tutor',
+        name: 'المدرس الذكي',
+        role: 'شريك دراستك اليومي',
+        body: 'يبث إجابات فورية مستندة إلى منهجك. يبحث في الدروس، يصحح إجاباتك المكتوبة بمعايير، يولّد أسئلة تمرين مخصصة لنقاط ضعفك، ويتذكر ما واجهته بالأمس.',
+        tools: ['search_curriculum', 'assess_answer', 'generate_practice', 'record_memory', 'recommend_next'],
+        color: 'accent',
+      },
+      {
+        icon: 'placement',
+        name: 'مراقب التحديد',
+        role: 'يعاير نقطة بدايتك',
+        body: 'يدير اختبار التحديد — ٢٠-٣٠ سؤالاً تكيفياً من بنك مكون من ٥٦٠ سؤالاً. يقدّر مهاراتك في الوقت الحقيقي ويضعك في المرحلة المناسبة.',
+        tools: ['adaptive_question_selection', 'skill_estimation', 'phase_placement'],
+        color: 'warning',
+      },
+      {
+        icon: 'daily',
+        name: 'المخطط اليومي',
+        role: 'يبني خطتك كل صباح',
+        body: 'يستيقظ مبكراً ويولّد خطة شخصية من ٣ عناصر: مراجعة متباعدة، تدريب على نقاط الضعف، ودرس جديد. يتكيف كل يوم مع ما أخطأت فيه بالأمس.',
+        tools: ['mastery_analysis', 'spaced_repetition', 'lesson_recommendation'],
+        color: 'success',
+      },
+      {
+        icon: 'grand',
+        name: 'مراقب الاختبار الكبير',
+        role: 'يحرس الامتحان النهائي',
+        body: 'يدير اختباراً مراقَباً من ٣٠ سؤالاً بحد زمني ٣ ساعات. تصحيح تلقائي بمعايير حتمية — لا يصحح النموذج الاختبار الكبير، بل المعايير. نسبة النجاح: ٧٠٪.',
+        tools: ['question_pool_assembly', 'time_enforcement', 'rubric_grading'],
+        color: 'danger',
+      },
+      {
+        icon: 'cert',
+        name: 'مُصدر الشهادة',
+        role: 'يوقّع إنجازك',
+        body: 'ينشئ شهادة PDF ثنائية اللغة مع توقيع HMAC. أي شخص لديه الرابط يمكنه التحقق منها على صفحة عامة — بدون تسجيل دخول. يعمل فقط بعد تأكيد مراقب الاختبار الكبير نجاحك.',
+        tools: ['hmac_signing', 'pdf_generation', 'qr_verification', 'public_page_publish'],
+        color: 'accent',
+      },
+    ],
+
     agentLabel: 'المدرس',
     agentTitle: 'وكيل ذكي حقيقي. ليس مجرد دردشة.',
     agentSubtitle:
@@ -408,6 +505,14 @@ const COPY = {
 const STEP_ICONS = {
   placement: ClipboardList,
   learn: BookOpen,
+  cert: Award,
+} as const
+
+const AGENT_ICONS = {
+  tutor: Brain,
+  placement: ClipboardList,
+  daily: Calendar,
+  grand: Shield,
   cert: Award,
 } as const
 
@@ -556,6 +661,74 @@ export default async function Landing({
                   </div>
                   <h3 className="mt-8 text-xl font-semibold tracking-tight">{step.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-fg-muted">{step.body}</p>
+                </div>
+              </BlurFade>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* ─── 5 Agents ──────────────────────────────────────── */}
+      <section
+        id="agents"
+        className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-28"
+      >
+        <BlurFade delay={0.05}>
+          <SectionEyebrow text={t.agentsLabel} icon={<Zap className="h-3 w-3" />} />
+          <h2 className="mt-4 max-w-2xl text-3xl font-semibold tracking-tight sm:text-5xl">
+            {t.agentsTitle}
+          </h2>
+          <p className="mt-4 max-w-2xl text-base text-fg-muted">{t.agentsSubtitle}</p>
+        </BlurFade>
+
+        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {t.agents.map((agent, i) => {
+            const AgentIcon = AGENT_ICONS[agent.icon as keyof typeof AGENT_ICONS]
+            return (
+              <BlurFade key={agent.name} delay={0.1 + i * 0.06}>
+                <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-bg-elev/50 backdrop-blur transition-all hover:border-border-strong hover:bg-bg-elev">
+                  {/* Header */}
+                  <div className="border-b border-border px-5 pb-4 pt-5">
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={cn(
+                          'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border',
+                          agent.color === 'accent' && 'border-accent/30 bg-accent-soft text-accent',
+                          agent.color === 'warning' && 'border-warning/30 bg-warning/10 text-warning',
+                          agent.color === 'success' && 'border-success/30 bg-success/10 text-success',
+                          agent.color === 'danger' && 'border-danger/30 bg-danger/10 text-danger',
+                        )}
+                      >
+                        <AgentIcon className="h-4 w-4" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-fg">{agent.name}</p>
+                        <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+                          {agent.role}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Body */}
+                  <div className="flex flex-1 flex-col px-5 py-4">
+                    <p className="flex-1 text-sm leading-relaxed text-fg-muted">
+                      {agent.body}
+                    </p>
+
+                    {/* Tool pills */}
+                    <div className="mt-4 flex flex-wrap gap-1.5">
+                      {agent.tools.map((tool) => (
+                        <span
+                          key={tool}
+                          className="inline-flex items-center gap-1 rounded-md border border-border bg-bg px-2 py-0.5 font-mono text-[9px] text-fg-subtle"
+                        >
+                          <Wrench className="h-2 w-2" />
+                          {tool}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </BlurFade>
             )
