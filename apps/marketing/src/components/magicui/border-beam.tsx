@@ -1,7 +1,13 @@
 'use client'
 
 import * as React from 'react'
-import { motion, type MotionStyle, type Transition } from 'motion/react'
+import {
+  motion,
+  useInView,
+  useReducedMotion,
+  type MotionStyle,
+  type Transition,
+} from 'motion/react'
 import { cn } from '@/lib/utils'
 
 interface BorderBeamProps {
@@ -35,8 +41,19 @@ export function BorderBeam({
   initialOffset = 0,
   borderWidth = 1.5,
 }: BorderBeamProps) {
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  // biome-ignore lint/suspicious/noExplicitAny: motion margin type is internal
+  const isVisible = useInView(containerRef, { margin: '200px' as any })
+  const reduceMotion = useReducedMotion()
+
+  // When the user prefers reduced motion, render a tiny static beam segment
+  // instead of looping. When the element is offscreen, freeze the animation
+  // so it doesn't burn frames the user can't see.
+  const shouldAnimate = !reduceMotion && isVisible
+
   return (
     <div
+      ref={containerRef}
       className="pointer-events-none absolute inset-0 rounded-[inherit]"
       style={{
         padding: borderWidth,
@@ -57,18 +74,26 @@ export function BorderBeam({
           } as MotionStyle
         }
         initial={{ offsetDistance: `${initialOffset}%` }}
-        animate={{
-          offsetDistance: reverse
-            ? [`${100 - initialOffset}%`, `${-initialOffset}%`]
-            : [`${initialOffset}%`, `${100 + initialOffset}%`],
-        }}
-        transition={{
-          repeat: Number.POSITIVE_INFINITY,
-          ease: 'linear',
-          duration,
-          delay: -delay,
-          ...transition,
-        }}
+        animate={
+          shouldAnimate
+            ? {
+                offsetDistance: reverse
+                  ? [`${100 - initialOffset}%`, `${-initialOffset}%`]
+                  : [`${initialOffset}%`, `${100 + initialOffset}%`],
+              }
+            : { offsetDistance: `${initialOffset}%` }
+        }
+        transition={
+          shouldAnimate
+            ? {
+                repeat: Number.POSITIVE_INFINITY,
+                ease: 'linear',
+                duration,
+                delay: -delay,
+                ...transition,
+              }
+            : { duration: 0 }
+        }
       />
     </div>
   )

@@ -1,75 +1,38 @@
-'use client'
-
 import * as React from 'react'
-import { useEffect, useId, useRef, useState } from 'react'
-import { motion } from 'motion/react'
 import { cn } from '@/lib/utils'
 
 interface DotPatternProps extends React.SVGProps<SVGSVGElement> {
   width?: number
   height?: number
-  x?: number
-  y?: number
-  cx?: number
-  cy?: number
   cr?: number
   className?: string
+  /** Kept for API compat — the static version is already glow-flavoured. */
   glow?: boolean
 }
 
 /**
- * Animated dot pattern background. Use as an absolutely-positioned overlay
- * inside a relative parent. Color comes from `currentColor` so set `text-...`
- * on the parent or the component.
+ * Static dot-pattern background. Uses an SVG <pattern> tile that the browser
+ * repeats natively — one DOM node total instead of one motion.circle per
+ * cell. No animation, no JS, no resize listener. Renders at 60fps regardless
+ * of viewport size.
+ *
+ * The original animated version rendered ~4000 motion.circles on a desktop
+ * viewport, each running an infinite opacity+scale loop, which made every
+ * marketing page jank constantly. The visual difference once you stop
+ * looking for it is negligible.
  */
 export function DotPattern({
   width = 18,
   height = 18,
-  x = 0,
-  y = 0,
-  cx = 1,
-  cy = 1,
   cr = 1,
   className,
-  glow = false,
+  // biome-ignore lint/correctness/noUnusedVariables: kept for API compat
+  glow: _glow,
   ...props
 }: DotPatternProps) {
-  const id = useId()
-  const containerRef = useRef<SVGSVGElement>(null)
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
-
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (containerRef.current) {
-        const { width, height } = containerRef.current.getBoundingClientRect()
-        setDimensions({ width, height })
-      }
-    }
-    updateDimensions()
-    window.addEventListener('resize', updateDimensions)
-    return () => window.removeEventListener('resize', updateDimensions)
-  }, [])
-
-  const dots = Array.from(
-    {
-      length:
-        Math.ceil(dimensions.width / width) * Math.ceil(dimensions.height / height),
-    },
-    (_, i) => {
-      const col = i % Math.ceil(dimensions.width / width)
-      const row = Math.floor(i / Math.ceil(dimensions.width / width))
-      return {
-        x: col * width + cx + x,
-        y: row * height + cy + y,
-        delay: Math.random() * 5,
-        duration: Math.random() * 3 + 2,
-      }
-    },
-  )
-
+  const id = React.useId()
   return (
     <svg
-      ref={containerRef}
       aria-hidden="true"
       className={cn(
         'pointer-events-none absolute inset-0 h-full w-full text-fg-subtle/30',
@@ -78,37 +41,18 @@ export function DotPattern({
       {...props}
     >
       <defs>
-        <radialGradient id={`${id}-gradient`}>
-          <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
-        </radialGradient>
+        <pattern
+          id={id}
+          x="0"
+          y="0"
+          width={width}
+          height={height}
+          patternUnits="userSpaceOnUse"
+        >
+          <circle cx={width / 2} cy={height / 2} r={cr} fill="currentColor" />
+        </pattern>
       </defs>
-      {dots.map((dot) => (
-        <motion.circle
-          key={`${dot.x}-${dot.y}`}
-          cx={dot.x}
-          cy={dot.y}
-          r={cr}
-          fill={glow ? `url(#${id}-gradient)` : 'currentColor'}
-          initial={glow ? { opacity: 0.4, scale: 1 } : {}}
-          animate={
-            glow
-              ? { opacity: [0.4, 1, 0.4], scale: [1, 1.5, 1] }
-              : {}
-          }
-          transition={
-            glow
-              ? {
-                  duration: dot.duration,
-                  repeat: Number.POSITIVE_INFINITY,
-                  repeatType: 'reverse',
-                  delay: dot.delay,
-                  ease: 'easeInOut',
-                }
-              : {}
-          }
-        />
-      ))}
+      <rect width="100%" height="100%" fill={`url(#${id})`} />
     </svg>
   )
 }
