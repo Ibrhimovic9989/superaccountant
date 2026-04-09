@@ -13,7 +13,6 @@ try {
 
 import 'reflect-metadata'
 import { NestFactory } from '@nestjs/core'
-import { ValidationPipe } from '@nestjs/common'
 import { AppModule } from './app.module'
 import { loadEnv } from '@sa/config'
 
@@ -38,10 +37,9 @@ async function bootstrap() {
     credentials: true,
   })
 
-  // Strip unknown fields and reject obviously bad payloads at the boundary.
-  app.useGlobalPipes(
-    new ValidationPipe({ whitelist: true, forbidNonWhitelisted: false, transform: true }),
-  )
+  // Validation: every controller uses zod schemas at the boundary (see e.g.
+  // tutor.controller.ts). We do not register a Nest ValidationPipe because
+  // that would pull in class-validator + class-transformer just to no-op.
 
   // Trust the nginx proxy in front of us — needed so the throttler keys
   // requests by the real client IP and not by 127.0.0.1.
