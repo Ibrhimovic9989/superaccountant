@@ -29,10 +29,13 @@ async function bootstrap() {
   app.enableCors({
     origin: (origin, cb) => {
       // Allow same-origin (no Origin header) + explicit allowlist + Vercel previews.
+      // Deny silently (cb(null, false)) on rejection — throwing produces a 500;
+      // returning false makes Express omit CORS headers and the browser blocks
+      // it with the correct error class.
       if (!origin) return cb(null, true)
       if (allowed.includes(origin)) return cb(null, true)
       if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/.test(origin)) return cb(null, true)
-      return cb(new Error(`CORS: origin ${origin} not allowed`))
+      return cb(null, false)
     },
     credentials: true,
   })
