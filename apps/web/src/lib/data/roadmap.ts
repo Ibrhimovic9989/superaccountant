@@ -76,17 +76,25 @@ export async function getRoadmap(
   `
 
   // 2. Get mastery for each lesson this student has attempted.
+  // LearningProgress links to the user via LearningEnrollment.
+  // lessonId is a cuid FK to CurriculumLesson.id — join to get the slug.
   const progress = await prisma.$queryRaw<
-    { lessonSlug: string; mastery: number; completed: boolean }[]
+    { lessonSlug: string; mastery: number }[]
   >`
     SELECT
-      lp."lessonSlug",
-      lp."mastery",
-      lp."completedAt" IS NOT NULL as "completed"
+      cl."slug" as "lessonSlug",
+      lp."mastery"
     FROM "LearningProgress" lp
-    WHERE lp."userId" = ${userId}
+    JOIN "LearningEnrollment" le ON lp."enrollmentId" = le.id
+    JOIN "CurriculumLesson" cl ON lp."lessonId" = cl.id
+    WHERE le."userId" = ${userId}
   `
-  const masteryMap = new Map(progress.map((p) => [p.lessonSlug, p]))
+  const masteryMap = new Map(
+    progress.map((p) => [
+      p.lessonSlug,
+      { mastery: Number(p.mastery), completed: Number(p.mastery) >= 0.7 },
+    ]),
+  )
 
   // 3. Get student profile for estimation.
   const profileRows = await prisma.$queryRaw<
