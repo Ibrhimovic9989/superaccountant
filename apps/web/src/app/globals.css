@@ -141,6 +141,37 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* Tally Prime theme — used by the Practice Lab simulation */
+.tally-shell {
+  --tally-bg: #0c1021;
+  --tally-header: #111633;
+  --tally-border: #2a3050;
+  --tally-fg: #e0e0e8;
+  --tally-dim: #6070a0;
+  --tally-yellow: #f0d060;
+  --tally-green: #60d080;
+  --tally-select: #3060d0;
+  --tally-red: #e05050;
+  font-family: var(--font-mono);
+  color: var(--tally-fg);
+  background: var(--tally-bg);
+}
+.tally-shell * {
+  border-radius: 0 !important;
+}
+
+@theme {
+  --color-tally-bg: var(--tally-bg, #0c1021);
+  --color-tally-header: var(--tally-header, #111633);
+  --color-tally-border: var(--tally-border, #2a3050);
+  --color-tally-fg: var(--tally-fg, #e0e0e8);
+  --color-tally-dim: var(--tally-dim, #6070a0);
+  --color-tally-yellow: var(--tally-yellow, #f0d060);
+  --color-tally-green: var(--tally-green, #60d080);
+  --color-tally-select: var(--tally-select, #3060d0);
+  --color-tally-red: var(--tally-red, #e05050);
+}
+
 /* Skeleton shimmer */
 @keyframes skeleton-shimmer {
   0% { background-position: -200% 0; }

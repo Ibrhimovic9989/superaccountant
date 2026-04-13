@@ -2,647 +2,197 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import {
-  ArrowLeft,
-  BookOpen,
-  Check,
-  CheckCircle2,
-  ChevronDown,
-  FileText,
-  Landmark,
-  List,
-  Plus,
-  RotateCcw,
-  XCircle,
-} from 'lucide-react'
-import { motion, AnimatePresence } from 'motion/react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { BlurFade } from '@/components/magicui/blur-fade'
-import { BorderBeam } from '@/components/magicui/border-beam'
+import { ArrowLeft } from 'lucide-react'
+import { TallyShell, TallyRow, TallyAccountPicker, TallyFKeyBar } from './tally-theme'
 import { cn } from '@/lib/utils'
 
-// ─── Chart of Accounts — Sharma Trading Co. ─────────────────
-
-type Account = {
-  code: string
-  name: string
-  group: 'asset' | 'liability' | 'income' | 'expense' | 'equity'
-  subGroup: string
-}
-
-const ACCOUNTS: Account[] = [
-  { code: 'BANK', name: 'Bank A/c (HDFC)', group: 'asset', subGroup: 'Current Assets' },
-  { code: 'CASH', name: 'Cash A/c', group: 'asset', subGroup: 'Current Assets' },
-  // Sundry Debtors
-  { code: 'PATEL', name: 'Patel Enterprises', group: 'asset', subGroup: 'Sundry Debtors' },
-  { code: 'MEHTA', name: 'Mehta & Sons', group: 'asset', subGroup: 'Sundry Debtors' },
-  { code: 'ABC', name: 'ABC Retail', group: 'asset', subGroup: 'Sundry Debtors' },
-  { code: 'DELHI', name: 'Delhi Distributors', group: 'asset', subGroup: 'Sundry Debtors' },
-  // Sundry Creditors
-  { code: 'GUPTA', name: 'Gupta Suppliers', group: 'liability', subGroup: 'Sundry Creditors' },
-  { code: 'RAJ', name: 'Raj Transport', group: 'liability', subGroup: 'Sundry Creditors' },
-  { code: 'VERMA', name: 'Verma Chemicals', group: 'liability', subGroup: 'Sundry Creditors' },
-  { code: 'OM', name: 'Om Packaging', group: 'liability', subGroup: 'Sundry Creditors' },
-  { code: 'SHARMA', name: 'Sharma & Co (Audit)', group: 'liability', subGroup: 'Sundry Creditors' },
-  // Loans
-  { code: 'HDFC_LOAN', name: 'Loan from HDFC Bank', group: 'liability', subGroup: 'Loans (Liability)' },
-  // Duties & Taxes
-  { code: 'TDS_PAY', name: 'TDS Payable', group: 'liability', subGroup: 'Duties & Taxes' },
-  { code: 'GST_PAY', name: 'GST Payable', group: 'liability', subGroup: 'Duties & Taxes' },
-  // Income
-  { code: 'SALES', name: 'Sales A/c', group: 'income', subGroup: 'Revenue' },
-  // Expenses
-  { code: 'PURCHASE', name: 'Purchase A/c', group: 'expense', subGroup: 'Direct Expenses' },
-  { code: 'FREIGHT', name: 'Freight Charges', group: 'expense', subGroup: 'Direct Expenses' },
-  { code: 'SALARY', name: 'Salary A/c', group: 'expense', subGroup: 'Indirect Expenses' },
-  { code: 'RENT', name: 'Rent A/c', group: 'expense', subGroup: 'Indirect Expenses' },
-  { code: 'INTERNET', name: 'Internet Expense', group: 'expense', subGroup: 'Indirect Expenses' },
-  { code: 'AUDIT', name: 'Audit Fees', group: 'expense', subGroup: 'Indirect Expenses' },
-  { code: 'EMI_INT', name: 'Loan EMI (Principal)', group: 'expense', subGroup: 'Indirect Expenses' },
-  { code: 'SUSPENSE', name: 'Suspense A/c', group: 'asset', subGroup: 'Current Assets' },
+const ACCOUNTS = [
+  { code: 'BANK', name: 'Bank A/c (HDFC)', subGroup: 'Current Assets' },
+  { code: 'CASH', name: 'Cash A/c', subGroup: 'Current Assets' },
+  { code: 'PATEL', name: 'Patel Enterprises', subGroup: 'Sundry Debtors' },
+  { code: 'MEHTA', name: 'Mehta & Sons', subGroup: 'Sundry Debtors' },
+  { code: 'ABC', name: 'ABC Retail', subGroup: 'Sundry Debtors' },
+  { code: 'DELHI', name: 'Delhi Distributors', subGroup: 'Sundry Debtors' },
+  { code: 'GUPTA', name: 'Gupta Suppliers', subGroup: 'Sundry Creditors' },
+  { code: 'RAJ', name: 'Raj Transport', subGroup: 'Sundry Creditors' },
+  { code: 'VERMA', name: 'Verma Chemicals', subGroup: 'Sundry Creditors' },
+  { code: 'OM', name: 'Om Packaging', subGroup: 'Sundry Creditors' },
+  { code: 'SHARMA', name: 'Sharma & Co (Audit)', subGroup: 'Sundry Creditors' },
+  { code: 'HDFC_LOAN', name: 'Loan from HDFC Bank', subGroup: 'Loans' },
+  { code: 'TDS_PAY', name: 'TDS Payable', subGroup: 'Duties & Taxes' },
+  { code: 'GST_PAY', name: 'GST Payable', subGroup: 'Duties & Taxes' },
+  { code: 'SALES', name: 'Sales A/c', subGroup: 'Revenue' },
+  { code: 'PURCHASE', name: 'Purchase A/c', subGroup: 'Direct Expenses' },
+  { code: 'FREIGHT', name: 'Freight Charges', subGroup: 'Direct Expenses' },
+  { code: 'SALARY', name: 'Salary A/c', subGroup: 'Indirect Expenses' },
+  { code: 'RENT', name: 'Rent A/c', subGroup: 'Indirect Expenses' },
+  { code: 'INTERNET', name: 'Internet Expense', subGroup: 'Indirect Expenses' },
+  { code: 'AUDIT', name: 'Audit Fees', subGroup: 'Indirect Expenses' },
+  { code: 'EMI', name: 'Loan EMI (Principal)', subGroup: 'Indirect Expenses' },
+  { code: 'SUSPENSE', name: 'Suspense A/c', subGroup: 'Current Assets' },
 ]
 
-// ─── Bank Statement — the source document ───────────────────
-
-type BankEntry = {
-  id: string
-  date: string
-  narration: string
-  debit: number | null
-  credit: number | null
-}
-
-const BANK_STATEMENT: BankEntry[] = [
-  { id: 'b1', date: '02 Apr', narration: 'NEFT from Patel Enterprises — Inv #1042', debit: null, credit: 85000 },
-  { id: 'b2', date: '03 Apr', narration: 'RTGS to Gupta Suppliers — Bill #PO-328', debit: 42000, credit: null },
-  { id: 'b3', date: '05 Apr', narration: 'UPI to Jio — Monthly Internet', debit: 1180, credit: null },
-  { id: 'b4', date: '07 Apr', narration: 'NEFT from Mehta & Sons — Inv #1045', debit: null, credit: 126500 },
-  { id: 'b5', date: '07 Apr', narration: 'TDS 194C deposited — Q4 FY26', debit: 8400, credit: null },
-  { id: 'b6', date: '10 Apr', narration: 'RTGS to Raj Transport — Freight Bill #F-91', debit: 35000, credit: null },
-  { id: 'b7', date: '12 Apr', narration: 'Salary transfer — Apr 2026', debit: 215000, credit: null },
-  { id: 'b8', date: '15 Apr', narration: 'Loan disbursement — HDFC Bank CC', debit: null, credit: 500000 },
-  { id: 'b9', date: '18 Apr', narration: 'NEFT from ABC Retail — Inv #1048', debit: null, credit: 34500 },
-  { id: 'b10', date: '20 Apr', narration: 'RTGS to Verma Chemicals — Bill #VC-112', debit: 78200, credit: null },
-  { id: 'b11', date: '22 Apr', narration: 'GST IGST payment — Mar 2026', debit: 18750, credit: null },
-  { id: 'b12', date: '25 Apr', narration: 'Rent — Office Sector 44 Gurgaon', debit: 55000, credit: null },
-  { id: 'b13', date: '28 Apr', narration: 'UPI from Unknown — Ref 9282817', debit: null, credit: 12000 },
-  { id: 'b14', date: '29 Apr', narration: 'RTGS to Sharma & Co — Audit Fee', debit: 75000, credit: null },
-  { id: 'b15', date: '30 Apr', narration: 'EMI — HDFC CC Loan', debit: 45000, credit: null },
+type BankEntry = { id: string; date: string; narration: string; debit: number | null; credit: number | null }
+const BANK: BankEntry[] = [
+  { id: 'b1', date: '02-Apr', narration: 'NEFT from Patel Enterprises - Inv #1042', debit: null, credit: 85000 },
+  { id: 'b2', date: '03-Apr', narration: 'RTGS to Gupta Suppliers - Bill #PO-328', debit: 42000, credit: null },
+  { id: 'b3', date: '05-Apr', narration: 'UPI to Jio - Monthly Internet', debit: 1180, credit: null },
+  { id: 'b4', date: '07-Apr', narration: 'NEFT from Mehta & Sons - Inv #1045', debit: null, credit: 126500 },
+  { id: 'b5', date: '07-Apr', narration: 'TDS 194C deposited - Q4 FY26', debit: 8400, credit: null },
+  { id: 'b6', date: '10-Apr', narration: 'RTGS to Raj Transport - Freight #F-91', debit: 35000, credit: null },
+  { id: 'b7', date: '12-Apr', narration: 'Salary transfer - Apr 2026', debit: 215000, credit: null },
+  { id: 'b8', date: '15-Apr', narration: 'Loan disbursement - HDFC Bank CC', debit: null, credit: 500000 },
+  { id: 'b9', date: '18-Apr', narration: 'NEFT from ABC Retail - Inv #1048', debit: null, credit: 34500 },
+  { id: 'b10', date: '20-Apr', narration: 'RTGS to Verma Chemicals - Bill #VC-112', debit: 78200, credit: null },
+  { id: 'b11', date: '22-Apr', narration: 'GST IGST payment - Mar 2026', debit: 18750, credit: null },
+  { id: 'b12', date: '25-Apr', narration: 'Rent - Office Sector 44 Gurgaon', debit: 55000, credit: null },
+  { id: 'b13', date: '28-Apr', narration: 'UPI from Unknown - Ref 9282817', debit: null, credit: 12000 },
+  { id: 'b14', date: '29-Apr', narration: 'RTGS to Sharma & Co - Audit Fee', debit: 75000, credit: null },
+  { id: 'b15', date: '30-Apr', narration: 'EMI - HDFC CC Loan', debit: 45000, credit: null },
 ]
 
-// ─── Expected correct vouchers ──────────────────────────────
-
-type ExpectedVoucher = {
-  bankId: string
-  type: 'receipt' | 'payment' | 'contra' | 'journal'
-  debit: string  // account code
-  credit: string // account code
-  amount: number
-  hint: string
-}
-
-const EXPECTED: ExpectedVoucher[] = [
-  { bankId: 'b1', type: 'receipt', debit: 'BANK', credit: 'PATEL', amount: 85000, hint: 'Receipt from Patel against Inv #1042' },
-  { bankId: 'b2', type: 'payment', debit: 'GUPTA', credit: 'BANK', amount: 42000, hint: 'Payment to Gupta Suppliers for PO-328' },
-  { bankId: 'b3', type: 'payment', debit: 'INTERNET', credit: 'BANK', amount: 1180, hint: 'Jio internet expense' },
-  { bankId: 'b4', type: 'receipt', debit: 'BANK', credit: 'MEHTA', amount: 126500, hint: 'Receipt from Mehta & Sons against Inv #1045' },
-  { bankId: 'b5', type: 'payment', debit: 'TDS_PAY', credit: 'BANK', amount: 8400, hint: 'TDS liability discharged' },
-  { bankId: 'b6', type: 'payment', debit: 'FREIGHT', credit: 'BANK', amount: 35000, hint: 'Freight to Raj Transport — remember 194C TDS!' },
-  { bankId: 'b7', type: 'payment', debit: 'SALARY', credit: 'BANK', amount: 215000, hint: 'April salaries' },
-  { bankId: 'b8', type: 'receipt', debit: 'BANK', credit: 'HDFC_LOAN', amount: 500000, hint: 'Loan credited — liability increases' },
-  { bankId: 'b9', type: 'receipt', debit: 'BANK', credit: 'ABC', amount: 34500, hint: 'Receipt from ABC Retail against Inv #1048' },
-  { bankId: 'b10', type: 'payment', debit: 'VERMA', credit: 'BANK', amount: 78200, hint: 'Payment to Verma Chemicals for VC-112' },
-  { bankId: 'b11', type: 'payment', debit: 'GST_PAY', credit: 'BANK', amount: 18750, hint: 'GST liability discharged' },
-  { bankId: 'b12', type: 'payment', debit: 'RENT', credit: 'BANK', amount: 55000, hint: 'Rent expense — remember 194I TDS!' },
-  { bankId: 'b13', type: 'receipt', debit: 'BANK', credit: 'SUSPENSE', amount: 12000, hint: 'Unknown credit — park in Suspense until clarified' },
-  { bankId: 'b14', type: 'payment', debit: 'AUDIT', credit: 'BANK', amount: 75000, hint: 'Audit fee — remember 194J TDS!' },
-  { bankId: 'b15', type: 'payment', debit: 'EMI_INT', credit: 'BANK', amount: 45000, hint: 'Loan EMI repayment' },
+type Expected = { bankId: string; type: string; debit: string; credit: string; hint: string }
+const EXPECTED: Expected[] = [
+  { bankId: 'b1', type: 'receipt', debit: 'BANK', credit: 'PATEL', hint: 'Receipt against Inv #1042' },
+  { bankId: 'b2', type: 'payment', debit: 'GUPTA', credit: 'BANK', hint: 'Payment for PO-328' },
+  { bankId: 'b3', type: 'payment', debit: 'INTERNET', credit: 'BANK', hint: 'Jio internet expense' },
+  { bankId: 'b4', type: 'receipt', debit: 'BANK', credit: 'MEHTA', hint: 'Receipt against Inv #1045' },
+  { bankId: 'b5', type: 'payment', debit: 'TDS_PAY', credit: 'BANK', hint: 'TDS liability paid' },
+  { bankId: 'b6', type: 'payment', debit: 'FREIGHT', credit: 'BANK', hint: 'Freight - TDS u/s 194C' },
+  { bankId: 'b7', type: 'payment', debit: 'SALARY', credit: 'BANK', hint: 'April salaries' },
+  { bankId: 'b8', type: 'receipt', debit: 'BANK', credit: 'HDFC_LOAN', hint: 'Loan credited - liability' },
+  { bankId: 'b9', type: 'receipt', debit: 'BANK', credit: 'ABC', hint: 'Receipt against Inv #1048' },
+  { bankId: 'b10', type: 'payment', debit: 'VERMA', credit: 'BANK', hint: 'Payment for VC-112' },
+  { bankId: 'b11', type: 'payment', debit: 'GST_PAY', credit: 'BANK', hint: 'GST liability paid' },
+  { bankId: 'b12', type: 'payment', debit: 'RENT', credit: 'BANK', hint: 'Rent - TDS u/s 194I' },
+  { bankId: 'b13', type: 'receipt', debit: 'BANK', credit: 'SUSPENSE', hint: 'Unknown - park in Suspense' },
+  { bankId: 'b14', type: 'payment', debit: 'AUDIT', credit: 'BANK', hint: 'Audit fee - TDS u/s 194J' },
+  { bankId: 'b15', type: 'payment', debit: 'EMI', credit: 'BANK', hint: 'Loan EMI repayment' },
 ]
 
-const VOUCHER_TYPES = [
-  { value: 'receipt', label: 'Receipt', icon: '↓', desc: 'Money coming IN to bank' },
-  { value: 'payment', label: 'Payment', icon: '↑', desc: 'Money going OUT of bank' },
-  { value: 'contra', label: 'Contra', icon: '↔', desc: 'Bank ↔ Cash transfer' },
-  { value: 'journal', label: 'Journal', icon: '📝', desc: 'Non-cash adjustment' },
-] as const
-
-type Voucher = {
-  bankId: string
-  type: string
-  debit: string
-  credit: string
-  amount: number
-}
-
-type Tab = 'vouchers' | 'ledger' | 'trial'
-
-// ─── Main Component ─────────────────────────────────────────
+type Voucher = { bankId: string; type: string; debit: string; credit: string; amount: number }
+type View = 'entry' | 'daybook' | 'trial'
 
 export function BookkeepingSim({ locale }: { locale: 'en' | 'ar' }) {
   const [vouchers, setVouchers] = React.useState<Voucher[]>([])
-  const [selectedBankId, setSelectedBankId] = React.useState<string | null>(null)
-  const [tab, setTab] = React.useState<Tab>('vouchers')
-  const [showResults, setShowResults] = React.useState(false)
+  const [selId, setSelId] = React.useState<string | null>(BANK[0]?.id ?? null)
+  const [view, setView] = React.useState<View>('entry')
+  const [vType, setVType] = React.useState('')
+  const [vDebit, setVDebit] = React.useState('')
+  const [vCredit, setVCredit] = React.useState('')
+  const [checked, setChecked] = React.useState(false)
 
-  // Voucher form state
-  const [formType, setFormType] = React.useState('')
-  const [formDebit, setFormDebit] = React.useState('')
-  const [formCredit, setFormCredit] = React.useState('')
+  const done = new Set(vouchers.map((v) => v.bankId))
+  const sel = BANK.find((e) => e.id === selId)
+  const amt = sel ? (sel.credit ?? sel.debit ?? 0) : 0
 
-  const completedBankIds = new Set(vouchers.map((v) => v.bankId))
-  const selectedEntry = BANK_STATEMENT.find((e) => e.id === selectedBankId)
-
-  function resetForm() {
-    setFormType('')
-    setFormDebit('')
-    setFormCredit('')
+  function post() {
+    if (!selId || !vType || !vDebit || !vCredit) return
+    setVouchers((p) => [...p.filter((v) => v.bankId !== selId), { bankId: selId, type: vType, debit: vDebit, credit: vCredit, amount: amt }])
+    const next = BANK.find((e) => !done.has(e.id) && e.id !== selId)
+    if (next) setSelId(next.id)
+    setVType(''); setVDebit(''); setVCredit('')
   }
 
-  function submitVoucher() {
-    if (!selectedBankId || !formType || !formDebit || !formCredit || !selectedEntry) return
-    const amount = selectedEntry.credit ?? selectedEntry.debit ?? 0
-    setVouchers((prev) => [
-      ...prev.filter((v) => v.bankId !== selectedBankId),
-      { bankId: selectedBankId, type: formType, debit: formDebit, credit: formCredit, amount },
-    ])
-    resetForm()
-    // Auto-advance to next unprocessed entry
-    const nextUnprocessed = BANK_STATEMENT.find(
-      (e) => e.id !== selectedBankId && !completedBankIds.has(e.id),
-    )
-    setSelectedBankId(nextUnprocessed?.id ?? null)
+  function selectEntry(id: string) {
+    setSelId(id)
+    const v = vouchers.find((v) => v.bankId === id)
+    if (v) { setVType(v.type); setVDebit(v.debit); setVCredit(v.credit) }
+    else { setVType(''); setVDebit(''); setVCredit('') }
   }
 
-  function checkResults() {
-    setShowResults(true)
-    setTab('vouchers')
-  }
-
-  // Compute trial balance from vouchers
   const balances = React.useMemo(() => {
-    const bal: Record<string, { debit: number; credit: number }> = {}
-    // Opening: Bank has ₹1,50,000
-    bal.BANK = { debit: 150000, credit: 0 }
-    for (const v of vouchers) {
-      if (!bal[v.debit]) bal[v.debit] = { debit: 0, credit: 0 }
-      if (!bal[v.credit]) bal[v.credit] = { debit: 0, credit: 0 }
-      bal[v.debit]!.debit += v.amount
-      bal[v.credit]!.credit += v.amount
-    }
-    return bal
+    const b: Record<string, number> = { BANK: 150000 }
+    for (const v of vouchers) { b[v.debit] = (b[v.debit] ?? 0) + v.amount; b[v.credit] = (b[v.credit] ?? 0) - v.amount }
+    return b
   }, [vouchers])
 
   const score = React.useMemo(() => {
-    if (!showResults) return { correct: 0, total: EXPECTED.length }
-    let correct = 0
-    for (const exp of EXPECTED) {
-      const v = vouchers.find((v) => v.bankId === exp.bankId)
-      if (v && v.type === exp.type && v.debit === exp.debit && v.credit === exp.credit) {
-        correct++
-      }
+    if (!checked) return 0
+    return EXPECTED.filter((exp) => { const v = vouchers.find((v) => v.bankId === exp.bankId); return v && v.type === exp.type && v.debit === exp.debit && v.credit === exp.credit }).length
+  }, [vouchers, checked])
+
+  React.useEffect(() => {
+    const h = (e: KeyboardEvent) => {
+      if (e.key === 'F5') { e.preventDefault(); setVType('payment') }
+      if (e.key === 'F6') { e.preventDefault(); setVType('receipt') }
+      if (e.key === 'F7') { e.preventDefault(); setVType('journal') }
+      if (e.key === 'F8') { e.preventDefault(); setVType('contra') }
     }
-    return { correct, total: EXPECTED.length }
-  }, [vouchers, showResults])
+    window.addEventListener('keydown', h)
+    return () => window.removeEventListener('keydown', h)
+  }, [])
 
   return (
     <div>
-      {/* Header */}
-      <BlurFade delay={0.05}>
-        <Link
-          href={`/${locale}/practice-lab`}
-          className="mb-4 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-fg-subtle transition-colors hover:text-fg"
-        >
-          <ArrowLeft className="h-3 w-3 rtl:rotate-180" />
-          Practice Lab
-        </Link>
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-accent/30 bg-accent-soft text-accent">
-              <Landmark className="h-4 w-4" />
-            </span>
-            <div>
-              <h1 className="text-lg font-semibold tracking-tight sm:text-2xl">
-                Tally Simulation — Sharma Trading Co.
-              </h1>
-              <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-                April 2026 · Opening bank balance: ₹1,50,000 · {vouchers.length}/{BANK_STATEMENT.length} entries posted
-              </p>
-            </div>
-          </div>
-          <Badge variant={completedBankIds.size === BANK_STATEMENT.length ? 'accent' : 'default'}>
-            {completedBankIds.size}/{BANK_STATEMENT.length}
-          </Badge>
-        </div>
-      </BlurFade>
+      <Link href={`/${locale}/practice-lab`} className="mb-3 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-fg-subtle hover:text-fg">
+        <ArrowLeft className="h-3 w-3 rtl:rotate-180" /> Practice Lab
+      </Link>
 
-      {/* Tab bar */}
-      <div className="mt-5 flex items-center gap-1 border-b border-border">
-        {([
-          { id: 'vouchers' as Tab, label: 'Voucher Entry', icon: FileText },
-          { id: 'ledger' as Tab, label: 'Day Book', icon: List },
-          { id: 'trial' as Tab, label: 'Trial Balance', icon: BookOpen },
-        ]).map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            onClick={() => setTab(t.id)}
-            className={cn(
-              'flex items-center gap-1.5 border-b-2 px-4 py-2.5 text-xs font-medium transition-colors',
-              tab === t.id
-                ? 'border-accent text-accent'
-                : 'border-transparent text-fg-muted hover:text-fg',
-            )}
-          >
-            <t.icon className="h-3.5 w-3.5" />
-            {t.label}
-          </button>
-        ))}
-        {completedBankIds.size === BANK_STATEMENT.length && !showResults && (
-          <Button
-            type="button"
-            variant="accent"
-            size="sm"
-            className="ms-auto mb-1"
-            onClick={checkResults}
-          >
-            <Check className="h-3.5 w-3.5" />
-            Check All Entries
-          </Button>
-        )}
-      </div>
-
-      {/* Voucher Entry tab */}
-      {tab === 'vouchers' && (
-        <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_1.2fr]">
-          {/* Left: Bank Statement */}
-          <div className="overflow-hidden rounded-xl border border-border bg-bg-elev/50">
-            <div className="border-b border-border bg-bg-overlay px-4 py-2.5">
-              <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-                <Landmark className="mb-0.5 inline h-3 w-3" /> HDFC Bank Statement — April 2026
-              </p>
-            </div>
-            <div className="max-h-[65vh] divide-y divide-border overflow-y-auto">
-              {BANK_STATEMENT.map((entry) => {
-                const done = completedBankIds.has(entry.id)
-                const selected = selectedBankId === entry.id
-                const expected = showResults ? EXPECTED.find((e) => e.bankId === entry.id) : null
-                const voucher = showResults ? vouchers.find((v) => v.bankId === entry.id) : null
-                const isCorrect = showResults && expected && voucher &&
-                  voucher.type === expected.type && voucher.debit === expected.debit && voucher.credit === expected.credit
-                const isWrong = showResults && !isCorrect
-
-                return (
-                  <button
-                    key={entry.id}
-                    type="button"
-                    onClick={() => {
-                      setSelectedBankId(entry.id)
-                      resetForm()
-                      // Pre-fill if already posted
-                      const existing = vouchers.find((v) => v.bankId === entry.id)
-                      if (existing) {
-                        setFormType(existing.type)
-                        setFormDebit(existing.debit)
-                        setFormCredit(existing.credit)
-                      }
-                    }}
-                    className={cn(
-                      'flex w-full items-center gap-2 px-4 py-2.5 text-start transition-colors',
-                      selected ? 'bg-accent-soft' : 'hover:bg-bg-overlay',
-                      showResults && isCorrect && 'bg-success/5',
-                      showResults && isWrong && 'bg-danger/5',
-                    )}
-                  >
-                    <span className="shrink-0">
-                      {showResults ? (
-                        isCorrect ? (
-                          <CheckCircle2 className="h-4 w-4 text-success" />
-                        ) : (
-                          <XCircle className="h-4 w-4 text-danger" />
-                        )
-                      ) : done ? (
-                        <CheckCircle2 className="h-4 w-4 text-success" />
-                      ) : (
-                        <span className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-border text-[8px] text-fg-subtle">
-                          {BANK_STATEMENT.indexOf(entry) + 1}
-                        </span>
-                      )}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-xs">{entry.narration}</p>
-                      <div className="flex items-center gap-2 font-mono text-[10px] text-fg-subtle">
-                        <span>{entry.date}</span>
-                        {entry.credit ? (
-                          <span className="text-success">Cr ₹{entry.credit.toLocaleString()}</span>
-                        ) : (
-                          <span className="text-danger">Dr ₹{entry.debit?.toLocaleString()}</span>
-                        )}
-                      </div>
-                    </div>
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-
-          {/* Right: Voucher Form */}
-          <div className="overflow-hidden rounded-xl border border-border bg-bg-elev/50">
-            {selectedEntry ? (
-              <>
-                <div className="border-b border-border bg-bg-overlay px-4 py-2.5">
-                  <p className="font-mono text-[10px] uppercase tracking-wider text-accent">
-                    Create Voucher
-                  </p>
-                  <p className="mt-1 text-sm">{selectedEntry.narration}</p>
-                  <p className="font-mono text-xs text-fg-muted">
-                    {selectedEntry.date} · {selectedEntry.credit ? `Cr ₹${selectedEntry.credit.toLocaleString()}` : `Dr ₹${selectedEntry.debit?.toLocaleString()}`}
-                  </p>
-                </div>
-                <div className="space-y-4 p-4">
-                  {/* Voucher Type */}
-                  <div>
-                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-wider text-fg-muted">
-                      Voucher Type
-                    </label>
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                      {VOUCHER_TYPES.map((vt) => (
-                        <button
-                          key={vt.value}
-                          type="button"
-                          onClick={() => setFormType(vt.value)}
-                          className={cn(
-                            'rounded-lg border px-3 py-2 text-center text-xs transition-colors',
-                            formType === vt.value
-                              ? 'border-accent bg-accent text-accent-fg'
-                              : 'border-border bg-bg hover:border-border-strong',
-                          )}
-                        >
-                          <span className="text-base">{vt.icon}</span>
-                          <p className="mt-1 font-medium">{vt.label}</p>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Debit Account */}
-                  <div>
-                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-wider text-fg-muted">
-                      Debit A/c (Dr.)
-                    </label>
-                    <select
-                      value={formDebit}
-                      onChange={(e) => setFormDebit(e.target.value)}
-                      className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm outline-none transition-colors focus:border-accent"
-                    >
-                      <option value="">— Select Account —</option>
-                      {Object.entries(groupAccountsBySubGroup()).map(([group, accs]) => (
-                        <optgroup key={group} label={group}>
-                          {accs.map((acc) => (
-                            <option key={acc.code} value={acc.code}>
-                              {acc.name}
-                            </option>
-                          ))}
-                        </optgroup>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Credit Account */}
-                  <div>
-                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-wider text-fg-muted">
-                      Credit A/c (Cr.)
-                    </label>
-                    <select
-                      value={formCredit}
-                      onChange={(e) => setFormCredit(e.target.value)}
-                      className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm outline-none transition-colors focus:border-accent"
-                    >
-                      <option value="">— Select Account —</option>
-                      {Object.entries(groupAccountsBySubGroup()).map(([group, accs]) => (
-                        <optgroup key={group} label={group}>
-                          {accs.map((acc) => (
-                            <option key={acc.code} value={acc.code}>
-                              {acc.name}
-                            </option>
-                          ))}
-                        </optgroup>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Amount (auto-filled, read-only) */}
-                  <div>
-                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-wider text-fg-muted">
-                      Amount
-                    </label>
-                    <div className="rounded-lg border border-border bg-bg-overlay px-4 py-2.5 font-mono text-lg tabular-nums">
-                      ₹{(selectedEntry.credit ?? selectedEntry.debit ?? 0).toLocaleString()}
-                    </div>
-                  </div>
-
-                  {/* Submit */}
-                  <Button
-                    type="button"
-                    variant="accent"
-                    className="w-full"
-                    disabled={!formType || !formDebit || !formCredit}
-                    onClick={submitVoucher}
-                  >
-                    <Plus className="h-4 w-4" />
-                    Post Voucher
-                  </Button>
-
-                  {/* Show hint for wrong entries after results */}
-                  {showResults && (() => {
-                    const exp = EXPECTED.find((e) => e.bankId === selectedBankId)
-                    if (!exp) return null
-                    const v = vouchers.find((v) => v.bankId === selectedBankId)
-                    const isCorrect = v && v.type === exp.type && v.debit === exp.debit && v.credit === exp.credit
-                    if (isCorrect) return null
-                    return (
-                      <div className="rounded-lg border border-warning/30 bg-warning/10 p-3 text-xs">
-                        <p className="font-semibold text-warning">Expected:</p>
-                        <p className="mt-1 text-fg-muted">
-                          {VOUCHER_TYPES.find((t) => t.value === exp.type)?.label} — Dr. {ACCOUNTS.find((a) => a.code === exp.debit)?.name}, Cr. {ACCOUNTS.find((a) => a.code === exp.credit)?.name}
-                        </p>
-                        <p className="mt-1 italic text-fg-subtle">{exp.hint}</p>
-                      </div>
-                    )
-                  })()}
-                </div>
-              </>
-            ) : (
-              <div className="flex h-60 flex-col items-center justify-center gap-3 p-6 text-center">
-                <Landmark className="h-8 w-8 text-fg-subtle" />
-                <p className="text-sm text-fg-muted">
-                  Select a bank entry from the left to create a voucher
-                </p>
-                <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-                  {completedBankIds.size}/{BANK_STATEMENT.length} entries posted
-                </p>
-              </div>
-            )}
+      <TallyShell company="Sharma Trading Co. - April 2026">
+        <div className="flex border-b border-tally-border">
+          {(['entry', 'daybook', 'trial'] as View[]).map((v) => (
+            <button key={v} type="button" onClick={() => setView(v)} className={cn('px-4 py-1.5 text-[10px] uppercase tracking-wider', view === v ? 'bg-tally-select text-white' : 'text-tally-dim hover:text-tally-fg')}>{v === 'entry' ? 'Voucher Entry' : v === 'daybook' ? 'Day Book' : 'Trial Balance'}</button>
+          ))}
+          <div className="ms-auto flex items-center gap-2 px-3 text-[10px] text-tally-dim">
+            <span>{done.size}/{BANK.length} posted</span>
+            {done.size === BANK.length && !checked && <button type="button" onClick={() => setChecked(true)} className="bg-tally-yellow px-2 py-0.5 font-bold text-tally-bg">CHECK ALL</button>}
+            {checked && <span className={score === EXPECTED.length ? 'text-tally-green' : 'text-tally-red'}>{score}/{EXPECTED.length} correct</span>}
           </div>
         </div>
-      )}
 
-      {/* Day Book tab */}
-      {tab === 'ledger' && (
-        <div className="mt-4 overflow-hidden rounded-xl border border-border bg-bg-elev/50">
-          <div className="border-b border-border bg-bg-overlay px-4 py-2.5">
-            <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-              Day Book — All Vouchers Posted
-            </p>
-          </div>
-          {vouchers.length === 0 ? (
-            <p className="p-8 text-center text-sm text-fg-muted">No vouchers posted yet.</p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[600px] text-sm">
-                <thead>
-                  <tr className="border-b border-border bg-bg-overlay/50 text-[10px] uppercase tracking-wider text-fg-subtle">
-                    <th className="px-4 py-2 text-start font-mono">Date</th>
-                    <th className="px-4 py-2 text-start font-mono">Type</th>
-                    <th className="px-4 py-2 text-start font-mono">Debit A/c</th>
-                    <th className="px-4 py-2 text-start font-mono">Credit A/c</th>
-                    <th className="px-4 py-2 text-end font-mono">Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {vouchers
-                    .sort((a, b) => {
-                      const ia = BANK_STATEMENT.findIndex((e) => e.id === a.bankId)
-                      const ib = BANK_STATEMENT.findIndex((e) => e.id === b.bankId)
-                      return ia - ib
-                    })
-                    .map((v) => {
-                      const entry = BANK_STATEMENT.find((e) => e.id === v.bankId)
-                      return (
-                        <tr key={v.bankId} className="border-b border-border last:border-0">
-                          <td className="px-4 py-2 font-mono text-xs text-fg-subtle">
-                            {entry?.date}
-                          </td>
-                          <td className="px-4 py-2">
-                            <Badge variant="default" className="text-[9px]">
-                              {v.type}
-                            </Badge>
-                          </td>
-                          <td className="px-4 py-2 text-xs">
-                            {ACCOUNTS.find((a) => a.code === v.debit)?.name}
-                          </td>
-                          <td className="px-4 py-2 text-xs">
-                            {ACCOUNTS.find((a) => a.code === v.credit)?.name}
-                          </td>
-                          <td className="px-4 py-2 text-end font-mono text-xs tabular-nums">
-                            ₹{v.amount.toLocaleString()}
-                          </td>
-                        </tr>
-                      )
-                    })}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Trial Balance tab */}
-      {tab === 'trial' && (
-        <div className="mt-4 overflow-hidden rounded-xl border border-border bg-bg-elev/50">
-          <div className="border-b border-border bg-bg-overlay px-4 py-2.5">
-            <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-              Trial Balance — as at 30 April 2026
-            </p>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[500px] text-sm">
-              <thead>
-                <tr className="border-b border-border bg-bg-overlay/50 text-[10px] uppercase tracking-wider text-fg-subtle">
-                  <th className="px-4 py-2 text-start font-mono">Account</th>
-                  <th className="px-4 py-2 text-end font-mono">Debit (₹)</th>
-                  <th className="px-4 py-2 text-end font-mono">Credit (₹)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ACCOUNTS.filter((a) => balances[a.code]).map((acc) => {
-                  const b = balances[acc.code]!
-                  const net = b.debit - b.credit
-                  return (
-                    <tr key={acc.code} className="border-b border-border last:border-0">
-                      <td className="px-4 py-2 text-xs">{acc.name}</td>
-                      <td className="px-4 py-2 text-end font-mono text-xs tabular-nums">
-                        {net > 0 ? net.toLocaleString() : '—'}
-                      </td>
-                      <td className="px-4 py-2 text-end font-mono text-xs tabular-nums">
-                        {net < 0 ? Math.abs(net).toLocaleString() : '—'}
-                      </td>
-                    </tr>
-                  )
+        {view === 'entry' && (
+          <div className="flex min-h-[520px] flex-col sm:flex-row">
+            <div className="flex w-full flex-col border-b border-tally-border sm:w-[45%] sm:border-b-0 sm:border-e">
+              <div className="border-b border-tally-border bg-tally-header px-3 py-1"><span className="text-[10px] text-tally-dim">HDFC BANK STATEMENT</span><span className="ms-2 text-[10px] text-tally-yellow">Opening: 1,50,000</span></div>
+              <div className="flex border-b border-tally-border bg-tally-header/50 px-3 py-0.5 text-[9px] uppercase text-tally-dim"><span className="w-5 shrink-0">#</span><span className="w-12 shrink-0">Date</span><span className="flex-1">Narration</span><span className="w-16 shrink-0 text-end">Dr</span><span className="w-16 shrink-0 text-end">Cr</span></div>
+              <div className="max-h-[380px] overflow-y-auto sm:max-h-none sm:flex-1">
+                {BANK.map((entry, i) => {
+                  const isDone = done.has(entry.id); const exp = checked ? EXPECTED.find((e) => e.bankId === entry.id) : null; const v = checked ? vouchers.find((v) => v.bankId === entry.id) : null; const isOk = !!(checked && exp && v && v.type === exp.type && v.debit === exp.debit && v.credit === exp.credit)
+                  return (<TallyRow key={entry.id} selected={selId === entry.id} done={isDone && !checked} correct={isOk} wrong={checked && !isOk} onClick={() => selectEntry(entry.id)}>
+                    <span className="w-5 shrink-0 text-[9px] text-tally-dim">{checked ? (isOk ? '\u2713' : '\u2717') : isDone ? '\u2713' : i + 1}</span>
+                    <span className="w-12 shrink-0 text-[10px]">{entry.date}</span>
+                    <span className="flex-1 truncate text-[10px]">{entry.narration}</span>
+                    <span className="w-16 shrink-0 text-end text-[10px] tabular-nums text-tally-red">{entry.debit ? entry.debit.toLocaleString('en-IN') : ''}</span>
+                    <span className="w-16 shrink-0 text-end text-[10px] tabular-nums text-tally-green">{entry.credit ? entry.credit.toLocaleString('en-IN') : ''}</span>
+                  </TallyRow>)
                 })}
-                <tr className="border-t-2 border-border bg-bg-overlay font-semibold">
-                  <td className="px-4 py-2 text-xs">Total</td>
-                  <td className="px-4 py-2 text-end font-mono text-xs tabular-nums">
-                    {Object.values(balances)
-                      .reduce((a, b) => a + Math.max(b.debit - b.credit, 0), 0)
-                      .toLocaleString()}
-                  </td>
-                  <td className="px-4 py-2 text-end font-mono text-xs tabular-nums">
-                    {Object.values(balances)
-                      .reduce((a, b) => a + Math.max(b.credit - b.debit, 0), 0)
-                      .toLocaleString()}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+              </div>
+            </div>
+            <div className="flex flex-1 flex-col">
+              {sel ? (<>
+                <div className="border-b border-tally-border bg-tally-header px-3 py-1"><span className="text-[10px] text-tally-yellow">ACCOUNTING VOUCHER</span></div>
+                <div className="border-b border-tally-border/50 px-3 py-2"><p className="text-xs text-tally-fg">{sel.narration}</p><p className="mt-1 text-lg font-bold tabular-nums text-tally-yellow">Rs. {amt.toLocaleString('en-IN')}<span className="ms-2 text-[10px] font-normal text-tally-dim">{sel.credit ? '(Credit in Bank)' : '(Debit in Bank)'}</span></p></div>
+                <div className="border-b border-tally-border/30 px-3 py-1.5"><span className="me-3 text-[10px] uppercase text-tally-dim">Type:</span>{(['receipt', 'payment', 'contra', 'journal'] as const).map((t, i) => (<button key={t} type="button" onClick={() => setVType(t)} className={cn('me-1 px-2 py-0.5 text-[10px] uppercase', vType === t ? 'bg-tally-select text-white' : 'text-tally-dim hover:text-tally-fg')}><span className="text-tally-yellow">F{i + 5}</span> {t}</button>))}</div>
+                <TallyAccountPicker label="Dr (Debit)" value={vDebit} onChange={setVDebit} accounts={ACCOUNTS} />
+                <TallyAccountPicker label="Cr (Credit)" value={vCredit} onChange={setVCredit} accounts={ACCOUNTS} />
+                <div className="flex items-center gap-2 border-b border-tally-border/30 px-3 py-1.5"><span className="w-28 shrink-0 text-[10px] uppercase text-tally-dim">Amount</span><span className="text-xs tabular-nums text-tally-yellow">{amt.toLocaleString('en-IN')}</span></div>
+                <div className="flex-1" />
+                <div className="border-t border-tally-border px-3 py-2"><button type="button" onClick={post} disabled={!vType || !vDebit || !vCredit} className={cn('w-full py-1.5 text-xs font-bold uppercase', vType && vDebit && vCredit ? 'bg-tally-yellow text-tally-bg' : 'bg-tally-dim/20 text-tally-dim cursor-not-allowed')}>Accept (Enter)</button></div>
+                {checked && (() => { const exp = EXPECTED.find((e) => e.bankId === selId); const v = vouchers.find((v) => v.bankId === selId); if (!exp) return null; const ok = v && v.type === exp.type && v.debit === exp.debit && v.credit === exp.credit; if (ok) return null; return (<div className="border-t border-tally-red/30 bg-tally-red/10 px-3 py-2 text-[10px]"><span className="text-tally-red">Expected: </span><span className="text-tally-fg">{exp.type.toUpperCase()} | Dr. {ACCOUNTS.find((a) => a.code === exp.debit)?.name} | Cr. {ACCOUNTS.find((a) => a.code === exp.credit)?.name}</span><p className="mt-1 italic text-tally-dim">{exp.hint}</p></div>) })()}
+              </>) : (<div className="flex flex-1 items-center justify-center text-[10px] text-tally-dim">Select a bank entry</div>)}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Score card */}
-      {showResults && (
-        <BlurFade delay={0.1}>
-          <div className="relative mt-8 overflow-hidden rounded-2xl border border-border bg-bg-elev p-6 text-center">
-            <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-              Simulation Complete
-            </p>
-            <p className="mt-3 font-mono text-4xl font-medium tabular-nums">
-              {score.correct}/{score.total}
-            </p>
-            <p className="mt-2 text-sm text-fg-muted">
-              {score.correct === score.total
-                ? 'Perfect! Every voucher posted correctly.'
-                : `${score.correct} vouchers correct. Click on red entries to see the expected answer.`}
-            </p>
-            <Button
-              type="button"
-              variant="ghost"
-              className="mt-4"
-              onClick={() => {
-                setVouchers([])
-                setShowResults(false)
-                setSelectedBankId(BANK_STATEMENT[0]?.id ?? null)
-                resetForm()
-              }}
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-              Try Again
-            </Button>
-            {score.correct === score.total && (
-              <BorderBeam size={80} duration={6} colorFrom="#22c55e" colorTo="#16a34a" />
-            )}
-          </div>
-        </BlurFade>
-      )}
+        {view === 'daybook' && (<div className="min-h-[400px]">
+          <div className="flex border-b border-tally-border bg-tally-header/50 px-3 py-0.5 text-[9px] uppercase text-tally-dim"><span className="w-14 shrink-0">Date</span><span className="w-16 shrink-0">Type</span><span className="flex-1">Debit A/c</span><span className="flex-1">Credit A/c</span><span className="w-24 shrink-0 text-end">Amount</span></div>
+          {vouchers.length === 0 ? <div className="p-6 text-center text-[10px] text-tally-dim">No vouchers posted</div> : vouchers.sort((a, b) => BANK.findIndex((e) => e.id === a.bankId) - BANK.findIndex((e) => e.id === b.bankId)).map((v) => { const entry = BANK.find((e) => e.id === v.bankId); return (<div key={v.bankId} className="flex border-b border-tally-border/30 px-3 py-1 text-[10px]"><span className="w-14 shrink-0 text-tally-dim">{entry?.date}</span><span className="w-16 shrink-0 uppercase text-tally-yellow">{v.type}</span><span className="flex-1 truncate">{ACCOUNTS.find((a) => a.code === v.debit)?.name}</span><span className="flex-1 truncate">{ACCOUNTS.find((a) => a.code === v.credit)?.name}</span><span className="w-24 shrink-0 text-end tabular-nums">{v.amount.toLocaleString('en-IN')}</span></div>) })}
+        </div>)}
+
+        {view === 'trial' && (<div className="min-h-[400px]">
+          <div className="flex border-b border-tally-border bg-tally-header/50 px-3 py-0.5 text-[9px] uppercase text-tally-dim"><span className="flex-1">Particulars</span><span className="w-28 shrink-0 text-end">Debit (Rs.)</span><span className="w-28 shrink-0 text-end">Credit (Rs.)</span></div>
+          {ACCOUNTS.filter((a) => balances[a.code] !== undefined && balances[a.code] !== 0).map((acc) => { const val = balances[acc.code] ?? 0; return (<div key={acc.code} className="flex border-b border-tally-border/30 px-3 py-1 text-[10px]"><span className="flex-1">{acc.name}</span><span className="w-28 shrink-0 text-end tabular-nums text-tally-yellow">{val > 0 ? val.toLocaleString('en-IN') : ''}</span><span className="w-28 shrink-0 text-end tabular-nums text-tally-green">{val < 0 ? Math.abs(val).toLocaleString('en-IN') : ''}</span></div>) })}
+          <div className="flex border-t-2 border-tally-yellow/40 bg-tally-header px-3 py-1 text-[10px] font-bold"><span className="flex-1">Total</span><span className="w-28 shrink-0 text-end tabular-nums text-tally-yellow">{Object.values(balances).filter((v) => v > 0).reduce((a, b) => a + b, 0).toLocaleString('en-IN')}</span><span className="w-28 shrink-0 text-end tabular-nums text-tally-green">{Object.values(balances).filter((v) => v < 0).reduce((a, b) => a + Math.abs(b), 0).toLocaleString('en-IN')}</span></div>
+        </div>)}
+
+        <TallyFKeyBar keys={[
+          { key: 'F5', label: 'Payment', onClick: () => setVType('payment'), active: vType === 'payment' },
+          { key: 'F6', label: 'Receipt', onClick: () => setVType('receipt'), active: vType === 'receipt' },
+          { key: 'F7', label: 'Journal', onClick: () => setVType('journal'), active: vType === 'journal' },
+          { key: 'F8', label: 'Contra', onClick: () => setVType('contra'), active: vType === 'contra' },
+        ]} />
+      </TallyShell>
     </div>
   )
-}
-
-function groupAccountsBySubGroup(): Record<string, Account[]> {
-  const groups: Record<string, Account[]> = {}
-  for (const acc of ACCOUNTS) {
-    if (!groups[acc.subGroup]) groups[acc.subGroup] = []
-    groups[acc.subGroup]!.push(acc)
-  }
-  return groups
 }
