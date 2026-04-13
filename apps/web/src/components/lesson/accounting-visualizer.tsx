@@ -4,6 +4,7 @@ import * as React from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Check, ChevronLeft, ChevronRight, Pause, Play, RotateCcw, Volume2, VolumeX } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { PUBLIC_CONFIG } from '@/lib/config/public'
 import { cn } from '@/lib/utils'
 
 /**
@@ -165,37 +166,73 @@ export function AccountingVisualizer({
     [voices],
   )
 
+  // Audio element for Azure TTS playback
+  const audioRef = React.useRef<HTMLAudioElement | null>(null)
+
   const speak = React.useCallback(
+    async (text: string) => {
+      if (!voiceEnabled || typeof window === 'undefined') return
+
+      // Stop any previous audio
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current = null
+      }
+      if (window.speechSynthesis) window.speechSynthesis.cancel()
+
+      setSpeaking(true)
+
+      // Try Azure TTS via the API (works reliably for both EN and AR)
+      try {
+        const url = `${PUBLIC_CONFIG.apiUrl}/curriculum/speak?text=${encodeURIComponent(text)}&locale=${locale}`
+        const audio = new Audio(url)
+        audioRef.current = audio
+        audio.onended = () => { setSpeaking(false); audioRef.current = null }
+        audio.onerror = () => {
+          // Fallback to browser TTS if Azure fails
+          setSpeaking(false)
+          audioRef.current = null
+          speakBrowser(text)
+        }
+        await audio.play()
+      } catch {
+        // Fallback to browser TTS
+        speakBrowser(text)
+      }
+    },
+    [locale, voiceEnabled],
+  )
+
+  // Browser TTS fallback (works well for English, spotty for Arabic)
+  const speakBrowser = React.useCallback(
     (text: string) => {
-      if (!voiceEnabled || typeof window === 'undefined' || !window.speechSynthesis) return
-      window.speechSynthesis.cancel()
+      if (!window.speechSynthesis) { setSpeaking(false); return }
       const utterance = new SpeechSynthesisUtterance(text)
       const targetLang = locale === 'ar' ? 'ar-SA' : 'en-US'
       utterance.lang = targetLang
       const voice = findVoice(targetLang)
       if (voice) utterance.voice = voice
       utterance.rate = locale === 'ar' ? 0.85 : 0.92
-      utterance.pitch = 1
       utterance.onstart = () => setSpeaking(true)
       utterance.onend = () => setSpeaking(false)
       utterance.onerror = () => setSpeaking(false)
       window.speechSynthesis.speak(utterance)
     },
-    [locale, voiceEnabled, findVoice],
+    [locale, findVoice],
   )
 
-  // Stop speech on unmount or when voice is disabled
+  // Stop all audio on unmount or when voice is disabled
   React.useEffect(() => {
     return () => {
-      if (typeof window !== 'undefined' && window.speechSynthesis) {
-        window.speechSynthesis.cancel()
-      }
+      if (audioRef.current) { audioRef.current.pause(); audioRef.current = null }
+      if (typeof window !== 'undefined' && window.speechSynthesis) window.speechSynthesis.cancel()
     }
   }, [])
 
   React.useEffect(() => {
-    if (!voiceEnabled && typeof window !== 'undefined' && window.speechSynthesis) {
-      window.speechSynthesis.cancel()
+    if (!voiceEnabled) {
+      if (audioRef.current) { audioRef.current.pause(); audioRef.current = null }
+      if (typeof window !== 'undefined' && window.speechSynthesis) window.speechSynthesis.cancel()
       setSpeaking(false)
     }
   }, [voiceEnabled])
@@ -242,11 +279,17 @@ export function AccountingVisualizer({
     if (txn) speak(locale === 'ar' ? txn.voiceAr : txn.voiceEn)
   }
 
+  function stopAllAudio() {
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null }
+    if (typeof window !== 'undefined' && window.speechSynthesis) window.speechSynthesis.cancel()
+    setSpeaking(false)
+  }
+
   function stepBack() {
     if (isFirst) return
     setCurrentStep(currentStep - 1)
     setAnimatingEntry(null)
-    if (typeof window !== 'undefined' && window.speechSynthesis) window.speechSynthesis.cancel()
+    stopAllAudio()
     const txn = transactions[currentStep - 1]
     if (txn) speak(locale === 'ar' ? txn.voiceAr : txn.voiceEn)
   }
@@ -255,7 +298,7 @@ export function AccountingVisualizer({
     setCurrentStep(-1)
     setPlaying(false)
     setAnimatingEntry(null)
-    if (typeof window !== 'undefined' && window.speechSynthesis) window.speechSynthesis.cancel()
+    stopAllAudio()
   }
 
   // Auto-play — waits for speech to finish if voice is on, otherwise 2.5s
@@ -265,13 +308,15 @@ export function AccountingVisualizer({
       return
     }
     if (voiceEnabled && speaking) {
-      // Wait for speech to finish, then advance after a short pause
+      // Poll until audio finishes (works for both Azure Audio + browser TTS)
       const check = setInterval(() => {
-        if (!window.speechSynthesis?.speaking) {
+        const azurePlaying = audioRef.current && !audioRef.current.paused && !audioRef.current.ended
+        const browserPlaying = window.speechSynthesis?.speaking
+        if (!azurePlaying && !browserPlaying) {
           clearInterval(check)
           setTimeout(stepForward, 600)
         }
-      }, 200)
+      }, 250)
       return () => clearInterval(check)
     }
     const id = setTimeout(stepForward, 2500)
