@@ -1,23 +1,24 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Eye, FileText, GitBranch, Network, Sparkles } from 'lucide-react'
+import { BarChart3, Eye, FileText, GitBranch, Network, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const ICONS = {
   watch: Eye,
   read: FileText,
+  visualize: BarChart3,
   flow: GitBranch,
   map: Network,
   try: Sparkles,
 } as const
 
 const LABELS = {
-  en: { watch: 'Watch', read: 'Read', flow: 'Flow', map: 'Map', try: 'Practice' },
-  ar: { watch: 'شاهد', read: 'اقرأ', flow: 'مخطط', map: 'خريطة', try: 'تمرّن' },
+  en: { watch: 'Watch', read: 'Read', visualize: 'Visualize', flow: 'Flow', map: 'Map', try: 'Practice' },
+  ar: { watch: 'شاهد', read: 'اقرأ', visualize: 'تصوّر', flow: 'مخطط', map: 'خريطة', try: 'تمرّن' },
 } as const
 
-export type Section = 'watch' | 'read' | 'flow' | 'map' | 'try'
+export type Section = 'watch' | 'read' | 'visualize' | 'flow' | 'map' | 'try'
 
 type Props = {
   sections: Section[]

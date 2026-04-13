@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react'
+import { AccountingVisualizer } from './accounting-visualizer'
 import { LessonContent } from './lesson-content'
 import { MermaidBlock } from './mermaid-block'
 import { Practice } from './practice'
@@ -20,12 +21,13 @@ import { Badge } from '@/components/ui/badge'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { cn } from '@/lib/utils'
 
-const SECTIONS: Section[] = ['watch', 'read', 'flow', 'map', 'try']
+const SECTIONS: Section[] = ['watch', 'read', 'visualize', 'flow', 'map', 'try']
 
 const LABELS = {
   en: {
     watch: 'Watch',
     read: 'Read',
+    visualize: 'Visualize',
     flow: 'Flow',
     map: 'Map',
     try: 'Practice',
@@ -39,6 +41,7 @@ const LABELS = {
   ar: {
     watch: 'شاهد',
     read: 'اقرأ',
+    visualize: 'تصوّر',
     flow: 'مخطط',
     map: 'خريطة',
     try: 'تمرّن',
@@ -240,6 +243,13 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
             <section id="read" className="scroll-mt-24">
               <SectionHeader label={t.read} />
               <LessonContent markdown={markdown} />
+            </section>
+          </BlurFade>
+
+          <BlurFade delay={0.22}>
+            <section id="visualize" className="scroll-mt-24">
+              <SectionHeader label={t.visualize} />
+              <AccountingVisualizer locale={locale} />
             </section>
           </BlurFade>
 
