@@ -49,7 +49,7 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     explanation: 'Debtor increases (asset ↑), Sales increases (income ↑)',
     explanationAr: 'المدين يزيد (أصل ↑)، المبيعات تزيد (إيراد ↑)',
     voiceEn: 'We sold goods worth 85 thousand rupees to Patel Enterprises, but they have not paid yet. So Patel now owes us money — that is a debtor, an asset for us. And we earned sales revenue. So we debit the debtor account and credit the sales account.',
-    voiceAr: 'بعنا بضائع بقيمة 85 ألف روبية لشركة باتل، لكنهم لم يدفعوا بعد. فشركة باتل الآن مدينة لنا — وهذا أصل بالنسبة لنا. وحققنا إيراد مبيعات. لذلك نجعل حساب المدين مدينًا ونجعل حساب المبيعات دائنًا.',
+    voiceAr: 'بعنا بضائع بقيمة ٨٥ ألف روبية لشركة باتل، لكنهم لم يدفعوا بعد. فشركة باتل الآن مدينة لنا — وهذا أصل بالنسبة لنا. وحققنا إيراد مبيعات. لذلك نجعل حساب المدين مدينًا ونجعل حساب المبيعات دائنًا.',
   },
   {
     id: 't2',
@@ -61,7 +61,7 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     explanation: 'Bank increases (asset ↑), Debtor decreases (asset ↓) — receivable settled',
     explanationAr: 'البنك يزيد (أصل ↑)، المدين ينقص (أصل ↓) — تمت التسوية',
     voiceEn: 'Patel Enterprises has now paid us 85 thousand rupees into our bank account. Our bank balance goes up — that is an asset increasing, so we debit the bank. And Patel no longer owes us, so the debtor balance goes down — we credit the debtor account. The receivable is now settled.',
-    voiceAr: 'شركة باتل دفعت لنا 85 ألف روبية في حسابنا البنكي. رصيد البنك يرتفع — وهذا أصل يزيد، فنجعل البنك مدينًا. وباتل لم يعد مدينًا لنا، فنجعل حساب المدين دائنًا. تمت التسوية.',
+    voiceAr: 'شركة باتل دفعت لنا ٨٥ ألف روبية في حسابنا البنكي. رصيد البنك يرتفع — وهذا أصل يزيد، فنجعل البنك مدينًا. وباتل لم يعد مدينًا لنا، فنجعل حساب المدين دائنًا. تمت التسوية.',
   },
   {
     id: 't3',
@@ -73,7 +73,7 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     explanation: 'Purchases increase (expense ↑), Creditor increases (liability ↑)',
     explanationAr: 'المشتريات تزيد (مصروف ↑)، الدائن يزيد (التزام ↑)',
     voiceEn: 'We bought goods worth 42 thousand rupees from Gupta Suppliers, but we have not paid them yet. So our purchases go up — that is an expense. And we now owe Gupta money — that is a creditor, a liability. Debit purchases, credit the creditor.',
-    voiceAr: 'اشترينا بضائع بقيمة 42 ألف روبية من مورد جوبتا، لكن لم ندفع بعد. فالمشتريات تزيد — وهي مصروف. ونحن الآن مدينون لجوبتا — وهذا التزام. نجعل المشتريات مدينة والدائن دائنًا.',
+    voiceAr: 'اشترينا بضائع بقيمة ٤٢ ألف روبية من مورد جوبتا، لكن لم ندفع بعد. فالمشتريات تزيد — وهي مصروف. ونحن الآن مدينون لجوبتا — وهذا التزام. نجعل المشتريات مدينة والدائن دائنًا.',
   },
   {
     id: 't4',
@@ -85,7 +85,7 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     explanation: 'Creditor decreases (liability ↓), Bank decreases (asset ↓)',
     explanationAr: 'الدائن ينقص (التزام ↓)، البنك ينقص (أصل ↓)',
     voiceEn: 'We are now paying Gupta Suppliers the 42 thousand we owed them. Our liability to Gupta goes down — we debit the creditor account. And money leaves our bank — bank balance decreases, so we credit the bank account.',
-    voiceAr: 'ندفع الآن لمورد جوبتا 42 ألف روبية التي كنا ندينها. التزامنا لجوبتا ينخفض — فنجعل الدائن مدينًا. والمال يخرج من البنك — فنجعل البنك دائنًا.',
+    voiceAr: 'ندفع الآن لمورد جوبتا ٤٢ ألف روبية التي كنا ندينها. التزامنا لجوبتا ينخفض — فنجعل الدائن مدينًا. والمال يخرج من البنك — فنجعل البنك دائنًا.',
   },
   {
     id: 't5',
@@ -97,7 +97,7 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     explanation: 'Rent expense increases (expense ↑), Bank decreases (asset ↓)',
     explanationAr: 'مصروف الإيجار يزيد (مصروف ↑)، البنك ينقص (أصل ↓)',
     voiceEn: 'We paid 55 thousand rupees for office rent. Rent is an expense — it goes up, so we debit the rent account. The money came out of our bank, so bank goes down — we credit the bank.',
-    voiceAr: 'دفعنا 55 ألف روبية إيجار المكتب. الإيجار مصروف — يزيد فنجعله مدينًا. والمال خرج من البنك فنجعل البنك دائنًا.',
+    voiceAr: 'دفعنا ٥٥ ألف روبية إيجار المكتب. الإيجار مصروف — يزيد فنجعله مدينًا. والمال خرج من البنك فنجعل البنك دائنًا.',
   },
   {
     id: 't6',
@@ -109,7 +109,7 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     explanation: 'Bank increases (asset ↑), Loan increases (liability ↑)',
     explanationAr: 'البنك يزيد (أصل ↑)، القرض يزيد (التزام ↑)',
     voiceEn: 'HDFC Bank gave us a loan of 5 lakh rupees. The money came into our bank account — bank goes up, so we debit it. But we now owe HDFC this money — the loan is a liability that increases. So we credit the loan account.',
-    voiceAr: 'أعطانا بنك HDFC قرضًا بقيمة 5 لاخ روبية. المال دخل حسابنا البنكي — فنجعل البنك مدينًا. لكننا الآن مدينون بهذا المبلغ — القرض التزام يزيد. فنجعل حساب القرض دائنًا.',
+    voiceAr: 'أعطانا بنك HDFC قرضًا بقيمة ٥ لاخ روبية. المال دخل حسابنا البنكي — فنجعل البنك مدينًا. لكننا الآن مدينون بهذا المبلغ — القرض التزام يزيد. فنجعل حساب القرض دائنًا.',
   },
   {
     id: 't7',
@@ -121,7 +121,7 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     explanation: 'Salary expense increases (expense ↑), Bank decreases (asset ↓)',
     explanationAr: 'مصروف الرواتب يزيد (مصروف ↑)، البنك ينقص (أصل ↓)',
     voiceEn: 'We paid 2 lakh 15 thousand rupees in salaries to our employees. Salary is an expense — it increases, so we debit the salary account. The money left our bank, so we credit the bank account.',
-    voiceAr: 'دفعنا 2 لاخ و15 ألف روبية رواتب للموظفين. الراتب مصروف — يزيد فنجعله مدينًا. والمال خرج من البنك فنجعل البنك دائنًا.',
+    voiceAr: 'دفعنا ٢ لاخ و١٥ ألف روبية رواتب للموظفين. الراتب مصروف — يزيد فنجعله مدينًا. والمال خرج من البنك فنجعل البنك دائنًا.',
   },
 ]
 
@@ -137,23 +137,54 @@ export function AccountingVisualizer({
   const [speaking, setSpeaking] = React.useState(false)
 
   // ── Speech synthesis ──────────────────────────────────────
+  // Voices load asynchronously — we cache them and refresh on voiceschanged.
+  const [voices, setVoices] = React.useState<SpeechSynthesisVoice[]>([])
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return
+    const load = () => setVoices(window.speechSynthesis.getVoices())
+    load()
+    window.speechSynthesis.addEventListener('voiceschanged', load)
+    return () => window.speechSynthesis.removeEventListener('voiceschanged', load)
+  }, [])
+
+  const findVoice = React.useCallback(
+    (lang: string): SpeechSynthesisVoice | undefined => {
+      // Exact match first (e.g. ar-SA), then prefix match (ar-*), then any
+      const exact = voices.find((v) => v.lang === lang)
+      if (exact) return exact
+      const prefix = lang.split('-')[0] ?? lang
+      const partial = voices.find((v) => v.lang.startsWith(prefix))
+      if (partial) return partial
+      // For Arabic, also try ar_SA (underscore variant some browsers use)
+      if (prefix === 'ar') {
+        return voices.find((v) => v.lang.includes('ar'))
+      }
+      return undefined
+    },
+    [voices],
+  )
+
   const speak = React.useCallback(
     (text: string) => {
       if (!voiceEnabled || typeof window === 'undefined' || !window.speechSynthesis) return
-      window.speechSynthesis.cancel() // stop any previous utterance
+      window.speechSynthesis.cancel()
       const utterance = new SpeechSynthesisUtterance(text)
-      utterance.lang = locale === 'ar' ? 'ar-SA' : 'en-US'
-      utterance.rate = 0.92
+      const targetLang = locale === 'ar' ? 'ar-SA' : 'en-US'
+      utterance.lang = targetLang
+      const voice = findVoice(targetLang)
+      if (voice) utterance.voice = voice
+      utterance.rate = locale === 'ar' ? 0.85 : 0.92
       utterance.pitch = 1
       utterance.onstart = () => setSpeaking(true)
       utterance.onend = () => setSpeaking(false)
       utterance.onerror = () => setSpeaking(false)
       window.speechSynthesis.speak(utterance)
     },
-    [locale, voiceEnabled],
+    [locale, voiceEnabled, findVoice],
   )
 
-  // Stop speech when component unmounts or voice is disabled
+  // Stop speech on unmount or when voice is disabled
   React.useEffect(() => {
     return () => {
       if (typeof window !== 'undefined' && window.speechSynthesis) {
