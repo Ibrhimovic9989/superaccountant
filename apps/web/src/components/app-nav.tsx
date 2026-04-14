@@ -1,8 +1,8 @@
+import { Command, LayoutDashboard, Map as MapIcon, Music2, Search } from 'lucide-react'
 import Link from 'next/link'
-import { Command, LayoutDashboard, Map, Search } from 'lucide-react'
 import { Logomark, Wordmark } from './brand/logo'
-import { ThemeToggle } from './theme-toggle'
 import { LocaleToggle } from './locale-toggle'
+import { ThemeToggle } from './theme-toggle'
 import { UserMenu } from './user-menu'
 
 type Props = {
@@ -12,8 +12,8 @@ type Props = {
 }
 
 const COPY = {
-  en: { dashboard: 'Dashboard', roadmap: 'Roadmap', search: 'Search' },
-  ar: { dashboard: 'لوحة التحكم', roadmap: 'خريطة الطريق', search: 'بحث' },
+  en: { dashboard: 'Dashboard', roadmap: 'Roadmap', songs: 'Songs', search: 'Search' },
+  ar: { dashboard: 'لوحة التحكم', roadmap: 'خريطة الطريق', songs: 'الأغاني', search: 'بحث' },
 } as const
 
 /**
@@ -42,8 +42,15 @@ export function AppNav({ locale, userName, userEmail }: Props) {
             href={`/${locale}/roadmap`}
             className="hidden items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-fg-muted transition-colors hover:bg-bg-elev hover:text-fg sm:inline-flex"
           >
-            <Map className="h-3.5 w-3.5" />
+            <MapIcon className="h-3.5 w-3.5" />
             {t.roadmap}
+          </Link>
+          <Link
+            href={`/${locale}/songs`}
+            className="hidden items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-fg-muted transition-colors hover:bg-bg-elev hover:text-fg sm:inline-flex"
+          >
+            <Music2 className="h-3.5 w-3.5" />
+            {t.songs}
           </Link>
           <Link
             href={`/${locale}/search`}
