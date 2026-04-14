@@ -4,6 +4,7 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react'
 import { AccountingVisualizer } from './accounting-visualizer'
+import { pickScenario } from '@/lib/data/visualizer-scenarios'
 import { LessonContent } from './lesson-content'
 import { MermaidBlock } from './mermaid-block'
 import { Practice } from './practice'
@@ -249,7 +250,16 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
           <BlurFade delay={0.22}>
             <section id="visualize" className="scroll-mt-24">
               <SectionHeader label={t.visualize} />
-              <AccountingVisualizer locale={locale} />
+              {(() => {
+                const scenario = pickScenario(lesson.slug)
+                return (
+                  <AccountingVisualizer
+                    locale={locale}
+                    transactions={scenario.transactions}
+                    title={locale === 'ar' ? scenario.titleAr : scenario.title}
+                  />
+                )
+              })()}
             </section>
           </BlurFade>
 
