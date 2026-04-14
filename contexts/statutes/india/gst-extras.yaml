@@ -1,0 +1,141 @@
+# GST — additional key sections beyond basic registration and ITC
+# Source: cbic-gst.gov.in · verified as of 2024-25 amendments.
+
+source: "Central Goods and Services Tax Act, 2017"
+sourceShort: "CGST Act"
+jurisdiction: "india"
+sourceUrl: "https://cbic-gst.gov.in/"
+tags: [gst, indirect-tax, composition, refund, penalty]
+
+sections:
+  - code: "10"
+    title: "Composition Scheme"
+    content: |
+      Section 10 offers a simplified composition scheme for small taxpayers — flat
+      tax rates on turnover with minimal compliance burden.
+
+      Eligibility threshold (aggregate turnover in preceding FY):
+      - ₹1.5 crore for most states.
+      - ₹75 lakh for special category states (NE states, Himachal, Uttarakhand, J&K).
+
+      Composition tax rates (on taxable turnover):
+      - Manufacturers: 1% (0.5% CGST + 0.5% SGST)
+      - Traders: 1% (of taxable turnover, not total turnover)
+      - Restaurants (not serving liquor): 5% (2.5% + 2.5%)
+      - Service providers (separate scheme u/s 10(2A)): 6% with turnover limit ₹50 lakh.
+
+      Restrictions:
+      - Cannot collect tax from customers.
+      - Cannot claim input tax credit (ITC).
+      - Cannot make inter-state outward supplies.
+      - Cannot supply goods through e-commerce operators required to collect TCS.
+      - Cannot supply non-taxable goods (alcohol, petroleum).
+
+      Return filing:
+      - CMP-08 (quarterly payment challan) — by 18th of following quarter.
+      - GSTR-4 (annual return) — by 30 April of next FY.
+
+  - code: "34"
+    title: "Credit and Debit Notes"
+    content: |
+      Section 34 governs credit notes and debit notes.
+
+      CREDIT NOTE (issued by supplier to reduce a prior invoice):
+      When issued:
+      - Taxable value or tax charged was excess of what was correct.
+      - Goods returned by the recipient.
+      - Goods or services found deficient.
+
+      Time limit to issue credit note: Before 30 November of the following financial
+      year OR filing of annual return, whichever is earlier.
+
+      Effect: Supplier's tax liability reduces. Recipient must reverse the
+      corresponding ITC (if claimed).
+
+      DEBIT NOTE (issued by supplier to increase a prior invoice):
+      When issued:
+      - Taxable value or tax charged was less than correct.
+
+      No time limit as such — debit note can be issued any time (but beyond the
+      limitation period, the recipient may not be able to claim additional ITC).
+
+      Both credit and debit notes must contain reference to the original invoice
+      and must be reported in GSTR-1.
+
+  - code: "54"
+    title: "Refund of Tax"
+    content: |
+      Section 54 governs refund claims under GST. Common refund scenarios:
+
+      1. Excess balance in the electronic cash ledger.
+      2. Export of goods/services with payment of IGST (automatic refund on shipping
+         bill filing — integration with customs).
+      3. Zero-rated supply without payment of tax under LUT (refund of accumulated ITC).
+      4. Inverted duty structure (input tax rate higher than output rate — accumulated
+         ITC).
+      5. Deemed export (supply to EOU, SEZ, advance authorization holders).
+      6. Finalization of provisional assessment.
+      7. Excess payment of tax.
+
+      Time limit: 2 years from the relevant date (defined separately for each scenario
+      in Explanation to Section 54).
+
+      Process:
+      - File Form GST RFD-01 on the GST portal.
+      - Supporting documents: invoices, bank realization certificates (for exports),
+        statement of inward/outward supplies.
+      - Refund sanctioned in Form RFD-06; amount credited to the registered bank account.
+
+      Interest on delayed refund (Section 56): 6% per annum if refund not granted
+      within 60 days of application. 9% if refund is delayed beyond adjudication order.
+
+      Unjust enrichment: Refund claim (other than exports, ITC, deemed exports,
+      inverted duty) credited to the Consumer Welfare Fund unless the applicant
+      proves the incidence of tax was not passed on to any other person.
+
+  - code: "73"
+    title: "Demand for Non-Fraud Cases"
+    content: |
+      Section 73 governs recovery of tax NOT paid, short-paid, or erroneously
+      refunded, where the cause is NOT fraud, wilful misstatement, or suppression
+      of facts.
+
+      Time limit for show-cause notice: Within 3 years from the due date of filing
+      annual return for the financial year.
+      Time limit for adjudication order: Within 3 years of the due date of annual
+      return (SCN issued within 2 years 9 months).
+
+      Voluntary payment before SCN: Pay tax + interest (18% p.a. u/s 50). NO PENALTY.
+      Payment after SCN but before adjudication: Tax + interest + 10% of tax or
+      ₹10,000 (whichever higher) as penalty.
+      Payment within 30 days of adjudication order: Tax + interest + 10% penalty.
+      After 30 days: Full tax + interest + 10% penalty + recovery proceedings.
+
+      Section 74 (FRAUD cases — wilful misstatement, suppression, evasion): Extended
+      time limit of 5 years, and penalty up to 100% of tax (reduced percentages if
+      paid before/after SCN, similar ladder to 73 but higher).
+
+  - code: "129"
+    title: "Detention, Seizure, and Release of Goods in Transit"
+    content: |
+      Section 129 allows GST officers to detain or seize goods and conveyance being
+      transported in contravention of the Act — primarily for missing/invalid
+      e-way bills.
+
+      Conditions for release:
+      (a) Owner wants to release — pay penalty of 200% of tax payable (effectively
+          100% tax + 100% penalty) on the goods.
+      (b) Owner does not come forward — pay 50% of the VALUE of goods + tax.
+      (c) Exempt goods — pay 2% of value (max ₹25,000).
+      (d) Bank guarantee or bond equivalent to the above for provisional release.
+
+      E-way bill mandatory for:
+      - Inter-state movement of goods with consignment value > ₹50,000.
+      - Intra-state movement (varies by state; mostly ≥ ₹50,000 or ₹1 lakh).
+
+      Validity of e-way bill: 1 day per 200 km of distance (1 day per 20 km for
+      over-dimensional cargo). Can be extended if genuine delay.
+
+      Appeal: Section 107 (appeal to Appellate Authority) and Section 112 (to the
+      Tribunal). Pre-deposit required for appeal: 10% of disputed tax, capped at
+      ₹25 crore.

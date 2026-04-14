@@ -1,0 +1,165 @@
+# Income Tax Act — Deductions from Total Income (Chapter VI-A) and key exemptions
+# Source: incometaxindia.gov.in · verified as of FY 2025-26.
+
+source: "Income Tax Act, 1961"
+sourceShort: "ITA"
+jurisdiction: "india"
+sourceUrl: "https://incometaxindia.gov.in/"
+tags: [deductions, exemptions, direct-tax, old-regime]
+
+sections:
+  - code: "80C"
+    title: "Deduction for Investments and Specified Payments"
+    content: |
+      Section 80C allows a deduction up to ₹1,50,000 per year from gross total income
+      for specified investments and payments. Available only under the OLD tax regime
+      (not under Section 115BAC new regime).
+
+      Eligible investments/payments include:
+      - Life insurance premium (≤ 10% of sum assured for policies issued after 1 Apr 2012)
+      - Public Provident Fund (PPF) contributions
+      - Employee's share of EPF contribution
+      - Equity-Linked Savings Scheme (ELSS) mutual funds (3-year lock-in)
+      - National Savings Certificates (NSC) — VIII issue
+      - Sukanya Samriddhi Yojana (SSY) for girl child
+      - 5-year tax-saving fixed deposits with scheduled banks
+      - Principal repayment of home loan
+      - Stamp duty + registration charges on purchase of a house (year of purchase)
+      - Tuition fees for up to 2 children (not coaching/donations)
+      - Senior Citizens Saving Scheme (SCSS)
+      - Deposit in notified pension fund
+
+      Section 80CCD(1B) provides an ADDITIONAL deduction of ₹50,000 for NPS
+      (National Pension System) — over and above the ₹1.5 lakh 80C limit.
+
+  - code: "80D"
+    title: "Deduction for Health Insurance Premiums"
+    content: |
+      Section 80D allows deduction for health insurance premiums paid (non-cash
+      payment required) for self, spouse, dependent children, and parents.
+
+      Limits (annual, under the OLD tax regime):
+      - Self + spouse + dependent children (all below 60): ₹25,000
+      - Self + family (below 60) + parents below 60: ₹25,000 + ₹25,000 = ₹50,000
+      - Self + family (below 60) + parents 60 or above: ₹25,000 + ₹50,000 = ₹75,000
+      - Self 60 or above + parents 60 or above: ₹50,000 + ₹50,000 = ₹1,00,000
+
+      Within the above limits:
+      - Preventive health check-up expenses: up to ₹5,000 (can be in cash)
+      - Mediclaim premium for the individual and family combined cap.
+
+      Medical expenses of senior citizens (60+): if no health insurance is taken,
+      actual medical expenses up to the age-slab limit (₹50,000 or ₹1,00,000) are
+      deductible.
+
+  - code: "80G"
+    title: "Deduction for Charitable Donations"
+    content: |
+      Section 80G allows deduction for donations to approved charitable institutions
+      and specified funds. The quantum of deduction depends on the recipient:
+
+      Category A — 100% deduction without qualifying limit:
+      - Prime Minister's National Relief Fund (PMNRF)
+      - PM CARES Fund
+      - National Defence Fund
+      - Chief Minister's Relief Fund (state funds)
+      - Swachh Bharat Kosh, Clean Ganga Fund
+      - National Illness Assistance Fund
+
+      Category B — 50% deduction without qualifying limit:
+      - Prime Minister's Drought Relief Fund
+      - Jawaharlal Nehru Memorial Fund
+      - Indira Gandhi Memorial Trust
+      - Rajiv Gandhi Foundation
+
+      Category C — 100% deduction subject to 10% of adjusted GTI:
+      - Government or approved local authority for promoting family planning
+      - Indian Olympic Association donations for sports infrastructure
+
+      Category D — 50% deduction subject to 10% of adjusted GTI:
+      - Most registered charitable trusts, religious institutions, educational
+        institutions (with 80G certificate)
+
+      Conditions:
+      - Donation must be in a form OTHER than cash for amounts > ₹2,000.
+      - Recipient must have a valid 80G certificate and file Form 10BD.
+      - Donor needs Form 10BE issued by the recipient to claim the deduction.
+
+      Not available under the new tax regime (Section 115BAC).
+
+  - code: "80E"
+    title: "Deduction for Education Loan Interest"
+    content: |
+      Section 80E allows deduction of the ENTIRE interest paid on a loan taken for
+      higher education of self, spouse, children, or a student for whom the assessee
+      is a legal guardian.
+
+      Scope:
+      - Higher education = any course of study after passing Senior Secondary
+        Examination (Class 12) — in India or abroad.
+      - Loan must be from a scheduled bank or approved financial institution/trust.
+
+      Duration:
+      - Deduction available for the year in which repayment begins and the 7
+        immediately following years, OR until the interest is fully paid — whichever
+        is earlier.
+      - No cap on the amount of interest deductible.
+
+      Only the INTEREST component is deductible — not the principal.
+      Available only under the OLD tax regime.
+
+  - code: "10(13A)"
+    title: "House Rent Allowance (HRA) Exemption"
+    content: |
+      Section 10(13A) read with Rule 2A exempts the least of the following from
+      the House Rent Allowance received by a salaried employee:
+
+      1. Actual HRA received from the employer.
+      2. Rent paid − 10% of salary.
+      3. 50% of salary (for Mumbai, Delhi, Chennai, Kolkata — "metro cities")
+         OR 40% of salary (for all other cities — "non-metro").
+
+      "Salary" for HRA purposes = Basic pay + DA (if forming part of retirement
+      benefits) + Commission on turnover (if applicable). Excludes all other
+      allowances and perquisites.
+
+      Conditions:
+      - Employee must actually pay rent (not to themselves or spouse).
+      - If annual rent > ₹1,00,000, employee must furnish landlord's PAN.
+      - Available only under the OLD tax regime.
+
+      HRA is taxable if the employee lives in their own house or does not pay rent.
+
+  - code: "115BAC"
+    title: "New Tax Regime (Default from FY 2023-24)"
+    content: |
+      Section 115BAC is the DEFAULT tax regime from FY 2023-24 onwards for
+      individuals and HUFs. Concessional slab rates, but most deductions and
+      exemptions are NOT available.
+
+      Slab rates (FY 2025-26 under 115BAC, new regime):
+      - Up to ₹4,00,000: Nil
+      - ₹4,00,001 to ₹8,00,000: 5%
+      - ₹8,00,001 to ₹12,00,000: 10%
+      - ₹12,00,001 to ₹16,00,000: 15%
+      - ₹16,00,001 to ₹20,00,000: 20%
+      - ₹20,00,001 to ₹24,00,000: 25%
+      - Above ₹24,00,000: 30%
+
+      Standard deduction: ₹75,000 (salaried), ₹25,000 (family pension).
+      Rebate u/s 87A: Full tax rebate if total income ≤ ₹12,00,000.
+      Effective no tax up to ₹12,75,000 (12,00,000 + 75,000 std deduction) for
+      salaried individuals.
+
+      NOT available under new regime:
+      - Chapter VI-A deductions (except 80CCD(2) — employer's NPS contribution and
+        80CCH — agniveer corpus fund)
+      - HRA, LTA, section 80C, 80D, 80G, 80E etc.
+      - Standard deduction for professionals
+
+      Still available:
+      - Employer's contribution to NPS / EPF
+      - Standard deduction on salary + family pension
+      - Home loan interest ONLY on let-out property (not self-occupied)
+      - Transport allowance for differently-abled
+      - Conveyance allowance for official duties

@@ -1,0 +1,163 @@
+# Capital Gains + Tax Audit + Return filing — Income Tax Act
+# Source: incometaxindia.gov.in · verified as of FY 2025-26.
+
+source: "Income Tax Act, 1961"
+sourceShort: "ITA"
+jurisdiction: "india"
+sourceUrl: "https://incometaxindia.gov.in/"
+tags: [capital-gains, audit, returns, presumptive, direct-tax]
+
+sections:
+  - code: "44AB"
+    title: "Compulsory Tax Audit"
+    content: |
+      Section 44AB requires a tax audit by a chartered accountant for:
+
+      Business:
+      - Turnover/gross receipts > ₹1 crore in the financial year.
+      - Enhanced threshold: ₹10 crore if cash receipts AND cash payments are each
+        ≤ 5% of total receipts/payments. Encourages digital transactions.
+
+      Profession:
+      - Gross receipts > ₹50 lakh.
+
+      Presumptive scheme opt-out:
+      - A person who opted for Section 44AD / 44ADA presumptive scheme in any earlier
+        year and later opted out must get tax audit done for 5 subsequent years
+        (to prevent gaming the regime).
+
+      Tax audit report forms:
+      - Form 3CA + 3CD: for assessees already required to get accounts audited under
+        any other law (Companies Act etc.).
+      - Form 3CB + 3CD: for all others.
+
+      Due date: 30 September of the assessment year (one month before the return
+      filing date for audit cases).
+
+      Penalty u/s 271B: ½% of turnover, capped at ₹1,50,000.
+
+  - code: "44AD"
+    title: "Presumptive Taxation for Small Business"
+    content: |
+      Section 44AD allows resident individuals, HUFs, and partnership firms (not LLPs)
+      to offer business income on a presumptive basis:
+      - 8% of turnover if received in cash.
+      - 6% of turnover if received by account-payee cheque / bank transfer / UPI /
+        digital mode.
+
+      Eligibility:
+      - Turnover ≤ ₹2 crore (enhanced to ₹3 crore if cash receipts ≤ 5%).
+      - Not available for commission/brokerage business, agency business, or
+        professions covered under Section 44AA (specified professions).
+
+      Relief:
+      - No requirement to maintain books of account u/s 44AA.
+      - No tax audit u/s 44AB.
+      - Entire deduction for business expenses/depreciation is deemed allowed.
+
+      Advance tax: Must be paid by 15 March (single instalment), not four.
+
+      Lock-in: Once opted in, must continue for 5 years. Opting out requires audit
+      for next 5 years (section 44AB(e)).
+
+  - code: "44ADA"
+    title: "Presumptive Taxation for Professionals"
+    content: |
+      Section 44ADA allows resident individuals, HUFs, and partnership firms engaged
+      in a specified profession (legal, medical, engineering, architectural,
+      accountancy, technical consultancy, interior decoration, authorised
+      representatives, film artists, company secretaries, information technology,
+      and other professions notified by CBDT) to declare:
+
+      - 50% of gross receipts as presumptive income.
+
+      Eligibility:
+      - Gross receipts ≤ ₹50 lakh (enhanced to ₹75 lakh if cash receipts ≤ 5%).
+
+      Benefits:
+      - No books of account requirement.
+      - No tax audit.
+      - No detailed expense substantiation.
+
+      Opting out implications: if declared income is lower than 50%, tax audit under
+      section 44AB and proper books become mandatory.
+
+  - code: "54"
+    title: "Capital Gains Exemption — Residential House (Self-Occupied)"
+    content: |
+      Section 54 exempts long-term capital gains (LTCG) on sale of a residential
+      house (held > 24 months) if the gain is reinvested in another residential
+      house.
+
+      Conditions:
+      - Reinvestment must be:
+        - Within 1 year BEFORE or 2 years AFTER the sale, OR
+        - Within 3 years if the new house is under construction.
+      - The exemption is capped at the lower of:
+        - Capital gain, or
+        - Cost of new residential house.
+
+      Limit (from FY 2023-24): Exemption on investment in new property restricted to
+      ₹10 crore. Any LTCG above ₹10 crore of reinvestment is taxable at 12.5% (LTCG
+      rate under 112A post-Budget 2024).
+
+      Multiple houses rule: One-time option to invest in TWO residential houses
+      available if capital gain ≤ ₹2 crore.
+
+      Capital Gains Account Scheme (CGAS): If the reinvestment is not completed before
+      the return filing due date, unutilized amount must be deposited in a CGAS account
+      with a public sector bank.
+
+  - code: "112A"
+    title: "Long-Term Capital Gains on Listed Equity / Equity Mutual Funds"
+    content: |
+      Section 112A (introduced Budget 2018, revised Budget 2024) governs LTCG on:
+      - Listed equity shares (held > 12 months)
+      - Units of equity-oriented mutual funds (held > 12 months)
+      - Units of a business trust (held > 36 months pre-FY24)
+
+      Rate (post-23 July 2024):
+      - 12.5% on LTCG exceeding ₹1,25,000 per year (raised from ₹1 lakh).
+      - No indexation benefit.
+
+      For sales BEFORE 23 July 2024: Rate was 10% + surcharge + cess on LTCG > ₹1 lakh.
+
+      Grandfathering: For shares acquired before 31 Jan 2018, the higher of:
+      - Actual cost, or
+      - Fair Market Value on 31 Jan 2018 (limited to sale price)
+      is treated as cost of acquisition.
+
+      Section 111A governs Short-Term Capital Gains (STCG) on the same assets
+      (held ≤ 12 months) — rate 20% (raised from 15% in Budget 2024) from 23 July 2024.
+
+  - code: "139"
+    title: "Return of Income — Filing Due Dates"
+    content: |
+      Section 139 governs filing of return of income.
+
+      Due dates for Assessment Year (AY 2025-26 example):
+      - Non-audit cases (most individuals, HUF, small firms): 31 July 2025.
+      - Tax audit cases (u/s 44AB): 31 October 2025.
+      - Transfer pricing cases (u/s 92E): 30 November 2025.
+
+      Belated return (Section 139(4)): Can be filed by 31 December of the
+      assessment year, with late-filing fee u/s 234F:
+      - ₹5,000 if total income > ₹5 lakh.
+      - ₹1,000 if total income ≤ ₹5 lakh.
+
+      Revised return (Section 139(5)): Can be filed by 31 December of the assessment
+      year OR before completion of assessment, whichever is earlier.
+
+      Updated return (Section 139(8A), ITR-U): Can be filed within 48 months (4 years,
+      raised from 24 months in Budget 2025) of the end of the relevant AY, with
+      additional tax:
+      - 25% of tax+interest if filed within 12 months.
+      - 50% if filed between 12-24 months.
+      - 60% if filed between 24-36 months.
+      - 70% if filed between 36-48 months.
+
+      Cannot file ITR-U to claim/increase a refund, reduce tax liability, or for
+      cases under assessment/search.
+
+      Interest under Section 234A: 1% per month on unpaid tax from the due date
+      till actual filing date, in case of late return.

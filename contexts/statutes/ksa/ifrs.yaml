@@ -1,0 +1,169 @@
+# IFRS as endorsed by SOCPA — the accounting standards mandatory in KSA
+# Source: SOCPA (Saudi Organization for Chartered and Professional Accountants).
+
+source: "IFRS as endorsed by SOCPA"
+sourceShort: "IFRS"
+jurisdiction: "ksa"
+sourceUrl: "https://socpa.org.sa/"
+tags: [ifrs, socpa, accounting-standards, reporting]
+
+sections:
+  - code: "IFRS 15"
+    title: "Revenue from Contracts with Customers"
+    content: |
+      IFRS 15 (effective 1 January 2018) establishes a single, comprehensive
+      5-step model for revenue recognition. Endorsed by SOCPA for all listed
+      and SME entities in KSA.
+
+      The 5 steps:
+      1. Identify the contract — must be enforceable, approved, with identifiable
+         rights and payment terms, and commercially substantive.
+      2. Identify performance obligations — distinct goods/services or a distinct
+         series. Distinct if: capable of being distinct + separately identifiable
+         in the contract.
+      3. Determine transaction price — fixed + variable consideration (estimated
+         using expected value or most likely amount) + significant financing
+         component adjustment + non-cash consideration + consideration payable
+         to customer.
+      4. Allocate transaction price — based on standalone selling prices
+         (observable or estimated). Residual approach permitted only if SSP is
+         highly variable or uncertain.
+      5. Recognise revenue — when (point in time) or as (over time) the entity
+         satisfies each performance obligation by transferring control.
+
+      Over-time criteria (any one suffices):
+      - Customer simultaneously receives and consumes the benefits.
+      - Entity's performance creates/enhances an asset the customer controls.
+      - Entity's performance does not create an asset with alternative use + entity
+        has enforceable right to payment for performance to date.
+
+      Contract costs:
+      - Incremental costs of obtaining a contract (sales commissions): capitalized if
+        recoverable, amortized over period of benefit.
+      - Costs to fulfill a contract (that don't fall under another standard):
+        capitalized if they relate directly to the contract, generate/enhance
+        resources, and are recoverable.
+
+  - code: "IFRS 16"
+    title: "Leases"
+    content: |
+      IFRS 16 (effective 1 January 2019) replaced IAS 17 and fundamentally
+      changed lessee accounting — nearly all leases now on-balance-sheet.
+
+      LESSEE single model:
+      At commencement:
+      - Recognise Right-of-Use (ROU) asset.
+      - Recognise Lease Liability at present value of lease payments not yet paid,
+        discounted at the rate implicit in the lease (or the lessee's incremental
+        borrowing rate if the implicit rate cannot be readily determined).
+
+      Subsequent:
+      - ROU asset: depreciated straight-line over shorter of lease term and useful
+        life. Tested for impairment under IAS 36.
+      - Lease liability: unwinded using effective-interest method. Interest in P&L,
+        principal reduces the liability as payments are made.
+
+      P&L impact: Depreciation (straight-line) + Interest (front-loaded) replaces
+      the previous straight-line rent expense. Total expense is higher in early
+      years, lower later — "front-loaded" cost profile.
+
+      Optional exemptions (lessee choice, applied consistently):
+      - Short-term leases (lease term ≤ 12 months from commencement, no purchase
+        option). Expense on straight-line basis over lease term.
+      - Low-value underlying asset (guidance: asset cost when new ≤ US$ 5,000 —
+        laptops, small office equipment). Expense on straight-line basis.
+
+      LESSOR accounting (largely unchanged from IAS 17):
+      - Finance lease: Transfers substantially all risks and rewards. Derecognise
+        asset, recognise net investment in lease. Interest income in P&L.
+      - Operating lease: Retain asset on balance sheet, recognise lease income
+        on straight-line basis.
+
+      Lease modifications, sale-and-leaseback: detailed guidance in Appendix B.
+
+  - code: "IFRS 9"
+    title: "Financial Instruments"
+    content: |
+      IFRS 9 (effective 1 January 2018) replaced IAS 39. Three pillars.
+
+      CLASSIFICATION of financial assets:
+      - Business model assessment: Hold to collect / Hold to collect and sell /
+        Other (e.g. trading).
+      - SPPI test: Contractual cash flows are Solely Payments of Principal and
+        Interest on principal outstanding.
+
+      Three categories:
+      - Amortised Cost: Hold to collect + SPPI passes. Measured at amortised cost
+        using the effective interest method.
+      - FVOCI (Fair Value through OCI): Hold to collect and sell + SPPI passes.
+        Fair value in balance sheet; changes in OCI; recycled to P&L on derecognition.
+        Interest, ECL, FX gains/losses still in P&L.
+      - FVTPL (Fair Value through P&L): All others (equity investments, derivatives,
+        instruments failing SPPI). Entire fair value change in P&L.
+
+      Equity instruments: FVTPL by default, but OCI election available (irrevocable)
+      for strategic holdings — gains/losses never recycled to P&L (only to retained
+      earnings).
+
+      IMPAIRMENT — Expected Credit Loss (ECL) model:
+      Forward-looking, replaced the "incurred loss" model of IAS 39.
+
+      Three-stage model for assets at amortised cost and FVOCI (debt):
+      - Stage 1: No significant increase in credit risk (SICR). Recognise 12-month ECL.
+      - Stage 2: SICR since initial recognition. Recognise lifetime ECL.
+      - Stage 3: Credit-impaired (objective evidence of default, ≥ 90 days past due).
+        Recognise lifetime ECL; interest computed on net carrying amount.
+
+      Simplified approach for trade receivables, contract assets (IFRS 15),
+      and lease receivables: Always use lifetime ECL — no staging.
+
+      HEDGE ACCOUNTING:
+      - Three types: fair value hedge, cash flow hedge, hedge of net investment in
+        foreign operation.
+      - Effectiveness: Qualitative assessment (economic relationship, credit risk
+        not dominant, hedge ratio aligned with risk management) replaces the old
+        80-125% retrospective test.
+      - Rebalancing: Permitted to maintain alignment as conditions change.
+
+  - code: "IAS 2"
+    title: "Inventories"
+    content: |
+      IAS 2 prescribes the accounting treatment for inventories. SOCPA-endorsed for
+      all entities in KSA.
+
+      MEASUREMENT: Inventories are measured at the LOWER of:
+      - Cost, and
+      - Net Realisable Value (NRV).
+
+      COST includes:
+      - Purchase cost (price − trade discounts + import duties + non-recoverable
+        taxes + freight + handling).
+      - Conversion costs (direct labor + systematic allocation of fixed and variable
+        production overheads based on normal capacity).
+      - Other costs incurred to bring inventories to their present location and
+        condition.
+
+      COST EXCLUDES (recognized as period expenses):
+      - Abnormal amounts of wasted materials, labor, overhead.
+      - Storage costs (unless necessary for production).
+      - Administrative overheads not contributing to bringing inventory to
+        present location/condition.
+      - Selling costs.
+
+      COST FORMULAS allowed:
+      - Specific Identification: Mandatory for items not ordinarily interchangeable
+        and goods/services produced for specific projects.
+      - FIFO (First-In, First-Out): Cost of older purchases assigned to COGS first.
+      - Weighted Average Cost: Recalculated after each receipt (perpetual) or at
+        period end (periodic).
+
+      LIFO (Last-In, First-Out) is NOT permitted under IFRS — this is a key
+      difference from US GAAP.
+
+      NRV = Estimated selling price in the ordinary course of business
+          − Estimated costs to complete
+          − Estimated costs necessary to make the sale.
+
+      Write-downs to NRV are recognized as an expense in the period. Subsequent
+      reversals (when NRV recovers) reduce the expense — up to the original cost,
+      never higher.

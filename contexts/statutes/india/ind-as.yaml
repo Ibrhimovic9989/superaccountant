@@ -1,0 +1,147 @@
+# Ind AS — Indian Accounting Standards (ICAI, convergent with IFRS)
+# Source: ICAI + MCA notifications · Phase I (from FY 2016-17), Phase II (FY 2017-18).
+
+source: "Indian Accounting Standards"
+sourceShort: "Ind AS"
+jurisdiction: "india"
+sourceUrl: "https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/accounting-standards.html"
+tags: [ind-as, ifrs, accounting-standards, reporting]
+
+sections:
+  - code: "Ind AS 115"
+    title: "Revenue from Contracts with Customers"
+    content: |
+      Ind AS 115 (convergent with IFRS 15) establishes a 5-step model for revenue
+      recognition. Replaced AS 7 (construction) and AS 9 (revenue) in Indian GAAP.
+
+      The 5 steps:
+      1. Identify the contract with a customer.
+      2. Identify the performance obligations in the contract (distinct goods or
+         services promised).
+      3. Determine the transaction price (fixed + variable + financing + non-cash).
+      4. Allocate the transaction price to each performance obligation (based on
+         standalone selling prices).
+      5. Recognize revenue when (or as) the entity satisfies a performance obligation.
+
+      Point-in-time vs over-time:
+      - Over-time (revenue spread): Customer simultaneously receives and consumes
+        (e.g. monthly subscription, construction with continuous transfer of control).
+      - Point-in-time (full revenue at one moment): Transfer of legal title, physical
+        possession, acceptance, or customer's exposure to risks and rewards occurs
+        at a specific instant (e.g. sale of a car).
+
+      Key impacts:
+      - Software companies: Must unbundle license + implementation + support, assign
+        a price to each, recognize separately.
+      - Real estate developers: Revenue on completion (not percentage-of-completion)
+        unless specific control-transfer conditions are met during construction.
+      - Telecom operators: Free handset bundled with data plan must be allocated a
+        portion of total contract value.
+
+      Disclosures: Disaggregation of revenue, contract balances (receivables, assets,
+      liabilities), performance obligations, significant judgments.
+
+  - code: "Ind AS 116"
+    title: "Leases"
+    content: |
+      Ind AS 116 (effective from 1 April 2019, convergent with IFRS 16) replaced Ind
+      AS 17. Fundamental shift: lessees must recognize nearly ALL leases on the
+      balance sheet.
+
+      LESSEE accounting (single model):
+      - Recognize a Right-of-Use (ROU) Asset (asset) and a Lease Liability (liability)
+        at the commencement date.
+      - Initial measurement of lease liability: present value of lease payments not
+        yet paid, discounted at the rate implicit in the lease (if determinable) or
+        the lessee's incremental borrowing rate.
+      - Initial measurement of ROU asset: lease liability + prepaid rent + initial
+        direct costs + dismantling costs − any lease incentives received.
+      - Subsequent measurement:
+        - Lease liability: effective-interest method (unwind the discount).
+        - ROU asset: depreciated over the shorter of lease term or asset's useful life.
+      - P&L impact: depreciation on ROU + interest on lease liability (instead of a
+        single rent expense). Front-loaded cost profile.
+
+      Exemptions (lessee may elect):
+      - Short-term leases (≤ 12 months, no purchase option).
+      - Low-value underlying asset (guidance: ≤ US$ 5,000 when new — laptops,
+        printers, small office equipment).
+
+      LESSOR accounting: Largely unchanged from Ind AS 17. Still classifies leases
+      as finance leases or operating leases based on transfer of risks and rewards.
+
+  - code: "Ind AS 109"
+    title: "Financial Instruments"
+    content: |
+      Ind AS 109 (effective from 1 April 2018, convergent with IFRS 9) replaced Ind
+      AS 39. Three pillars: classification, impairment, hedge accounting.
+
+      CLASSIFICATION of financial assets:
+      Two tests:
+      1. Business model (hold to collect / hold to collect and sell / other).
+      2. SPPI test — contractual cash flows are Solely Payments of Principal and
+         Interest.
+
+      Three categories:
+      - Amortised cost: Hold-to-collect + SPPI passes. E.g. trade receivables,
+        loans given.
+      - FVOCI (Fair Value through Other Comprehensive Income): Hold-to-collect-and-sell
+        + SPPI passes. Gains/losses in OCI, recycled to P&L on sale.
+      - FVTPL (Fair Value through P&L): Everything else — equity investments (unless
+        OCI election), derivatives, instruments failing SPPI.
+
+      IMPAIRMENT — Expected Credit Loss (ECL) model:
+      Replaced the old "incurred loss" model. Applied to amortised cost + FVOCI debt
+      assets + loan commitments + financial guarantees.
+
+      Three-stage model:
+      - Stage 1: Performing — 12-month ECL.
+      - Stage 2: Significant increase in credit risk since initial recognition —
+        lifetime ECL.
+      - Stage 3: Credit-impaired (default) — lifetime ECL; interest on net carrying
+        amount.
+
+      Simplified approach: Trade receivables and contract assets under Ind AS 115 —
+      always recognise lifetime ECL (no stage 1/2/3 distinction).
+
+      HEDGE ACCOUNTING: More principle-based than Ind AS 39. Three types of hedge:
+      fair value, cash flow, net investment. Hedge effectiveness assessed qualitatively
+      (vs quantitative 80-125% rule under IAS 39). Rebalancing of hedge ratio
+      permitted.
+
+  - code: "Ind AS 16"
+    title: "Property, Plant and Equipment (PP&E)"
+    content: |
+      Ind AS 16 (convergent with IAS 16) governs PP&E — tangible assets held for use
+      in production, supply of goods/services, rental, or administrative purposes,
+      expected to be used > 1 period.
+
+      RECOGNITION: An item is recognised as PP&E only when:
+      - It is probable that future economic benefits will flow to the entity.
+      - The cost can be reliably measured.
+
+      INITIAL MEASUREMENT — at cost, which includes:
+      - Purchase price + non-refundable taxes + duties.
+      - Directly attributable costs (site preparation, installation, testing).
+      - Estimated dismantling, removal, and restoration costs (asset retirement
+        obligation, corresponding liability).
+      - Borrowing costs (Ind AS 23) capitalized if the asset is a qualifying asset.
+
+      SUBSEQUENT MEASUREMENT — choice of two models:
+      1. Cost model: Cost − accumulated depreciation − impairment losses.
+      2. Revaluation model: Fair value at revaluation date − subsequent depreciation
+         and impairment. Revaluation surplus credited to OCI; deficit to P&L unless
+         a prior surplus exists.
+
+      DEPRECIATION:
+      - Each significant component of an asset must be depreciated separately if
+         its useful life or depreciation method differs.
+      - Methods: straight-line, diminishing balance, units of production.
+      - Useful life and residual value reviewed at each financial year-end.
+
+      DERECOGNITION: Carrying amount derecognized on disposal or when no future
+      economic benefits are expected. Gain/loss = net proceeds − carrying amount,
+      recognized in P&L.
+
+      Note: Ind AS 16 differs slightly from IAS 16 — the "cost model" is default
+      and revaluation requires entity-wide class-by-class consistency.

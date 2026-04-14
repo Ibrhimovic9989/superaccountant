@@ -1,0 +1,105 @@
+# KSA Transfer Pricing — Bylaws issued by ZATCA (formerly GAZT)
+# Source: ZATCA Transfer Pricing Bylaws, February 2019 + subsequent circulars.
+
+source: "Transfer Pricing Bylaws (KSA)"
+sourceShort: "TP-Bylaws"
+jurisdiction: "ksa"
+sourceUrl: "https://zatca.gov.sa/"
+tags: [transfer-pricing, related-parties, direct-tax, international-tax]
+
+sections:
+  - code: "Art. 4"
+    title: "Arm's Length Principle and Scope"
+    content: |
+      Transactions between related persons must be conducted at arm's length —
+      i.e. the conditions (price, terms, margins) that would have been agreed
+      between independent enterprises in comparable circumstances.
+
+      Scope of controlled transactions covered:
+      - Sale or purchase of tangible goods.
+      - Provision or receipt of services.
+      - Financial transactions (loans, guarantees).
+      - Transfer or license of intangibles (IP, trademarks, know-how).
+      - Cost contribution arrangements.
+      - Business restructurings.
+
+      Related persons include entities with:
+      - ≥ 50% direct or indirect ownership/voting rights.
+      - Common management/control (same individual or entity controls both).
+      - Subsidiary-parent relationships.
+      - Permanent establishments of the same entity.
+
+      Taxpayer must demonstrate compliance by maintaining prescribed TP
+      documentation (master file + local file) if thresholds met.
+
+      If ZATCA determines non-arm's-length pricing, it may adjust the taxable
+      income accordingly. Corresponding adjustments in other jurisdictions are
+      not automatic — MAP (Mutual Agreement Procedure) under DTAA may be needed.
+
+  - code: "Art. 16"
+    title: "TP Documentation — Master File and Local File"
+    content: |
+      Taxpayers with consolidated group revenue exceeding specified thresholds must
+      prepare:
+
+      MASTER FILE (group-level):
+      - Organizational structure of the MNE group.
+      - Description of the group's business, intangibles, financial activities.
+      - Consolidated financials.
+      - List of material controlled transactions.
+      - Global transfer pricing policy.
+
+      LOCAL FILE (KSA entity-level):
+      - Details of controlled transactions with related parties.
+      - Functional analysis (functions performed, assets used, risks assumed).
+      - TP methods applied and comparables.
+      - Economic analysis supporting arm's length remuneration.
+      - Financial data of the Saudi entity.
+
+      Documentation must be prepared contemporaneously — in the same tax year as
+      the transactions — and submitted within 30 days of ZATCA's request during
+      an audit.
+
+      Exemption: Small taxpayers with controlled transactions below SAR 6 million
+      in the year are exempt from preparing a local file (but still subject to
+      the arm's-length requirement).
+
+      Method hierarchy (OECD-aligned):
+      1. Comparable Uncontrolled Price (CUP)
+      2. Resale Price Method (RPM)
+      3. Cost Plus Method
+      4. Transactional Net Margin Method (TNMM)
+      5. Profit Split Method
+
+      The "most appropriate method" should be selected based on the facts — not
+      forced to follow the hierarchy.
+
+  - code: "Art. 18"
+    title: "Country-by-Country Reporting (CbCR)"
+    content: |
+      CbC reporting obligation arises for MNE groups with consolidated annual
+      group revenue ≥ SAR 3.2 billion (approx. USD 850 million) in the
+      preceding fiscal year.
+
+      The CbCR must include, per jurisdiction:
+      - Revenue (related party and unrelated).
+      - Profit before tax.
+      - Income tax paid / accrued.
+      - Stated capital.
+      - Accumulated earnings.
+      - Number of employees.
+      - Tangible assets other than cash and cash equivalents.
+      - List of constituent entities per jurisdiction and their main business.
+
+      Filing:
+      - CbCR Notification: Filed within 120 days of the end of the reporting
+        fiscal year. Identifies the reporting entity and jurisdiction.
+      - CbC Report: Filed within 12 months of the end of the reporting fiscal
+        year by the ultimate parent entity OR a designated surrogate.
+
+      KSA-resident constituent entities of a foreign-parent MNE must file a
+      CbCR Notification, and in some cases a local CbC report (if the parent
+      jurisdiction doesn't exchange CbCRs with KSA).
+
+      CbCR data is exchanged between tax authorities under the OECD's MCAA.
+      Not publicly disclosed.

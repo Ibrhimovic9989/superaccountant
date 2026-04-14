@@ -1,0 +1,113 @@
+# KSA — Excise Tax + Real Estate Transaction Tax
+# Source: ZATCA Excise Tax Law + RETT Implementing Regulations (2020).
+
+source: "KSA Indirect Taxes (Excise + RETT)"
+sourceShort: "KSA-IT"
+jurisdiction: "ksa"
+sourceUrl: "https://zatca.gov.sa/"
+tags: [excise, rett, real-estate, indirect-tax]
+
+sections:
+  - code: "Excise Rates"
+    title: "Excise Tax Rates and Scope"
+    content: |
+      Excise tax is levied on harmful products in KSA at the following rates:
+
+      100% on:
+      - Tobacco and tobacco products (cigarettes, shisha, e-cigarettes, e-liquids).
+      - Energy drinks (beverages containing stimulants like caffeine, taurine,
+        ginseng, guarana marketed for boosting physical/mental energy).
+      - Electronic smoking devices and liquids.
+
+      50% on:
+      - Soft drinks (carbonated drinks excluding plain unflavoured water, juices
+        ≥ 75%, milk, specialty dietary products).
+      - Sweetened drinks (added sugar or sweetener, effective 1 December 2019).
+
+      Excise tax is added on top of the customs value/import price BEFORE VAT is
+      calculated — meaning VAT (15%) applies on the excise-inclusive value.
+
+      Registration: Importers, producers, and warehouse keepers of excise goods
+      must register with ZATCA regardless of turnover.
+
+      Tax point: At release from a tax warehouse, import (customs clearance),
+      or production for domestic consumption.
+
+  - code: "Excise Compliance"
+    title: "Excise Tax Return and Payment"
+    content: |
+      Registered persons must file and pay excise tax every TWO MONTHS (bi-monthly
+      return), due by the 15th of the month following the end of the tax period.
+
+      Example: Jan-Feb return due 15 March.
+
+      Compliance requirements:
+      - Maintain stock records showing opening, production/imports, sales, and
+        closing stock of each excise product.
+      - Apply tax stamps on tobacco products (digital tracking system via ZATCA).
+      - Use approved tax warehouses for storage of untaxed goods.
+
+      Exemptions from excise (subject to ZATCA approval):
+      - Exports of excise goods.
+      - Goods used by diplomatic missions (with reciprocity).
+      - Goods for official use by specified government entities.
+
+      Penalties:
+      - Late filing: 5% of tax due (min SAR 1,000).
+      - Late payment: 5% per month, capped at 25%.
+      - Tax evasion: penalty up to 3 times the tax due + criminal charges in
+        severe cases.
+
+  - code: "RETT"
+    title: "Real Estate Transaction Tax (RETT)"
+    content: |
+      Real Estate Transaction Tax (RETT) is a 5% tax on the total value of all
+      real estate transactions in KSA, introduced on 4 October 2020 to replace
+      VAT on real estate disposals.
+
+      Scope:
+      - Applies to ALL transfers of real estate ownership (sale, assignment,
+        transfer of shares in a real-estate-only company, etc.), whether
+        buildings or land, residential or commercial, new or used.
+
+      Rate: 5% of the total transaction value (not just the margin).
+
+      Key exemptions:
+      - First-time purchase by Saudi citizens of a residential property up to
+        SAR 1 million (the government bears the RETT through Sakani programme).
+      - Transfers between spouses and up to second-degree relatives.
+      - Real estate contributed to an endowment (waqf) or a charity.
+      - Transfer as part of inheritance division.
+      - Transfer between wholly-owned subsidiaries under common control.
+      - Real estate portfolios held via licensed real estate funds (REITs and
+        private funds meeting prescribed conditions).
+
+      Payment: Due before registration of the deed with the notary or the
+      Ministry of Justice platform. No registration without RETT receipt.
+
+      Interaction with VAT: A real estate transaction subject to RETT is exempt
+      from VAT. However, the seller CANNOT recover input VAT on costs related
+      to a RETT-only transaction (input VAT apportionment issues).
+
+  - code: "RETT Compliance"
+    title: "RETT Filing and Payment"
+    content: |
+      RETT declaration must be filed on ZATCA's Fatoora/RETT platform BEFORE
+      the transaction is registered.
+
+      Filing flow:
+      1. Seller or authorized broker initiates the declaration online.
+      2. System calculates tax at 5% on the total contract value.
+      3. Payment is made via SADAD (government payment network).
+      4. ZATCA issues an RETT certificate.
+      5. Certificate is submitted to the notary/registry authority for
+         deed registration.
+
+      Non-compliance consequences:
+      - Deed cannot be registered — the transaction is legally incomplete.
+      - Penalty: 2% of the unreported transaction value for late declaration.
+      - Under-declared values: additional tax on the difference + interest.
+
+      Retroactive application: For real estate transactions between 2018 and
+      3 October 2020 where VAT was paid, taxpayers may apply for a VAT refund
+      and RETT settlement — various transitional arrangements apply.

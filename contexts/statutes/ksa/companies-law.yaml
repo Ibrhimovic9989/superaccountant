@@ -1,0 +1,140 @@
+# Saudi Companies Law (2022) — key articles for LLC, JSC, and governance
+# Source: Ministry of Commerce · Companies Law issued by Royal Decree M/132, 2022.
+
+source: "Saudi Companies Law (2022)"
+sourceShort: "SCL"
+jurisdiction: "ksa"
+sourceUrl: "https://mc.gov.sa/"
+tags: [companies-law, corporate-law, governance]
+
+sections:
+  - code: "Forms"
+    title: "Recognised Company Forms"
+    content: |
+      The Saudi Companies Law (2022) recognises the following company forms:
+
+      Commercial companies:
+      - Joint Stock Company (JSC) — sharikat musahama.
+      - Simplified Joint Stock Company (SJSC) — new form under 2022 law, fewer
+        governance requirements, suitable for startups and family offices.
+      - Limited Liability Company (LLC) — sharikat mas'uliya mahduda. Most common
+        form for small and medium businesses.
+      - General Partnership — sharikat tadamun. Unlimited liability for partners.
+      - Limited Partnership — sharikat tawsiya. Mix of general and limited partners.
+
+      Professional companies:
+      - Professional Company — for licensed professions (law, audit, engineering).
+
+      Single-person companies:
+      - Single-Person LLC permitted.
+      - Single-Shareholder JSC permitted (previously 5 shareholders minimum).
+
+      Foreign investors may establish any of these forms subject to Ministry of
+      Investment (MISA) licensing and sectoral restrictions in the Negative List.
+
+  - code: "LLC"
+    title: "Limited Liability Company (LLC)"
+    content: |
+      An LLC is the most common business form in KSA. Key features under the 2022 Law:
+
+      SHAREHOLDERS:
+      - Minimum 1 shareholder (previously 2).
+      - Maximum 50 shareholders.
+      - Both natural and legal persons may hold shares.
+      - Foreign ownership up to 100% allowed in most sectors (subject to MISA
+        foreign investment licence).
+
+      CAPITAL:
+      - No minimum capital statutory requirement (was SAR 500,000 earlier; removed).
+      - Capital must be adequate for the company's activities — MISA may require
+        minimum capital for specific licenses (e.g. trading, contracting).
+      - Shares are called "quotas" (hissas), not shares. Not freely transferable —
+         existing quotaholders have right of first refusal.
+
+      GOVERNANCE:
+      - Managed by one or more managers (natural persons).
+      - Shareholders meet at least once per year (annual general meeting).
+      - Decisions require majority of quotas representing > 50% of capital (routine
+        matters) or ≥ 75% (significant matters like amendment of articles, capital
+        increase, dissolution).
+
+      LIABILITY: Shareholders' liability limited to the amount of their quotas —
+      personal assets not at risk for company debts except for fraud/wilful misconduct.
+
+      STATUTORY AUDITOR: Required if the LLC has ≥ 20 quotaholders OR meets
+      prescribed financial thresholds (revenue, assets, employees).
+
+      ANNUAL FINANCIAL STATEMENTS: Must be prepared in accordance with SOCPA-endorsed
+      IFRS; filed with the Ministry of Commerce; disclosed to ZATCA with the
+      Zakat/tax return.
+
+  - code: "JSC"
+    title: "Joint Stock Company (JSC) and Simplified JSC"
+    content: |
+      A Joint Stock Company (JSC) is the form used for large businesses and any
+      company listed on the Saudi Exchange (Tadawul).
+
+      TRADITIONAL JSC:
+      - Minimum 1 shareholder (under 2022 law; previously 5).
+      - Minimum capital: SAR 500,000 for a closed JSC, SAR 10 million for a listed
+        JSC.
+      - Shares freely transferable (listed JSCs) subject to exchange rules.
+      - Board of Directors: minimum 3, maximum 11 directors.
+      - Shareholders meetings (ordinary and extraordinary) with specified quorums
+        (typically 50% for ordinary, 50% + 1 for extraordinary; reduced quorums for
+        adjourned meetings).
+      - Statutory audit mandatory by CMA-/SOCPA-licensed audit firm.
+
+      SIMPLIFIED JOINT STOCK COMPANY (SJSC):
+      New under the 2022 Law. Designed for startups, SMEs, and family offices:
+      - Minimum 1 shareholder. No maximum (JSC-like).
+      - No minimum capital statutory requirement.
+      - Flexible governance — may be managed by shareholders, a board, or a
+        manager per the articles of association.
+      - No mandatory board committees unless required by sector regulator.
+      - Share transfer restrictions can be freely structured.
+      - Preferred shares, employee share option plans (ESOPs), and convertible
+        instruments permitted.
+
+      Corporate governance:
+      - All JSCs must have an independent auditor.
+      - Listed JSCs subject to CMA (Capital Market Authority) Corporate Governance
+        Regulation (2017, as amended) — independent directors, audit committee,
+        nomination/remuneration committee, disclosure requirements.
+
+  - code: "MISA"
+    title: "Foreign Investment License (MISA)"
+    content: |
+      Foreign investors in KSA require a license from the Ministry of Investment
+      (MISA, formerly SAGIA) before establishing a commercial presence.
+
+      Foreign ownership levels:
+      - 100% permitted in most service and industrial activities.
+      - Restricted in activities on the Negative List (telecoms partially, media,
+        oil/gas exploration, cartography, land transport services of Hajj/Umrah
+        pilgrims, etc.).
+      - Real estate investment: Restricted to licensed foreign investors with
+        specific conditions (investment in Makkah/Madinah restricted).
+
+      Minimum capital (varies by activity, set by MISA, not by Companies Law):
+      - Trading: SAR 30 million minimum (with additional commitments to Saudization
+        and training).
+      - Contracting: SAR 500,000 minimum; financial prequalification required.
+      - Consulting/services: typically no minimum.
+      - Manufacturing/industrial: no minimum.
+
+      Licensing process:
+      1. Apply via MISA online portal with business plan, financial statements
+         of parent, and articles of association.
+      2. Receive MISA license (typically within 5-10 working days).
+      3. Register the company with Ministry of Commerce (CR certificate).
+      4. Tax registration with ZATCA.
+      5. Labour file opening with GOSI and Ministry of Human Resources.
+
+      Regional Headquarters Programme: Multinational companies may obtain a
+      "Regional HQ" license from MISA, which provides:
+      - 30-year corporate income tax exemption on HQ profits.
+      - Withholding tax exemptions on dividends, services.
+      - Expedited government procurement preferences.
+      - Mandatory relocation of regional HQ from other GCC countries by 1 Jan 2024
+        to qualify for government contracts above SAR 1 million.
