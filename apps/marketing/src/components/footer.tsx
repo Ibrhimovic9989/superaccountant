@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Mail, MapPin, Phone } from 'lucide-react'
+import { Logomark, Wordmark } from './brand/logo'
 
 type Props = { locale: 'en' | 'ar' }
 
@@ -64,10 +65,8 @@ export function Footer({ locale }: Props) {
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2.5">
-              <span className="relative inline-flex h-7 w-7 items-center justify-center rounded-md bg-fg text-bg">
-                <span className="font-mono text-[12px] font-bold leading-none">SA</span>
-              </span>
-              <span className="text-base font-semibold tracking-tight">SuperAccountant</span>
+              <Logomark size={28} />
+              <Wordmark className="text-base" />
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-fg-muted">{t.tagline}</p>
           </div>

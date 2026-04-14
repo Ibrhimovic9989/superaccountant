@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { ArrowRight, Loader2, Search as SearchIcon, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import { AppNav } from '@/components/app-nav'
+import { Logomark, Wordmark } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { PUBLIC_CONFIG } from '@/lib/config/public'
@@ -102,12 +103,8 @@ export default function SearchPage() {
       <header className="sticky top-0 z-40 border-b border-border bg-bg/80 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-4xl items-center justify-between gap-2 px-4 sm:px-6">
           <Link href={`/${locale}/dashboard`} className="flex shrink-0 items-center gap-2">
-            <span className="relative inline-flex h-6 w-6 items-center justify-center rounded-md bg-fg text-bg">
-              <span className="font-mono text-[11px] font-bold leading-none">SA</span>
-            </span>
-            <span className="text-sm font-semibold tracking-tight max-[420px]:hidden">
-              SuperAccountant
-            </span>
+            <Logomark size={26} />
+            <Wordmark className="text-sm max-[420px]:hidden" />
           </Link>
           <Link
             href={`/${locale}/dashboard`}

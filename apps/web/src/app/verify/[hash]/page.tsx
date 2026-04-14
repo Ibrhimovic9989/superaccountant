@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { FileX, Languages } from 'lucide-react'
 import { PUBLIC_CONFIG } from '@/lib/config/public'
+import { Logomark, Wordmark } from '@/components/brand/logo'
 import { CertificateCard } from '@/components/certificate/certificate-card'
 import { DotPattern } from '@/components/magicui/dot-pattern'
 
@@ -65,10 +66,8 @@ export default async function PublicVerifyPage({
       {/* Minimal top bar — just brand mark + locale toggle */}
       <header className="relative z-10 flex h-14 items-center justify-between px-6">
         <Link href="/" className="group flex items-center gap-2.5">
-          <span className="relative inline-flex h-6 w-6 items-center justify-center rounded-md bg-fg text-bg">
-            <span className="font-mono text-[11px] font-bold leading-none">SA</span>
-          </span>
-          <span className="text-sm font-semibold tracking-tight">SuperAccountant</span>
+          <Logomark size={26} />
+          <Wordmark className="text-sm" />
         </Link>
         <Link
           href={`/verify/${hash}?lang=${otherLang}`}

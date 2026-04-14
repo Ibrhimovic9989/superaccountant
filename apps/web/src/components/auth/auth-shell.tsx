@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
+import { Logomark, Wordmark } from '@/components/brand/logo'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { LocaleToggle } from '@/components/locale-toggle'
 import { DotPattern } from '@/components/magicui/dot-pattern'
@@ -31,10 +32,8 @@ export function AuthShell({ locale, children }: Props) {
       {/* Top bar */}
       <header className="relative z-10 flex h-14 items-center justify-between px-6">
         <Link href={`/${locale}`} className="group flex items-center gap-2.5">
-          <span className="relative inline-flex h-6 w-6 items-center justify-center rounded-md bg-fg text-bg">
-            <span className="font-mono text-[11px] font-bold leading-none">SA</span>
-          </span>
-          <span className="text-sm font-semibold tracking-tight">SuperAccountant</span>
+          <Logomark size={26} />
+          <Wordmark className="text-sm" />
         </Link>
         <div className="flex items-center gap-2">
           <LocaleToggle locale={locale} />
