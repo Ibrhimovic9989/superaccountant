@@ -24,11 +24,11 @@ export function AppNav({ locale, userName, userEmail }: Props) {
   const t = COPY[locale]
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-3 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-3 sm:px-6">
         <div className="flex min-w-0 items-center gap-3 sm:gap-5">
-          <Link href={`/${locale}/dashboard`} className="group flex shrink-0 items-center gap-2">
-            <Logomark size={26} />
-            <Wordmark className="text-sm max-[420px]:hidden" />
+          <Link href={`/${locale}/dashboard`} className="group flex shrink-0 items-center gap-2.5">
+            <Logomark size={36} />
+            <Wordmark className="text-base max-[420px]:hidden" />
           </Link>
 
           <Link

@@ -30,10 +30,10 @@ export function AuthShell({ locale, children }: Props) {
       />
 
       {/* Top bar */}
-      <header className="relative z-10 flex h-14 items-center justify-between px-6">
+      <header className="relative z-10 flex h-16 items-center justify-between px-6">
         <Link href={`/${locale}`} className="group flex items-center gap-2.5">
-          <Logomark size={26} />
-          <Wordmark className="text-sm" />
+          <Logomark size={36} />
+          <Wordmark className="text-base" />
         </Link>
         <div className="flex items-center gap-2">
           <LocaleToggle locale={locale} />

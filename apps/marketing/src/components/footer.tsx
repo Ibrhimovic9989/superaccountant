@@ -64,9 +64,9 @@ export function Footer({ locale }: Props) {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2.5">
-              <Logomark size={28} />
-              <Wordmark className="text-base" />
+            <div className="flex items-center gap-3">
+              <Logomark size={42} />
+              <Wordmark className="text-lg" />
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-fg-muted">{t.tagline}</p>
           </div>

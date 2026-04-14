@@ -66,10 +66,10 @@ export function MarketingNav({ locale }: Props) {
   ]
 
   return (
-    <header className="relative z-30 flex h-14 items-center justify-between gap-2 px-4 sm:px-6">
+    <header className="relative z-30 flex h-16 items-center justify-between gap-2 px-4 sm:px-6">
       <Link href={`/${locale}`} className="group flex items-center gap-2.5">
-        <Logomark size={26} />
-        <Wordmark className="text-sm" />
+        <Logomark size={36} />
+        <Wordmark className="text-base" />
       </Link>
 
       {/* Desktop links */}

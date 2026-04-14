@@ -101,9 +101,9 @@ type LogoProps = {
 }
 
 const SIZES = {
-  sm: { mark: 26, text: 'text-sm' },
-  md: { mark: 32, text: 'text-base' },
-  lg: { mark: 44, text: 'text-xl' },
+  sm: { mark: 36, text: 'text-base' },
+  md: { mark: 44, text: 'text-lg' },
+  lg: { mark: 56, text: 'text-2xl' },
 } as const
 
 export function Logo({ className, size = 'sm', markOnly = false }: LogoProps) {

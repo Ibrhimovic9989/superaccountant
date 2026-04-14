@@ -64,10 +64,10 @@ export default async function PublicVerifyPage({
       />
 
       {/* Minimal top bar — just brand mark + locale toggle */}
-      <header className="relative z-10 flex h-14 items-center justify-between px-6">
+      <header className="relative z-10 flex h-16 items-center justify-between px-6">
         <Link href="/" className="group flex items-center gap-2.5">
-          <Logomark size={26} />
-          <Wordmark className="text-sm" />
+          <Logomark size={36} />
+          <Wordmark className="text-base" />
         </Link>
         <Link
           href={`/verify/${hash}?lang=${otherLang}`}

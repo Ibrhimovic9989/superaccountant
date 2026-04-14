@@ -101,10 +101,10 @@ export default function SearchPage() {
       {/* Can't use the server AppNav here since this is a client component.
           Render a minimal header instead. */}
       <header className="sticky top-0 z-40 border-b border-border bg-bg/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 max-w-4xl items-center justify-between gap-2 px-4 sm:px-6">
-          <Link href={`/${locale}/dashboard`} className="flex shrink-0 items-center gap-2">
-            <Logomark size={26} />
-            <Wordmark className="text-sm max-[420px]:hidden" />
+        <div className="mx-auto flex h-16 max-w-4xl items-center justify-between gap-2 px-4 sm:px-6">
+          <Link href={`/${locale}/dashboard`} className="flex shrink-0 items-center gap-2.5">
+            <Logomark size={36} />
+            <Wordmark className="text-base max-[420px]:hidden" />
           </Link>
           <Link
             href={`/${locale}/dashboard`}
