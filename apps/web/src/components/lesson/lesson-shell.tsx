@@ -4,6 +4,7 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react'
 import { AccountingVisualizer } from './accounting-visualizer'
+import { LessonAudioPlayer } from './lesson-audio-player'
 import { pickScenario } from '@/lib/data/visualizer-scenarios'
 import { LessonContent } from './lesson-content'
 import { MermaidBlock } from './mermaid-block'
@@ -243,6 +244,15 @@ export function LessonShell({ lesson, locale, tutorContext, userId }: Props) {
           <BlurFade delay={0.2}>
             <section id="read" className="scroll-mt-24">
               <SectionHeader label={t.read} />
+              {(() => {
+                const audioUrl = locale === 'ar' ? lesson.audioUrlAr : lesson.audioUrlEn
+                if (!audioUrl) return null
+                return (
+                  <div className="mb-6">
+                    <LessonAudioPlayer audioUrl={audioUrl} locale={locale} />
+                  </div>
+                )
+              })()}
               <LessonContent markdown={markdown} />
             </section>
           </BlurFade>

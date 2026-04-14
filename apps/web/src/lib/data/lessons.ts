@@ -20,6 +20,8 @@ export type LessonView = {
   flowchartMermaid: string | null
   mindmapMermaid: string | null
   videoUrl: string | null
+  audioUrlEn: string | null
+  audioUrlAr: string | null
   learningObjectives: string[]
   learningObjectivesAr: string[]
   assessmentItems: AssessmentItem[]
@@ -94,12 +96,17 @@ export const getLessonBySlug = cache(async (slug: string): Promise<LessonView | 
   })
   if (!lesson) return null
 
-  // Pull the AR objectives via raw SQL — column isn't in the Prisma schema yet.
-  const arRow = await prisma.$queryRawUnsafe<Array<{ objectives: unknown }>>(
-    `SELECT "learningObjectivesAr" as objectives FROM "CurriculumLesson" WHERE id = $1`,
+  // Pull the AR objectives + audio URLs via raw SQL — columns added post-hoc,
+  // not yet in the Prisma schema.
+  const extraRow = await prisma.$queryRawUnsafe<
+    Array<{ objectives: unknown; audioUrlEn: string | null; audioUrlAr: string | null }>
+  >(
+    `SELECT "learningObjectivesAr" as objectives, "audioUrlEn", "audioUrlAr" FROM "CurriculumLesson" WHERE id = $1`,
     lesson.id,
   )
-  let learningObjectivesAr = (arRow[0]?.objectives as string[] | null) ?? []
+  let learningObjectivesAr = (extraRow[0]?.objectives as string[] | null) ?? []
+  const audioUrlEn = extraRow[0]?.audioUrlEn ?? null
+  const audioUrlAr = extraRow[0]?.audioUrlAr ?? null
   const englishObjectives = (lesson.learningObjectives as string[] | null) ?? []
   // Lazy-translate on first AR access
   if (learningObjectivesAr.length === 0 && englishObjectives.length > 0) {
@@ -136,6 +143,8 @@ export const getLessonBySlug = cache(async (slug: string): Promise<LessonView | 
     flowchartMermaid: lesson.flowchartMermaid,
     mindmapMermaid: lesson.mindmapMermaid,
     videoUrl: lesson.videoUrl,
+    audioUrlEn,
+    audioUrlAr,
     learningObjectives: englishObjectives,
     learningObjectivesAr,
     // biome-ignore lint/suspicious/noExplicitAny: stored as Json in Prisma
