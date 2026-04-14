@@ -1,0 +1,178 @@
+# Tax Deducted at Source (TDS) — key sections of the Income Tax Act, 1961
+# Source: incometaxindia.gov.in · official text verified as of 2025 amendments.
+
+source: "Income Tax Act, 1961"
+sourceShort: "ITA"
+jurisdiction: "india"
+sourceUrl: "https://incometaxindia.gov.in/"
+tags: [tds, withholding, direct-tax]
+
+sections:
+  - code: "192"
+    title: "TDS on Salary"
+    content: |
+      Section 192 requires every person responsible for paying any income chargeable under
+      the head "Salaries" to deduct tax at source at the time of payment, at the average
+      rate of income-tax computed on the basis of the rates in force for the relevant
+      financial year, on the estimated income of the assessee under this head.
+
+      Key points:
+      - TDS is computed on gross salary minus exemptions (HRA, LTA etc.) and deductions
+        (80C, 80D etc.) after considering the old or new tax regime selection.
+      - Rate = total tax / total income, applied monthly.
+      - Form 16 must be issued annually by 15 June to the employee.
+      - Due date for deposit: 7th of the following month (30 April for March deductions).
+      - Quarterly return in Form 24Q.
+
+  - code: "194A"
+    title: "TDS on Interest Other Than Interest on Securities"
+    content: |
+      Section 194A requires TDS at 10% on interest payments other than interest on
+      securities (such as bank FD interest, loan interest, unsecured loan interest)
+      where the aggregate amount paid or credited to a payee during a financial year
+      exceeds the prescribed threshold.
+
+      Thresholds (FY 2025-26):
+      - Bank / co-operative bank / post office FD interest: ₹50,000 per year per deductor
+        for senior citizens; ₹40,000 for others.
+      - Other cases (non-bank, loans from individuals/firms): ₹5,000 per year.
+
+      Rate: 10%. If payee does not furnish PAN: 20% under Section 206AA.
+      TDS is not deductible on interest credited to savings accounts.
+
+  - code: "194C"
+    title: "TDS on Payments to Contractors"
+    content: |
+      Section 194C requires TDS on payments to any resident contractor for carrying
+      out any work (including supply of labour) in pursuance of a contract.
+
+      Rate:
+      - Individual / HUF contractor: 1%
+      - Other contractors (firm, company, etc.): 2%
+
+      Threshold: TDS applies if a single payment exceeds ₹30,000, OR if aggregate
+      payments during the financial year exceed ₹1,00,000 to the same contractor.
+
+      Exemptions: No TDS on payments to transport contractors who own 10 or fewer
+      goods carriages and furnish a declaration along with PAN.
+
+      "Work" includes advertising, broadcasting, catering, construction, manufacturing
+      or supplying products according to the customer's specification, carriage of
+      goods or passengers by any mode of transport other than railways.
+
+  - code: "194H"
+    title: "TDS on Commission or Brokerage"
+    content: |
+      Section 194H requires TDS at 2% (reduced from 5% w.e.f. 1 Oct 2024) on commission
+      or brokerage paid to a resident, where the aggregate amount paid in a financial
+      year exceeds ₹20,000 (increased from ₹15,000 w.e.f. FY 2025-26).
+
+      "Commission or brokerage" does not include insurance commission (covered under
+      Section 194D) or brokerage on listed securities.
+
+      If PAN not furnished: 20% under Section 206AA.
+
+  - code: "194I"
+    title: "TDS on Rent"
+    content: |
+      Section 194I requires TDS on rent paid to a resident.
+
+      Rates:
+      - Rent of plant, machinery or equipment: 2%
+      - Rent of land, building, furniture or fittings: 10%
+
+      Threshold: aggregate rent during the financial year exceeds ₹2,40,000 per payee.
+      W.e.f. FY 2025-26, the threshold is applied on a monthly basis (₹50,000 per month)
+      under Section 194-IB for individual/HUF tenants not covered by tax audit.
+
+      "Rent" includes any payment under any lease, sub-lease, tenancy, or any other
+      agreement for the use of any land, building, machinery, equipment, furniture
+      or fittings — whether or not the payee owns them.
+
+  - code: "194J"
+    title: "TDS on Fees for Professional or Technical Services"
+    content: |
+      Section 194J requires TDS on payments to residents for professional services,
+      technical services, royalty, non-compete fees, or director's remuneration (other
+      than salary).
+
+      Rates:
+      - Professional services (legal, medical, engineering, architectural, accountancy,
+        technical consultancy, interior decoration, advertising, information technology,
+        company secretary, authorised representatives, film artists, sports persons,
+        umpires, commentators, event managers, anchors, sports columnists, coaches):
+        10%
+      - Technical services: 2%
+      - Call centre operations: 2%
+      - Royalty for sale/distribution/exhibition of cinematographic films: 2%
+      - Other royalty: 10%
+      - Director's remuneration (non-salary): 10%
+
+      Threshold: ₹30,000 per financial year per payee per nature of payment.
+      If PAN not furnished: 20% under Section 206AA.
+
+  - code: "194Q"
+    title: "TDS on Purchase of Goods"
+    content: |
+      Section 194Q requires a buyer whose turnover in the preceding financial year
+      exceeded ₹10 crore to deduct TDS at 0.1% on the purchase value of goods exceeding
+      ₹50 lakh from any single seller during a financial year.
+
+      Interaction with TCS under Section 206C(1H): If both Section 194Q (buyer) and
+      Section 206C(1H) (seller) apply to the same transaction, Section 194Q takes
+      precedence — only TDS is deducted, TCS is not collected.
+
+      TDS is deducted at the time of payment or credit, whichever is earlier.
+      If PAN not furnished: 5% under Section 206AA.
+
+  - code: "195"
+    title: "TDS on Payments to Non-Residents"
+    content: |
+      Section 195 requires TDS on any sum chargeable under the Income Tax Act payable
+      to a non-resident (other than salary).
+
+      Rate: at the rates in force (as prescribed in Part II of the First Schedule to
+      the Finance Act, or as per the applicable DTAA — whichever is more beneficial
+      to the non-resident, subject to furnishing of Tax Residency Certificate and Form 10F).
+
+      Key points:
+      - No threshold — TDS applies on all sums chargeable to tax in India.
+      - Before remittance, Form 15CA/15CB must be filed online (15CB is a CA certificate).
+      - DTAA beneficial rate requires TRC + Form 10F + No-PE declaration.
+      - If PAN not furnished: Section 206AA prescribes 20% minimum, unless overridden
+        by DTAA read with Rule 37BC (relief for non-residents without PAN).
+
+  - code: "206AA"
+    title: "TDS at Higher Rate if PAN Not Furnished"
+    content: |
+      Section 206AA requires TDS at the higher of:
+      - rate specified in the relevant TDS section,
+      - rate in force, or
+      - 20%
+
+      if the deductee fails to furnish their PAN to the deductor.
+
+      For non-residents: Rule 37BC provides relief — if the non-resident furnishes
+      name, email, contact, address, country tax residency certificate, and TIN,
+      Section 206AA does not apply to interest, royalty, fees for technical services,
+      and payments on transfer of capital asset.
+
+  - code: "206AB"
+    title: "TDS at Higher Rate for Non-Filers of Return"
+    content: |
+      Section 206AB requires TDS at higher of:
+      - twice the rate specified in the TDS section,
+      - twice the rate in force, or
+      - 5%
+
+      if the deductee is a "specified person" — one who has not filed an income tax
+      return for the preceding year, and aggregate TDS + TCS in that year was
+      ₹50,000 or more.
+
+      Does not apply to salary (192), PF withdrawal (192A), lottery winnings (194B/BB),
+      horse race (194BB), deemed dividend to shareholder (194), rent by
+      individual/HUF (194-IB), transfer of immovable property (194-IA), cash
+      withdrawal (194N), or winnings from online games (194BA).
+
+      Deductors should check the income tax "Compliance Check for Section 206AB & 206CCA"
+      portal before deducting TDS.

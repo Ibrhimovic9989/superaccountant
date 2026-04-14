@@ -19,6 +19,7 @@ import type {
 } from '../../domain/session'
 import { buildTutorSystemPrompt } from './system-prompt'
 import { buildSearchCurriculumTool } from './tools/search-curriculum'
+import { buildSearchStatutesTool } from './tools/search-statutes'
 import { buildAssessAnswerTool } from './tools/assess-answer'
 import { buildGeneratePracticeQuestionTool } from './tools/generate-practice-question'
 import { buildRecordSessionMemoryTool } from './tools/record-session-memory'
@@ -58,6 +59,7 @@ export class TutoringAgent {
           locale: session.locale,
         }),
       )
+      .register(buildSearchStatutesTool({ market: session.market }))
       .register(buildAssessAnswerTool({ locale: session.locale }))
       .register(buildGeneratePracticeQuestionTool({ locale: session.locale }))
       .register(

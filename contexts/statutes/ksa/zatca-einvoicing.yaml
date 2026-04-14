@@ -1,0 +1,86 @@
+# ZATCA E-Invoicing (Fatoora) — Phase 1 + Phase 2 requirements
+# Source: ZATCA E-Invoicing Regulation and technical specifications.
+
+source: "ZATCA E-Invoicing Regulation"
+sourceShort: "Fatoora"
+jurisdiction: "ksa"
+sourceUrl: "https://zatca.gov.sa/en/E-Invoicing/"
+tags: [zatca, e-invoicing, fatoora, compliance]
+
+sections:
+  - code: "Phase 1"
+    title: "Generation Phase (Fatoora Phase 1)"
+    content: |
+      Phase 1 of ZATCA e-invoicing became mandatory for all VAT-registered taxable
+      persons on 4 December 2021. Key requirements:
+
+      1. All tax invoices and credit/debit notes must be generated through a compliant
+         electronic invoicing system — not paper, not generic Word/Excel.
+      2. Invoices must be stored electronically.
+      3. Invoices must be in Arabic (other languages can be added alongside, but
+         Arabic is mandatory).
+      4. Invoices for B2B must follow the structured format; B2C simplified invoices
+         must include a QR code (TLV-encoded: seller name, VAT number, timestamp,
+         total with VAT, VAT amount).
+      5. Prohibited practices:
+         - Handwritten invoices
+         - Scanned copies of handwritten invoices
+         - Generating invoices on unregistered software
+
+      Non-compliance penalties range from warnings to SAR 50,000 per invoice depending
+      on the severity and repetition of the violation.
+
+  - code: "Phase 2"
+    title: "Integration Phase (Fatoora Phase 2)"
+    content: |
+      Phase 2 requires real-time integration with ZATCA's Fatoora platform. Rolled out
+      in waves based on annual VAT-taxable revenue:
+
+      - Wave 1 (1 January 2023): Taxpayers with revenue > SAR 3 billion (2021)
+      - Wave 2 (1 July 2023): > SAR 500 million
+      - Wave 3 (1 October 2023): > SAR 250 million
+      - Wave 4 (1 November 2023): > SAR 150 million
+      - Waves 5-19 onwards: progressively lower thresholds, announced quarterly.
+        Wave 19 (April 2026): taxpayers with revenue > SAR 1.75 million (2023 or 2024).
+
+      Technical requirements:
+      - B2B invoices ("standard tax invoices"): Must be cleared by ZATCA BEFORE being
+        shared with the buyer. The invoice is submitted to Fatoora, which applies a
+        cryptographic stamp and returns the invoice with a Cleared status within
+        milliseconds. The cleared XML + QR is the legal invoice.
+      - B2C invoices ("simplified tax invoices"): Generated with a QR code locally,
+        then reported to ZATCA within 24 hours.
+
+      Mandatory technical elements:
+      - UBL 2.1 XML format compliant with ZATCA's specification
+      - Cryptographic stamp (PKI-based signature using the taxpayer's ZATCA-issued
+        certificate)
+      - Previous invoice hash (chain of custody)
+      - UUID per invoice
+      - QR code containing the cryptographic stamp
+
+  - code: "Scope"
+    title: "What Must Be Issued Electronically"
+    content: |
+      ZATCA e-invoicing applies to:
+
+      Must be issued electronically:
+      - Standard tax invoices (B2B, including supplies to government)
+      - Simplified tax invoices (B2C retail)
+      - Credit notes
+      - Debit notes
+
+      Not covered by e-invoicing (manual or no invoice):
+      - Supplies exempt from VAT (e.g. residential rent, interest-based lending)
+        — though records must still be kept
+      - Transactions outside VAT scope
+
+      The taxpayer is responsible for the e-invoicing solution (built in-house,
+      purchased from a vendor, or using a cloud service). ZATCA publishes a list of
+      compliant software vendors on its portal.
+
+      Software and devices must have tamper-resistant features:
+      - Inability to edit or delete after issuance
+      - Tamper-evident sequential numbering
+      - Audit trail of all changes and corrections
+      - Segregation of invoice-issuing function from user-configurable settings

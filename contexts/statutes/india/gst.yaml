@@ -1,0 +1,218 @@
+# GST — key sections of the CGST Act, 2017
+# Source: cbic-gst.gov.in · official text as of 2024-25 amendments.
+
+source: "Central Goods and Services Tax Act, 2017"
+sourceShort: "CGST Act"
+jurisdiction: "india"
+sourceUrl: "https://cbic-gst.gov.in/"
+tags: [gst, indirect-tax, vat]
+
+sections:
+  - code: "7"
+    title: "Scope of Supply"
+    content: |
+      Section 7 defines "supply" as including:
+      (a) all forms of supply of goods or services or both such as sale, transfer, barter,
+          exchange, licence, rental, lease or disposal made or agreed to be made for a
+          consideration by a person in the course or furtherance of business;
+      (b) import of services for a consideration whether or not in the course or
+          furtherance of business;
+      (c) the activities specified in Schedule I, made or agreed to be made without a
+          consideration.
+
+      Schedule III activities (services by an employee to employer, functions performed
+      by MPs/MLAs, services of funeral/burial/crematorium, sale of land and sale of
+      building where occupancy certificate has been issued) are deemed NOT to be supply.
+
+      Composite supply (two or more supplies naturally bundled) and mixed supply are
+      treated differently — composite supply is taxed at the rate applicable to the
+      principal supply; mixed supply is taxed at the highest rate among the components.
+
+  - code: "9"
+    title: "Levy and Collection of GST"
+    content: |
+      Section 9 levies central GST (CGST) on all intra-state supplies of goods or
+      services or both, except alcohol for human consumption, at rates notified by the
+      Central Government on the recommendation of the GST Council.
+
+      Petroleum crude, high-speed diesel, motor spirit (petrol), natural gas, and
+      aviation turbine fuel are currently outside GST — taxed under VAT/central excise.
+
+      Reverse charge (Section 9(3) and 9(4)): For notified categories, the recipient
+      pays GST instead of the supplier. Key reverse-charge cases:
+      - Services by a goods transport agency (not in freight forwarding)
+      - Legal services by an advocate to a business entity
+      - Services by a director to the company (other than salary)
+      - Sponsorship services
+      - Import of services
+
+  - code: "16"
+    title: "Input Tax Credit — Eligibility and Conditions"
+    content: |
+      Section 16 governs input tax credit (ITC) — the central mechanism of GST.
+
+      Conditions to claim ITC:
+      (a) The registered person possesses a tax invoice / debit note issued by a
+          registered supplier;
+      (b) The person has received the goods or services;
+      (c) The tax charged has actually been paid to the government by the supplier;
+      (d) The person has furnished the GSTR-3B return.
+
+      Additional conditions (w.e.f. 1 Oct 2022):
+      - The invoice must appear in the recipient's GSTR-2B (auto-populated from the
+        supplier's GSTR-1).
+      - Payment to the supplier must be made within 180 days — otherwise ITC is
+        reversed with interest.
+
+      Time limit: ITC must be claimed by 30 November of the following financial year
+      OR filing of annual return (GSTR-9), whichever is earlier.
+
+      If goods are received in lots, ITC can be claimed only on receipt of the last lot.
+
+  - code: "17(5)"
+    title: "Blocked Input Tax Credit"
+    content: |
+      Section 17(5) lists categories where ITC is NOT available, even if other conditions
+      of Section 16 are met. Key blocked credits:
+
+      (a) Motor vehicles for transportation of persons with seating capacity ≤ 13
+          (including driver), EXCEPT when used for:
+          - further supply of such motor vehicles (car dealer),
+          - transportation of passengers (taxi service),
+          - imparting training on driving such vehicles.
+
+      (b) Food and beverages, outdoor catering, beauty treatment, health services,
+          cosmetic and plastic surgery — unless used by a registered person making
+          outward taxable supply of the same category.
+
+      (c) Membership of a club, health and fitness centre.
+
+      (d) Rent-a-cab, life insurance and health insurance — unless notified by the
+          government as obligatory for an employer.
+
+      (e) Travel benefits extended to employees on vacation (leave travel concession).
+
+      (f) Works contract services when supplied for construction of immovable property
+          (other than plant and machinery), EXCEPT where it is an input service for
+          further supply of works contract service.
+
+      (g) Goods or services used for construction of immovable property (other than
+          plant and machinery) on own account, even if capitalized.
+
+      (h) Goods or services used for personal consumption.
+
+      (i) Goods lost, stolen, destroyed, written off or disposed of by way of gift or
+          free samples.
+
+  - code: "22"
+    title: "Persons Liable for GST Registration"
+    content: |
+      Section 22 requires GST registration for:
+      - Every supplier whose aggregate turnover in a financial year exceeds:
+        - ₹40 lakh for suppliers of goods (most states)
+        - ₹20 lakh for suppliers of services
+        - ₹10 lakh for special category states (Arunachal Pradesh, Assam, J&K, Manipur,
+          Meghalaya, Mizoram, Nagaland, Sikkim, Tripura, Uttarakhand, Himachal Pradesh)
+
+      "Aggregate turnover" includes taxable supplies, exempt supplies, exports, and
+      inter-state supplies — computed on all-India basis for the same PAN.
+
+      Section 24 (compulsory registration, regardless of turnover) applies to:
+      - Persons making any inter-state taxable supply
+      - Casual taxable persons
+      - Persons liable to pay under reverse charge
+      - Non-resident taxable persons
+      - E-commerce operators
+      - Input service distributors
+      - Persons supplying through e-commerce operators
+
+  - code: "31"
+    title: "Tax Invoice Requirements"
+    content: |
+      Section 31 requires a registered person supplying taxable goods to issue a tax
+      invoice — at the time of removal of goods (where movement is involved) or at the
+      time of delivery (where no movement is involved), and in any case before supply.
+
+      For services: invoice must be issued within 30 days of provision of service
+      (45 days for banking/insurance/NBFC).
+
+      Mandatory fields on a tax invoice:
+      1. Name, address, and GSTIN of the supplier
+      2. Invoice number (consecutive serial, ≤ 16 characters)
+      3. Date of issue
+      4. Name, address, GSTIN (if registered) of the recipient
+      5. HSN code of goods or SAC of services
+      6. Description, quantity, unit of goods
+      7. Total value, taxable value (after discount)
+      8. Rate and amount of CGST, SGST/UTGST, IGST, cess
+      9. Place of supply (for inter-state)
+      10. Reverse charge indicator
+      11. Signature / digital signature
+
+      E-invoicing: Mandatory for businesses with turnover > ₹5 crore (from 1 August
+      2023). Invoices must be reported to the Invoice Registration Portal (IRP) which
+      generates an IRN (Invoice Reference Number) and QR code.
+
+  - code: "37"
+    title: "GSTR-1 Furnishing Details of Outward Supplies"
+    content: |
+      Section 37 requires every registered person to furnish details of outward supplies
+      (GSTR-1) by the 11th of the following month for monthly filers, or by the 13th of
+      the month following the quarter for quarterly filers under the QRMP scheme.
+
+      GSTR-1 contains:
+      - B2B supplies (invoice-wise)
+      - B2C large supplies (inter-state > ₹2.5 lakh, invoice-wise)
+      - B2C small supplies (summary)
+      - Exports and supplies to SEZ
+      - Credit/debit notes
+      - Amendments to prior periods
+      - Nil-rated, exempt, non-GST supplies
+      - Advances received
+
+      Late filing attracts late fee of ₹50 per day (₹20 for nil return) up to 0.25% of
+      turnover. From FY 2024-25, filing GSTR-1 is a pre-condition to file GSTR-3B.
+
+  - code: "39"
+    title: "GSTR-3B Monthly Return"
+    content: |
+      Section 39 requires every registered person to furnish GSTR-3B — a summary return
+      of outward supplies, input tax credit claimed, and net tax liability — by the 20th
+      of the following month (or 22nd/24th for QRMP filers, depending on state group).
+
+      GSTR-3B auto-populates from GSTR-1 (outward) and GSTR-2B (inward) and must be
+      reconciled before filing.
+
+      Payment of tax: Full tax payment is due with GSTR-3B. Partial payment is allowed
+      but interest at 18% per annum applies on the unpaid portion until full payment.
+
+      Late fee: ₹50 per day (₹20 for nil return) per Act (CGST + SGST) up to ₹5,000.
+
+  - code: "44"
+    title: "GSTR-9 Annual Return"
+    content: |
+      Section 44 requires every registered person (except casual taxable person,
+      non-resident taxable person, ISD, TDS/TCS deductor) to furnish an annual return
+      in GSTR-9 by 31 December of the next financial year.
+
+      GSTR-9 reconciles the year's monthly GSTR-1 and GSTR-3B with the books of accounts.
+
+      GSTR-9C (self-certified reconciliation statement) is required where the aggregate
+      turnover exceeds ₹5 crore in the financial year.
+
+      Optional fields: several tables are now optional (introduced progressively from
+      FY 2017-18 to reduce compliance burden), but the reconciliation of taxes paid and
+      ITC claimed is mandatory.
+
+  - code: "50"
+    title: "Interest on Delayed Payment of Tax"
+    content: |
+      Section 50 prescribes interest at:
+      - 18% per annum on delayed payment of tax (cash portion).
+      - 24% per annum on ITC wrongly availed and utilized (reduced to 18% from 1 July
+        2017 for ITC availed but not utilized, i.e. sitting in the electronic credit
+        ledger unused).
+
+      Interest is computed on the net tax liability — i.e., after setting off available
+      ITC — clarified by the 2020 amendment. Earlier, there was ambiguity whether
+      interest applied on gross or net liability; the amendment settled it as net.

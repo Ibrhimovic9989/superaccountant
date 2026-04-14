@@ -1,0 +1,90 @@
+# Saudi Zakat — key provisions of the Zakat Bylaws
+# Source: ZATCA Zakat Implementing Regulations (2019, as amended).
+
+source: "Zakat Implementing Regulations (KSA)"
+sourceShort: "Zakat-IR"
+jurisdiction: "ksa"
+sourceUrl: "https://zatca.gov.sa/"
+tags: [zakat, direct-tax, sharia]
+
+sections:
+  - code: "Rate"
+    title: "Zakat Rate and Scope"
+    content: |
+      The standard Zakat rate in Saudi Arabia is 2.5% of the Zakat base, applied to:
+
+      - Saudi/GCC-owned entities (natural persons and legal persons registered for
+        commercial activities).
+
+      Mixed-ownership entities pay:
+      - Zakat on the Saudi/GCC-owned portion of the profits and capital.
+      - Corporate Income Tax (20%) on the foreign-owned portion.
+
+      The Zakat fiscal year is the Hijri year by default, but taxpayers may elect the
+      Gregorian year, subject to consistent application.
+
+  - code: "Base"
+    title: "Zakat Base Calculation"
+    content: |
+      The Zakat base is calculated using the deemed method — designed to approximate
+      net working capital (Zakatable assets minus Zakatable liabilities).
+
+      Inclusions in the Zakat base (additions to equity):
+      - Shareholders' equity (paid-up capital + retained earnings + reserves)
+      - Loans from shareholders
+      - Long-term liabilities (net of the portion used to fund non-Zakatable fixed
+        assets)
+      - Opening-year adjustments
+
+      Deductions from the Zakat base:
+      - Net fixed assets (property, plant, equipment — as these are "tools of
+        business", not Zakatable wealth)
+      - Investments in Saudi subsidiaries (to avoid double taxation)
+      - Deferred expenses
+      - Accumulated losses
+
+      Minimum base: The Zakat base cannot be less than the adjusted net profit of the
+      year. If the deemed base is negative or lower than net profit, the net profit
+      is used as the floor.
+
+  - code: "Filing"
+    title: "Zakat Return Filing and Payment"
+    content: |
+      Zakat return is filed annually, due within 120 days of the end of the financial
+      year.
+
+      The return includes:
+      - Audited financial statements
+      - Adjustments to compute the Zakat base
+      - Declaration of ownership (Saudi/GCC vs foreign)
+      - Supporting schedules for inclusions and deductions
+
+      Payment: Zakat is due at the time of filing. Installment payment may be available
+      under specific conditions approved by ZATCA.
+
+      Late filing: A penalty of 1% of Zakat due per 30 days of delay (capped at 25%).
+
+      Zakat certificate: Issued by ZATCA after assessment. Required for:
+      - Participation in government tenders
+      - Renewing business licenses
+      - Opening/maintaining bank accounts
+      - Customs clearance in some cases
+
+  - code: "CIT"
+    title: "Corporate Income Tax (for Foreign-Owned Entities)"
+    content: |
+      Corporate Income Tax (CIT) applies at 20% to:
+      - Resident companies with non-GCC shareholders (on the non-GCC share of profits).
+      - Non-residents with a permanent establishment in KSA (on PE attributable
+        profits).
+
+      Withholding tax (WHT) applies to payments to non-residents without a PE:
+      - 5% on dividends, loan charges, insurance/reinsurance premiums, rent, air
+        tickets, international telecommunications services
+      - 15% on management fees, technical/consulting services, royalties, directors'
+        fees
+      - 20% on payments to related parties with a weak business substance
+      - Reduced rates may apply under applicable double taxation agreements.
+
+      Natural gas investment tax: 30% flat rate on natural gas extraction activities
+      (separate regime from standard CIT).

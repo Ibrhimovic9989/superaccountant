@@ -1,0 +1,135 @@
+# Saudi VAT — key provisions of the VAT Implementing Regulations
+# Source: ZATCA (Zakat, Tax and Customs Authority) · official English text.
+
+source: "VAT Implementing Regulations (KSA)"
+sourceShort: "VAT-IR"
+jurisdiction: "ksa"
+sourceUrl: "https://zatca.gov.sa/"
+tags: [vat, zatca, indirect-tax]
+
+sections:
+  - code: "Art. 1"
+    title: "Standard VAT Rate"
+    content: |
+      The standard VAT rate in Saudi Arabia is 15% (raised from 5% effective 1 July 2020).
+      This is the general rate applied to most supplies of goods and services made by a
+      taxable person in the Kingdom.
+
+      The Kingdom does not operate a reduced-rate bracket. Supplies are either:
+      - Taxable at 15%
+      - Zero-rated (0%)
+      - Exempt
+
+      The distinction between zero-rated and exempt is critical: zero-rated suppliers
+      can recover input VAT, exempt suppliers cannot.
+
+  - code: "Art. 30"
+    title: "Mandatory VAT Registration"
+    content: |
+      A person is required to register for VAT if the value of their taxable supplies
+      (excluding capital assets and exempt supplies) in the preceding 12 months OR the
+      expected value in the next 12 months exceeds SAR 375,000 (the mandatory
+      registration threshold).
+
+      A person whose taxable supplies exceed SAR 187,500 may register voluntarily
+      (the voluntary registration threshold).
+
+      Non-residents making taxable supplies in KSA must register regardless of value
+      threshold if they are not covered by the reverse charge mechanism.
+
+      Registration must be obtained within 30 days of crossing the threshold.
+
+  - code: "Art. 33"
+    title: "Zero-Rated Supplies"
+    content: |
+      The following supplies are zero-rated (0% VAT, input credit still recoverable):
+
+      - Exports of goods from the Kingdom to outside the GCC customs territory,
+        subject to proof of export (customs export declaration).
+      - International transportation services (passenger and freight) between the
+        Kingdom and a location outside the Kingdom, and related services.
+      - Supplies of qualifying medicines and medical equipment as listed in the
+        Saudi FDA register.
+      - Supplies of qualifying investment metals (gold, silver, platinum of at least
+        99% purity and tradable on global markets).
+      - The first supply of a residential property sale (effective October 2020 —
+        replaced by a separate Real Estate Transaction Tax at 5%, but the VAT zero-rating
+        technical framework remains).
+
+  - code: "Art. 35"
+    title: "Exempt Supplies"
+    content: |
+      Exempt supplies (no VAT, but input VAT on costs is NOT recoverable):
+
+      - Financial services: interest-based lending, issuing/transfer of money,
+        provision of credit, life insurance. Note: fee-based financial services
+        (like arrangement fees or advisory charged as an explicit fee) are taxable.
+      - Lease or rental of residential real estate.
+      - Sale of residential real estate (from Oct 2020, covered by Real Estate
+        Transaction Tax at 5% instead of VAT).
+
+      A mixed-use business (both taxable and exempt supplies) must apportion input VAT
+      between recoverable and non-recoverable portions — typically on a turnover basis.
+
+  - code: "Art. 47"
+    title: "Tax Invoice Requirements"
+    content: |
+      Every taxable person making a taxable supply must issue a tax invoice. A valid
+      tax invoice under KSA VAT law must include:
+
+      1. The words "Tax Invoice" clearly shown.
+      2. Name, address, and TIN of the supplier.
+      3. Name, address, and TIN of the customer (for B2B).
+      4. A unique sequential invoice number.
+      5. Date of issue, and date of supply if different.
+      6. Description of goods or services.
+      7. Quantity and unit price.
+      8. Total value excluding VAT.
+      9. VAT rate applied.
+      10. VAT amount in Saudi Riyals.
+      11. Total amount including VAT.
+      12. Any discount offered.
+
+      From 4 December 2021 (Phase 1 of e-invoicing), tax invoices must be generated
+      electronically. From 1 January 2023 onwards (Phase 2, rolled out in waves),
+      invoices must also be cryptographically stamped and reported to ZATCA in real
+      time via the Fatoora platform.
+
+      Simplified tax invoices (for B2C supplies under SAR 1,000) may omit the customer's
+      TIN/address but must include a QR code.
+
+  - code: "Art. 52"
+    title: "Input VAT Recovery"
+    content: |
+      A taxable person may deduct input VAT paid on goods and services used in making
+      taxable supplies (standard-rated or zero-rated). Conditions:
+
+      1. The person holds a valid tax invoice showing the VAT charged.
+      2. The VAT relates to goods or services actually received for business purposes.
+      3. The supply is used (or intended to be used) for taxable supplies.
+      4. Input VAT on specific categories is BLOCKED even if otherwise eligible:
+         - Vehicles designed mainly for passenger transport (unless used directly for
+           taxable supplies like car rental or taxi).
+         - Entertainment, restaurant, catering, and hotel services (with limited
+           exceptions for employees travelling on business).
+         - Any supply used for private purposes.
+
+      Time limit: Input VAT must be claimed in the tax period in which the invoice
+      is received, or in the subsequent 5 years. After 5 years, the right is lost.
+
+  - code: "Art. 59"
+    title: "VAT Return and Payment"
+    content: |
+      VAT returns must be filed monthly or quarterly depending on annual taxable
+      turnover:
+      - Monthly filing: if turnover exceeds SAR 40 million.
+      - Quarterly filing: if turnover is SAR 40 million or less.
+
+      Due date: Last day of the month following the tax period.
+      - Monthly filer for January return: due 28/29 February.
+      - Quarterly filer (Q1: Jan-Mar): due 30 April.
+
+      Payment must accompany the return. Late filing penalty: 5%-25% of the tax due
+      depending on delay. Late payment penalty: 5% of unpaid VAT for each month of
+      delay. Voluntary disclosure of errors before ZATCA detection reduces penalties
+      significantly.
