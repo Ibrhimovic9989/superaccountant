@@ -4,30 +4,25 @@ import { cn } from '@/lib/utils'
 /**
  * Brand system — logomark + wordmark + combined logo.
  *
- * Wordmark (matches the image):
- *   Super    → fg color (white on dark, black on light)
- *   a        → blue (#4aa9ff)
- *   ccountant → purple (#a78bfa)
+ * Wordmark: 'Superaccountant' with the aurora gradient (same as the
+ * marketing hero "accounting tutor"). The gradient animates fg → accent
+ * → fg → accent on a 6s shine loop via `.aurora-text` in globals.css.
  *
- * Logomark: bold "S" with the same blue→purple gradient, inside a
- * rounded-square tile. Scales cleanly from 16px favicon to 128px.
+ * Logomark: stylized T-account (the foundation of double-entry
+ * bookkeeping). A rounded square frame with a horizontal bar at the top,
+ * a vertical divider splitting the bottom into Dr | Cr columns, and four
+ * small entry blocks inside — instantly readable as "ledger" to anyone
+ * in finance.
  */
 
-const BLUE = '#4aa9ff'
-const PURPLE = '#a78bfa'
-
-// ─── Logomark ───────────────────────────────────────────────
+// ─── Logomark — T-Account ───────────────────────────────────
 
 type MarkProps = {
   size?: number
   className?: string
-  /** 'tile' = black rounded-square bg with white S → gradient only letter.
-   *  'solid' = no background, just the gradient S floating. */
-  variant?: 'tile' | 'solid'
 }
 
-export function Logomark({ size = 28, className, variant = 'tile' }: MarkProps) {
-  // Unique gradient id so multiple instances on the page don't collide.
+export function Logomark({ size = 28, className }: MarkProps) {
   const gradId = React.useId()
   return (
     <svg
@@ -40,42 +35,59 @@ export function Logomark({ size = 28, className, variant = 'tile' }: MarkProps) 
       aria-hidden="true"
     >
       <defs>
-        <linearGradient id={gradId} x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor={BLUE} />
-          <stop offset="100%" stopColor={PURPLE} />
+        <linearGradient id={gradId} x1="2" y1="2" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="var(--fg)" />
+          <stop offset="100%" stopColor="var(--accent)" />
         </linearGradient>
       </defs>
 
-      {variant === 'tile' && (
-        <rect width="32" height="32" rx="8" className="fill-fg" />
-      )}
+      {/* Outer rounded frame — the ledger card */}
+      <rect
+        x="3"
+        y="3"
+        width="26"
+        height="26"
+        rx="6"
+        stroke={`url(#${gradId})`}
+        strokeWidth="2"
+        fill="none"
+      />
 
-      <text
-        x="16"
-        y="16"
-        textAnchor="middle"
-        dominantBaseline="central"
-        fontFamily="var(--font-inter), Inter, system-ui, -apple-system, sans-serif"
-        fontSize="22"
-        fontWeight="800"
-        letterSpacing="-0.04em"
-        fill={variant === 'tile' ? `url(#${gradId})` : `url(#${gradId})`}
-        style={{ paintOrder: 'stroke' }}
-      >
-        S
-      </text>
+      {/* Top horizontal bar — the account-name divider */}
+      <line
+        x1="3"
+        y1="11"
+        x2="29"
+        y2="11"
+        stroke={`url(#${gradId})`}
+        strokeWidth="2"
+      />
+
+      {/* Vertical divider — splits Dr | Cr */}
+      <line
+        x1="16"
+        y1="11"
+        x2="16"
+        y2="29"
+        stroke={`url(#${gradId})`}
+        strokeWidth="2"
+      />
+
+      {/* Four entry blocks — Dr column on left, Cr column on right */}
+      <rect x="6" y="14.5" width="7" height="2.5" rx="1" fill={`url(#${gradId})`} opacity="0.95" />
+      <rect x="6" y="19" width="7" height="2.5" rx="1" fill={`url(#${gradId})`} opacity="0.55" />
+      <rect x="19" y="14.5" width="7" height="2.5" rx="1" fill={`url(#${gradId})`} opacity="0.55" />
+      <rect x="19" y="19" width="7" height="2.5" rx="1" fill={`url(#${gradId})`} opacity="0.95" />
     </svg>
   )
 }
 
-// ─── Wordmark ───────────────────────────────────────────────
+// ─── Wordmark — Aurora "Superaccountant" ────────────────────
 
 export function Wordmark({ className }: { className?: string }) {
   return (
-    <span className={cn('font-semibold tracking-tight leading-none', className)}>
-      <span className="text-fg">Super</span>
-      <span style={{ color: BLUE }}>a</span>
-      <span style={{ color: PURPLE }}>ccountant</span>
+    <span className={cn('aurora-text font-semibold tracking-tight leading-none', className)}>
+      Superaccountant
     </span>
   )
 }
@@ -103,4 +115,3 @@ export function Logo({ className, size = 'sm', markOnly = false }: LogoProps) {
     </span>
   )
 }
-

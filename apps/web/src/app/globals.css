@@ -141,6 +141,22 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* Aurora gradient text — same as marketing hero */
+.aurora-text {
+  background: linear-gradient(
+    110deg,
+    var(--fg) 0%,
+    var(--accent) 35%,
+    var(--fg) 70%,
+    var(--accent) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 6s linear infinite;
+}
+
 /* Tally Prime theme — used by the Practice Lab simulation */
 .tally-shell {
   --tally-bg: #0c1021;
