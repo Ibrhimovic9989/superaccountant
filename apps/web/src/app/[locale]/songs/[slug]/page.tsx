@@ -6,7 +6,7 @@ import { getUserProfile } from '@/lib/data/profile'
 import type { Song, SongVerse } from '@/lib/data/songs'
 import { getSongBySlug, getSongsForMarket } from '@/lib/data/songs'
 import type { SupportedLocale } from '@sa/i18n'
-import { ArrowLeft, Music2, Sparkles, Youtube } from 'lucide-react'
+import { ArrowLeft, Music2, Sparkles, Volume2 } from 'lucide-react'
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 
@@ -15,7 +15,8 @@ const COPY = {
     back: 'Back to Song Lab',
     badge: 'Song Lab',
     sungTo: 'Sung to',
-    playTune: 'Play the tune',
+    playTune: 'Play the song',
+    audioPending: 'Audio is being generated — check back shortly.',
     intro: 'How to sing this',
     chorus: 'Chorus',
     verse: 'Verse',
@@ -29,7 +30,8 @@ const COPY = {
     back: 'العودة إلى معمل الأغاني',
     badge: 'معمل الأغاني',
     sungTo: 'على لحن',
-    playTune: 'شغل اللحن',
+    playTune: 'شغل الأغنية',
+    audioPending: 'جارٍ توليد الصوت — تحقق بعد قليل.',
     intro: 'كيف تغنيها',
     chorus: 'الكورس',
     verse: 'المقطع',
@@ -153,24 +155,24 @@ export default async function SongDetailPage({
           </p>
         </BlurFade>
 
-        {/* YouTube embed — play the tune */}
+        {/* Native audio player — sung in-app via TTS pipeline */}
         <BlurFade delay={0.25}>
           <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-bg-elev/50 shadow-sm">
             <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-2.5">
               <div className="flex items-center gap-2 text-xs font-medium text-fg">
-                <Youtube className="h-3.5 w-3.5 text-danger" />
+                <Volume2 className="h-3.5 w-3.5 text-accent" />
                 {t.playTune}
               </div>
               <Badge variant="default">{song.tune.name}</Badge>
             </div>
-            <div className="relative aspect-video w-full bg-black">
-              <iframe
-                src={`https://www.youtube-nocookie.com/embed/${song.tune.youtubeId}`}
-                title={song.tune.name}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 h-full w-full border-0"
-              />
+            <div className="bg-bg-overlay/40 px-4 py-5">
+              {song.audioUrl ? (
+                <audio controls preload="metadata" src={song.audioUrl} className="w-full">
+                  <track kind="captions" />
+                </audio>
+              ) : (
+                <p className="text-center text-xs text-fg-muted">{t.audioPending}</p>
+              )}
             </div>
           </div>
         </BlurFade>
