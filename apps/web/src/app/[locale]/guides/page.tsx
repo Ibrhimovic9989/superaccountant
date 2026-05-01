@@ -3,8 +3,8 @@ import { BlurFade } from '@/components/magicui/blur-fade'
 import { BorderBeam } from '@/components/magicui/border-beam'
 import { Badge } from '@/components/ui/badge'
 import { auth } from '@/lib/auth'
+import { FAMILY_LABELS, getGuidesForMarket, groupGuidesByFamily } from '@/lib/data/guides'
 import type { Guide } from '@/lib/data/guides'
-import { getGuidesForMarket } from '@/lib/data/guides'
 import { getUserProfile } from '@/lib/data/profile'
 import { cn } from '@/lib/utils'
 import type { SupportedLocale } from '@sa/i18n'
@@ -40,6 +40,55 @@ const TILE_CLASSES: Record<Guide['color'], string> = {
   danger: 'border-danger/30 bg-danger/10',
 }
 
+function GuideCard({
+  guide,
+  locale,
+  t,
+  delay,
+}: {
+  guide: Guide
+  locale: SupportedLocale
+  t: (typeof COPY)[SupportedLocale]
+  delay: number
+}) {
+  const happyPathLength = guide.steps.filter((s) => s.label).length
+  return (
+    <BlurFade delay={delay}>
+      <Link
+        href={`/${locale}/guides/${guide.slug}`}
+        className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-bg-elev/50 backdrop-blur transition-all hover:border-border-strong hover:bg-bg-elev"
+      >
+        <div className="flex flex-1 flex-col p-5">
+          <div className="flex items-center justify-between">
+            <span
+              className={cn(
+                'inline-flex h-12 w-12 items-center justify-center rounded-2xl border text-2xl',
+                TILE_CLASSES[guide.color],
+              )}
+            >
+              {guide.emoji}
+            </span>
+            <Badge variant="default">
+              {happyPathLength} {t.steps}
+            </Badge>
+          </div>
+          <h3 className="mt-4 text-base font-semibold tracking-tight">{guide.title}</h3>
+          <p className="mt-1 text-xs text-fg-muted">{guide.subtitle}</p>
+          <p className="mt-4 flex-1 text-xs leading-relaxed text-fg-muted">{guide.hook}</p>
+          <p className="mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+            <Clock className="h-3 w-3" />~{guide.estimatedMinutes} {t.minutes}
+          </p>
+        </div>
+        <div className="flex items-center justify-between gap-2 border-t border-border bg-bg-overlay/50 px-5 py-3 text-sm font-medium text-accent">
+          <span>{t.open}</span>
+          <ArrowRight className="h-3.5 w-3.5 rtl:rotate-180 transition-transform group-hover:translate-x-0.5" />
+        </div>
+        <BorderBeam size={80} duration={10} colorFrom="#a78bfa" colorTo="#8b5cf6" />
+      </Link>
+    </BlurFade>
+  )
+}
+
 export default async function GuidesPage({
   params,
 }: {
@@ -53,6 +102,8 @@ export default async function GuidesPage({
 
   const t = COPY[locale]
   const guides = getGuidesForMarket(u.preferredTrack)
+  const grouped = groupGuidesByFamily(guides)
+  const familyOrder: Guide['family'][] = ['tally-prime', 'zoho-books', 'other']
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-bg text-fg">
@@ -75,48 +126,35 @@ export default async function GuidesPage({
           <p className="mt-3 max-w-2xl text-sm text-fg-muted sm:text-base">{t.subtitle}</p>
         </BlurFade>
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {guides.map((guide, i) => {
-            const happyPathLength = guide.steps.filter((s) => s.label).length
-            return (
-              <BlurFade key={guide.slug} delay={0.1 + i * 0.06}>
-                <Link
-                  href={`/${locale}/guides/${guide.slug}`}
-                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-bg-elev/50 backdrop-blur transition-all hover:border-border-strong hover:bg-bg-elev"
-                >
-                  <div className="flex flex-1 flex-col p-5">
-                    <div className="flex items-center justify-between">
-                      <span
-                        className={cn(
-                          'inline-flex h-12 w-12 items-center justify-center rounded-2xl border text-2xl',
-                          TILE_CLASSES[guide.color],
-                        )}
-                      >
-                        {guide.emoji}
-                      </span>
-                      <Badge variant="default">
-                        {happyPathLength} {t.steps}
-                      </Badge>
-                    </div>
-                    <h3 className="mt-4 text-base font-semibold tracking-tight">{guide.title}</h3>
-                    <p className="mt-1 text-xs text-fg-muted">{guide.subtitle}</p>
-                    <p className="mt-4 flex-1 text-xs leading-relaxed text-fg-muted">
-                      {guide.hook}
-                    </p>
-                    <p className="mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-                      <Clock className="h-3 w-3" />~{guide.estimatedMinutes} {t.minutes}
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between gap-2 border-t border-border bg-bg-overlay/50 px-5 py-3 text-sm font-medium text-accent">
-                    <span>{t.open}</span>
-                    <ArrowRight className="h-3.5 w-3.5 rtl:rotate-180 transition-transform group-hover:translate-x-0.5" />
-                  </div>
-                  <BorderBeam size={80} duration={10} colorFrom="#a78bfa" colorTo="#8b5cf6" />
-                </Link>
+        {familyOrder.map((family) => {
+          const familyGuides = grouped[family]
+          if (familyGuides.length === 0) return null
+          const label = FAMILY_LABELS[family]
+          return (
+            <section key={family} className="mt-12">
+              <BlurFade delay={0.2}>
+                <h2 className="mb-5 flex items-center gap-2 text-xl font-semibold tracking-tight">
+                  <span className="text-2xl">{label.emoji}</span>
+                  <span>{label[locale]}</span>
+                  <span className="font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
+                    · {familyGuides.length}
+                  </span>
+                </h2>
               </BlurFade>
-            )
-          })}
-        </div>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {familyGuides.map((guide, i) => (
+                  <GuideCard
+                    key={guide.slug}
+                    guide={guide}
+                    locale={locale}
+                    t={t}
+                    delay={0.25 + i * 0.04}
+                  />
+                ))}
+              </div>
+            </section>
+          )
+        })}
       </main>
     </div>
   )
