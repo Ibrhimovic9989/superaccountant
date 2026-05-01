@@ -44,7 +44,7 @@ export type Guide = {
   /** Filter by market — 'india' | 'ksa' | 'both'. */
   market: 'india' | 'ksa' | 'both'
   /** Software / product family this guide belongs to (for grouping). */
-  family: 'tally-prime' | 'zoho-books' | 'other'
+  family: 'tally-prime' | 'zoho-books' | 'quickbooks-online' | 'other'
   estimatedMinutes: number
   emoji: string
   color: 'accent' | 'success' | 'warning' | 'danger'

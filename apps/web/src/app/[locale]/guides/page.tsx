@@ -103,7 +103,7 @@ export default async function GuidesPage({
   const t = COPY[locale]
   const guides = getGuidesForMarket(u.preferredTrack)
   const grouped = groupGuidesByFamily(guides)
-  const familyOrder: Guide['family'][] = ['tally-prime', 'zoho-books', 'other']
+  const familyOrder: Guide['family'][] = ['tally-prime', 'zoho-books', 'quickbooks-online', 'other']
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-bg text-fg">

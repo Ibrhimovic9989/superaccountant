@@ -1,0 +1,112 @@
+import type { Guide } from '../types'
+
+export const ZOHO_REPORTS: Guide = {
+  slug: 'zoho-books-reports',
+  title: 'Reports + dashboards in Zoho Books',
+  subtitle: 'P&L drill-downs, custom reports, scheduled emails, Zoho Analytics integration',
+  hook: "Reading reports separates accountants from data-entry clerks. This guide walks through Zoho's report library, how to drill into any number, and how to schedule the right reports to land in the right inboxes weekly.",
+  market: 'india',
+  family: 'zoho-books',
+  estimatedMinutes: 20,
+  emoji: '📊',
+  color: 'success',
+  prerequisites: ['Zoho Books org with at least a few months of data'],
+  outcomes: [
+    'P&L + Balance Sheet read with comparative + drill-down',
+    'Cash Flow Statement (Indirect method) reviewed',
+    'Custom report saved with filters you reuse',
+    'Reports auto-emailed to stakeholders weekly / monthly',
+    'Zoho Analytics connected for advanced dashboards',
+  ],
+  startStepId: 'pl',
+  steps: [
+    {
+      id: 'pl',
+      label: 'P&L',
+      title: 'Profit & Loss with comparison',
+      body: '**Reports** → **Profit and Loss**.\n\nKey controls (top of the report):\n- **Date range** — pick the period\n- **Compare with:** Previous period / Same period last year — adds a 2nd column\n- **Include non-posting transactions** — for what-if drafts (off by default)\n- **Show drill-down** — click any row to see the underlying transactions\n\nAt month-end run **This month vs Last month** AND **This month vs Same month last year** — the two comparisons together tell you trend AND seasonality.',
+      callout: {
+        kind: 'tip',
+        text: 'Click any number → drill down to ledger entries → click a ledger entry → drill into the actual invoice/bill. 3 clicks from any P&L number to source.',
+      },
+      next: 'bs',
+    },
+    {
+      id: 'bs',
+      label: 'BS',
+      title: 'Balance Sheet',
+      body: '**Reports** → **Balance Sheet**.\n\n- **As of date** — point-in-time snapshot\n- **Compare with:** prior date — to see change in net worth\n- **Drill-down** for receivables / payables / fixed assets\n\nMonthly: lock down by exporting BS as PDF on the 5th of next month — your audit-trail snapshot.',
+      next: 'cash-flow',
+    },
+    {
+      id: 'cash-flow',
+      label: 'Cash flow',
+      title: 'Cash Flow Statement',
+      body: "**Reports** → **Cash Flow Statement** (Indirect method, AS 3 / Ind AS 7 compliant).\n\nThree sections:\n- **Operating** — net profit + working-capital changes\n- **Investing** — fixed asset purchases / sales, investments\n- **Financing** — loans taken/repaid, equity changes\n\nThe net of these three should equal the change in cash + bank balances over the period. If it doesn't, your books have a leakage.",
+      callout: {
+        kind: 'warning',
+        text: 'Cash Flow ≠ P&L. A profitable firm can run out of cash if receivables grow faster than profits. Review monthly.',
+      },
+      next: 'aged',
+    },
+    {
+      id: 'aged',
+      label: 'Aged AR/AP',
+      title: 'Aged Receivables + Payables',
+      body: '**Reports** → **Receivables** → **Aged Receivables Detail** (and **Aged Payables Detail**).\n\nBuckets: 0-30 / 31-60 / 61-90 / >90 days. Anything in the >60 bucket is **collections work** — not an accounting problem.\n\nUse this report as your **weekly collections call list**:\n- **>30 days** — friendly reminder\n- **>60 days** — escalation call\n- **>90 days** — write-off candidate or legal',
+      callout: {
+        kind: 'tip',
+        text: 'Schedule **Aged Receivables Summary** to email yourself + the founder every Monday morning. Visibility = collection.',
+      },
+      next: 'gst-reports',
+    },
+    {
+      id: 'gst-reports',
+      label: 'GST',
+      title: 'GST reports for compliance',
+      body: 'Reports → **GST** module:\n\n- **GST Summary** — total tax payable / refundable for any period\n- **HSN Summary** — for GSTR-1\n- **GSTR-1 / 2B / 3B** — already covered in the GST Returns guide\n- **Reverse Charge Summary** — for RCM compliance audit\n\nMonthly: generate **GST Summary** before filing 3B — sanity-check the liability.',
+      next: 'custom',
+    },
+    {
+      id: 'custom',
+      label: 'Custom',
+      title: 'Custom reports + saved views',
+      body: 'Most reports support **custom filters** (top-right):\n\n- Date range\n- Customer / vendor\n- Item / category\n- Project / cost centre\n- Tag\n\nApply filters → **Save Customization** → name it (e.g. *"Mumbai Branch P&L"*). It now lives in your **Saved Reports** list.\n\nSaved customizations also show up as options when you set up scheduled emails (next step).',
+      next: 'schedule',
+    },
+    {
+      id: 'schedule',
+      label: 'Schedule',
+      title: 'Auto-email reports on a schedule',
+      body: "Open any report → **Schedule** (top-right) → **+ Add Schedule**.\n\n- **Frequency:** Daily / Weekly / Monthly / Quarterly\n- **Day + time** of send\n- **Recipients:** founder, CFO, branch managers\n- **Format:** PDF / Excel\n- **Subject + message** template\n\nZoho emails the report at the scheduled time — you don't need to remember.",
+      callout: {
+        kind: 'success',
+        text: 'Good defaults: P&L every Monday 8 AM to founder. Aged Receivables Mon 8 AM to you + sales head. GST Summary 5th of each month.',
+      },
+      next: 'analytics',
+    },
+    {
+      id: 'analytics',
+      label: 'Analytics',
+      title: 'Zoho Analytics (advanced)',
+      body: 'For boardroom-grade dashboards (cohort analysis, customer LTV, revenue waterfall):\n\n**Settings** → **Integrations** → **Zoho Analytics** → **Connect**.\n\nZoho syncs all your Books data into Analytics where you can:\n- Build pivot tables, charts, custom dashboards\n- Blend Books data with Sheet data, CRM data\n- Schedule slides export for board decks\n\nFree tier: 5 users, 100k rows. Adequate for an SME.',
+      callout: {
+        kind: 'tip',
+        text: "If your founder asks for charts that don't exist in Books reports, it's time for Analytics. Don't try to fake it with Excel exports.",
+      },
+      next: 'done',
+    },
+    {
+      id: 'flag-instructor',
+      title: 'Ask your instructor',
+      body: 'Reporting design is firm-specific. What does the founder check daily? Weekly? Monthly? Bring those questions to your next class — your instructor will map them to the right Zoho reports.',
+      terminal: true,
+    },
+    {
+      id: 'done',
+      title: 'Reports mastered',
+      body: 'You can now answer any management question with a 30-second drill-down. Schedule the right ones to flow weekly and you become indispensable.\n\n**Next:** move on to **QuickBooks** if you handle international clients, or revisit any Tally / Zoho topic for deeper practice.',
+      terminal: true,
+    },
+  ],
+}
