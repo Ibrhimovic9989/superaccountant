@@ -22,8 +22,13 @@ export type GuideStep = {
   body: string
   /** Optional inline screenshot (public path or full URL). */
   image?: string
-  /** Optional embedded video (YouTube ID). Falls back to a link. */
-  video?: { youtubeId: string; caption?: string }
+  /**
+   * Optional video reference. Renders as a "watch on YouTube" launcher
+   * (opens in new tab) — never embedded, so uploader embed restrictions
+   * can't break the UI. If `youtubeId` is given we link straight to the
+   * watch page; otherwise we search YouTube for `caption`.
+   */
+  video?: { youtubeId?: string; caption?: string }
   /** Optional callout above the action area. */
   callout?: { kind: 'tip' | 'warning' | 'success'; text: string }
   /** Branching question. If present, replaces the default Continue button. */

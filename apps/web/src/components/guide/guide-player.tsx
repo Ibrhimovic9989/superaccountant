@@ -218,32 +218,31 @@ function StepVideo({
   t: (typeof COPY)[Locale]
   fallbackTitle: string
 }) {
+  // No iframe — many videos block embedding ("Video unavailable").
+  // We launch YouTube in a new tab so embed restrictions never break the UI.
+  const url = video.youtubeId
+    ? `https://www.youtube.com/watch?v=${video.youtubeId}`
+    : `https://www.youtube.com/results?search_query=${encodeURIComponent(video.caption ?? fallbackTitle)}`
   return (
-    <div className="mt-6 overflow-hidden rounded-xl border border-border">
-      <div className="flex items-center justify-between gap-2 border-b border-border bg-bg-overlay/40 px-4 py-2.5">
-        <div className="flex items-center gap-2 text-xs font-medium text-fg">
-          <Youtube className="h-3.5 w-3.5 text-danger" />
-          {video.caption ?? t.videoCaption}
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group mt-6 flex items-center justify-between gap-3 rounded-xl border border-border bg-bg-overlay/40 px-4 py-3.5 transition-all hover:border-accent/50 hover:bg-accent-soft/30"
+    >
+      <div className="flex min-w-0 items-center gap-3">
+        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-danger/30 bg-danger/10">
+          <Youtube className="h-4 w-4 text-danger" />
+        </span>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-medium text-fg">{video.caption ?? t.videoCaption}</p>
+          <p className="truncate font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+            {t.openOnYouTube}
+          </p>
         </div>
-        <a
-          href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-mono text-[10px] uppercase tracking-wider text-accent hover:underline"
-        >
-          {t.openOnYouTube}
-        </a>
       </div>
-      <div className="relative aspect-video bg-black">
-        <iframe
-          src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}`}
-          title={video.caption ?? fallbackTitle}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 h-full w-full border-0"
-        />
-      </div>
-    </div>
+      <ArrowRight className="h-4 w-4 shrink-0 text-fg-subtle transition-all group-hover:translate-x-0.5 group-hover:text-accent rtl:rotate-180" />
+    </a>
   )
 }
 
