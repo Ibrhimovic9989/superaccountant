@@ -40,8 +40,7 @@ export const TALLY_GETTING_STARTED: Guide = {
       title: 'Download Tally Prime',
       body: "Open your browser and go to **tallysolutions.com/download**. Click **Download Tally Prime** — it's a free download. The installer is around 250 MB.",
       video: {
-        youtubeId: '7g7-zN1Z0Wc',
-        caption: 'Tally Prime — official installation walkthrough',
+        caption: 'Tally Prime official installation walkthrough',
       },
       check: {
         question: 'Did the installer download successfully?',
