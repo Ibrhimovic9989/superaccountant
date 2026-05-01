@@ -5,7 +5,7 @@ export const TALLY_GETTING_STARTED: Guide = {
   title: 'Get started with Tally Prime',
   subtitle: 'Install, activate, and book your first voucher in under 30 minutes',
   hook: "From a fresh Windows laptop to recording your first sale — every click guided, every error answered. By the end you'll have a working company file with GST configured.",
-  market: 'india',
+  market: 'both',
   family: 'tally-prime',
   estimatedMinutes: 30,
   emoji: '📒',

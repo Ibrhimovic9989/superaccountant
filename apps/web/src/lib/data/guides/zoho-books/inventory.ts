@@ -5,7 +5,7 @@ export const ZOHO_INVENTORY: Guide = {
   title: 'Inventory in Zoho Books — multi-warehouse + batches',
   subtitle: 'Track stock by warehouse, batch, and serial number — natively in Zoho',
   hook: 'If you carry physical stock, the Zoho Inventory features (built into Books or via the dedicated Zoho Inventory app) keep your stock balance and your books always in sync — no separate tally-vs-physical reconciliation.',
-  market: 'india',
+  market: 'both',
   family: 'zoho-books',
   estimatedMinutes: 25,
   emoji: '📦',

@@ -5,7 +5,7 @@ export const TALLY_COST_CENTRES: Guide = {
   title: 'Cost centres in Tally — track by branch, project, or department',
   subtitle: 'Slice your P&L by anything you care about, without creating a hundred ledgers',
   hook: "When the boss asks 'how profitable is the Mumbai branch?' or 'what did Project Phoenix actually cost?' — cost centres are how you answer in 30 seconds without re-keying anything.",
-  market: 'india',
+  market: 'both',
   family: 'tally-prime',
   estimatedMinutes: 20,
   emoji: '🎯',

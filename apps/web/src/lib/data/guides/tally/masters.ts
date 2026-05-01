@@ -5,7 +5,7 @@ export const TALLY_MASTERS: Guide = {
   title: 'Set up your Tally masters',
   subtitle: 'Groups, ledgers, stock items — the foundation under every voucher',
   hook: 'Most Tally errors start in the masters. Build them right once and every voucher you book afterwards just works.',
-  market: 'india',
+  market: 'both',
   family: 'tally-prime',
   estimatedMinutes: 25,
   emoji: '🗂️',

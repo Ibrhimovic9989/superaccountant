@@ -5,7 +5,7 @@ export const TALLY_INVENTORY: Guide = {
   title: 'Inventory in Tally — godowns, batches, BOM',
   subtitle: 'Multi-warehouse stock, batch + expiry tracking, manufacturing bills of material',
   hook: "Once you stop selling out of one storeroom, Tally's inventory engine kicks in. Multi-godown, batch-wise, expiry-tracked, manufactured-from-recipe — all of it.",
-  market: 'india',
+  market: 'both',
   family: 'tally-prime',
   estimatedMinutes: 25,
   emoji: '📦',

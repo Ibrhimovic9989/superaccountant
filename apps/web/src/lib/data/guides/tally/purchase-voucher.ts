@@ -5,7 +5,7 @@ export const TALLY_PURCHASE_VOUCHER: Guide = {
   title: 'Record purchase vouchers in Tally',
   subtitle: 'Cash purchase, credit purchase, RCM, debit notes — all covered',
   hook: "The mirror-image of sales. Master both and you can close 90% of an SME's books.",
-  market: 'india',
+  market: 'both',
   family: 'tally-prime',
   estimatedMinutes: 20,
   emoji: '🧾',

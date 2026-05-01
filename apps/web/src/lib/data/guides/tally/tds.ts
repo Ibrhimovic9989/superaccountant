@@ -5,7 +5,7 @@ export const TALLY_TDS: Guide = {
   title: 'TDS in Tally — set up, deduct, file',
   subtitle: 'Section 194C, 194J, 194I deductions auto-calculated and tracked',
   hook: 'TDS is mandatory above thresholds and the penalties for missing it are stiff. Tally automates the deduction at the moment you book the expense — no spreadsheets needed.',
-  market: 'india',
+  market: 'both',
   family: 'tally-prime',
   estimatedMinutes: 25,
   emoji: '🧮',

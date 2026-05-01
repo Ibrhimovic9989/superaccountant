@@ -6,7 +6,7 @@ export const ZOHO_PROJECTS: Guide = {
   subtitle:
     'For consultants, agencies, and service firms — track hours, bill them, see project profitability',
   hook: 'If your firm sells time (consulting, design, dev, accounting services), this is how you turn timesheets into invoices into a profitability report — all in one tool.',
-  market: 'india',
+  market: 'both',
   family: 'zoho-books',
   estimatedMinutes: 25,
   emoji: '⏱️',

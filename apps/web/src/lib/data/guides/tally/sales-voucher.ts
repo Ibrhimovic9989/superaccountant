@@ -5,7 +5,7 @@ export const TALLY_SALES_VOUCHER: Guide = {
   title: 'Record sales vouchers in Tally',
   subtitle: 'Cash sales, credit sales, with GST — every variation covered',
   hook: "Sales vouchers are 80% of an accountant's daily work. Get the workflow into your fingers and you can book 50 invoices an hour.",
-  market: 'india',
+  market: 'both',
   family: 'tally-prime',
   estimatedMinutes: 20,
   emoji: '💰',

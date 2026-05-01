@@ -5,7 +5,7 @@ export const ZOHO_GST_SETUP: Guide = {
   title: 'GST setup deep-dive in Zoho Books',
   subtitle: 'Tax rates, HSN, place of supply, e-invoicing toggles',
   hook: "Get the GST plumbing right once and Zoho will do the right thing on every invoice automatically. Skip this and you'll fix bugs for the rest of the year.",
-  market: 'india',
+  market: 'both',
   family: 'zoho-books',
   estimatedMinutes: 20,
   emoji: '🧾',

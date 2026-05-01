@@ -5,7 +5,7 @@ export const TALLY_GST_RETURNS: Guide = {
   title: 'File GST returns from Tally',
   subtitle: 'GSTR-1, GSTR-3B, GSTR-2B reconciliation — all from your Tally data',
   hook: 'Filing GST returns by hand from spreadsheets is error-prone and slow. Tally generates them straight from your vouchers — this guide walks you through GSTR-1 and GSTR-3B end-to-end.',
-  market: 'india',
+  market: 'both',
   family: 'tally-prime',
   estimatedMinutes: 30,
   emoji: '📤',

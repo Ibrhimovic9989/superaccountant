@@ -5,7 +5,7 @@ export const ZOHO_EXPENSES: Guide = {
   title: 'Record expenses + bills in Zoho Books',
   subtitle: 'Cash expenses, supplier bills, RCM purchases — every variation',
   hook: "Two flows: **Expenses** for small day-to-day costs (taxi, snacks), **Bills** for proper supplier invoices. We'll cover both.",
-  market: 'india',
+  market: 'both',
   family: 'zoho-books',
   estimatedMinutes: 15,
   emoji: '💸',

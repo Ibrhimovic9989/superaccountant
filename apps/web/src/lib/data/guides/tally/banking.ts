@@ -5,7 +5,7 @@ export const TALLY_BANKING: Guide = {
   title: 'Banking in Tally — payments, receipts, reconciliation',
   subtitle: 'Pay suppliers, receive from customers, match Tally to your bank statement',
   hook: 'Banking errors are the #1 reason audits go sideways. This guide covers every cash flow workflow plus the monthly reconciliation that catches them.',
-  market: 'india',
+  market: 'both',
   family: 'tally-prime',
   estimatedMinutes: 25,
   emoji: '🏦',

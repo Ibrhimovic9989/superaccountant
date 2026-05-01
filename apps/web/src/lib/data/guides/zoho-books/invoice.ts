@@ -5,7 +5,7 @@ export const ZOHO_INVOICE: Guide = {
   title: 'Create your first invoice in Zoho Books',
   subtitle: 'Customer → invoice → email → payment, end-to-end',
   hook: "The most common workflow you'll do — multiple times a day. Get it down cold and you'll move fast forever.",
-  market: 'india',
+  market: 'both',
   family: 'zoho-books',
   estimatedMinutes: 15,
   emoji: '🧾',

@@ -5,7 +5,7 @@ export const TALLY_MULTI_CURRENCY: Guide = {
   title: 'Multi-currency in Tally — invoice in USD, book in INR',
   subtitle: 'Forex transactions, conversion gain/loss, period-end revaluation',
   hook: 'Selling to a US or UK client? Buying from a Chinese supplier? Tally tracks the foreign currency, the INR equivalent, and the exchange gain/loss when the rate moves between invoice and payment.',
-  market: 'india',
+  market: 'both',
   family: 'tally-prime',
   estimatedMinutes: 25,
   emoji: '💱',

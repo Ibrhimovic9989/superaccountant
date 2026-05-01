@@ -5,7 +5,7 @@ export const ZOHO_SIGNUP: Guide = {
   title: 'Sign up + set up your Zoho Books organization',
   subtitle: 'From zero to a working organization with GST in 15 minutes',
   hook: 'Zoho Books is the cloud-native alternative to Tally — runs in the browser, mobile-friendly, automatic backups, and India-ready. This guide gets your organization live.',
-  market: 'india',
+  market: 'both',
   family: 'zoho-books',
   estimatedMinutes: 15,
   emoji: '🌐',

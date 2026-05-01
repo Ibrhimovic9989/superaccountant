@@ -5,7 +5,7 @@ export const ZOHO_GST_RETURNS: Guide = {
   title: 'File GST returns from Zoho Books',
   subtitle: 'GSTR-1, GSTR-3B, GSTR-2B reconciliation — direct portal integration',
   hook: 'Zoho can push GSTR-1 directly to the GST portal via API — no JSON download, no manual upload. This guide walks you through the cleanest path from data → filed return.',
-  market: 'india',
+  market: 'both',
   family: 'zoho-books',
   estimatedMinutes: 25,
   emoji: '📤',

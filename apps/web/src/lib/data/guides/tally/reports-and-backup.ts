@@ -5,7 +5,7 @@ export const TALLY_REPORTS_BACKUP: Guide = {
   title: 'Reports, year-end, and backup',
   subtitle: 'Reading P&L + Balance Sheet, closing the year, never losing data',
   hook: "If you can't read a Balance Sheet you can't be an accountant. This guide walks you through the four reports an accountant looks at every day — and the backup discipline that protects 5 years of work.",
-  market: 'india',
+  market: 'both',
   family: 'tally-prime',
   estimatedMinutes: 25,
   emoji: '📊',

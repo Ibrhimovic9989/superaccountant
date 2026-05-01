@@ -5,7 +5,7 @@ export const ZOHO_RECURRING: Guide = {
   title: 'Recurring invoices + auto-collection in Zoho',
   subtitle: 'Set up subscription billing once, never invoice the same customer twice',
   hook: 'If you bill the same customer the same amount on the same day every month, you should never touch the keyboard for it. Zoho automates the whole loop — invoice, email, payment.',
-  market: 'india',
+  market: 'both',
   family: 'zoho-books',
   estimatedMinutes: 15,
   emoji: '🔁',

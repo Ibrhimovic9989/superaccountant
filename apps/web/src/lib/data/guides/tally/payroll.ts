@@ -5,7 +5,7 @@ export const TALLY_PAYROLL: Guide = {
   title: 'Payroll in Tally — salaries, PF, ESI, PT',
   subtitle: 'Process salaries with statutory deductions, generate payslips, file PF/ESI returns',
   hook: "Most Indian firms still pay salaries via a separate Excel sheet and forget to journal it into the books. Tally's payroll runs everything in one place — slabs, deductions, statutory filings, and the journal entry posts itself.",
-  market: 'india',
+  market: 'both',
   family: 'tally-prime',
   estimatedMinutes: 30,
   emoji: '👥',

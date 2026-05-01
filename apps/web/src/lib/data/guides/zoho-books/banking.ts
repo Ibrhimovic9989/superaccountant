@@ -5,7 +5,7 @@ export const ZOHO_BANKING: Guide = {
   title: 'Connect bank + reconcile in Zoho Books',
   subtitle: 'Auto-feed your bank statement, match in clicks, never reconcile by hand again',
   hook: "Zoho's killer feature vs Tally — direct bank feed. Connect your bank once and every transaction lands in Zoho automatically. Reconciliation becomes a 5-minute job, not a 5-hour one.",
-  market: 'india',
+  market: 'both',
   family: 'zoho-books',
   estimatedMinutes: 20,
   emoji: '🏦',

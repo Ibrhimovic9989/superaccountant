@@ -5,7 +5,7 @@ export const ZOHO_REPORTS: Guide = {
   title: 'Reports + dashboards in Zoho Books',
   subtitle: 'P&L drill-downs, custom reports, scheduled emails, Zoho Analytics integration',
   hook: "Reading reports separates accountants from data-entry clerks. This guide walks through Zoho's report library, how to drill into any number, and how to schedule the right reports to land in the right inboxes weekly.",
-  market: 'india',
+  market: 'both',
   family: 'zoho-books',
   estimatedMinutes: 20,
   emoji: '📊',
