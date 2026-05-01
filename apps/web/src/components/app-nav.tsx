@@ -1,4 +1,4 @@
-import { Command, LayoutDashboard, Map as MapIcon, Music2, Search } from 'lucide-react'
+import { BookOpen, Command, LayoutDashboard, Map as MapIcon, Music2, Search } from 'lucide-react'
 import Link from 'next/link'
 import { Logomark, Wordmark } from './brand/logo'
 import { LocaleToggle } from './locale-toggle'
@@ -12,8 +12,20 @@ type Props = {
 }
 
 const COPY = {
-  en: { dashboard: 'Dashboard', roadmap: 'Roadmap', songs: 'Songs', search: 'Search' },
-  ar: { dashboard: 'لوحة التحكم', roadmap: 'خريطة الطريق', songs: 'الأغاني', search: 'بحث' },
+  en: {
+    dashboard: 'Dashboard',
+    roadmap: 'Roadmap',
+    guides: 'Guides',
+    songs: 'Songs',
+    search: 'Search',
+  },
+  ar: {
+    dashboard: 'لوحة التحكم',
+    roadmap: 'خريطة الطريق',
+    guides: 'الأدلة',
+    songs: 'الأغاني',
+    search: 'بحث',
+  },
 } as const
 
 /**
@@ -44,6 +56,13 @@ export function AppNav({ locale, userName, userEmail }: Props) {
           >
             <MapIcon className="h-3.5 w-3.5" />
             {t.roadmap}
+          </Link>
+          <Link
+            href={`/${locale}/guides`}
+            className="hidden items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-fg-muted transition-colors hover:bg-bg-elev hover:text-fg sm:inline-flex"
+          >
+            <BookOpen className="h-3.5 w-3.5" />
+            {t.guides}
           </Link>
           <Link
             href={`/${locale}/songs`}
