@@ -13,11 +13,11 @@
  * later means swapping this file only — Tools are framework-agnostic.
  */
 
+import { type AzureChatMessage, azureOpenAI } from '@sa/ai'
 import { z } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
-import { azureOpenAI, type AzureChatMessage } from '@sa/ai'
 import type { Tool, ToolContext, ToolResult } from './tool'
-import { ToolRegistry } from './tool-registry'
+import type { ToolRegistry } from './tool-registry'
 
 export type AgentEvent =
   | { type: 'text_delta'; text: string }

@@ -65,6 +65,13 @@ export interface MasteryPort {
 export type StudentProfile = {
   name: string | null
   examGoal: string | null
+  /**
+   * Career goal — drives whether the tutor leans into placement-prep tone
+   * (resumes, interviews) or upskill-deepening tone (advanced topics).
+   * One of: 'first-job' | 'switch-careers' | 'upskill' | 'own-business'
+   * | 'exploring' (free-form text in DB; tutor reads any string).
+   */
+  jobGoal: string | null
   experienceYears: number | null
   currentRole: string | null
   currentEmployer: string | null

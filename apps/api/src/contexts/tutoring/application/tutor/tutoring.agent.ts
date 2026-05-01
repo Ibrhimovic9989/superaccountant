@@ -18,12 +18,12 @@ import type {
   UserProfilePort,
 } from '../../domain/session'
 import { buildTutorSystemPrompt } from './system-prompt'
-import { buildSearchCurriculumTool } from './tools/search-curriculum'
-import { buildSearchStatutesTool } from './tools/search-statutes'
 import { buildAssessAnswerTool } from './tools/assess-answer'
 import { buildGeneratePracticeQuestionTool } from './tools/generate-practice-question'
-import { buildRecordSessionMemoryTool } from './tools/record-session-memory'
 import { buildRecommendNextLessonTool } from './tools/recommend-next-lesson'
+import { buildRecordSessionMemoryTool } from './tools/record-session-memory'
+import { buildSearchCurriculumTool } from './tools/search-curriculum'
+import { buildSearchStatutesTool } from './tools/search-statutes'
 
 export type TutorRunInput = {
   session: TutoringSessionContext
@@ -62,9 +62,7 @@ export class TutoringAgent {
       .register(buildSearchStatutesTool({ market: session.market }))
       .register(buildAssessAnswerTool({ locale: session.locale }))
       .register(buildGeneratePracticeQuestionTool({ locale: session.locale }))
-      .register(
-        buildRecordSessionMemoryTool(this.ports.memory, { sessionId: session.sessionId }),
-      )
+      .register(buildRecordSessionMemoryTool(this.ports.memory, { sessionId: session.sessionId }))
       .register(
         buildRecommendNextLessonTool(this.ports.mastery, {
           userId: session.userId,

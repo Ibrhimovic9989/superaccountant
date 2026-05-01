@@ -28,7 +28,11 @@ export type PermissionResult =
   | { behavior: 'ask'; prompt: string }
 
 export type ToolResult<Output> =
-  | { ok: true; output: Output; usage?: { tokensIn?: number; tokensOut?: number; costUsd?: number } }
+  | {
+      ok: true
+      output: Output
+      usage?: { tokensIn?: number; tokensOut?: number; costUsd?: number }
+    }
   | { ok: false; error: string; retryable: boolean }
 
 export interface Tool<TInput, TOutput> {

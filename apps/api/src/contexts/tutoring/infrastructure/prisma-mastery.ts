@@ -1,5 +1,5 @@
 import { prisma } from '@sa/db'
-import type { MasteryPort, MarketTrack } from '../domain/session'
+import type { MarketTrack, MasteryPort } from '../domain/session'
 
 /**
  * Mastery + recommendation port. Mastery is stored on LearningProgress
@@ -29,10 +29,12 @@ export class PrismaMastery implements MasteryPort {
     if (!enrollment) return []
 
     const masteredIds = new Set(
-      (await prisma.learningProgress.findMany({
-        where: { enrollmentId: enrollment.id, mastery: { gte: 0.75 } },
-        select: { lessonId: true },
-      })).map((p) => p.lessonId),
+      (
+        await prisma.learningProgress.findMany({
+          where: { enrollmentId: enrollment.id, mastery: { gte: 0.75 } },
+          select: { lessonId: true },
+        })
+      ).map((p) => p.lessonId),
     )
 
     const lessons = await prisma.curriculumLesson.findMany({

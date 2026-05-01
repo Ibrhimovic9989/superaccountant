@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { buildTutorSystemPrompt, TUTOR_DYNAMIC_BOUNDARY } from './system-prompt'
 import type { SessionMemoryEntry, StudentProfile } from '../../domain/session'
+import { TUTOR_DYNAMIC_BOUNDARY, buildTutorSystemPrompt } from './system-prompt'
 
 /**
  * System prompt assembly is the heart of the tutor — it decides what the
@@ -69,6 +69,7 @@ describe('buildTutorSystemPrompt', () => {
     const profile: StudentProfile = {
       name: 'Aisha Al-Rashid',
       examGoal: 'SOCPA',
+      jobGoal: 'upskill',
       experienceYears: 3,
       currentRole: 'Audit associate',
       currentEmployer: 'Big4 KSA',
@@ -103,6 +104,7 @@ describe('buildTutorSystemPrompt', () => {
     const profile: StudentProfile = {
       name: null,
       examGoal: null,
+      jobGoal: null,
       experienceYears: 1,
       currentRole: null,
       currentEmployer: null,
@@ -120,6 +122,7 @@ describe('buildTutorSystemPrompt', () => {
     const profile: StudentProfile = {
       name: 'Test',
       examGoal: null,
+      jobGoal: null,
       experienceYears: 0,
       currentRole: null,
       currentEmployer: null,

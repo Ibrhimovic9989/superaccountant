@@ -1,7 +1,7 @@
 // One-shot: add profile columns to IdentityUser.
 // Collected post-market-pick during onboarding, used to personalize the tutor.
 import { readFileSync } from 'node:fs'
-import { resolve, dirname } from 'node:path'
+import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __d = dirname(fileURLToPath(import.meta.url))
@@ -24,12 +24,14 @@ const cols = [
   ['targetExamDate', 'TIMESTAMP(3)'],
   ['motivation', 'TEXT'],
   ['profileCompletedAt', 'TIMESTAMP(3)'],
+  // Job-search intent — added so we can route placement-assistance vs
+  // upskill-only students differently. Free-form via radio in UI; values
+  // map to a small enum but stored as TEXT for forward-compat.
+  ['jobGoal', 'TEXT'],
 ]
 
 for (const [name, type] of cols) {
-  await p.$executeRawUnsafe(
-    `ALTER TABLE "IdentityUser" ADD COLUMN IF NOT EXISTS "${name}" ${type}`,
-  )
+  await p.$executeRawUnsafe(`ALTER TABLE "IdentityUser" ADD COLUMN IF NOT EXISTS "${name}" ${type}`)
   console.log(`✓ ${name} ${type}`)
 }
 

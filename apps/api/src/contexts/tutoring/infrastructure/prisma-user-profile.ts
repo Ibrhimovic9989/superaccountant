@@ -15,6 +15,7 @@ export class PrismaUserProfile implements UserProfilePort {
       {
         name: string | null
         examGoal: string | null
+        jobGoal: string | null
         experienceYears: number | null
         currentRole: string | null
         currentEmployer: string | null
@@ -28,6 +29,7 @@ export class PrismaUserProfile implements UserProfilePort {
       SELECT
         "name",
         "examGoal",
+        "jobGoal",
         "experienceYears",
         "currentRole",
         "currentEmployer",
@@ -45,6 +47,7 @@ export class PrismaUserProfile implements UserProfilePort {
     return {
       name: row.name,
       examGoal: row.examGoal,
+      jobGoal: row.jobGoal,
       experienceYears: row.experienceYears,
       currentRole: row.currentRole,
       currentEmployer: row.currentEmployer,

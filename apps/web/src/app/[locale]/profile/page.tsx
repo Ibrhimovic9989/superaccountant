@@ -1,12 +1,8 @@
-import { redirect } from 'next/navigation'
-import { revalidatePath } from 'next/cache'
-import { Settings2 } from 'lucide-react'
-import { auth, signOut } from '@/lib/auth'
-import type { SupportedLocale } from '@sa/i18n'
 import { AppNav } from '@/components/app-nav'
 import { BlurFade } from '@/components/magicui/blur-fade'
-import { ProfileForm, type ProfileFormData } from '@/components/profile/profile-form'
 import { ProfileDangerZone } from '@/components/profile/profile-danger-zone'
+import { ProfileForm, type ProfileFormData } from '@/components/profile/profile-form'
+import { auth, signOut } from '@/lib/auth'
 import {
   deleteUserAccount,
   exportUserData,
@@ -14,6 +10,10 @@ import {
   resetUserTrack,
   updateUserProfile,
 } from '@/lib/data/profile'
+import type { SupportedLocale } from '@sa/i18n'
+import { Settings2 } from 'lucide-react'
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
 const COPY = {
   en: {
@@ -53,6 +53,7 @@ export default async function ProfilePage({
     currentRole: u.profile.currentRole,
     currentEmployer: u.profile.currentEmployer,
     experienceYears: u.profile.experienceYears,
+    jobGoal: u.profile.jobGoal,
     examGoal: u.profile.examGoal,
     studyHoursPerWeek: u.profile.studyHoursPerWeek,
     targetExamDate: u.profile.targetExamDate ? toDateInput(u.profile.targetExamDate) : null,
@@ -163,6 +164,7 @@ function parseFormData(fd: FormData) {
     currentRole: str('currentRole'),
     currentEmployer: str('currentEmployer'),
     experienceYears: num('experienceYears'),
+    jobGoal: str('jobGoal'),
     examGoal: str('examGoal'),
     studyHoursPerWeek: num('studyHoursPerWeek'),
     targetExamDate: date('targetExamDate'),

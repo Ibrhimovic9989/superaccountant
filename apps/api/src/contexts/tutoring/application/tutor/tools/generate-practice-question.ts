@@ -1,5 +1,5 @@
-import { z } from 'zod'
 import { azureOpenAI } from '@sa/ai'
+import { z } from 'zod'
 import type { Tool } from '../../../agent/tool'
 import type { Locale } from '../../../domain/session'
 
@@ -10,7 +10,9 @@ const Input = z.object({
   groundingContext: z
     .string()
     .optional()
-    .describe('Paste relevant lesson body returned by search_curriculum so the question stays on-curriculum.'),
+    .describe(
+      'Paste relevant lesson body returned by search_curriculum so the question stays on-curriculum.',
+    ),
 })
 
 const Output = z.object({
@@ -27,9 +29,10 @@ const systemFor = (locale: Locale) =>
     ? `أنشئ سؤال تدريب واحد للطالب. أعد JSON صارم: { prompt (بالعربية), choices? (للأسئلة من نوع MCQ)، modelAnswer، rubric? }. تأكد من أن السؤال له إجابة قابلة للتقييم بشكل موضوعي.`
     : `Generate a single practice question for the student. Return STRICT JSON: { prompt, choices? (for MCQ), modelAnswer, rubric? }. The question must have an objectively gradeable answer. Use only facts present in the supplied grounding context if provided.`
 
-export const buildGeneratePracticeQuestionTool = (
-  ctxFixed: { locale: Locale },
-): Tool<z.infer<typeof Input>, PracticeOutput> => ({
+export const buildGeneratePracticeQuestionTool = (ctxFixed: { locale: Locale }): Tool<
+  z.infer<typeof Input>,
+  PracticeOutput
+> => ({
   name: 'generate_practice_question',
   description() {
     return 'Generate ONE practice question on a specific topic. Use this when the student wants to test their understanding or you spot a weak area. Pair with assess_answer afterward.'

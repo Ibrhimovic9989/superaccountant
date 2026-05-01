@@ -1,5 +1,5 @@
 import { prisma } from '@sa/db'
-import type { CurriculumSearchPort, LessonChunkHit, MarketTrack, Locale } from '../domain/session'
+import type { CurriculumSearchPort, LessonChunkHit, Locale, MarketTrack } from '../domain/session'
 
 /**
  * pgvector-backed curriculum search. Uses raw SQL since Prisma cannot model

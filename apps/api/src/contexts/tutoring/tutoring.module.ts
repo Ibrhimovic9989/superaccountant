@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common'
-import { TutorController } from './interface/tutor.controller'
 import { TutoringAgent } from './application/tutor/tutoring.agent'
 import { PrismaCurriculumSearch } from './infrastructure/prisma-curriculum-search'
-import { PrismaSessionMemory } from './infrastructure/prisma-session-memory'
 import { PrismaMastery } from './infrastructure/prisma-mastery'
+import { PrismaSessionMemory } from './infrastructure/prisma-session-memory'
 import { PrismaUserProfile } from './infrastructure/prisma-user-profile'
+import { TutorController } from './interface/tutor.controller'
 import {
   CURRICULUM_SEARCH,
   MASTERY,

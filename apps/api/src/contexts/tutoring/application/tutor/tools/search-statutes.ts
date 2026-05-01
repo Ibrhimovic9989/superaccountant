@@ -1,6 +1,6 @@
-import { z } from 'zod'
-import { prisma } from '@sa/db'
 import { embed } from '@sa/ai'
+import { prisma } from '@sa/db'
+import { z } from 'zod'
 import type { Tool } from '../../../agent/tool'
 import type { MarketTrack } from '../../../domain/session'
 

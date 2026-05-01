@@ -1,17 +1,17 @@
-import { redirect } from 'next/navigation'
-import { auth } from '@/lib/auth'
-import type { SupportedLocale } from '@sa/i18n'
 import { AppNav } from '@/components/app-nav'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { ProfileForm, type ProfileFormData } from '@/components/profile/profile-form'
+import { auth } from '@/lib/auth'
 import { getUserProfile, updateUserProfile } from '@/lib/data/profile'
+import type { SupportedLocale } from '@sa/i18n'
+import { redirect } from 'next/navigation'
 
 const COPY = {
   en: {
     step: 'Step 2 of 3',
     title: 'Tell us about yourself',
     subtitle:
-      "A few quick questions so the tutor can personalize your daily plan, lessons, and difficulty.",
+      'A few quick questions so the tutor can personalize your daily plan, lessons, and difficulty.',
   },
   ar: {
     step: 'الخطوة 2 من 3',
@@ -45,6 +45,7 @@ export default async function ProfileSetupPage({
     currentRole: u.profile.currentRole,
     currentEmployer: u.profile.currentEmployer,
     experienceYears: u.profile.experienceYears,
+    jobGoal: u.profile.jobGoal,
     examGoal: u.profile.examGoal,
     studyHoursPerWeek: u.profile.studyHoursPerWeek,
     targetExamDate: u.profile.targetExamDate ? toDateInput(u.profile.targetExamDate) : null,
@@ -124,6 +125,7 @@ function parseFormData(fd: FormData) {
     currentRole: str('currentRole'),
     currentEmployer: str('currentEmployer'),
     experienceYears: num('experienceYears'),
+    jobGoal: str('jobGoal'),
     examGoal: str('examGoal'),
     studyHoursPerWeek: num('studyHoursPerWeek'),
     targetExamDate: date('targetExamDate'),

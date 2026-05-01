@@ -1,10 +1,18 @@
-import { z } from 'zod'
 import { embed } from '@sa/ai'
+import { z } from 'zod'
 import type { Tool } from '../../../agent/tool'
-import type { CurriculumSearchPort, LessonChunkHit, MarketTrack, Locale } from '../../../domain/session'
+import type {
+  CurriculumSearchPort,
+  LessonChunkHit,
+  Locale,
+  MarketTrack,
+} from '../../../domain/session'
 
 const Input = z.object({
-  query: z.string().min(3).describe('A precise question or topic phrase. Be specific — vague queries return weak hits.'),
+  query: z
+    .string()
+    .min(3)
+    .describe('A precise question or topic phrase. Be specific — vague queries return weak hits.'),
   limit: z.number().int().min(1).max(8).default(5),
 })
 
@@ -23,7 +31,7 @@ export const buildSearchCurriculumTool = (
 ): Tool<z.infer<typeof Input>, SearchOutput> => ({
   name: 'search_curriculum',
   description() {
-    return 'Search the SuperAccountant curriculum by semantic similarity. Returns the most relevant lesson sections in the student\'s locale. Always call this BEFORE answering a domain question.'
+    return "Search the SuperAccountant curriculum by semantic similarity. Returns the most relevant lesson sections in the student's locale. Always call this BEFORE answering a domain question."
   },
   inputSchema: Input,
   isReadOnly: () => true,

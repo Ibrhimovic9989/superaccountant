@@ -18,6 +18,16 @@ export type ProfileFields = {
   currentRole: string | null
   currentEmployer: string | null
   experienceYears: number | null
+  /**
+   * Job-search intent — drives whether placement assistance, upskill
+   * tracks, or owner workflows are emphasised. One of:
+   *   'first-job'      — graduates seeking their first role
+   *   'switch-careers' — changing into accounting from another field
+   *   'upskill'        — already employed, want to grow
+   *   'own-business'   — running a business, doing own books
+   *   'exploring'      — just learning
+   */
+  jobGoal: string | null
   examGoal: string | null
   studyHoursPerWeek: number | null
   targetExamDate: Date | null
@@ -49,6 +59,7 @@ export async function getUserProfile(userId: string): Promise<UserProfileSnapsho
       currentRole: string | null
       currentEmployer: string | null
       experienceYears: number | null
+      jobGoal: string | null
       examGoal: string | null
       studyHoursPerWeek: number | null
       targetExamDate: Date | null
@@ -66,6 +77,7 @@ export async function getUserProfile(userId: string): Promise<UserProfileSnapsho
       "currentRole",
       "currentEmployer",
       "experienceYears",
+      "jobGoal",
       "examGoal",
       "studyHoursPerWeek",
       "targetExamDate",
@@ -89,6 +101,7 @@ export async function getUserProfile(userId: string): Promise<UserProfileSnapsho
       currentRole: row.currentRole,
       currentEmployer: row.currentEmployer,
       experienceYears: row.experienceYears,
+      jobGoal: row.jobGoal,
       examGoal: row.examGoal,
       studyHoursPerWeek: row.studyHoursPerWeek,
       targetExamDate: row.targetExamDate,
@@ -117,6 +130,7 @@ export async function updateUserProfile(
       "currentRole" = ${p.currentRole},
       "currentEmployer" = ${p.currentEmployer},
       "experienceYears" = ${p.experienceYears},
+      "jobGoal" = ${p.jobGoal},
       "examGoal" = ${p.examGoal},
       "studyHoursPerWeek" = ${p.studyHoursPerWeek},
       "targetExamDate" = ${p.targetExamDate},
@@ -164,8 +178,9 @@ export async function exportUserData(userId: string): Promise<unknown> {
       SELECT
         "id", "email", "name", "image", "locale", "preferredTrack", "role",
         "phone", "country", "city", "currentRole", "currentEmployer",
-        "experienceYears", "examGoal", "studyHoursPerWeek", "targetExamDate",
-        "motivation", "profileCompletedAt", "createdAt", "updatedAt"
+        "experienceYears", "jobGoal", "examGoal", "studyHoursPerWeek",
+        "targetExamDate", "motivation", "profileCompletedAt",
+        "createdAt", "updatedAt"
       FROM "IdentityUser"
       WHERE "id" = ${userId}
       LIMIT 1

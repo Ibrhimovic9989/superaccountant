@@ -1,9 +1,9 @@
 import { BadRequestException, Body, Controller, Inject, Post, Res } from '@nestjs/common'
 import { Throttle } from '@nestjs/throttler'
 import type { Response } from 'express'
-import { TutorAskBodySchema, type TutorAskBody } from './tutor.dto'
-import { TutoringAgent } from '../application/tutor/tutoring.agent'
+import type { TutoringAgent } from '../application/tutor/tutoring.agent'
 import { TUTORING_AGENT } from '../tutoring.tokens'
+import { type TutorAskBody, TutorAskBodySchema } from './tutor.dto'
 
 /**
  * SSE-streamed tutor endpoint.

@@ -3,10 +3,17 @@ import type { Tool } from '../../../agent/tool'
 import type { SessionMemoryPort } from '../../../domain/session'
 
 const Input = z.object({
-  kind: z.enum(['student', 'course', 'scratch']).describe(
-    'student = stable facts about the learner (strengths, weaknesses, accommodations). course = notes about the lesson/module they\'re working through. scratch = ephemeral working notes.',
-  ),
-  bodyMd: z.string().min(1).describe('The full memory body in markdown. Overwrites any existing memory of the same kind for this session.'),
+  kind: z
+    .enum(['student', 'course', 'scratch'])
+    .describe(
+      "student = stable facts about the learner (strengths, weaknesses, accommodations). course = notes about the lesson/module they're working through. scratch = ephemeral working notes.",
+    ),
+  bodyMd: z
+    .string()
+    .min(1)
+    .describe(
+      'The full memory body in markdown. Overwrites any existing memory of the same kind for this session.',
+    ),
 })
 
 export type RecordMemoryOutput = { id: string; kind: string }

@@ -1,5 +1,5 @@
-import { z } from 'zod'
 import { azureOpenAI } from '@sa/ai'
+import { z } from 'zod'
 import type { Tool } from '../../../agent/tool'
 import type { Locale } from '../../../domain/session'
 
@@ -85,7 +85,9 @@ function extractJson(raw: string): string {
 /** Normalize + clamp the parsed assessment into our strict output shape. */
 function normalize(raw: z.infer<typeof Output>): AssessOutput {
   const score = Math.max(0, Math.min(1, Number(raw.score) || 0))
-  const v = String(raw.verdict ?? '').toLowerCase().trim()
+  const v = String(raw.verdict ?? '')
+    .toLowerCase()
+    .trim()
   let verdict: AssessOutput['verdict'] = 'incorrect'
   if (v === 'correct' || v === 'right' || v === 'yes') verdict = 'correct'
   else if (v === 'partial' || v === 'partially' || v === 'partly') verdict = 'partial'
@@ -138,9 +140,10 @@ function heuristicGrade(question: string, studentAnswer: string, locale: Locale)
   }
 }
 
-export const buildAssessAnswerTool = (
-  ctxFixed: { locale: Locale },
-): Tool<z.infer<typeof Input>, AssessOutput> => ({
+export const buildAssessAnswerTool = (ctxFixed: { locale: Locale }): Tool<
+  z.infer<typeof Input>,
+  AssessOutput
+> => ({
   name: 'assess_answer',
   description() {
     return "Grade a student's answer against a question. Returns score (0..1), verdict (correct/partial/incorrect), feedback, and a review suggestion. When the question is open-ended and you do not have a reference answer, the tool will grade against general accounting knowledge — but you should provide a brief `rubric` describing what a good answer looks like if you have one."
@@ -182,6 +185,9 @@ export const buildAssessAnswerTool = (
     }
 
     // Final fallback: heuristic grade. Better than erroring out the whole turn.
-    return { ok: true, output: heuristicGrade(input.question, input.studentAnswer, ctxFixed.locale) }
+    return {
+      ok: true,
+      output: heuristicGrade(input.question, input.studentAnswer, ctxFixed.locale),
+    }
   },
 })

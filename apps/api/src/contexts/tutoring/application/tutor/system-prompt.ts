@@ -12,12 +12,7 @@
  *   7. Memory                  [DYNAMIC]
  */
 
-import type {
-  Locale,
-  MarketTrack,
-  SessionMemoryEntry,
-  StudentProfile,
-} from '../../domain/session'
+import type { Locale, MarketTrack, SessionMemoryEntry, StudentProfile } from '../../domain/session'
 
 export const TUTOR_DYNAMIC_BOUNDARY = '\n<!-- ── TUTOR DYNAMIC BOUNDARY ── -->\n'
 
@@ -80,20 +75,29 @@ function trackRules(market: MarketTrack): string {
 `.trim()
 }
 
-function profileSection(profile: StudentProfile | null): string {
-  if (!profile) return '# Student profile\n(no profile on file)'
+const JOB_GOAL_LABELS: Record<string, string> = {
+  'first-job': 'looking for their first accounting job (placement-prep mode)',
+  'switch-careers': 'switching careers into accounting',
+  upskill: 'already employed, upskilling for promotion / better role',
+  'own-business': 'running their own business and managing the books',
+  exploring: 'just exploring the field',
+}
+
+function experienceDesc(years: number): string {
+  if (years === 0) return 'student / no professional experience yet'
+  if (years === 1) return '1 year of accounting experience'
+  return `${years} years of accounting experience`
+}
+
+function profileLines(profile: StudentProfile): string[] {
   const lines: string[] = []
   if (profile.name) lines.push(`- Name: **${profile.name}**`)
   if (profile.examGoal) lines.push(`- Studying for: **${profile.examGoal}**`)
+  if (profile.jobGoal) {
+    lines.push(`- Career goal: ${JOB_GOAL_LABELS[profile.jobGoal] ?? profile.jobGoal}`)
+  }
   if (profile.experienceYears !== null && profile.experienceYears !== undefined) {
-    const years = profile.experienceYears
-    const desc =
-      years === 0
-        ? 'student / no professional experience yet'
-        : years === 1
-          ? '1 year of accounting experience'
-          : `${years} years of accounting experience`
-    lines.push(`- Experience: ${desc}`)
+    lines.push(`- Experience: ${experienceDesc(profile.experienceYears)}`)
   }
   if (profile.currentRole) {
     const where = profile.currentEmployer ? ` at ${profile.currentEmployer}` : ''
@@ -111,6 +115,12 @@ function profileSection(profile: StudentProfile | null): string {
   if (profile.motivation) {
     lines.push(`- In their own words: "${profile.motivation.replace(/\s+/g, ' ').trim()}"`)
   }
+  return lines
+}
+
+function profileSection(profile: StudentProfile | null): string {
+  if (!profile) return '# Student profile\n(no profile on file)'
+  const lines = profileLines(profile)
 
   if (lines.length === 0) return '# Student profile\n(profile is empty)'
 
@@ -129,7 +139,7 @@ function memorySection(entries: SessionMemoryEntry[]): string {
   const grouped: Record<string, string[]> = {}
   for (const e of entries) {
     grouped[e.kind] = grouped[e.kind] ?? []
-    grouped[e.kind]!.push(e.bodyMd)
+    grouped[e.kind]?.push(e.bodyMd)
   }
   const sections = Object.entries(grouped).map(
     ([kind, bodies]) => `## ${kind}\n${bodies.join('\n\n')}`,

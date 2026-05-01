@@ -1,5 +1,5 @@
-import { ArrowRight, Briefcase, Target, User as UserIcon } from 'lucide-react'
 import { SubmitButton } from '@/components/ui/loading'
+import { ArrowRight, Briefcase, Target, User as UserIcon } from 'lucide-react'
 
 export type ProfileFormData = {
   name: string | null
@@ -9,11 +9,24 @@ export type ProfileFormData = {
   currentRole: string | null
   currentEmployer: string | null
   experienceYears: number | null
+  jobGoal: string | null
   examGoal: string | null
   studyHoursPerWeek: number | null
   targetExamDate: string | null
   motivation: string | null
 }
+
+/**
+ * Job-search intent options. Stored as TEXT in DB; UI shows the localized
+ * label. The `value` is what gets persisted, so keep it stable.
+ */
+const JOB_GOALS = [
+  { value: 'first-job', en: 'My first accounting job', ar: 'وظيفتي المحاسبية الأولى' },
+  { value: 'switch-careers', en: 'Switch into accounting', ar: 'الانتقال إلى المحاسبة' },
+  { value: 'upskill', en: 'Upskill in my current role', ar: 'تطوير مهاراتي الحالية' },
+  { value: 'own-business', en: 'Run my own business books', ar: 'إدارة دفاتر عملي الخاصة' },
+  { value: 'exploring', en: 'Just exploring', ar: 'مجرد استكشاف' },
+] as const
 
 type Props = {
   locale: 'en' | 'ar'
@@ -46,14 +59,25 @@ const COPY = {
     employerPlaceholder: 'Firm or company',
     experience: 'Years of experience',
     experiencePlaceholder: '0',
+    jobGoal: "What's your career goal?",
+    jobGoalHelp:
+      "We'll prioritise placement help, upskill paths, or owner workflows based on your answer.",
     examGoal: 'What are you preparing for?',
-    examGoalIndia: ['CA Foundation', 'CA Intermediate', 'CA Final', 'CMA', 'CS', 'ACCA', 'Just learning'],
+    examGoalIndia: [
+      'CA Foundation',
+      'CA Intermediate',
+      'CA Final',
+      'CMA',
+      'CS',
+      'ACCA',
+      'Just learning',
+    ],
     examGoalKsa: ['SOCPA', 'IFRS Diploma', 'ACCA', 'CMA', 'ZATCA exam', 'Just learning'],
     studyHours: 'Hours you can study per week',
     targetDate: 'Target exam date (optional)',
     motivation: 'Why are you here? (optional)',
     motivationPlaceholder:
-      "What do you want to get out of this? The tutor will use this to personalize your experience.",
+      'What do you want to get out of this? The tutor will use this to personalize your experience.',
   },
   ar: {
     sectionPersonal: 'شخصي',
@@ -74,14 +98,16 @@ const COPY = {
     employerPlaceholder: 'شركة أو مؤسسة',
     experience: 'سنوات الخبرة',
     experiencePlaceholder: '0',
+    jobGoal: 'ما هو هدفك المهني؟',
+    jobGoalHelp:
+      'سنركّز على المساعدة في التوظيف أو مسارات التطوير أو سير عمل أصحاب الأعمال بناءً على إجابتك.',
     examGoal: 'لماذا تستعد؟',
     examGoalIndia: ['CA الأساسي', 'CA المتوسط', 'CA النهائي', 'CMA', 'CS', 'ACCA', 'للتعلم فقط'],
     examGoalKsa: ['SOCPA', 'دبلوم IFRS', 'ACCA', 'CMA', 'امتحان ZATCA', 'للتعلم فقط'],
     studyHours: 'ساعات الدراسة في الأسبوع',
     targetDate: 'تاريخ الامتحان المستهدف (اختياري)',
     motivation: 'لماذا أنت هنا؟ (اختياري)',
-    motivationPlaceholder:
-      'ماذا تريد أن تحصل عليه من هذا؟ سيستخدم المدرس هذا لتخصيص تجربتك.',
+    motivationPlaceholder: 'ماذا تريد أن تحصل عليه من هذا؟ سيستخدم المدرس هذا لتخصيص تجربتك.',
   },
 } as const
 
@@ -97,7 +123,14 @@ export function ProfileForm({
   const t = COPY[locale]
   const examGoals = market === 'india' ? t.examGoalIndia : t.examGoalKsa
   const defaultCountry =
-    initial.country ?? (market === 'india' ? (locale === 'ar' ? 'الهند' : 'India') : locale === 'ar' ? 'السعودية' : 'Saudi Arabia')
+    initial.country ??
+    (market === 'india'
+      ? locale === 'ar'
+        ? 'الهند'
+        : 'India'
+      : locale === 'ar'
+        ? 'السعودية'
+        : 'Saudi Arabia')
 
   return (
     <form action={action} className="space-y-10">
@@ -132,12 +165,7 @@ export function ProfileForm({
             />
           </Field>
           <Field label={t.country}>
-            <input
-              name="country"
-              defaultValue={defaultCountry}
-              required
-              className={inputCls}
-            />
+            <input name="country" defaultValue={defaultCountry} required className={inputCls} />
           </Field>
           <Field label={t.city}>
             <input
@@ -180,6 +208,26 @@ export function ProfileForm({
               placeholder={t.experiencePlaceholder}
               className={inputCls}
             />
+          </Field>
+          <Field label={t.jobGoal} className="sm:col-span-2">
+            <p className="-mt-1 mb-2 text-xs text-fg-muted">{t.jobGoalHelp}</p>
+            <div className="flex flex-wrap gap-2">
+              {JOB_GOALS.map((g) => (
+                <label
+                  key={g.value}
+                  className="group inline-flex cursor-pointer items-center gap-2 rounded-lg border border-border bg-bg-elev px-3 py-2 text-sm transition-all hover:border-border-strong has-[:checked]:border-accent has-[:checked]:bg-accent-soft"
+                >
+                  <input
+                    type="radio"
+                    name="jobGoal"
+                    value={g.value}
+                    defaultChecked={initial.jobGoal === g.value}
+                    className="sr-only"
+                  />
+                  <span>{g[locale]}</span>
+                </label>
+              ))}
+            </div>
           </Field>
         </div>
       </section>
