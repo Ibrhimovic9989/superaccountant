@@ -73,6 +73,11 @@ export const QBO_SALES: Guide = {
       label: 'Invoice',
       title: 'Create an invoice from scratch',
       body: "**+ New** → **Invoice**.\n\n- **Customer**\n- **Invoice date** + **Due date** (auto from payment terms)\n- **Items + qty + rate**\n- **Tax** — auto-calc\n- **Custom fields** — invoice number format set in Settings → Sales\n- **Online payment** — toggle ON to embed Stripe / PayPal / ACH link in the invoice email\n\n**Save and send** OR **Save and close** if you'll send later.",
+      video: {
+        // Hector Garcia (Intuit-featured Advanced Certified ProAdvisor)
+        youtubeId: 'PYWvEVrvenM',
+        caption: 'QuickBooks Online — Invoice + receive payment walkthrough',
+      },
       callout: {
         kind: 'tip',
         text: 'Online payment doubles the speed of receivables collection. Set up Intuit Merchant Services or QuickBooks Payments for ACH (US) — fees ~1% vs ~3% on credit cards.',

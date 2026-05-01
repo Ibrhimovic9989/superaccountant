@@ -218,14 +218,43 @@ function StepVideo({
   t: (typeof COPY)[Locale]
   fallbackTitle: string
 }) {
-  // No iframe — many videos block embedding ("Video unavailable").
-  // We launch YouTube in a new tab so embed restrictions never break the UI.
-  const url = video.youtubeId
-    ? `https://www.youtube.com/watch?v=${video.youtubeId}`
-    : `https://www.youtube.com/results?search_query=${encodeURIComponent(video.caption ?? fallbackTitle)}`
+  // With a verified youtubeId we embed in-app. Without one, we render
+  // a launcher card that opens a YouTube search for the caption — so
+  // students still get to a relevant video without us guessing IDs.
+  if (video.youtubeId) {
+    return (
+      <div className="mt-6 overflow-hidden rounded-xl border border-border">
+        <div className="flex items-center justify-between gap-2 border-b border-border bg-bg-overlay/40 px-4 py-2.5">
+          <div className="flex items-center gap-2 text-xs font-medium text-fg">
+            <Youtube className="h-3.5 w-3.5 text-danger" />
+            {video.caption ?? t.videoCaption}
+          </div>
+          <a
+            href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-mono text-[10px] uppercase tracking-wider text-accent hover:underline"
+          >
+            {t.openOnYouTube}
+          </a>
+        </div>
+        <div className="relative aspect-video bg-black">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}`}
+            title={video.caption ?? fallbackTitle}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="absolute inset-0 h-full w-full border-0"
+          />
+        </div>
+      </div>
+    )
+  }
+
+  const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(video.caption ?? fallbackTitle)}`
   return (
     <a
-      href={url}
+      href={searchUrl}
       target="_blank"
       rel="noopener noreferrer"
       className="group mt-6 flex items-center justify-between gap-3 rounded-xl border border-border bg-bg-overlay/40 px-4 py-3.5 transition-all hover:border-accent/50 hover:bg-accent-soft/30"

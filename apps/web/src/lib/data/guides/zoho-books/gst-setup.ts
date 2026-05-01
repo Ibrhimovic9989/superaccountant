@@ -25,6 +25,11 @@ export const ZOHO_GST_SETUP: Guide = {
       label: 'Tax rates',
       title: 'Confirm default GST rates',
       body: "Settings → **Taxes** → **Tax Rates**. Zoho ships with all the standard GST slabs:\n\n- **GST 5%** → CGST 2.5% + SGST 2.5% intra / IGST 5% inter\n- **GST 12%** → CGST 6% + SGST 6% intra / IGST 12% inter\n- **GST 18%** → CGST 9% + SGST 9% intra / IGST 18% inter\n- **GST 28%** → CGST 14% + SGST 14% intra / IGST 28% inter\n- **Nil-rated** + **Exempt** + **Non-GST**\n\nReview and **make sure they're not edited** unless you have a reason.",
+      video: {
+        // Official Zoho Books channel — "Setting Up GST Details in Your Organisation"
+        youtubeId: 'SXgqhJ-cjwI',
+        caption: 'Zoho Books — Setting up GST for India',
+      },
       callout: {
         kind: 'warning',
         text: "Don't delete or rename these. Every invoice template references them — breaking the rate breaks the templates.",
