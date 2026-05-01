@@ -29,6 +29,10 @@ export const QBO_SETUP: Guide = {
       label: 'Sign up',
       title: 'Sign up for QuickBooks Online',
       body: "Go to **quickbooks.intuit.com** → pick the **country edition** matching your client (US / UK / CA / AU / Global).\n\nFor outsourced India-based bookkeeping work, you'll typically use the **client's country edition**, not India.\n\nPick a plan:\n- **Simple Start** — $35/mo (US) — single user, no inventory\n- **Essentials** — $65/mo — 3 users, bills + multi-currency\n- **Plus** — $99/mo — 5 users, inventory, projects, classes/locations\n- **Advanced** — $235/mo — 25 users, batch invoicing, custom roles\n\nMost SMBs use **Plus**. Sign up + verify email.",
+      video: {
+        youtubeId: 'BuAZLZjVG-E',
+        caption: 'QuickBooks Online 2025 beginner tutorial — new layout',
+      },
       callout: {
         kind: 'warning',
         text: 'QuickBooks Online India was discontinued in **April 2023**. Use Tally Prime / Zoho Books for Indian businesses. QBO is for international clients only.',

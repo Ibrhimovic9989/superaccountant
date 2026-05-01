@@ -42,6 +42,10 @@ export const TALLY_PURCHASE_VOUCHER: Guide = {
       label: 'Credit purchase',
       title: 'Record a credit purchase',
       body: "Gateway → **Vouchers** → **F9 (Purchase)**.\n\n- **Date:** today\n- **Supplier invoice no:** the number on supplier's tax invoice (NOT your own running number)\n- **Date:** date on supplier's invoice\n- **Party A/c name:** *Bharat Suppliers*\n- **Purchase ledger:** *Purchase — Goods*\n- **Stock item, qty, rate**\n- **GST** auto-records ITC\n\nIn **Bill-wise**: New Ref, supplier's invoice number, due date.\n\n**Ctrl + A** to save.",
+      video: {
+        youtubeId: '0IlmDeSpSvg',
+        caption: 'Purchase voucher entry in Tally Prime — cash + credit',
+      },
       callout: {
         kind: 'warning',
         text: "Always enter the **supplier's invoice number**, not your own. GSTR-2B reconciliation matches on supplier invoice number — get it wrong and the ITC won't reconcile.",

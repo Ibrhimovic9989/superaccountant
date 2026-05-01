@@ -42,6 +42,10 @@ export const TALLY_BANKING: Guide = {
       label: 'Payment',
       title: 'Make a supplier payment',
       body: "Gateway → **Vouchers** → **F5 (Payment)**.\n\n- **Date:** payment date\n- **Account:** *HDFC Bank — 0123* (or Cash for cash payments)\n- **Particulars:** supplier ledger (e.g. *Bharat Suppliers*)\n- **Amount:** payment amount\n\nIn **Bill-wise Details**:\n- **Type of Ref:** Agst Ref → pick the open invoice\n- Tally auto-knocks off the invoice from the supplier's outstanding\n\n**Ctrl + A** to save.",
+      video: {
+        youtubeId: 'wIk4QOYg1JM',
+        caption: 'Payment (F5) and Contra (F4) vouchers in Tally Prime',
+      },
       callout: {
         kind: 'warning',
         text: "Always use **Agst Ref** to match against an open bill. **New Ref** creates an advance payment that won't auto-clear when the next purchase comes in.",
@@ -142,6 +146,10 @@ export const TALLY_BANKING: Guide = {
       label: 'Reconcile',
       title: 'Bank Reconciliation Statement',
       body: "Display → **Account Books** → **Cash/Bank Book** → pick your bank → press **F5 (Reconcile)**.\n\nYou'll see two columns:\n- **Tally entries** (your books)\n- **Bank date** (empty — you fill it in)\n\nFor each entry that *cleared* on your bank statement, type the date it cleared. For entries not yet cleared, leave the bank date blank — they're your **outstanding** items.",
+      video: {
+        youtubeId: 'D8yz0jr7Ra8',
+        caption: 'Bank reconciliation in Tally Prime — with statement import',
+      },
       callout: {
         kind: 'tip',
         text: "Once all matched entries have a bank date, the **closing balance** at the bottom of the screen should equal your bank statement's closing balance. If not — investigate.",

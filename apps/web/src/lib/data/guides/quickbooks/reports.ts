@@ -32,6 +32,10 @@ export const QBO_REPORTS: Guide = {
       label: 'P&L',
       title: 'Profit & Loss',
       body: '**Reports** → **Profit and Loss**.\n\nKey controls:\n- **Report period** — pick or use This Month / Last Month / This Year\n- **Compare** — Previous period / Same period last year — adds a 2nd column\n- **Display columns by** — Total / Months / Customers / Class / Location / Project — splits the P&L into named columns\n\n**Click any number** → drills to the source transactions → click again → drills to the actual invoice / bill.',
+      video: {
+        youtubeId: 'ItfYZTWvisI',
+        caption: 'Generate Profit & Loss report in QuickBooks Online',
+      },
       callout: {
         kind: 'tip',
         text: 'Compare to **Same period last year** AND **Previous period** in two separate runs — different stories. YoY shows growth; vs prior month shows trend. Both matter.',

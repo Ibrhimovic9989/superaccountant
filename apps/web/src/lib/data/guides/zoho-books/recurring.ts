@@ -48,6 +48,10 @@ export const ZOHO_RECURRING: Guide = {
       label: 'Create profile',
       title: 'Create the recurring profile',
       body: '**Sales** → **Recurring Invoices** → **+ New**.\n\n- **Profile name:** *Acme Monthly Retainer* (internal name)\n- **Customer:** pick\n- **Frequency:** Monthly / Quarterly / Yearly / Custom\n- **Start date:** when first invoice goes out\n- **Never expires** OR **Ends after N invoices** OR **End date**\n- **Item table:** same as a regular invoice — items, qty, rate, GST\n- **Payment terms** + **invoice notes**\n\n**Save**.',
+      video: {
+        youtubeId: 'FhnpHlzZuTg',
+        caption: 'Create recurring invoices in Zoho Books — full guide',
+      },
       callout: {
         kind: 'tip',
         text: "If billing date varies (e.g. 5th of every month, but skip if it's a Sunday), use **Custom** frequency with explicit dates.",

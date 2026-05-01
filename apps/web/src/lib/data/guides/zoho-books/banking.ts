@@ -147,6 +147,10 @@ export const ZOHO_BANKING: Guide = {
       label: 'Reconcile',
       title: 'Reconcile the period',
       body: "Banking → your bank → **Reconcile**.\n\nZoho shows your **end-of-period bank balance** (from the auto-feed) vs your **end-of-period book balance**.\n\n- If they **match**: reconcile in one click. You're done.\n- If they **don't match**: Zoho lists every uncategorized transaction. Process them.",
+      video: {
+        youtubeId: 'tSH7LnHqwXM',
+        caption: 'Reconcile accounts in Zoho Books — step-by-step',
+      },
       callout: {
         kind: 'success',
         text: 'When they match, click **Mark as reconciled** and the period is closed. No bank-vs-Tally manual diff needed.',

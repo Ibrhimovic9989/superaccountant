@@ -81,6 +81,10 @@ export const ZOHO_INVOICE: Guide = {
       label: 'Invoice',
       title: 'Create the invoice',
       body: '**Sales** → **Invoices** → **+ New**.\n\n- **Customer:** pick from dropdown — Zoho fills in address, GSTIN, payment terms automatically\n- **Invoice #:** auto-incremented (Settings → Sales → Invoices to customize the format)\n- **Invoice date** + **Due date**\n- **Item table:** add items with qty + rate — tax auto-calculates\n- **Notes** (optional, customer-visible)\n- **Terms & conditions** (optional)\n\n**Save and Send** to email immediately, or **Save as Draft** to review first.',
+      video: {
+        youtubeId: 'OCglrlGgTok',
+        caption: 'Create an invoice in Zoho Books — step-by-step',
+      },
       callout: {
         kind: 'tip',
         text: 'Zoho calculates CGST + SGST or IGST based on your state vs customer state — no manual selection needed.',

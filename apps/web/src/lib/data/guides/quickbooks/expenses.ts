@@ -50,6 +50,10 @@ export const QBO_EXPENSES: Guide = {
       label: 'Bill',
       title: 'Enter a bill',
       body: "**+ New** → **Bill**.\n\n- **Vendor** — pick\n- **Bill no** — vendor's invoice number\n- **Bill date** + **Due date** (auto from terms)\n- **Category** (expense account) OR **Item** (if buying inventory)\n- **Amount + Tax** — sales tax / VAT auto-calc if rates are configured\n- **Memo + attach PDF** of vendor invoice\n\n**Save**.",
+      video: {
+        youtubeId: 'mAcr8oFG3u8',
+        caption: 'Vendor bills vs expenses in QuickBooks Online — when to use each',
+      },
       callout: {
         kind: 'tip',
         text: 'Always attach the vendor PDF. Auditors ask for source documents — having it inside QBO saves digging through email later.',

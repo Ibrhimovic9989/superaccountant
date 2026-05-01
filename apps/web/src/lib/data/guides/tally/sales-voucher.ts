@@ -42,6 +42,10 @@ export const TALLY_SALES_VOUCHER: Guide = {
       label: 'Cash sale',
       title: 'Record a cash sale',
       body: 'Gateway → **Vouchers** → **F8 (Sales)**.\n\n- **Date:** today\n- **Party A/c name:** *Cash*\n- **Sales ledger:** *Sales — Goods*\n- **Item:** pick from stock list, **Qty + Rate**\n- **GST** auto-fills from the stock item\n- **Total** auto-calculates\n\nPress **Ctrl + A** to save. Tally prints the invoice number on the next blank voucher.',
+      video: {
+        youtubeId: 'NStEhHjMOEY',
+        caption: 'Cash sales entry in Tally Prime — F8 with GST',
+      },
       callout: {
         kind: 'tip',
         text: 'Press **Alt + P** in the voucher to print the invoice. Or **Alt + L** to view it as a tax invoice before saving.',

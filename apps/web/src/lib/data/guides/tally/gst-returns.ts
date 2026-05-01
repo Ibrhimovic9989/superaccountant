@@ -71,6 +71,10 @@ export const TALLY_GST_RETURNS: Guide = {
       label: 'Export JSON',
       title: 'Export GSTR-1 as JSON',
       body: "In the GSTR-1 report screen, press **Alt + E (Export)** → **JSON (for GST portal)**.\n\nTally creates a JSON file in your configured export folder (default: **C:\\Users\\Public\\Tally Data**).\n\nNote the file name — you'll upload it to the GST portal next.",
+      video: {
+        youtubeId: 'TOEzoYL0jGg',
+        caption: 'Export GSTR-1 and GSTR-3B from TallyPrime (official)',
+      },
       check: {
         question: 'JSON exported?',
         options: [

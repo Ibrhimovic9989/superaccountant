@@ -102,6 +102,10 @@ export const QBO_BANKING: Guide = {
       label: 'Reconcile',
       title: 'Monthly reconciliation',
       body: "**Settings (gear)** → **Reconcile**.\n\n- **Account** — pick the bank account\n- **Statement ending date** — last day of month\n- **Statement ending balance** — copy from bank statement PDF\n\nQBO shows two columns: Deposits vs Withdrawals. Tick each transaction that's on your bank statement.\n\nWhen ticked transactions match the statement balance, the **difference is $0** — reconciled. Click **Finish now**.\n\nIf difference ≠ 0 — investigate.",
+      video: {
+        youtubeId: 'gmN331eEB-k',
+        caption: 'QuickBooks Online — reconcile your bank account (with discrepancy fixes)',
+      },
       callout: {
         kind: 'success',
         text: 'Reconciling monthly = audit-ready books. Reconciling yearly = a forensic nightmare. Make it a non-negotiable monthly habit.',

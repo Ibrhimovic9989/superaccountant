@@ -90,6 +90,10 @@ export const TALLY_PAYROLL: Guide = {
       label: 'Run payroll',
       title: 'Process the monthly payroll voucher',
       body: "Gateway → **Vouchers** → **Ctrl + F4 (Payroll)** → **Auto-fill (Alt + A)**.\n\nTally auto-fills every employee with their structured salary, applies attendance, computes deductions, and shows the **net payable** for each.\n\nReview each line. **Ctrl + A** to save.\n\n**Result:** the entire month's salary journal is posted in one voucher — Dr Basic / HRA / etc., Cr Salary Payable + PF Payable + ESI Payable + TDS Payable.",
+      video: {
+        youtubeId: 'IWIEIjmzmUs',
+        caption: 'Tally Prime payroll — pay heads, PF, ESI, salary processing',
+      },
       callout: {
         kind: 'tip',
         text: "Run on the **last working day** of the month so that all attendance + leave data is finalised. Don't pre-run on the 25th and patch later.",

@@ -129,6 +129,10 @@ export const TALLY_TDS: Guide = {
       label: 'Book voucher',
       title: 'Book the expense voucher',
       body: 'Gateway → **Vouchers** → **F7 (Journal)**.\n\nDr **Rent Paid** ₹50,000\nDr **TDS Receivable** (auto)\nCr **Mehta Properties** ₹50,000 — TDS\nCr **TDS Payable — 194I** (auto)\n\nTally auto-applies the TDS rate, computes the net payable, and creates the TDS liability ledger.\n\n**Ctrl + A** to save.',
+      video: {
+        youtubeId: 'DRXvsuxN6T4',
+        caption: 'Complete TDS in Tally Prime — configuration + entries',
+      },
       callout: {
         kind: 'tip',
         text: 'Some firms use F5 (Payment) directly, with TDS deducted at the moment of payment. Both work — pick the one your firm uses consistently.',

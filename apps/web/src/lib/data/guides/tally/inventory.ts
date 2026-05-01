@@ -38,6 +38,10 @@ export const TALLY_INVENTORY: Guide = {
       label: 'Godowns',
       title: 'Create godowns (warehouses)',
       body: 'Gateway → **Create** → **Godown**.\n\n- **Name:** *Mumbai Main Warehouse*\n- **Under:** Primary (or another godown for sub-warehouses)\n- **Address**\n\nRepeat for each location: *Delhi DC*, *Cochin Branch*, *Showroom*, etc.\n\nFrom now on every stock-affecting voucher asks **"From which godown?"**.',
+      video: {
+        youtubeId: 'bXT7-iFvo4A',
+        caption: 'Godown management in Tally Prime — multi-location stock',
+      },
       check: {
         question: 'Godowns created?',
         options: [

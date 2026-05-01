@@ -24,6 +24,10 @@ export const ZOHO_INVENTORY: Guide = {
       label: 'Enable',
       title: 'Turn on inventory tracking',
       body: '**Settings** → **Preferences** → **Items** → **Enable Inventory Tracking**.\n\nThis adds:\n- Stock on hand on every item\n- Warehouse + batch + serial fields on vouchers\n- Inventory reports module\n\nIf your business is **service-only**, skip this.',
+      video: {
+        youtubeId: '9au4kFztpNE',
+        caption: 'Manage inventory in Zoho Books — full beginner tutorial',
+      },
       callout: {
         kind: 'warning',
         text: "Once enabled, you'll be asked to enter **opening stock** for each goods item. Don't skip this — opening stock is what your year-1 balance sheet builds on.",
