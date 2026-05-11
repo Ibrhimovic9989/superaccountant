@@ -319,17 +319,13 @@ export function QuizPlayer({ submitLead }: Props) {
           to.
         </p>
         <a
-          href="#enroll"
+          href="/en/sign-in"
           className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3.5 text-base font-medium text-bg transition-colors hover:bg-accent/90"
         >
           See cohort details
           <ArrowRight className="h-4 w-4 rtl:rotate-180" />
         </a>
       </div>
-
-      <p className="mt-8 text-center text-xs text-fg-subtle">
-        We've also emailed a copy of your result to <strong>{email}</strong>.
-      </p>
     </div>
   )
 }
