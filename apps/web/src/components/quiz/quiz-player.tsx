@@ -76,6 +76,12 @@ export function QuizPlayer({ submitLead }: Props) {
       setError("That email doesn't look right.")
       return
     }
+    // Phone: digits / spaces / + / - / ( ) only, at least 7 digits total.
+    const digitsOnly = phone.replace(/\D/g, '')
+    if (digitsOnly.length < 7) {
+      setError('Please share a phone number so we can send your cohort details.')
+      return
+    }
     const { score, bucket } = scoreAnswers(answers)
     startSubmit(async () => {
       try {
@@ -231,7 +237,7 @@ export function QuizPlayer({ submitLead }: Props) {
           </label>
           <label className="block">
             <span className="mb-2 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-fg-muted">
-              Phone (optional)
+              Phone
             </span>
             <input
               type="tel"

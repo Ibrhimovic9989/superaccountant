@@ -27,11 +27,21 @@ export default async function QuizPage({
     answers: Record<string, string>
   }) {
     'use server'
+    // Server-side guard — never trust the client. If any of the three
+    // required fields is missing or malformed, refuse to persist and
+    // bubble the error back to the UI.
+    const name = args.name?.trim() ?? ''
+    const email = args.email?.trim().toLowerCase() ?? ''
+    const phone = args.phone?.trim() ?? ''
+    if (name.length < 2) throw new Error('Name is required')
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Valid email is required')
+    if (phone.replace(/\D/g, '').length < 7) throw new Error('Valid phone is required')
+
     const hdrs = await headers()
     await createMarketingLead({
-      name: args.name,
-      email: args.email,
-      phone: args.phone.length > 0 ? args.phone : null,
+      name,
+      email,
+      phone,
       source: '/quiz',
       quizSlug: 'accountant-dna',
       quizScore: args.score,
