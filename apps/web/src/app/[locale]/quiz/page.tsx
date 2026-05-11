@@ -1,7 +1,9 @@
+import { Logo } from '@/components/brand/logo'
 import { QuizPlayer } from '@/components/quiz/quiz-player'
 import { createMarketingLead } from '@/lib/data/leads'
 import type { SupportedLocale } from '@sa/i18n'
 import { headers } from 'next/headers'
+import Link from 'next/link'
 
 /**
  * Public marketing page — no auth gate. Lead-gen funnel into the cohort.
@@ -54,6 +56,11 @@ export default async function QuizPage({
 
   return (
     <div className="min-h-screen bg-bg text-fg">
+      <header className="mx-auto max-w-5xl px-4 pt-8 sm:px-6">
+        <Link href={`/${locale}/cohort`} className="inline-flex items-center gap-2.5">
+          <Logo size="sm" />
+        </Link>
+      </header>
       <main className="mx-auto max-w-5xl">
         <QuizPlayer submitLead={submitLead} />
       </main>

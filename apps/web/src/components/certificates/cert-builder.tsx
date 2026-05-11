@@ -390,9 +390,16 @@ function PreviewCard({
       style={{ borderColor: accent }}
     >
       <div className="mb-3 h-1.5 w-1/3" style={{ backgroundColor: accent }} />
-      <p className="font-mono text-[8px] uppercase tracking-widest text-slate-500">
-        SUPERACCOUNTANT
-      </p>
+      <div className="mb-1 flex items-center gap-2">
+        <img
+          src="https://nmiiqyfwvbcvtwumtwil.supabase.co/storage/v1/object/public/logo/WhatsApp_Image_2026-05-09_at_11.23.21-removebg-preview.png"
+          alt="Superaccountant"
+          className="h-6 w-6 object-contain"
+        />
+        <p className="font-mono text-[8px] uppercase tracking-widest text-slate-500">
+          SUPERACCOUNTANT
+        </p>
+      </div>
       <h3 className="mt-1 text-lg font-bold leading-tight">{title || '—'}</h3>
       <p className="mt-3 text-[10px] text-slate-500">This certificate is proudly presented to</p>
       <p className="mt-1 text-xl font-bold" style={{ color: accent }}>

@@ -1,4 +1,4 @@
-import { Document, Font, Page, StyleSheet, Text, View, pdf } from '@react-pdf/renderer'
+import { Document, Font, Image, Page, StyleSheet, Text, View, pdf } from '@react-pdf/renderer'
 /**
  * Server-rendered e-certificate template via @react-pdf/renderer.
  *
@@ -10,6 +10,7 @@ import { Document, Font, Page, StyleSheet, Text, View, pdf } from '@react-pdf/re
  */
 import React from 'react'
 import type { ReactElement } from 'react'
+import { LOGO_URL } from '../brand'
 
 // Keep React in scope so this module also works under non-automatic-JSX
 // runtimes (e.g. when invoked from a tsx smoke-test script).
@@ -48,6 +49,17 @@ const styles = StyleSheet.create({
     border: '1.5pt solid',
     padding: 32,
     position: 'relative',
+  },
+  brandRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 24,
+  },
+  brandLogo: {
+    height: 44,
+    width: 44,
+    objectFit: 'contain',
   },
   brandBand: {
     height: 8,
@@ -158,7 +170,12 @@ function CertificateDocument({
       <Page size="A4" orientation="landscape" style={styles.page}>
         <View style={[styles.innerBorder, { borderColor: accent }]}>
           <View style={[styles.brandBand, { backgroundColor: accent }]} />
-          <Text style={styles.eyebrow}>Superaccountant</Text>
+          <View style={styles.brandRow}>
+            {/* The logo PNG is fetched + embedded by @react-pdf/renderer
+                at PDF gen time. Server-side fetch — no client/CORS issues. */}
+            <Image src={LOGO_URL} style={styles.brandLogo} />
+            <Text style={styles.eyebrow}>Superaccountant</Text>
+          </View>
           <Text style={styles.title}>{template.title}</Text>
           <Text style={styles.presentedTo}>This certificate is proudly presented to</Text>
           <Text style={[styles.name, { color: accent }]}>{data.recipientName}</Text>

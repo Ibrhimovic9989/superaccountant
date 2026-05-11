@@ -1,3 +1,4 @@
+import { Logo } from '@/components/brand/logo'
 import { EnrollForm } from '@/components/cohort/enroll-form'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { BorderBeam } from '@/components/magicui/border-beam'
@@ -69,6 +70,13 @@ export default async function CohortPage({
   return (
     <div className="min-h-screen bg-bg text-fg">
       <main className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-20">
+        {/* ── Brand header ──────────────────────────────────── */}
+        <BlurFade delay={0.02}>
+          <Link href={`/${locale}/cohort`} className="mb-10 inline-flex items-center gap-2.5">
+            <Logo size="sm" />
+          </Link>
+        </BlurFade>
+
         {/* ── Hero ───────────────────────────────────────────── */}
         <BlurFade delay={0.05}>
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted">
