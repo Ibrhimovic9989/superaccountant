@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   Download,
   ExternalLink,
+  FileDown,
   FileText,
   Loader2,
   Upload,
@@ -93,6 +94,29 @@ export function CertificateBuilder({ generate }: Props) {
   function clearCsv() {
     setCsvFileName(null)
     setRecipientsRaw('')
+  }
+
+  /**
+   * Download a CSV template that matches exactly what parseRecipients
+   * accepts: a `Name,Email` header on line 1, then one recipient per
+   * line. Three sample rows so the structure is obvious — including
+   * one with a blank email to make the optional-email pattern clear.
+   */
+  function downloadTemplate() {
+    const csv =
+      'Name,Email\n' +
+      'Aisha Sharma,aisha@example.com\n' +
+      'Rahul Mehta,rahul@example.com\n' +
+      'Fatima Khan,\n'
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'superaccountant-certificate-recipients-template.csv'
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
   }
 
   function submit() {
@@ -226,7 +250,16 @@ export function CertificateBuilder({ generate }: Props) {
             with name and email columns.
           </p>
 
-          <div className="mb-3 flex items-center gap-2">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={downloadTemplate}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-bg-elev px-3 py-2 text-xs font-medium text-fg-muted transition-colors hover:bg-bg-overlay hover:text-fg"
+              title="Download a sample CSV with the correct columns"
+            >
+              <FileDown className="h-3.5 w-3.5" />
+              Download CSV template
+            </button>
             <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-bg-elev px-3 py-2 text-xs font-medium text-fg-muted transition-colors hover:bg-bg-overlay hover:text-fg">
               <Upload className="h-3.5 w-3.5" />
               {csvFileName ?? 'Upload CSV'}
