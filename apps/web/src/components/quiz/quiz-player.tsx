@@ -319,7 +319,7 @@ export function QuizPlayer({ submitLead }: Props) {
           to.
         </p>
         <a
-          href="/en/sign-in"
+          href="/en/cohort"
           className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3.5 text-base font-medium text-bg transition-colors hover:bg-accent/90"
         >
           See cohort details
