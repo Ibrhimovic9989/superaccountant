@@ -1,7 +1,18 @@
 import { Logo } from '@/components/brand/logo'
-import { EnrollForm } from '@/components/cohort/enroll-form'
+import { ApplyAndPay } from '@/components/cohort/apply-and-pay'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { BorderBeam } from '@/components/magicui/border-beam'
+import {
+  createRazorpayOrder,
+  getPublicRazorpayKeyId,
+  verifyPaymentSignature,
+} from '@/lib/cohort/razorpay'
+import {
+  formatPrice,
+  getActiveCohortForTrack,
+  markApplicationPaid,
+  upsertPendingApplication,
+} from '@/lib/cohort/store'
 import { createMarketingLead } from '@/lib/data/leads'
 import type { SupportedLocale } from '@sa/i18n'
 import {
@@ -39,32 +50,90 @@ export default async function CohortPage({
 }) {
   const { locale } = await params
 
-  async function submit(args: {
+  // The active Indian-track cohort is the live one for this page.
+  // (Saudi Mu'tamad cohort dates TBA — we still capture leads via the
+  // marketing form for that track.)
+  const cohort = await getActiveCohortForTrack('india')
+
+  async function createOrder(input: {
+    cohortId: string
     name: string
     email: string
     phone: string
     goal: string
   }) {
     'use server'
-    const name = args.name?.trim() ?? ''
-    const email = args.email?.trim().toLowerCase() ?? ''
-    const phone = args.phone?.trim() ?? ''
+    const name = input.name.trim()
+    const email = input.email.trim().toLowerCase()
+    const phone = input.phone.trim()
     if (name.length < 2) throw new Error('Name is required')
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Valid email is required')
     if (phone.replace(/\D/g, '').length < 7) throw new Error('Valid phone is required')
+    if (!cohort) throw new Error('No active cohort')
+    if (input.cohortId !== cohort.id) throw new Error('Cohort mismatch')
 
+    // Always log the marketing lead too — even if payment is abandoned,
+    // we keep the contact for follow-up.
     const hdrs = await headers()
     await createMarketingLead({
       name,
       email,
       phone,
       source: '/cohort',
-      // Re-use the quizAnswers JSONB slot for the "why you're joining"
-      // intent — same shape as the quiz-derived jobGoal field.
-      quizAnswers: { jobGoal: args.goal },
+      quizAnswers: { jobGoal: input.goal },
       locale,
+      track: cohort.track,
       userAgent: hdrs.get('user-agent') ?? null,
+    }).catch(() => {
+      // Non-fatal — duplicate inserts will just fail silently.
     })
+
+    const order = await createRazorpayOrder({
+      amountMinor: cohort.discountedPriceMinor,
+      currency: cohort.currency,
+      receipt: `coh_${cohort.slug}_${Date.now()}`,
+      notes: {
+        cohortSlug: cohort.slug,
+        cohortName: cohort.name,
+        name,
+        email,
+        phone,
+        jobGoal: input.goal,
+      },
+    })
+
+    const applicationId = await upsertPendingApplication({
+      cohortId: cohort.id,
+      name,
+      email,
+      phone,
+      jobGoal: input.goal,
+      razorpayOrderId: order.id,
+      amountMinor: cohort.discountedPriceMinor,
+      currency: cohort.currency,
+    })
+
+    return {
+      applicationId,
+      orderId: order.id,
+      amountMinor: order.amount,
+      currency: order.currency,
+      keyId: getPublicRazorpayKeyId(),
+    }
+  }
+
+  async function verifyPayment(input: {
+    razorpayOrderId: string
+    razorpayPaymentId: string
+    razorpaySignature: string
+  }) {
+    'use server'
+    const ok = verifyPaymentSignature(input)
+    if (!ok) {
+      return { ok: false as const, error: 'invalid_signature' }
+    }
+    await markApplicationPaid(input)
+    return { ok: true as const }
   }
 
   return (
@@ -101,7 +170,9 @@ export default async function CohortPage({
               href="#apply"
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-7 py-4 text-base font-medium text-bg transition-colors hover:bg-accent/90"
             >
-              Apply for the next cohort
+              {cohort
+                ? `Reserve seat — ${formatPrice(cohort.discountedPriceMinor, cohort.currency)}`
+                : 'Apply for the next cohort'}
               <ArrowRight className="h-4 w-4 rtl:rotate-180" />
             </a>
             <Link
@@ -112,6 +183,55 @@ export default async function CohortPage({
             </Link>
           </div>
         </BlurFade>
+
+        {/* ── Active cohort highlight card ──────────────────── */}
+        {cohort && (
+          <BlurFade delay={0.22}>
+            <div className="mt-10 overflow-hidden rounded-2xl border-2 border-accent/40 bg-gradient-to-br from-accent-soft/40 via-bg-elev/40 to-bg-elev/40 p-6 sm:p-8">
+              <div className="grid gap-6 sm:grid-cols-[1fr_auto] sm:items-end">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-accent">
+                    Next cohort · Indian Chartered
+                  </p>
+                  <h2 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">
+                    {cohort.name}
+                  </h2>
+                  <p className="mt-1.5 text-sm text-fg-muted">
+                    Starts{' '}
+                    <strong className="text-fg">
+                      {cohort.startDate.toLocaleDateString('en-GB', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                        timeZone: 'UTC',
+                      })}
+                    </strong>
+                    {cohort.city ? ` · ${cohort.city}` : ''} · {cohort.durationDays} days · Limited
+                    to {cohort.seatsTotal} seats
+                  </p>
+                </div>
+                <div className="text-end">
+                  <div className="flex items-baseline justify-end gap-3">
+                    <span className="text-3xl font-bold tracking-tight text-fg sm:text-4xl">
+                      {formatPrice(cohort.discountedPriceMinor, cohort.currency)}
+                    </span>
+                    <span className="text-base text-fg-subtle line-through">
+                      {formatPrice(cohort.originalPriceMinor, cohort.currency)}
+                    </span>
+                  </div>
+                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-success">
+                    {Math.round(
+                      ((cohort.originalPriceMinor - cohort.discountedPriceMinor) /
+                        cohort.originalPriceMinor) *
+                        100,
+                    )}
+                    % launch discount · One-time fee
+                  </p>
+                </div>
+              </div>
+            </div>
+          </BlurFade>
+        )}
 
         {/* ── Quick facts strip ──────────────────────────────── */}
         <BlurFade delay={0.25}>
@@ -389,16 +509,35 @@ export default async function CohortPage({
           </div>
         </Section>
 
-        {/* ── Apply form ─────────────────────────────────────── */}
+        {/* ── Apply + pay form ──────────────────────────────── */}
         <section id="apply" className="mt-20 scroll-mt-12">
           <BlurFade delay={0.7}>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted">
               <Sparkles className="h-3 w-3 text-accent" />
-              Apply
+              Apply + pay
             </div>
           </BlurFade>
           <BlurFade delay={0.72}>
-            <EnrollForm submit={submit} />
+            {cohort ? (
+              <ApplyAndPay
+                cohortId={cohort.id}
+                cohortName={cohort.name}
+                amountMinor={cohort.discountedPriceMinor}
+                originalPriceMinor={cohort.originalPriceMinor}
+                currency={cohort.currency}
+                priceLabel={formatPrice(cohort.discountedPriceMinor, cohort.currency)}
+                originalPriceLabel={formatPrice(cohort.originalPriceMinor, cohort.currency)}
+                createOrder={createOrder}
+                verifyPayment={verifyPayment}
+              />
+            ) : (
+              <div className="rounded-2xl border border-border bg-bg-elev/40 p-6 sm:p-8">
+                <p className="text-base text-fg-muted">
+                  No cohort is currently open for enrolment. Drop us a note and we'll WhatsApp you
+                  the moment the next cohort opens.
+                </p>
+              </div>
+            )}
           </BlurFade>
         </section>
 
