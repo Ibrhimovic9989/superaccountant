@@ -1,5 +1,17 @@
-import { redirect } from 'next/navigation'
-import Link from 'next/link'
+import { AppNav } from '@/components/app-nav'
+import { AnimatedList } from '@/components/magicui/animated-list'
+import { BlurFade } from '@/components/magicui/blur-fade'
+import { BorderBeam } from '@/components/magicui/border-beam'
+import { MagicCard } from '@/components/magicui/magic-card'
+import { NumberTicker } from '@/components/magicui/number-ticker'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { auth } from '@/lib/auth'
+import { getAccessTier } from '@/lib/cohort/access'
+import { type Badge as AchievementBadge, getAchievements } from '@/lib/data/achievements'
+import { getDashboardSnapshot } from '@/lib/data/dashboard'
+import { getUserProfile } from '@/lib/data/profile'
+import { cn } from '@/lib/utils'
 import {
   ArrowRight,
   BookOpen,
@@ -11,19 +23,8 @@ import {
   Target,
 } from 'lucide-react'
 import { Trophy } from 'lucide-react'
-import { auth } from '@/lib/auth'
-import { getDashboardSnapshot } from '@/lib/data/dashboard'
-import { getAchievements, type Badge as AchievementBadge } from '@/lib/data/achievements'
-import { getUserProfile } from '@/lib/data/profile'
-import { AppNav } from '@/components/app-nav'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { BlurFade } from '@/components/magicui/blur-fade'
-import { BorderBeam } from '@/components/magicui/border-beam'
-import { MagicCard } from '@/components/magicui/magic-card'
-import { NumberTicker } from '@/components/magicui/number-ticker'
-import { AnimatedList } from '@/components/magicui/animated-list'
-import { cn } from '@/lib/utils'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 export default async function Dashboard({
   params,
@@ -39,14 +40,13 @@ export default async function Dashboard({
   if (!u?.preferredTrack) redirect(`/${locale}/welcome`)
   if (!u.profileCompletedAt) redirect(`/${locale}/welcome/profile`)
 
-  const [snap, badges] = await Promise.all([
+  const [snap, badges, tier] = await Promise.all([
     getDashboardSnapshot(session.user.id),
     getAchievements(session.user.id, u.preferredTrack),
+    getAccessTier(session.user.id),
   ])
-  const firstName =
-    session.user.name?.split(' ')[0] ?? session.user.email?.split('@')[0] ?? ''
-  const trackLabel =
-    snap.market === 'india' ? 'India · Chartered Path' : "KSA · Mu'tamad Path"
+  const firstName = session.user.name?.split(' ')[0] ?? session.user.email?.split('@')[0] ?? ''
+  const trackLabel = snap.market === 'india' ? 'India · Chartered Path' : "KSA · Mu'tamad Path"
 
   const masteryPct = Math.round(snap.averageMastery * 100)
 
@@ -59,6 +59,49 @@ export default async function Dashboard({
       />
 
       <main className="mx-auto max-w-6xl px-6 py-12">
+        {/* ── Cohort access banner ────────────────────────── */}
+        {tier.kind === 'preview' && (
+          <BlurFade delay={0.02}>
+            <Link
+              href={`/${locale}/cohort`}
+              className="mb-8 flex flex-col gap-3 rounded-2xl border-2 border-accent/40 bg-gradient-to-r from-accent-soft/50 to-bg-elev/50 p-5 transition-colors hover:border-accent/60 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-accent">
+                  ✨ Preview access
+                </p>
+                <p className="mt-1 text-base font-medium tracking-tight">
+                  Reserve a seat in the next cohort to unlock daily AI assignments, the tutor, and
+                  your certificate.
+                </p>
+                <p className="mt-0.5 text-xs text-fg-muted">
+                  Starting at ₹24,999 · 50% launch discount · Mumbai · 1 Jun 2026
+                </p>
+              </div>
+              <span className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-accent/90">
+                Reserve seat
+                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+              </span>
+            </Link>
+          </BlurFade>
+        )}
+        {tier.kind === 'paid-cohort' && (
+          <BlurFade delay={0.02}>
+            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/5 px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-success">
+              <CheckCircle2 className="h-3 w-3" />
+              Enrolled · {tier.cohortName}
+            </div>
+          </BlurFade>
+        )}
+        {(tier.kind === 'admin' || tier.kind === 'staff') && (
+          <BlurFade delay={0.02}>
+            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-warning/30 bg-warning/5 px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-warning">
+              <Sparkles className="h-3 w-3" />
+              {tier.kind === 'admin' ? 'Admin' : 'Staff'} · full access
+            </div>
+          </BlurFade>
+        )}
+
         {/* ── Greeting ─────────────────────────────────────── */}
         <BlurFade delay={0.05}>
           <div className="mb-2 flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
@@ -200,9 +243,7 @@ export default async function Dashboard({
             <StatTile
               label={locale === 'ar' ? 'المرحلة' : 'Phase'}
               icon={<Target className="h-3.5 w-3.5" />}
-              value={
-                snap.phases.find((p) => p.completed < p.total)?.order ?? snap.phases.length
-              }
+              value={snap.phases.find((p) => p.completed < p.total)?.order ?? snap.phases.length}
               suffix={`/${snap.phases.length}`}
             />
           </div>
@@ -232,7 +273,7 @@ export default async function Dashboard({
                   <p className="mt-2 text-sm text-fg-muted">
                     {locale === 'ar'
                       ? 'لا توجد خطة اليوم بعد'
-                      : "No plan yet for today — check back tomorrow."}
+                      : 'No plan yet for today — check back tomorrow.'}
                   </p>
                 </div>
               ) : (
@@ -244,9 +285,7 @@ export default async function Dashboard({
                       className="group flex items-center gap-3 rounded-lg border border-border bg-bg p-3 transition-colors hover:border-border-strong hover:bg-bg-overlay"
                     >
                       <KindBadge kind={item.kind} locale={locale} />
-                      <span className="flex-1 text-sm font-medium text-fg">
-                        {item.lessonTitle}
-                      </span>
+                      <span className="flex-1 text-sm font-medium text-fg">{item.lessonTitle}</span>
                       <ArrowRight className="h-3.5 w-3.5 text-fg-subtle transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
                     </Link>
                   ))}
@@ -286,10 +325,7 @@ export default async function Dashboard({
                             {isDone ? '✓' : p.order}
                           </span>
                           <span
-                            className={cn(
-                              'font-medium',
-                              isCurrent ? 'text-fg' : 'text-fg-muted',
-                            )}
+                            className={cn('font-medium', isCurrent ? 'text-fg' : 'text-fg-muted')}
                           >
                             {locale === 'ar' ? p.titleAr : p.titleEn}
                           </span>
