@@ -81,7 +81,7 @@ export default async function CohortPage({
         <BlurFade delay={0.05}>
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted">
             <Sparkles className="h-3 w-3 text-accent" />
-            45-day offline cohort · India
+            45-day offline cohort · Two tracks
           </div>
         </BlurFade>
         <BlurFade delay={0.1}>
@@ -122,6 +122,76 @@ export default async function CohortPage({
             <Fact icon={<Trophy className="h-4 w-4" />} label="Placement" value="Included" />
           </div>
         </BlurFade>
+
+        {/* ── Two tracks ─────────────────────────────────────── */}
+        <Section
+          delay={0.28}
+          eyebrow="Pick your track"
+          title="Two cohorts. Same depth. Built for where you actually work."
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-2xl border-2 border-accent/40 bg-accent-soft/20 p-6 sm:p-7">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl" aria-hidden>
+                  🇮🇳
+                </span>
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-accent">
+                    Track 1
+                  </p>
+                  <h3 className="text-xl font-semibold tracking-tight">Indian Chartered</h3>
+                </div>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-fg-muted">
+                For India-based students. Companies Act 2013, Income Tax Act 1961, CGST/SGST/IGST,
+                TDS, ICAI standards, Ind AS where relevant. Tally Prime is the primary tool, with
+                Zoho Books + QuickBooks as bonus skills.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {['Companies Act', 'GST', 'TDS', 'Ind AS', 'Tally Prime', '₹'].map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center rounded-md border border-border bg-bg-elev px-2 py-0.5 text-xs text-fg-muted"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-2xl border-2 border-success/40 bg-success/5 p-6 sm:p-7">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl" aria-hidden>
+                  🇸🇦
+                </span>
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-success">
+                    Track 2
+                  </p>
+                  <h3 className="text-xl font-semibold tracking-tight">Saudi Mu'tamad</h3>
+                </div>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-fg-muted">
+                For KSA-based students. ZATCA regulations, VAT Implementing Regs, Zakat Bylaws, IFRS
+                as endorsed by SOCPA, Saudi Companies Law. Fatoora Phase 2 e-invoicing is built into
+                the curriculum, not an afterthought.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {['ZATCA', 'VAT 15%', 'Zakat', 'Fatoora', 'IFRS · SOCPA', 'SAR'].map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center rounded-md border border-border bg-bg-elev px-2 py-0.5 text-xs text-fg-muted"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+          <p className="mt-4 text-center text-xs text-fg-subtle">
+            You pick your track during sign-up. The cohort calendar, instructors, and tutor are all
+            tuned to your jurisdiction — no mixed content.
+          </p>
+        </Section>
 
         {/* ── Who it's for ───────────────────────────────────── */}
         <Section

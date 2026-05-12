@@ -1,24 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { BorderBeam } from '@/components/magicui/border-beam'
+import { MagicCard } from '@/components/magicui/magic-card'
+import { NumberTicker } from '@/components/magicui/number-ticker'
+import { Button } from '@/components/ui/button'
+import type { PoolCounts } from '@/lib/data/welcome'
+import { cn } from '@/lib/utils'
 import { ArrowRight, Check } from 'lucide-react'
 import { motion } from 'motion/react'
-import { Button } from '@/components/ui/button'
-import { MagicCard } from '@/components/magicui/magic-card'
-import { BorderBeam } from '@/components/magicui/border-beam'
-import { NumberTicker } from '@/components/magicui/number-ticker'
-import { cn } from '@/lib/utils'
-import type { PoolCounts } from '@/lib/data/welcome'
+import { useState } from 'react'
 
 type Market = 'india' | 'ksa'
 
 const COPY = {
   en: {
     indiaName: 'India',
-    indiaTrack: 'Chartered Path',
+    indiaTrack: 'Indian Chartered',
     indiaTags: ['Companies Act', 'GST', 'Income Tax', 'TDS', 'Tally Prime'],
     ksaName: 'Saudi Arabia',
-    ksaTrack: "Mu'tamad Path",
+    ksaTrack: "Saudi Mu'tamad",
     ksaTags: ['ZATCA', 'VAT', 'Zakat', 'Fatoora', 'IFRS · SOCPA'],
     questions: 'questions in your placement test',
     cta: 'Start placement test',
@@ -26,10 +26,10 @@ const COPY = {
   },
   ar: {
     indiaName: 'الهند',
-    indiaTrack: 'المسار المعتمد',
+    indiaTrack: 'المحاسب الهندي المعتمد',
     indiaTags: ['قانون الشركات', 'GST', 'ضريبة الدخل', 'TDS', 'تالي'],
     ksaName: 'المملكة العربية السعودية',
-    ksaTrack: 'مسار مُعتمَد',
+    ksaTrack: 'المُعتمَد السعودي',
     ksaTags: ['ZATCA', 'ضريبة القيمة المضافة', 'الزكاة', 'فاتورة', 'IFRS · SOCPA'],
     questions: 'سؤال في اختبار التحديد',
     cta: 'ابدأ اختبار التحديد',
