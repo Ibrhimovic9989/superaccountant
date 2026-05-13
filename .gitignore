@@ -49,3 +49,8 @@ coverage
 contexts/curriculum/seed/**/generated/
 *.mp4
 *.mkv
+
+.vercel
+
+# Internal handoff docs with credentials — never commit
+docs/INTERNAL-*.md

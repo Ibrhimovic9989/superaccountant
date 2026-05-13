@@ -149,6 +149,46 @@ export async function markApplicationPaid(args: {
   `
 }
 
+/**
+ * Webhook-driven paid transition. Razorpay webhooks don't carry the
+ * Checkout-style signature (that one is only emitted client-side), so
+ * we just record the payment id. Idempotent: a row already in 'paid'
+ * stays in 'paid'.
+ */
+export async function markApplicationPaidByWebhook(args: {
+  razorpayOrderId: string
+  razorpayPaymentId: string
+}): Promise<void> {
+  await prisma.$executeRaw`
+    UPDATE "CohortApplication"
+    SET "status" = 'paid',
+        "razorpayPaymentId" = ${args.razorpayPaymentId},
+        "paidAt" = COALESCE("paidAt", NOW()),
+        "updatedAt" = NOW()
+    WHERE "razorpayOrderId" = ${args.razorpayOrderId}
+      AND "status" <> 'paid'
+  `
+}
+
+export async function markApplicationFailed(orderId: string): Promise<void> {
+  await prisma.$executeRaw`
+    UPDATE "CohortApplication"
+    SET "status" = 'failed',
+        "updatedAt" = NOW()
+    WHERE "razorpayOrderId" = ${orderId}
+      AND "status" = 'pending'
+  `
+}
+
+export async function markApplicationRefundedByPaymentId(paymentId: string): Promise<void> {
+  await prisma.$executeRaw`
+    UPDATE "CohortApplication"
+    SET "status" = 'refunded',
+        "updatedAt" = NOW()
+    WHERE "razorpayPaymentId" = ${paymentId}
+  `
+}
+
 export async function getApplicationByOrderId(orderId: string): Promise<CohortApplication | null> {
   const rows = await prisma.$queryRaw<CohortApplication[]>`
     SELECT "id", "cohortId", "name", "email", "phone", "jobGoal",

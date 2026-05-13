@@ -1,0 +1,31 @@
+# Don't ship node_modules — Vercel runs pnpm install fresh on every build.
+node_modules
+**/node_modules
+
+# Build artefacts (Vercel rebuilds them).
+.next
+**/.next
+dist
+**/dist
+.turbo
+**/.turbo
+
+# Editor + OS junk.
+.DS_Store
+.idea
+.vscode
+
+# Local env files (Vercel uses its own env injection).
+.env
+.env.*.local
+**/.env
+**/.env.*.local
+
+# Test caches.
+.cache
+**/.cache
+playwright-report
+test-results
+
+# Heavy claude-code reference checkout we keep around for codebase studies.
+claude-code

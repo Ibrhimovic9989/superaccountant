@@ -546,6 +546,17 @@ export default async function CohortPage({
             Superaccountant · Built for the people most other programs ignore · Bilingual (EN /
             हिंदी)
           </p>
+          <p className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+            <Link href={`/${locale}/terms`} className="hover:text-fg">
+              Terms &amp; Conditions
+            </Link>
+            <span className="text-fg-subtle/40">·</span>
+            <Link href={`/${locale}/refund-policy`} className="hover:text-fg">
+              Refund Policy
+            </Link>
+            <span className="text-fg-subtle/40">·</span>
+            <span>info@superaccountant.in</span>
+          </p>
         </footer>
       </main>
 

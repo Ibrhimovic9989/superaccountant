@@ -1,9 +1,9 @@
 'use client'
 
-import * as React from 'react'
-import { AlertTriangle, Download, Repeat, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { SubmitButton } from '@/components/ui/loading'
+import { AlertTriangle, Download, Repeat, Trash2 } from 'lucide-react'
+import * as React from 'react'
 
 type Props = {
   locale: 'en' | 'ar'
@@ -24,7 +24,8 @@ const COPY = {
         : "You're on the Mu'tamad Path (KSA). Switching to Chartered Path (India) will reset your placement test — your profile and history are kept.",
     switchCta: 'Switch tracks',
     switchPending: 'Resetting…',
-    switchConfirm: 'This will clear your placement and send you back to the welcome flow. Continue?',
+    switchConfirm:
+      'This will clear your placement and send you back to the welcome flow. Continue?',
 
     exportTitle: 'Export your data',
     exportBody:
@@ -54,8 +55,7 @@ const COPY = {
     switchConfirm: 'سيؤدي هذا إلى مسح تحديدك وإعادتك إلى تدفق الترحيب. هل تريد المتابعة؟',
 
     exportTitle: 'صدّر بياناتك',
-    exportBody:
-      'حمّل لقطة JSON لكل ما نحتفظ به عنك — الملف الشخصي، المحاولات، الدروس، الشهادات.',
+    exportBody: 'حمّل لقطة JSON لكل ما نحتفظ به عنك — الملف الشخصي، المحاولات، الدروس، الشهادات.',
     exportCta: 'تنزيل بياناتي',
     exportPending: 'جارٍ التحضير…',
 
@@ -146,12 +146,7 @@ export function ProfileDangerZone({
           title={t.exportTitle}
           body={t.exportBody}
         >
-          <Button
-            type="button"
-            variant="secondary"
-            disabled={exporting}
-            onClick={handleExport}
-          >
+          <Button type="button" variant="secondary" disabled={exporting} onClick={handleExport}>
             <Download className="h-3.5 w-3.5" />
             {exporting ? t.exportPending : t.exportCta}
           </Button>
@@ -196,9 +191,7 @@ function Row({
   return (
     <div
       className={`flex flex-col gap-4 rounded-2xl border p-5 sm:flex-row sm:items-center sm:justify-between ${
-        tone === 'danger'
-          ? 'border-danger/30 bg-danger/5'
-          : 'border-border bg-bg-elev/50'
+        tone === 'danger' ? 'border-danger/30 bg-danger/5' : 'border-border bg-bg-elev/50'
       }`}
     >
       <div className="flex items-start gap-3">
