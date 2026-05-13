@@ -1,5 +1,12 @@
-import { redirect } from 'next/navigation'
-import Link from 'next/link'
+import { AppNav } from '@/components/app-nav'
+import { BlurFade } from '@/components/magicui/blur-fade'
+import { BorderBeam } from '@/components/magicui/border-beam'
+import { Badge } from '@/components/ui/badge'
+import { auth } from '@/lib/auth'
+import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
+import { getUserProfile } from '@/lib/data/profile'
+import { cn } from '@/lib/utils'
+import type { SupportedLocale } from '@sa/i18n'
 import {
   ArrowRight,
   BookOpen,
@@ -9,14 +16,8 @@ import {
   IndianRupee,
   Landmark,
 } from 'lucide-react'
-import { auth } from '@/lib/auth'
-import type { SupportedLocale } from '@sa/i18n'
-import { AppNav } from '@/components/app-nav'
-import { Badge } from '@/components/ui/badge'
-import { BlurFade } from '@/components/magicui/blur-fade'
-import { BorderBeam } from '@/components/magicui/border-beam'
-import { getUserProfile } from '@/lib/data/profile'
-import { cn } from '@/lib/utils'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 const COPY = {
   en: {
@@ -146,6 +147,8 @@ export default async function PracticeLabPage({
   const { locale } = await params
   const session = await auth()
   if (!session?.user?.id) redirect(`/${locale}/sign-in`)
+  const tier = await getAccessTier(session.user.id)
+  if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
   const u = await getUserProfile(session.user.id)
   if (!u?.preferredTrack) redirect(`/${locale}/welcome`)
   const t = COPY[locale]
@@ -234,12 +237,7 @@ export default async function PracticeLabPage({
                     </Link>
                   )}
                   {scenario.live && (
-                    <BorderBeam
-                      size={100}
-                      duration={10}
-                      colorFrom="#a78bfa"
-                      colorTo="#8b5cf6"
-                    />
+                    <BorderBeam size={100} duration={10} colorFrom="#a78bfa" colorTo="#8b5cf6" />
                   )}
                 </div>
               </BlurFade>

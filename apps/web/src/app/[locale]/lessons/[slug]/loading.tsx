@@ -36,7 +36,6 @@ export default function LessonLoading() {
               <Skeleton key={i} className="h-4 w-full" />
             ))}
           </div>
-
         </div>
       </main>
       <LoadingFacts floating />

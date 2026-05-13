@@ -1,8 +1,9 @@
-import { notFound, redirect } from 'next/navigation'
-import { auth } from '@/lib/auth'
-import { getLessonBySlug } from '@/lib/data/lessons'
-import { LessonShell } from '@/components/lesson/lesson-shell'
 import { AppNav } from '@/components/app-nav'
+import { LessonShell } from '@/components/lesson/lesson-shell'
+import { auth } from '@/lib/auth'
+import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
+import { getLessonBySlug } from '@/lib/data/lessons'
+import { notFound, redirect } from 'next/navigation'
 
 export default async function LessonPage({
   params,
@@ -12,6 +13,8 @@ export default async function LessonPage({
   const { locale, slug } = await params
   const session = await auth()
   if (!session?.user?.id) redirect(`/${locale}/sign-in`)
+  const tier = await getAccessTier(session.user.id)
+  if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
 
   const lesson = await getLessonBySlug(slug)
   if (!lesson) notFound()

@@ -1,16 +1,17 @@
-import { redirect } from 'next/navigation'
-import Link from 'next/link'
-import { ArrowRight, BookOpen, Check, Lock, Map, Target } from 'lucide-react'
-import { auth } from '@/lib/auth'
-import type { SupportedLocale } from '@sa/i18n'
 import { AppNav } from '@/components/app-nav'
-import { Badge } from '@/components/ui/badge'
 import { BlurFade } from '@/components/magicui/blur-fade'
-import { NumberTicker } from '@/components/magicui/number-ticker'
 import { BorderBeam } from '@/components/magicui/border-beam'
+import { NumberTicker } from '@/components/magicui/number-ticker'
+import { Badge } from '@/components/ui/badge'
+import { auth } from '@/lib/auth'
+import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
 import { getUserProfile } from '@/lib/data/profile'
-import { getRoadmap, type RoadmapPhase } from '@/lib/data/roadmap'
+import { type RoadmapPhase, getRoadmap } from '@/lib/data/roadmap'
 import { cn } from '@/lib/utils'
+import type { SupportedLocale } from '@sa/i18n'
+import { ArrowRight, BookOpen, Check, Lock, Map as MapIcon, Target } from 'lucide-react'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 const COPY = {
   en: {
@@ -59,15 +60,18 @@ export default async function RoadmapPage({
   const { locale } = await params
   const session = await auth()
   if (!session?.user?.id) redirect(`/${locale}/sign-in`)
+  const tier = await getAccessTier(session.user.id)
+  if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
 
   const u = await getUserProfile(session.user.id)
   if (!u?.preferredTrack) redirect(`/${locale}/welcome`)
 
   const roadmap = await getRoadmap(session.user.id, u.preferredTrack)
   const t = COPY[locale]
-  const pct = roadmap.totalLessons > 0
-    ? Math.round((roadmap.completedLessons / roadmap.totalLessons) * 100)
-    : 0
+  const pct =
+    roadmap.totalLessons > 0
+      ? Math.round((roadmap.completedLessons / roadmap.totalLessons) * 100)
+      : 0
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-bg text-fg">
@@ -81,7 +85,7 @@ export default async function RoadmapPage({
         {/* Header */}
         <BlurFade delay={0.05}>
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted">
-            <Map className="h-3 w-3 text-accent" />
+            <MapIcon className="h-3 w-3 text-accent" />
             {t.badge}
           </div>
         </BlurFade>
@@ -101,9 +105,7 @@ export default async function RoadmapPage({
                   value={roadmap.completedLessons}
                   className="font-mono text-2xl font-medium tracking-tight sm:text-3xl"
                 />
-                <span className="text-xs text-fg-subtle">
-                  / {roadmap.totalLessons}
-                </span>
+                <span className="text-xs text-fg-subtle">/ {roadmap.totalLessons}</span>
               </div>
               <p className="mt-1 font-mono text-[9px] uppercase tracking-wider text-fg-subtle sm:text-[10px]">
                 {t.lessonsCompleted}
@@ -132,10 +134,10 @@ export default async function RoadmapPage({
             <div className="p-4 text-center sm:p-5">
               <span className="font-mono text-2xl font-medium tracking-tight sm:text-3xl">
                 {roadmap.targetExamDate
-                  ? roadmap.targetExamDate.toLocaleDateString(
-                      locale === 'ar' ? 'ar-SA' : 'en-GB',
-                      { month: 'short', year: 'numeric' },
-                    )
+                  ? roadmap.targetExamDate.toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-GB', {
+                      month: 'short',
+                      year: 'numeric',
+                    })
                   : '—'}
               </span>
               <p className="mt-1 font-mono text-[9px] uppercase tracking-wider text-fg-subtle sm:text-[10px]">
@@ -149,7 +151,9 @@ export default async function RoadmapPage({
         <BlurFade delay={0.25}>
           <div className="mt-6 space-y-2">
             <div className="flex items-center justify-between text-xs text-fg-muted">
-              <span>{pct}% {t.completed}</span>
+              <span>
+                {pct}% {t.completed}
+              </span>
               <span>
                 {roadmap.completedLessons} {t.completedOf} {roadmap.totalLessons}
               </span>
@@ -200,9 +204,8 @@ function PhaseCard({
 }) {
   const isDone = phase.completedCount === phase.totalCount && phase.totalCount > 0
   const isCurrent = !isDone && phase.completedCount > 0
-  const phasePct = phase.totalCount > 0
-    ? Math.round((phase.completedCount / phase.totalCount) * 100)
-    : 0
+  const phasePct =
+    phase.totalCount > 0 ? Math.round((phase.completedCount / phase.totalCount) * 100) : 0
 
   return (
     <BlurFade delay={0.1 + phaseIdx * 0.06}>

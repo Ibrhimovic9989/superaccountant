@@ -55,3 +55,30 @@ export function hasFullAccess(tier: AccessTier): boolean {
 export function isAdmin(tier: AccessTier): boolean {
   return tier.kind === 'admin'
 }
+
+// ── Page guard ────────────────────────────────────────────────
+
+/**
+ * Drop-in guard for cohort-gated pages.
+ *
+ *   const { userId, tier } = await requireFullAccess(locale)
+ *
+ *   - Not signed in       → redirect to /sign-in
+ *   - Signed in, preview  → redirect to /cohort (must enrol + pay)
+ *   - paid / staff / admin → returns { userId, tier }
+ *
+ * Import { redirect } in the calling page is NOT needed — this helper
+ * throws Next's NEXT_REDIRECT internally and short-circuits the page.
+ */
+import { auth } from '@/lib/auth'
+import { redirect } from 'next/navigation'
+
+export async function requireFullAccess(
+  locale: string,
+): Promise<{ userId: string; tier: AccessTier }> {
+  const session = await auth()
+  if (!session?.user?.id) redirect(`/${locale}/sign-in`)
+  const tier = await getAccessTier(session.user.id)
+  if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
+  return { userId: session.user.id, tier }
+}

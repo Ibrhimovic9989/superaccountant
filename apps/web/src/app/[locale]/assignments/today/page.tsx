@@ -1,20 +1,14 @@
-import { redirect } from 'next/navigation'
-import Link from 'next/link'
-import {
-  ArrowRight,
-  BookOpen,
-  CalendarDays,
-  CircleDot,
-  RotateCcw,
-  Sparkles,
-} from 'lucide-react'
-import { auth } from '@/lib/auth'
-import { PUBLIC_CONFIG } from '@/lib/config/public'
-import type { SupportedLocale } from '@sa/i18n'
 import { AppNav } from '@/components/app-nav'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { Button } from '@/components/ui/button'
+import { auth } from '@/lib/auth'
+import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
+import { PUBLIC_CONFIG } from '@/lib/config/public'
 import { cn } from '@/lib/utils'
+import type { SupportedLocale } from '@sa/i18n'
+import { ArrowRight, BookOpen, CalendarDays, CircleDot, RotateCcw, Sparkles } from 'lucide-react'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 type DailyItem = {
   kind: 'review' | 'weak' | 'new'
@@ -28,9 +22,7 @@ const COPY = {
     badge: 'Daily plan',
     title: "Today's plan",
     subtitleWith: (n: number) =>
-      n === 1
-        ? '1 item · approximately 5 minutes'
-        : `${n} items · approximately ${n * 5} minutes`,
+      n === 1 ? '1 item · approximately 5 minutes' : `${n} items · approximately ${n * 5} minutes`,
     empty: 'No plan yet for today',
     emptyBody: 'A new plan is generated automatically every morning.',
     open: 'Open lesson',
@@ -81,6 +73,8 @@ export default async function TodayPage({
   const { locale } = await params
   const session = await auth()
   if (!session?.user?.id) redirect(`/${locale}/sign-in`)
+  const tier = await getAccessTier(session.user.id)
+  if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
   const userId = session.user.id
   const t = COPY[locale]
 
@@ -91,10 +85,9 @@ export default async function TodayPage({
   const cronSecret = process.env.CRON_SECRET ?? process.env.NEXTAUTH_SECRET ?? ''
   const fetchToday = async (): Promise<DailyResponse> => {
     try {
-      const res = await fetch(
-        `${PUBLIC_CONFIG.apiUrl}/assignments/today?userId=${userId}`,
-        { cache: 'no-store' },
-      )
+      const res = await fetch(`${PUBLIC_CONFIG.apiUrl}/assignments/today?userId=${userId}`, {
+        cache: 'no-store',
+      })
       if (res.ok) return (await res.json()) as DailyResponse
     } catch {}
     return { itemCount: 0, items: [] }

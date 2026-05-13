@@ -2,6 +2,7 @@ import { AppNav } from '@/components/app-nav'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { Badge } from '@/components/ui/badge'
 import { auth } from '@/lib/auth'
+import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
 import { getUserProfile } from '@/lib/data/profile'
 import type { Song, SongVerse } from '@/lib/data/songs'
 import { getSongBySlug, getSongsForMarket } from '@/lib/data/songs'
@@ -95,6 +96,8 @@ export default async function SongDetailPage({
   const { locale, slug } = await params
   const session = await auth()
   if (!session?.user?.id) redirect(`/${locale}/sign-in`)
+  const tier = await getAccessTier(session.user.id)
+  if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
   const u = await getUserProfile(session.user.id)
   if (!u?.preferredTrack) redirect(`/${locale}/welcome`)
 

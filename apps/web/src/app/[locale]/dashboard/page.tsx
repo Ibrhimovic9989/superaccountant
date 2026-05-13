@@ -7,7 +7,7 @@ import { NumberTicker } from '@/components/magicui/number-ticker'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { auth } from '@/lib/auth'
-import { getAccessTier } from '@/lib/cohort/access'
+import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
 import { type Badge as AchievementBadge, getAchievements } from '@/lib/data/achievements'
 import { getDashboardSnapshot } from '@/lib/data/dashboard'
 import { getUserProfile } from '@/lib/data/profile'
@@ -40,10 +40,14 @@ export default async function Dashboard({
   if (!u?.preferredTrack) redirect(`/${locale}/welcome`)
   if (!u.profileCompletedAt) redirect(`/${locale}/welcome/profile`)
 
-  const [snap, badges, tier] = await Promise.all([
+  // Cohort gate — preview-tier users get bounced to /cohort to enrol.
+  // Admin / staff / paid-cohort flow through.
+  const tier = await getAccessTier(session.user.id)
+  if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
+
+  const [snap, badges] = await Promise.all([
     getDashboardSnapshot(session.user.id),
     getAchievements(session.user.id, u.preferredTrack),
-    getAccessTier(session.user.id),
   ])
   const firstName = session.user.name?.split(' ')[0] ?? session.user.email?.split('@')[0] ?? ''
   const trackLabel = snap.market === 'india' ? 'India · Chartered Path' : "KSA · Mu'tamad Path"
@@ -59,32 +63,7 @@ export default async function Dashboard({
       />
 
       <main className="mx-auto max-w-6xl px-6 py-12">
-        {/* ── Cohort access banner ────────────────────────── */}
-        {tier.kind === 'preview' && (
-          <BlurFade delay={0.02}>
-            <Link
-              href={`/${locale}/cohort`}
-              className="mb-8 flex flex-col gap-3 rounded-2xl border-2 border-accent/40 bg-gradient-to-r from-accent-soft/50 to-bg-elev/50 p-5 transition-colors hover:border-accent/60 sm:flex-row sm:items-center sm:justify-between"
-            >
-              <div>
-                <p className="font-mono text-[10px] uppercase tracking-wider text-accent">
-                  ✨ Preview access
-                </p>
-                <p className="mt-1 text-base font-medium tracking-tight">
-                  Reserve a seat in the next cohort to unlock daily AI assignments, the tutor, and
-                  your certificate.
-                </p>
-                <p className="mt-0.5 text-xs text-fg-muted">
-                  Starting at ₹24,999 · 50% launch discount · Mumbai · 1 Jun 2026
-                </p>
-              </div>
-              <span className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-accent/90">
-                Reserve seat
-                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-              </span>
-            </Link>
-          </BlurFade>
-        )}
+        {/* ── Cohort access pill ──────────────────────────── */}
         {tier.kind === 'paid-cohort' && (
           <BlurFade delay={0.02}>
             <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/5 px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-success">

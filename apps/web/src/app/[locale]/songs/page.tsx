@@ -3,6 +3,7 @@ import { BlurFade } from '@/components/magicui/blur-fade'
 import { BorderBeam } from '@/components/magicui/border-beam'
 import { Badge } from '@/components/ui/badge'
 import { auth } from '@/lib/auth'
+import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
 import { getUserProfile } from '@/lib/data/profile'
 import { getSongsForMarket } from '@/lib/data/songs'
 import { cn } from '@/lib/utils'
@@ -40,6 +41,8 @@ export default async function SongsPage({
   const { locale } = await params
   const session = await auth()
   if (!session?.user?.id) redirect(`/${locale}/sign-in`)
+  const tier = await getAccessTier(session.user.id)
+  if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
   const u = await getUserProfile(session.user.id)
   if (!u?.preferredTrack) redirect(`/${locale}/welcome`)
   const t = COPY[locale]

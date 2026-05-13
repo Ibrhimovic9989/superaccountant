@@ -1,13 +1,14 @@
-import { redirect } from 'next/navigation'
-import { ArrowLeft, FileX } from 'lucide-react'
-import Link from 'next/link'
-import { auth } from '@/lib/auth'
-import { PUBLIC_CONFIG } from '@/lib/config/public'
-import type { SupportedLocale } from '@sa/i18n'
 import { AppNav } from '@/components/app-nav'
 import { CertificateCard } from '@/components/certificate/certificate-card'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { Button } from '@/components/ui/button'
+import { auth } from '@/lib/auth'
+import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
+import { PUBLIC_CONFIG } from '@/lib/config/public'
+import type { SupportedLocale } from '@sa/i18n'
+import { ArrowLeft, FileX } from 'lucide-react'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 type VerifyResult = {
   valid: boolean
@@ -25,6 +26,8 @@ export default async function CertificatePage({
   const { locale, hash } = await params
   const session = await auth()
   if (!session?.user?.id) redirect(`/${locale}/sign-in`)
+  const tier = await getAccessTier(session.user.id)
+  if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
 
   let v: VerifyResult = { valid: false }
   try {

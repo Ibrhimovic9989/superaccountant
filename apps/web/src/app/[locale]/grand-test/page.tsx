@@ -1,10 +1,11 @@
-import { redirect } from 'next/navigation'
-import { GraduationCap } from 'lucide-react'
-import { auth } from '@/lib/auth'
-import { GrandTestRunner } from '@/components/grand-test/grand-test-runner'
 import { AppNav } from '@/components/app-nav'
+import { GrandTestRunner } from '@/components/grand-test/grand-test-runner'
 import { BlurFade } from '@/components/magicui/blur-fade'
+import { auth } from '@/lib/auth'
+import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
 import type { SupportedLocale } from '@sa/i18n'
+import { GraduationCap } from 'lucide-react'
+import { redirect } from 'next/navigation'
 
 const COPY = {
   en: { badge: 'Final exam', title: 'Grand test' },
@@ -19,6 +20,8 @@ export default async function GrandTestPage({
   const { locale } = await params
   const session = await auth()
   if (!session?.user?.id) redirect(`/${locale}/sign-in`)
+  const tier = await getAccessTier(session.user.id)
+  if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
   const t = COPY[locale]
 
   return (

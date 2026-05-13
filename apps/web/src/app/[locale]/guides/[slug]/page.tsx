@@ -1,6 +1,7 @@
 import { AppNav } from '@/components/app-nav'
 import { GuidePlayer } from '@/components/guide/guide-player'
 import { auth } from '@/lib/auth'
+import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
 import { getGuideBySlug, getGuidesForMarket } from '@/lib/data/guides'
 import { getUserProfile } from '@/lib/data/profile'
 import type { SupportedLocale } from '@sa/i18n'
@@ -18,6 +19,8 @@ export default async function GuideDetailPage({
   const { locale, slug } = await params
   const session = await auth()
   if (!session?.user?.id) redirect(`/${locale}/sign-in`)
+  const tier = await getAccessTier(session.user.id)
+  if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
   const u = await getUserProfile(session.user.id)
   if (!u?.preferredTrack) redirect(`/${locale}/welcome`)
 
