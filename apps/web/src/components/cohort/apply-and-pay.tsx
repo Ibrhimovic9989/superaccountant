@@ -461,6 +461,8 @@ function enrollFreeErrorCopy(error: string): string {
     case 'invalid_email':
     case 'invalid_phone':
       return 'Please double-check your details.'
+    case 'server_error':
+      return 'Something went wrong on our side — please retry or contact us.'
     default:
       return 'Could not complete enrolment — please try again or contact support.'
   }

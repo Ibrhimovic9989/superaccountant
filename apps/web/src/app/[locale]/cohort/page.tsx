@@ -71,25 +71,34 @@ export default async function CohortPage({
     | { ok: false; reason: string }
   > {
     'use server'
-    if (!cohort) return { ok: false, reason: 'no_active_cohort' }
-    if (input.cohortId !== cohort.id) return { ok: false, reason: 'cohort_mismatch' }
-    const res = await validateDiscountCode({
-      code: input.code,
-      cohortId: cohort.id,
-      baseAmountMinor: cohort.discountedPriceMinor,
-    })
-    if (!res.ok) return { ok: false, reason: res.reason }
-    // Only 100%-off codes are supported via this form for now. Partial
-    // codes would need to be plumbed through the Razorpay create-order
-    // path; we'll add that when there's an actual partial code to ship.
-    if (res.discountedAmountMinor !== 0) {
-      return { ok: false, reason: 'partial_not_supported' }
-    }
-    return {
-      ok: true,
-      discountPercent: res.code.discountPercent,
-      discountedAmountMinor: res.discountedAmountMinor,
-      isFree: true,
+    try {
+      if (!cohort) return { ok: false, reason: 'no_active_cohort' }
+      if (input.cohortId !== cohort.id) return { ok: false, reason: 'cohort_mismatch' }
+      const res = await validateDiscountCode({
+        code: input.code,
+        cohortId: cohort.id,
+        baseAmountMinor: cohort.discountedPriceMinor,
+      })
+      if (!res.ok) return { ok: false, reason: res.reason }
+      // Only 100%-off codes are supported via this form for now. Partial
+      // codes would need to be plumbed through the Razorpay create-order
+      // path; we'll add that when there's an actual partial code to ship.
+      if (res.discountedAmountMinor !== 0) {
+        return { ok: false, reason: 'partial_not_supported' }
+      }
+      return {
+        ok: true,
+        discountPercent: res.code.discountPercent,
+        discountedAmountMinor: res.discountedAmountMinor,
+        isFree: true,
+      }
+    } catch (err) {
+      console.error('[applyDiscountCode] failed', {
+        cohortId: input.cohortId,
+        codeLength: input.code?.length ?? 0,
+        err,
+      })
+      return { ok: false, reason: 'server_error' }
     }
   }
 
@@ -189,52 +198,61 @@ export default async function CohortPage({
     code: string
   }): Promise<{ ok: true } | { ok: false; error: string }> {
     'use server'
-    const name = input.name.trim()
-    const email = input.email.trim().toLowerCase()
-    const phone = input.phone.trim()
-    const formError = checkApplicantFields({ name, email, phone })
-    if (formError) return { ok: false, error: formError }
-    if (!cohort) return { ok: false, error: 'no_active_cohort' }
-    if (input.cohortId !== cohort.id) return { ok: false, error: 'cohort_mismatch' }
+    try {
+      const name = input.name.trim()
+      const email = input.email.trim().toLowerCase()
+      const phone = input.phone.trim()
+      const formError = checkApplicantFields({ name, email, phone })
+      if (formError) return { ok: false, error: formError }
+      if (!cohort) return { ok: false, error: 'no_active_cohort' }
+      if (input.cohortId !== cohort.id) return { ok: false, error: 'cohort_mismatch' }
 
-    const res = await validateDiscountCode({
-      code: input.code,
-      cohortId: cohort.id,
-      baseAmountMinor: cohort.discountedPriceMinor,
-    })
-    if (!res.ok || res.discountedAmountMinor !== 0) {
-      return { ok: false, error: 'invalid_code' }
+      const res = await validateDiscountCode({
+        code: input.code,
+        cohortId: cohort.id,
+        baseAmountMinor: cohort.discountedPriceMinor,
+      })
+      if (!res.ok || res.discountedAmountMinor !== 0) {
+        return { ok: false, error: 'invalid_code' }
+      }
+
+      const consumed = await consumeDiscountCode(res.code.id)
+      if (!consumed) {
+        return { ok: false, error: 'code_exhausted' }
+      }
+
+      const hdrs = await headers()
+      await createMarketingLead({
+        name,
+        email,
+        phone,
+        source: '/cohort',
+        quizAnswers: { jobGoal: input.goal, discountCode: res.code.code },
+        locale,
+        track: cohort.track,
+        userAgent: hdrs.get('user-agent') ?? null,
+      }).catch(() => {})
+
+      await createPaidApplicationFree({
+        cohortId: cohort.id,
+        name,
+        email,
+        phone,
+        jobGoal: input.goal,
+        discountCode: res.code.code,
+        originalAmountMinor: cohort.discountedPriceMinor,
+        currency: cohort.currency,
+      })
+
+      return { ok: true }
+    } catch (err) {
+      console.error('[enrollFree] failed', {
+        cohortId: input.cohortId,
+        email: input.email,
+        err,
+      })
+      return { ok: false, error: 'server_error' }
     }
-
-    const consumed = await consumeDiscountCode(res.code.id)
-    if (!consumed) {
-      return { ok: false, error: 'code_exhausted' }
-    }
-
-    const hdrs = await headers()
-    await createMarketingLead({
-      name,
-      email,
-      phone,
-      source: '/cohort',
-      quizAnswers: { jobGoal: input.goal, discountCode: res.code.code },
-      locale,
-      track: cohort.track,
-      userAgent: hdrs.get('user-agent') ?? null,
-    }).catch(() => {})
-
-    await createPaidApplicationFree({
-      cohortId: cohort.id,
-      name,
-      email,
-      phone,
-      jobGoal: input.goal,
-      discountCode: res.code.code,
-      originalAmountMinor: cohort.discountedPriceMinor,
-      currency: cohort.currency,
-    })
-
-    return { ok: true }
   }
 
   return (
