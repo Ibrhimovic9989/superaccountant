@@ -58,6 +58,29 @@ export async function getActiveCohortForTrack(track: 'india' | 'ksa'): Promise<C
   return rows[0] ?? null
 }
 
+export async function getActiveCohorts(): Promise<Cohort[]> {
+  return prisma.$queryRaw<Cohort[]>`
+    SELECT "id", "slug", "track", "name", "city",
+           "startDate", "durationDays",
+           "currency", "originalPriceMinor", "discountedPriceMinor",
+           "seatsTotal", "status"
+    FROM "Cohort"
+    WHERE "status" = 'open'
+    ORDER BY "track" ASC, "startDate" ASC
+  `
+}
+
+export async function getCohortById(id: string): Promise<Cohort | null> {
+  const rows = await prisma.$queryRaw<Cohort[]>`
+    SELECT "id", "slug", "track", "name", "city",
+           "startDate", "durationDays",
+           "currency", "originalPriceMinor", "discountedPriceMinor",
+           "seatsTotal", "status"
+    FROM "Cohort" WHERE "id" = ${id} LIMIT 1
+  `
+  return rows[0] ?? null
+}
+
 export async function getCohortBySlug(slug: string): Promise<Cohort | null> {
   const rows = await prisma.$queryRaw<Cohort[]>`
     SELECT "id", "slug", "track", "name", "city",

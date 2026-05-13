@@ -1,6 +1,8 @@
 'use client'
 
-import { ArrowRight, CheckCircle2, CreditCard, Loader2, ShieldCheck } from 'lucide-react'
+import { ArrowRight, CheckCircle2, CreditCard, Loader2, LogIn, ShieldCheck } from 'lucide-react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState, useTransition } from 'react'
 import {
   type AppliedDiscount,
@@ -9,18 +11,22 @@ import {
 } from './discount-code-input'
 
 /**
- * Two-step apply-and-pay flow for a cohort:
+ * Apply-and-pay flow for a cohort. Public marketing page, gated payment.
  *
- *   1. Collect name / email / phone / goal → server action creates the
- *      CohortApplication (pending) + a Razorpay order, returns the order
- *      id + the public Razorpay key.
- *   2. We load Razorpay's Checkout script, open the modal with the order
- *      id, and on success POST back to the server to verify the signature.
- *      The application moves from `pending` → `paid`.
+ * Public: anyone can read the page.
+ * Gated:  to reserve, the user must be signed in. Their session email
+ *         is the source of truth (server actions re-fetch it; the input
+ *         is read-only on the client).
  *
- * If the user closes the modal we leave the application in `pending` — they
- * can retry by re-submitting the form (server action will UPSERT a fresh
- * order against the same email).
+ * Two payment paths:
+ *   - Razorpay (default): createOrder → open Checkout → verifyPayment.
+ *   - 100%-off discount code: skip Razorpay, enrollFree directly.
+ *
+ * Track selection: the user picks which cohort (Indian Chartered vs
+ * Saudi Mu'tamad). Each cohort has its own price + currency.
+ *
+ * On success: redirect to /dashboard. No interstitial green screen —
+ * the dashboard is gated and will let the user in.
  */
 
 type CreateOrderResponse = {
@@ -35,51 +41,40 @@ type VerifyResponse = { ok: true } | { ok: false; error: string }
 
 type EnrollFreeResponse = { ok: true } | { ok: false; error: string }
 
-type Props = {
-  cohortId: string
-  cohortName: string
+export type CohortOption = {
+  id: string
+  name: string
+  track: 'india' | 'ksa'
   amountMinor: number
   originalPriceMinor: number
   currency: 'INR' | 'SAR'
   priceLabel: string
   originalPriceLabel: string
-  /**
-   * Server action: creates the CohortApplication + Razorpay order.
-   * Returns the order details the browser needs to open Checkout.
-   */
+}
+
+type Props = {
+  cohorts: CohortOption[]
+  sessionUser: { email: string; name: string } | null
+  signInUrl: string
+  successUrl: string
   createOrder: (input: {
     cohortId: string
     name: string
-    email: string
     phone: string
     goal: string
   }) => Promise<CreateOrderResponse>
-  /**
-   * Server action: verifies the Razorpay HMAC signature and marks
-   * the application as paid. Returns ok=true on success.
-   */
   verifyPayment: (input: {
     razorpayOrderId: string
     razorpayPaymentId: string
     razorpaySignature: string
   }) => Promise<VerifyResponse>
-  /**
-   * Server action: validate a discount code against the active cohort.
-   * Codes are never enumerated to the client — only validation results.
-   */
   applyDiscountCode: (input: {
     cohortId: string
     code: string
   }) => Promise<DiscountApplyResponse>
-  /**
-   * Server action: 100%-off enrolment that skips Razorpay entirely.
-   * Server re-validates the code, atomically consumes a use, and
-   * inserts a paid CohortApplication directly.
-   */
   enrollFree: (input: {
     cohortId: string
     name: string
-    email: string
     phone: string
     goal: string
     code: string
@@ -94,7 +89,6 @@ const GOAL_OPTIONS = [
   { value: 'exploring', label: 'Just exploring' },
 ] as const
 
-// Razorpay Checkout — globally available once the script loads.
 type RazorpayOptions = {
   key: string
   amount: number
@@ -119,35 +113,114 @@ declare global {
 }
 
 export function ApplyAndPay({
-  cohortId,
-  cohortName,
-  amountMinor,
-  originalPriceMinor,
-  currency,
-  priceLabel,
-  originalPriceLabel,
+  cohorts,
+  sessionUser,
+  signInUrl,
+  successUrl,
   createOrder,
   verifyPayment,
   applyDiscountCode,
   enrollFree,
 }: Props) {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
+  const router = useRouter()
+
+  // Unauthenticated → render the sign-in CTA instead of the form.
+  if (!sessionUser) {
+    return <SignInGate signInUrl={signInUrl} cohorts={cohorts} />
+  }
+
+  return (
+    <AuthedForm
+      cohorts={cohorts}
+      sessionUser={sessionUser}
+      successUrl={successUrl}
+      router={router}
+      createOrder={createOrder}
+      verifyPayment={verifyPayment}
+      applyDiscountCode={applyDiscountCode}
+      enrollFree={enrollFree}
+    />
+  )
+}
+
+function SignInGate({ signInUrl, cohorts }: { signInUrl: string; cohorts: CohortOption[] }) {
+  const first = cohorts[0]
+  if (!first) return null
+  const cheapest = cohorts.reduce((min, c) => (c.amountMinor < min.amountMinor ? c : min), first)
+  return (
+    <div className="rounded-2xl border-2 border-accent/40 bg-accent-soft/30 p-6 sm:p-8">
+      <div className="mb-1 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent-soft px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent">
+        <ShieldCheck className="h-3 w-3" />
+        Secure payment via Razorpay
+      </div>
+      <h3 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Reserve your seat</h3>
+      <p className="mt-3 text-base text-fg-muted">
+        Sign in to reserve a seat in your cohort. We use your account email for the receipt and to
+        send onboarding materials. Both tracks unlock the same AI tutor + classroom curriculum — you
+        pick which jurisdiction during sign-up.
+      </p>
+      <p className="mt-2 text-sm text-fg-muted">
+        Prices start from <strong className="text-fg">{cheapest.priceLabel}</strong>.
+      </p>
+      <Link
+        href={signInUrl}
+        className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-7 py-4 text-base font-medium text-bg transition-colors hover:bg-accent/90"
+      >
+        <LogIn className="h-4 w-4" />
+        Sign in to reserve seat
+        <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+      </Link>
+      <p className="mt-3 text-[11px] text-fg-subtle">
+        New here? Same flow — sign in with Google or email and you'll land back on this page.
+      </p>
+    </div>
+  )
+}
+
+type AuthedFormProps = Omit<Props, 'signInUrl'> & {
+  sessionUser: { email: string; name: string }
+  router: ReturnType<typeof useRouter>
+}
+
+function AuthedForm(props: AuthedFormProps) {
+  // Guard outside the hook-using body so we don't violate Rules of Hooks.
+  const first = props.cohorts[0]
+  if (!first) return null
+  const initial = props.cohorts.find((c) => c.track === 'india') ?? first
+  return <AuthedFormBody {...props} initialCohort={initial} />
+}
+
+type AuthedFormBodyProps = AuthedFormProps & { initialCohort: CohortOption }
+
+function AuthedFormBody({
+  cohorts,
+  sessionUser,
+  successUrl,
+  router,
+  createOrder,
+  verifyPayment,
+  applyDiscountCode,
+  enrollFree,
+  initialCohort,
+}: AuthedFormBodyProps) {
+  const [selectedId, setSelectedId] = useState(initialCohort.id)
+  const cohort = cohorts.find((c) => c.id === selectedId) ?? initialCohort
+
+  const [name, setName] = useState(sessionUser.name)
   const [phone, setPhone] = useState('')
   const [goal, setGoal] = useState<(typeof GOAL_OPTIONS)[number]['value']>('first-job')
   const [error, setError] = useState<string | null>(null)
   const [paid, setPaid] = useState(false)
   const [pending, startTransition] = useTransition()
-
-  // Discount-code state — server is authoritative; we just cache its
-  // validation response so we can show the user the new price.
   const [applied, setApplied] = useState<AppliedDiscount | null>(null)
 
-  // Effective price for display + payment.
-  const effectiveAmountMinor = applied ? applied.finalAmountMinor : amountMinor
-  const effectivePriceLabel = applied ? formatMinor(effectiveAmountMinor, currency) : priceLabel
+  // Effective price for display + Razorpay charge amount.
+  const effectiveAmountMinor = applied ? applied.finalAmountMinor : cohort.amountMinor
+  const effectivePriceLabel = applied
+    ? formatMinor(effectiveAmountMinor, cohort.currency)
+    : cohort.priceLabel
   const discountPct = Math.round(
-    ((originalPriceMinor - effectiveAmountMinor) / originalPriceMinor) * 100,
+    ((cohort.originalPriceMinor - effectiveAmountMinor) / cohort.originalPriceMinor) * 100,
   )
 
   // Lazy-load Razorpay Checkout once on mount.
@@ -157,14 +230,26 @@ export function ApplyAndPay({
     script.src = 'https://checkout.razorpay.com/v1/checkout.js'
     script.async = true
     document.body.appendChild(script)
-    return () => {
-      // We deliberately don't remove the script; Checkout caches DOM state.
-    }
   }, [])
+
+  // Redirect to dashboard once paid — server has already inserted the
+  // CohortApplication with status='paid', so the dashboard gate will
+  // recognise this user immediately.
+  useEffect(() => {
+    if (paid) router.push(successUrl)
+  }, [paid, router, successUrl])
+
+  // Clear any applied discount when the user switches tracks — a code
+  // valid for one cohort may not be valid for another.
+  function onSelectCohort(id: string) {
+    if (id === selectedId) return
+    setSelectedId(id)
+    setApplied(null)
+    setError(null)
+  }
 
   function validateForm(): string | null {
     if (name.trim().length < 2) return 'Please share your name.'
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return "That email doesn't look right."
     if (phone.replace(/\D/g, '').length < 7) {
       return 'A valid phone number lets us reach out about onboarding.'
     }
@@ -174,9 +259,8 @@ export function ApplyAndPay({
   async function runFreeEnrol(appliedCode: string) {
     try {
       const res = await enrollFree({
-        cohortId,
+        cohortId: cohort.id,
         name: name.trim(),
-        email: email.trim().toLowerCase(),
         phone: phone.trim(),
         goal,
         code: appliedCode,
@@ -191,6 +275,64 @@ export function ApplyAndPay({
     }
   }
 
+  async function runRazorpay() {
+    try {
+      const order = await createOrder({
+        cohortId: cohort.id,
+        name: name.trim(),
+        phone: phone.trim(),
+        goal,
+      })
+      if (!order.keyId) {
+        throw new Error('Payments not configured — set NEXT_PUBLIC_RAZORPAY_KEY_ID.')
+      }
+      if (!window.Razorpay) {
+        throw new Error('Razorpay Checkout failed to load.')
+      }
+      const rzp = new window.Razorpay({
+        key: order.keyId,
+        amount: order.amountMinor,
+        currency: order.currency,
+        name: 'Superaccountant',
+        description: cohort.name,
+        order_id: order.orderId,
+        prefill: { name: name.trim(), email: sessionUser.email, contact: phone.trim() },
+        theme: { color: '#7c3aed' },
+        modal: {
+          ondismiss: () => {
+            setError('Payment cancelled — you can retry any time.')
+          },
+          escape: true,
+        },
+        handler: async (resp) => {
+          try {
+            const result = await verifyPayment({
+              razorpayOrderId: resp.razorpay_order_id,
+              razorpayPaymentId: resp.razorpay_payment_id,
+              razorpaySignature: resp.razorpay_signature,
+            })
+            if (!result.ok) {
+              setError(
+                `Payment received but verification failed (${result.error}). Our team will contact you within 24 hours.`,
+              )
+              return
+            }
+            setPaid(true)
+          } catch (err) {
+            setError(
+              err instanceof Error
+                ? err.message
+                : 'Verification call failed — please contact support.',
+            )
+          }
+        },
+      })
+      rzp.open()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not start payment.')
+    }
+  }
+
   function onSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
@@ -200,7 +342,6 @@ export function ApplyAndPay({
       return
     }
 
-    // 100%-off discount → skip Razorpay entirely, enrol directly.
     if (applied?.isFree) {
       startTransition(() => runFreeEnrol(applied.code))
       return
@@ -211,86 +352,10 @@ export function ApplyAndPay({
       return
     }
 
-    startTransition(async () => {
-      try {
-        const order = await createOrder({
-          cohortId,
-          name: name.trim(),
-          email: email.trim().toLowerCase(),
-          phone: phone.trim(),
-          goal,
-        })
-        if (!order.keyId) {
-          throw new Error('Payments not configured — set NEXT_PUBLIC_RAZORPAY_KEY_ID in .env.')
-        }
-        if (!window.Razorpay) {
-          throw new Error('Razorpay Checkout failed to load.')
-        }
-        const rzp = new window.Razorpay({
-          key: order.keyId,
-          amount: order.amountMinor,
-          currency: order.currency,
-          name: 'Superaccountant',
-          description: cohortName,
-          order_id: order.orderId,
-          prefill: { name: name.trim(), email: email.trim(), contact: phone.trim() },
-          theme: { color: '#7c3aed' },
-          modal: {
-            ondismiss: () => {
-              setError('Payment cancelled — you can retry any time.')
-            },
-            escape: true,
-          },
-          handler: async (resp) => {
-            try {
-              const result = await verifyPayment({
-                razorpayOrderId: resp.razorpay_order_id,
-                razorpayPaymentId: resp.razorpay_payment_id,
-                razorpaySignature: resp.razorpay_signature,
-              })
-              if (!result.ok) {
-                setError(
-                  `Payment received but verification failed (${result.error}). Our team will contact you within 24 hours.`,
-                )
-                return
-              }
-              setPaid(true)
-            } catch (err) {
-              setError(
-                err instanceof Error
-                  ? err.message
-                  : 'Verification call failed — please contact support.',
-              )
-            }
-          },
-        })
-        rzp.open()
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Could not start payment.')
-      }
-    })
+    startTransition(runRazorpay)
   }
 
-  if (paid) {
-    return (
-      <div className="rounded-2xl border-2 border-success/40 bg-success/5 p-8 text-center sm:p-12">
-        <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full border border-success/40 bg-success/10">
-          <CheckCircle2 className="h-8 w-8 text-success" />
-        </div>
-        <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-          You're in, {name.split(' ')[0]}.
-        </h3>
-        <p className="mt-3 text-base text-fg-muted">
-          Payment received. Your seat in <strong className="text-fg">{cohortName}</strong> is
-          confirmed. Our team will WhatsApp you on <strong>{phone}</strong> within 24 hours with the
-          onboarding kit, classroom location, and prep checklist.
-        </p>
-        <p className="mt-3 text-xs text-fg-subtle">
-          A receipt has been emailed to <strong>{email}</strong>.
-        </p>
-      </div>
-    )
-  }
+  if (paid) return <PaidRedirect firstName={name.split(' ')[0] || 'there'} />
 
   return (
     <form
@@ -303,12 +368,56 @@ export function ApplyAndPay({
       </div>
       <h3 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Reserve your seat</h3>
 
-      <div className="mt-4 flex items-baseline gap-3">
+      {/* Track selector */}
+      {cohorts.length > 1 && (
+        <fieldset className="mt-6">
+          <legend className="mb-2 block font-mono text-[10px] uppercase tracking-wider text-fg-muted">
+            Pick your track
+          </legend>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {cohorts.map((c) => {
+              const selected = c.id === selectedId
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => onSelectCohort(c.id)}
+                  className={`flex flex-col items-start gap-1 rounded-xl border-2 p-4 text-left transition-all ${
+                    selected
+                      ? c.track === 'india'
+                        ? 'border-accent bg-accent-soft text-fg'
+                        : 'border-success bg-success/10 text-fg'
+                      : 'border-border bg-bg-elev/50 text-fg hover:border-border-strong'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl" aria-hidden>
+                      {c.track === 'india' ? '🇮🇳' : '🇸🇦'}
+                    </span>
+                    <span className="text-sm font-semibold tracking-tight">
+                      {c.track === 'india' ? 'Indian Chartered' : "Saudi Mu'tamad"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-fg-muted">{c.name}</p>
+                  <div className="mt-1 flex items-baseline gap-2">
+                    <span className="text-lg font-bold tracking-tight">{c.priceLabel}</span>
+                    <span className="text-xs text-fg-subtle line-through">
+                      {c.originalPriceLabel}
+                    </span>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </fieldset>
+      )}
+
+      <div className="mt-6 flex items-baseline gap-3">
         <span className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">
           {applied?.isFree ? 'FREE' : effectivePriceLabel}
         </span>
         <span className="text-lg text-fg-subtle line-through">
-          {applied ? priceLabel : originalPriceLabel}
+          {applied ? cohort.priceLabel : cohort.originalPriceLabel}
         </span>
         {discountPct > 0 && (
           <span className="rounded-md bg-success/15 px-2 py-1 font-mono text-[11px] font-medium uppercase tracking-wider text-success">
@@ -329,15 +438,17 @@ export function ApplyAndPay({
             onChange={(e) => setName(e.target.value)}
             placeholder="Aisha Sharma"
             className={inputCls}
+            autoComplete="name"
           />
         </Field>
-        <Field label="Email">
+        <Field label="Email (from your account)">
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            className={inputCls}
+            value={sessionUser.email}
+            readOnly
+            tabIndex={-1}
+            aria-readonly="true"
+            className={`${inputCls} cursor-not-allowed opacity-70`}
           />
         </Field>
         <Field label="Phone (WhatsApp preferred)" className="sm:col-span-2">
@@ -345,8 +456,9 @@ export function ApplyAndPay({
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            placeholder={currency === 'INR' ? '+91 98xxx xxxxx' : '+966 5x xxx xxxx'}
+            placeholder={cohort.currency === 'INR' ? '+91 98xxx xxxxx' : '+966 5x xxx xxxx'}
             className={inputCls}
+            autoComplete="tel"
           />
         </Field>
         <Field label="Why you're joining" className="sm:col-span-2">
@@ -371,7 +483,7 @@ export function ApplyAndPay({
 
       <div className="mt-6">
         <DiscountCodeInput
-          cohortId={cohortId}
+          cohortId={cohort.id}
           applied={applied}
           onApply={setApplied}
           onClear={() => setApplied(null)}
@@ -440,6 +552,19 @@ function Field({
   )
 }
 
+function PaidRedirect({ firstName }: { firstName: string }) {
+  return (
+    <div className="rounded-2xl border-2 border-success/40 bg-success/5 p-8 text-center sm:p-12">
+      <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full border border-success/40 bg-success/10">
+        <CheckCircle2 className="h-8 w-8 text-success" />
+      </div>
+      <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">You're in, {firstName}.</h3>
+      <p className="mt-3 text-base text-fg-muted">Redirecting you to your dashboard…</p>
+      <Loader2 className="mx-auto mt-4 h-5 w-5 animate-spin text-fg-muted" />
+    </div>
+  )
+}
+
 function formatMinor(minor: number, currency: 'INR' | 'SAR'): string {
   const major = minor / 100
   if (currency === 'INR') {
@@ -457,8 +582,9 @@ function enrollFreeErrorCopy(error: string): string {
       return "Your code couldn't be confirmed at checkout — please re-apply it."
     case 'code_exhausted':
       return 'That code has just been used up. Please reach out for help.'
+    case 'unauthenticated':
+      return 'Please sign in again to reserve your seat.'
     case 'invalid_name':
-    case 'invalid_email':
     case 'invalid_phone':
       return 'Please double-check your details.'
     case 'server_error':

@@ -2,6 +2,7 @@ import { Logo } from '@/components/brand/logo'
 import { ApplyAndPay } from '@/components/cohort/apply-and-pay'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { BorderBeam } from '@/components/magicui/border-beam'
+import { auth } from '@/lib/auth'
 import {
   createRazorpayOrder,
   getPublicRazorpayKeyId,
@@ -11,12 +12,14 @@ import {
   consumeDiscountCode,
   createPaidApplicationFree,
   formatPrice,
-  getActiveCohortForTrack,
+  getActiveCohorts,
+  getCohortById,
   markApplicationPaid,
   upsertPendingApplication,
   validateDiscountCode,
 } from '@/lib/cohort/store'
 import { createMarketingLead } from '@/lib/data/leads'
+import { cn } from '@/lib/utils'
 import type { SupportedLocale } from '@sa/i18n'
 import {
   ArrowRight,
@@ -52,11 +55,19 @@ export default async function CohortPage({
   params: Promise<{ locale: SupportedLocale }>
 }) {
   const { locale } = await params
+  const session = await auth()
+  const sessionUser = session?.user?.email
+    ? {
+        email: session.user.email.toLowerCase(),
+        name: session.user.name ?? '',
+      }
+    : null
 
-  // The active Indian-track cohort is the live one for this page.
-  // (Saudi Mu'tamad cohort dates TBA — we still capture leads via the
-  // marketing form for that track.)
-  const cohort = await getActiveCohortForTrack('india')
+  // Fetch every active cohort. The applicant picks their track in the
+  // form; the chosen cohort's price + currency drives Razorpay.
+  const cohorts = await getActiveCohorts()
+  const indianCohort = cohorts.find((c) => c.track === 'india') ?? null
+  const primaryCohort = indianCohort ?? cohorts[0] ?? null
 
   /**
    * Apply a discount code. Server-only — codes are never enumerated to
@@ -72,12 +83,14 @@ export default async function CohortPage({
   > {
     'use server'
     try {
-      if (!cohort) return { ok: false, reason: 'no_active_cohort' }
-      if (input.cohortId !== cohort.id) return { ok: false, reason: 'cohort_mismatch' }
+      const target = await getCohortById(input.cohortId)
+      if (!target || target.status !== 'open') {
+        return { ok: false, reason: 'no_active_cohort' }
+      }
       const res = await validateDiscountCode({
         code: input.code,
-        cohortId: cohort.id,
-        baseAmountMinor: cohort.discountedPriceMinor,
+        cohortId: target.id,
+        baseAmountMinor: target.discountedPriceMinor,
       })
       if (!res.ok) return { ok: false, reason: res.reason }
       // Only 100%-off codes are supported via this form for now. Partial
@@ -105,20 +118,21 @@ export default async function CohortPage({
   async function createOrder(input: {
     cohortId: string
     name: string
-    email: string
     phone: string
     goal: string
   }) {
     'use server'
     try {
+      // Re-fetch session inside the action — never trust closure auth.
+      const s = await auth()
+      const email = s?.user?.email?.toLowerCase()
+      if (!email) throw new Error('Please sign in to reserve your seat.')
+      const target = await getCohortById(input.cohortId)
+      if (!target || target.status !== 'open') throw new Error('Cohort is not open')
       const name = input.name.trim()
-      const email = input.email.trim().toLowerCase()
       const phone = input.phone.trim()
       if (name.length < 2) throw new Error('Name is required')
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Valid email is required')
       if (phone.replace(/\D/g, '').length < 7) throw new Error('Valid phone is required')
-      if (!cohort) throw new Error('No active cohort')
-      if (input.cohortId !== cohort.id) throw new Error('Cohort mismatch')
 
       // Always log the marketing lead too — even if payment is abandoned,
       // we keep the contact for follow-up.
@@ -130,19 +144,19 @@ export default async function CohortPage({
         source: '/cohort',
         quizAnswers: { jobGoal: input.goal },
         locale,
-        track: cohort.track,
+        track: target.track,
         userAgent: hdrs.get('user-agent') ?? null,
       }).catch(() => {
         // Non-fatal — duplicate inserts will just fail silently.
       })
 
       const order = await createRazorpayOrder({
-        amountMinor: cohort.discountedPriceMinor,
-        currency: cohort.currency,
-        receipt: `coh_${cohort.slug}_${Date.now()}`,
+        amountMinor: target.discountedPriceMinor,
+        currency: target.currency,
+        receipt: `coh_${target.slug}_${Date.now()}`,
         notes: {
-          cohortSlug: cohort.slug,
-          cohortName: cohort.name,
+          cohortSlug: target.slug,
+          cohortName: target.name,
           name,
           email,
           phone,
@@ -151,14 +165,14 @@ export default async function CohortPage({
       })
 
       const applicationId = await upsertPendingApplication({
-        cohortId: cohort.id,
+        cohortId: target.id,
         name,
         email,
         phone,
         jobGoal: input.goal,
         razorpayOrderId: order.id,
-        amountMinor: cohort.discountedPriceMinor,
-        currency: cohort.currency,
+        amountMinor: target.discountedPriceMinor,
+        currency: target.currency,
       })
 
       return {
@@ -171,7 +185,6 @@ export default async function CohortPage({
     } catch (err) {
       console.error('[createOrder] failed', {
         cohortId: input.cohortId,
-        email: input.email,
         err,
       })
       throw err instanceof Error ? err : new Error('Could not start payment.')
@@ -201,25 +214,26 @@ export default async function CohortPage({
   async function enrollFree(input: {
     cohortId: string
     name: string
-    email: string
     phone: string
     goal: string
     code: string
   }): Promise<{ ok: true } | { ok: false; error: string }> {
     'use server'
     try {
+      const s = await auth()
+      const email = s?.user?.email?.toLowerCase()
+      if (!email) return { ok: false, error: 'unauthenticated' }
+      const target = await getCohortById(input.cohortId)
+      if (!target || target.status !== 'open') return { ok: false, error: 'no_active_cohort' }
       const name = input.name.trim()
-      const email = input.email.trim().toLowerCase()
       const phone = input.phone.trim()
       const formError = checkApplicantFields({ name, email, phone })
       if (formError) return { ok: false, error: formError }
-      if (!cohort) return { ok: false, error: 'no_active_cohort' }
-      if (input.cohortId !== cohort.id) return { ok: false, error: 'cohort_mismatch' }
 
       const res = await validateDiscountCode({
         code: input.code,
-        cohortId: cohort.id,
-        baseAmountMinor: cohort.discountedPriceMinor,
+        cohortId: target.id,
+        baseAmountMinor: target.discountedPriceMinor,
       })
       if (!res.ok || res.discountedAmountMinor !== 0) {
         return { ok: false, error: 'invalid_code' }
@@ -238,26 +252,25 @@ export default async function CohortPage({
         source: '/cohort',
         quizAnswers: { jobGoal: input.goal, discountCode: res.code.code },
         locale,
-        track: cohort.track,
+        track: target.track,
         userAgent: hdrs.get('user-agent') ?? null,
       }).catch(() => {})
 
       await createPaidApplicationFree({
-        cohortId: cohort.id,
+        cohortId: target.id,
         name,
         email,
         phone,
         jobGoal: input.goal,
         discountCode: res.code.code,
-        originalAmountMinor: cohort.discountedPriceMinor,
-        currency: cohort.currency,
+        originalAmountMinor: target.discountedPriceMinor,
+        currency: target.currency,
       })
 
       return { ok: true }
     } catch (err) {
       console.error('[enrollFree] failed', {
         cohortId: input.cohortId,
-        email: input.email,
         err,
       })
       return { ok: false, error: 'server_error' }
@@ -298,8 +311,11 @@ export default async function CohortPage({
               href="#apply"
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-7 py-4 text-base font-medium text-bg transition-colors hover:bg-accent/90"
             >
-              {cohort
-                ? `Reserve seat — ${formatPrice(cohort.discountedPriceMinor, cohort.currency)}`
+              {primaryCohort
+                ? `Reserve seat — from ${formatPrice(
+                    primaryCohort.discountedPriceMinor,
+                    primaryCohort.currency,
+                  )}`
                 : 'Apply for the next cohort'}
               <ArrowRight className="h-4 w-4 rtl:rotate-180" />
             </a>
@@ -312,51 +328,60 @@ export default async function CohortPage({
           </div>
         </BlurFade>
 
-        {/* ── Active cohort highlight card ──────────────────── */}
-        {cohort && (
+        {/* ── Active cohorts highlight ──────────────────────── */}
+        {cohorts.length > 0 && (
           <BlurFade delay={0.22}>
-            <div className="mt-10 overflow-hidden rounded-2xl border-2 border-accent/40 bg-gradient-to-br from-accent-soft/40 via-bg-elev/40 to-bg-elev/40 p-6 sm:p-8">
-              <div className="grid gap-6 sm:grid-cols-[1fr_auto] sm:items-end">
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-wider text-accent">
-                    Next cohort · Indian Chartered
+            <div className="mt-10 grid gap-4 sm:grid-cols-2">
+              {cohorts.map((c) => (
+                <div
+                  key={c.id}
+                  className={cn(
+                    'overflow-hidden rounded-2xl border-2 p-6',
+                    c.track === 'india'
+                      ? 'border-accent/40 bg-gradient-to-br from-accent-soft/40 via-bg-elev/40 to-bg-elev/40'
+                      : 'border-success/40 bg-gradient-to-br from-success/10 via-bg-elev/40 to-bg-elev/40',
+                  )}
+                >
+                  <p
+                    className={cn(
+                      'font-mono text-[10px] uppercase tracking-wider',
+                      c.track === 'india' ? 'text-accent' : 'text-success',
+                    )}
+                  >
+                    Next cohort · {c.track === 'india' ? 'Indian Chartered' : "Saudi Mu'tamad"}
                   </p>
-                  <h2 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">
-                    {cohort.name}
+                  <h2 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">
+                    {c.name}
                   </h2>
                   <p className="mt-1.5 text-sm text-fg-muted">
                     Starts{' '}
                     <strong className="text-fg">
-                      {cohort.startDate.toLocaleDateString('en-GB', {
+                      {c.startDate.toLocaleDateString('en-GB', {
                         day: 'numeric',
                         month: 'long',
                         year: 'numeric',
                         timeZone: 'UTC',
                       })}
                     </strong>
-                    {cohort.city ? ` · ${cohort.city}` : ''} · {cohort.durationDays} days · Limited
-                    to {cohort.seatsTotal} seats
+                    {c.city ? ` · ${c.city}` : ''} · {c.durationDays} days · {c.seatsTotal} seats
                   </p>
-                </div>
-                <div className="text-end">
-                  <div className="flex items-baseline justify-end gap-3">
-                    <span className="text-3xl font-bold tracking-tight text-fg sm:text-4xl">
-                      {formatPrice(cohort.discountedPriceMinor, cohort.currency)}
+                  <div className="mt-4 flex items-baseline gap-3">
+                    <span className="text-2xl font-bold tracking-tight text-fg sm:text-3xl">
+                      {formatPrice(c.discountedPriceMinor, c.currency)}
                     </span>
                     <span className="text-base text-fg-subtle line-through">
-                      {formatPrice(cohort.originalPriceMinor, cohort.currency)}
+                      {formatPrice(c.originalPriceMinor, c.currency)}
                     </span>
                   </div>
                   <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-success">
                     {Math.round(
-                      ((cohort.originalPriceMinor - cohort.discountedPriceMinor) /
-                        cohort.originalPriceMinor) *
+                      ((c.originalPriceMinor - c.discountedPriceMinor) / c.originalPriceMinor) *
                         100,
                     )}
                     % launch discount · One-time fee
                   </p>
                 </div>
-              </div>
+              ))}
             </div>
           </BlurFade>
         )}
@@ -646,15 +671,23 @@ export default async function CohortPage({
             </div>
           </BlurFade>
           <BlurFade delay={0.72}>
-            {cohort ? (
+            {cohorts.length > 0 ? (
               <ApplyAndPay
-                cohortId={cohort.id}
-                cohortName={cohort.name}
-                amountMinor={cohort.discountedPriceMinor}
-                originalPriceMinor={cohort.originalPriceMinor}
-                currency={cohort.currency}
-                priceLabel={formatPrice(cohort.discountedPriceMinor, cohort.currency)}
-                originalPriceLabel={formatPrice(cohort.originalPriceMinor, cohort.currency)}
+                cohorts={cohorts.map((c) => ({
+                  id: c.id,
+                  name: c.name,
+                  track: c.track,
+                  amountMinor: c.discountedPriceMinor,
+                  originalPriceMinor: c.originalPriceMinor,
+                  currency: c.currency,
+                  priceLabel: formatPrice(c.discountedPriceMinor, c.currency),
+                  originalPriceLabel: formatPrice(c.originalPriceMinor, c.currency),
+                }))}
+                sessionUser={sessionUser}
+                signInUrl={`/${locale}/sign-in?callbackUrl=${encodeURIComponent(
+                  `/${locale}/cohort#apply`,
+                )}`}
+                successUrl={`/${locale}/dashboard`}
                 createOrder={createOrder}
                 verifyPayment={verifyPayment}
                 applyDiscountCode={applyDiscountCode}
