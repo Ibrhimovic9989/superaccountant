@@ -144,9 +144,7 @@ export function ApplyAndPay({
 }
 
 function SignInGate({ signInUrl, cohorts }: { signInUrl: string; cohorts: CohortOption[] }) {
-  const first = cohorts[0]
-  if (!first) return null
-  const cheapest = cohorts.reduce((min, c) => (c.amountMinor < min.amountMinor ? c : min), first)
+  if (cohorts.length === 0) return null
   return (
     <div className="rounded-2xl border-2 border-accent/40 bg-accent-soft/30 p-6 sm:p-8">
       <div className="mb-1 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent-soft px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent">
@@ -159,9 +157,19 @@ function SignInGate({ signInUrl, cohorts }: { signInUrl: string; cohorts: Cohort
         send onboarding materials. Both tracks unlock the same AI tutor + classroom curriculum — you
         pick which jurisdiction during sign-up.
       </p>
-      <p className="mt-2 text-sm text-fg-muted">
-        Prices start from <strong className="text-fg">{cheapest.priceLabel}</strong>.
-      </p>
+      <ul className="mt-3 space-y-1 text-sm text-fg-muted">
+        {cohorts.map((c) => (
+          <li key={c.id}>
+            <span aria-hidden className="me-1">
+              {c.track === 'india' ? '🇮🇳' : '🇸🇦'}
+            </span>
+            <strong className="text-fg">
+              {c.track === 'india' ? 'Indian Chartered' : "Saudi Mu'tamad"}
+            </strong>{' '}
+            ({c.name}) · {c.priceLabel}
+          </li>
+        ))}
+      </ul>
       <Link
         href={signInUrl}
         className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-7 py-4 text-base font-medium text-bg transition-colors hover:bg-accent/90"
