@@ -110,62 +110,71 @@ export default async function CohortPage({
     goal: string
   }) {
     'use server'
-    const name = input.name.trim()
-    const email = input.email.trim().toLowerCase()
-    const phone = input.phone.trim()
-    if (name.length < 2) throw new Error('Name is required')
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Valid email is required')
-    if (phone.replace(/\D/g, '').length < 7) throw new Error('Valid phone is required')
-    if (!cohort) throw new Error('No active cohort')
-    if (input.cohortId !== cohort.id) throw new Error('Cohort mismatch')
+    try {
+      const name = input.name.trim()
+      const email = input.email.trim().toLowerCase()
+      const phone = input.phone.trim()
+      if (name.length < 2) throw new Error('Name is required')
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Valid email is required')
+      if (phone.replace(/\D/g, '').length < 7) throw new Error('Valid phone is required')
+      if (!cohort) throw new Error('No active cohort')
+      if (input.cohortId !== cohort.id) throw new Error('Cohort mismatch')
 
-    // Always log the marketing lead too — even if payment is abandoned,
-    // we keep the contact for follow-up.
-    const hdrs = await headers()
-    await createMarketingLead({
-      name,
-      email,
-      phone,
-      source: '/cohort',
-      quizAnswers: { jobGoal: input.goal },
-      locale,
-      track: cohort.track,
-      userAgent: hdrs.get('user-agent') ?? null,
-    }).catch(() => {
-      // Non-fatal — duplicate inserts will just fail silently.
-    })
+      // Always log the marketing lead too — even if payment is abandoned,
+      // we keep the contact for follow-up.
+      const hdrs = await headers()
+      await createMarketingLead({
+        name,
+        email,
+        phone,
+        source: '/cohort',
+        quizAnswers: { jobGoal: input.goal },
+        locale,
+        track: cohort.track,
+        userAgent: hdrs.get('user-agent') ?? null,
+      }).catch(() => {
+        // Non-fatal — duplicate inserts will just fail silently.
+      })
 
-    const order = await createRazorpayOrder({
-      amountMinor: cohort.discountedPriceMinor,
-      currency: cohort.currency,
-      receipt: `coh_${cohort.slug}_${Date.now()}`,
-      notes: {
-        cohortSlug: cohort.slug,
-        cohortName: cohort.name,
+      const order = await createRazorpayOrder({
+        amountMinor: cohort.discountedPriceMinor,
+        currency: cohort.currency,
+        receipt: `coh_${cohort.slug}_${Date.now()}`,
+        notes: {
+          cohortSlug: cohort.slug,
+          cohortName: cohort.name,
+          name,
+          email,
+          phone,
+          jobGoal: input.goal,
+        },
+      })
+
+      const applicationId = await upsertPendingApplication({
+        cohortId: cohort.id,
         name,
         email,
         phone,
         jobGoal: input.goal,
-      },
-    })
+        razorpayOrderId: order.id,
+        amountMinor: cohort.discountedPriceMinor,
+        currency: cohort.currency,
+      })
 
-    const applicationId = await upsertPendingApplication({
-      cohortId: cohort.id,
-      name,
-      email,
-      phone,
-      jobGoal: input.goal,
-      razorpayOrderId: order.id,
-      amountMinor: cohort.discountedPriceMinor,
-      currency: cohort.currency,
-    })
-
-    return {
-      applicationId,
-      orderId: order.id,
-      amountMinor: order.amount,
-      currency: order.currency,
-      keyId: getPublicRazorpayKeyId(),
+      return {
+        applicationId,
+        orderId: order.id,
+        amountMinor: order.amount,
+        currency: order.currency,
+        keyId: getPublicRazorpayKeyId(),
+      }
+    } catch (err) {
+      console.error('[createOrder] failed', {
+        cohortId: input.cohortId,
+        email: input.email,
+        err,
+      })
+      throw err instanceof Error ? err : new Error('Could not start payment.')
     }
   }
 
