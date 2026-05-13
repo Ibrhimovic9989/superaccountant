@@ -2,6 +2,11 @@
 
 import { ArrowRight, CheckCircle2, CreditCard, Loader2, ShieldCheck } from 'lucide-react'
 import { useEffect, useState, useTransition } from 'react'
+import {
+  type AppliedDiscount,
+  type DiscountApplyResponse,
+  DiscountCodeInput,
+} from './discount-code-input'
 
 /**
  * Two-step apply-and-pay flow for a cohort:
@@ -27,6 +32,8 @@ type CreateOrderResponse = {
 }
 
 type VerifyResponse = { ok: true } | { ok: false; error: string }
+
+type EnrollFreeResponse = { ok: true } | { ok: false; error: string }
 
 type Props = {
   cohortId: string
@@ -56,6 +63,27 @@ type Props = {
     razorpayPaymentId: string
     razorpaySignature: string
   }) => Promise<VerifyResponse>
+  /**
+   * Server action: validate a discount code against the active cohort.
+   * Codes are never enumerated to the client — only validation results.
+   */
+  applyDiscountCode: (input: {
+    cohortId: string
+    code: string
+  }) => Promise<DiscountApplyResponse>
+  /**
+   * Server action: 100%-off enrolment that skips Razorpay entirely.
+   * Server re-validates the code, atomically consumes a use, and
+   * inserts a paid CohortApplication directly.
+   */
+  enrollFree: (input: {
+    cohortId: string
+    name: string
+    email: string
+    phone: string
+    goal: string
+    code: string
+  }) => Promise<EnrollFreeResponse>
 }
 
 const GOAL_OPTIONS = [
@@ -100,6 +128,8 @@ export function ApplyAndPay({
   originalPriceLabel,
   createOrder,
   verifyPayment,
+  applyDiscountCode,
+  enrollFree,
 }: Props) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -108,6 +138,17 @@ export function ApplyAndPay({
   const [error, setError] = useState<string | null>(null)
   const [paid, setPaid] = useState(false)
   const [pending, startTransition] = useTransition()
+
+  // Discount-code state — server is authoritative; we just cache its
+  // validation response so we can show the user the new price.
+  const [applied, setApplied] = useState<AppliedDiscount | null>(null)
+
+  // Effective price for display + payment.
+  const effectiveAmountMinor = applied ? applied.finalAmountMinor : amountMinor
+  const effectivePriceLabel = applied ? formatMinor(effectiveAmountMinor, currency) : priceLabel
+  const discountPct = Math.round(
+    ((originalPriceMinor - effectiveAmountMinor) / originalPriceMinor) * 100,
+  )
 
   // Lazy-load Razorpay Checkout once on mount.
   useEffect(() => {
@@ -121,23 +162,50 @@ export function ApplyAndPay({
     }
   }, [])
 
-  const discountPct = Math.round(((originalPriceMinor - amountMinor) / originalPriceMinor) * 100)
+  function validateForm(): string | null {
+    if (name.trim().length < 2) return 'Please share your name.'
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return "That email doesn't look right."
+    if (phone.replace(/\D/g, '').length < 7) {
+      return 'A valid phone number lets us reach out about onboarding.'
+    }
+    return null
+  }
+
+  async function runFreeEnrol(appliedCode: string) {
+    try {
+      const res = await enrollFree({
+        cohortId,
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        phone: phone.trim(),
+        goal,
+        code: appliedCode,
+      })
+      if (!res.ok) {
+        setError(enrollFreeErrorCopy(res.error))
+        return
+      }
+      setPaid(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not complete enrolment.')
+    }
+  }
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
-    if (name.trim().length < 2) {
-      setError('Please share your name.')
+    const v = validateForm()
+    if (v) {
+      setError(v)
       return
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setError("That email doesn't look right.")
+
+    // 100%-off discount → skip Razorpay entirely, enrol directly.
+    if (applied?.isFree) {
+      startTransition(() => runFreeEnrol(applied.code))
       return
     }
-    if (phone.replace(/\D/g, '').length < 7) {
-      setError('A valid phone number lets us reach out about onboarding.')
-      return
-    }
+
     if (!window.Razorpay) {
       setError('Payment library is still loading — try again in a moment.')
       return
@@ -236,8 +304,12 @@ export function ApplyAndPay({
       <h3 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Reserve your seat</h3>
 
       <div className="mt-4 flex items-baseline gap-3">
-        <span className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">{priceLabel}</span>
-        <span className="text-lg text-fg-subtle line-through">{originalPriceLabel}</span>
+        <span className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">
+          {applied?.isFree ? 'FREE' : effectivePriceLabel}
+        </span>
+        <span className="text-lg text-fg-subtle line-through">
+          {applied ? priceLabel : originalPriceLabel}
+        </span>
         {discountPct > 0 && (
           <span className="rounded-md bg-success/15 px-2 py-1 font-mono text-[11px] font-medium uppercase tracking-wider text-success">
             {discountPct}% OFF
@@ -245,7 +317,9 @@ export function ApplyAndPay({
         )}
       </div>
       <p className="mt-1 text-xs text-fg-muted">
-        One-time fee · UPI / cards / netbanking / wallets · No hidden costs
+        {applied?.isFree
+          ? 'Discount applied — no payment needed. Your seat will be reserved instantly.'
+          : 'One-time fee · UPI / cards / netbanking / wallets · No hidden costs'}
       </p>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -295,6 +369,16 @@ export function ApplyAndPay({
         </Field>
       </div>
 
+      <div className="mt-6">
+        <DiscountCodeInput
+          cohortId={cohortId}
+          applied={applied}
+          onApply={setApplied}
+          onClear={() => setApplied(null)}
+          applyDiscountCode={applyDiscountCode}
+        />
+      </div>
+
       {error && (
         <p className="mt-4 rounded-lg border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
           {error}
@@ -309,12 +393,18 @@ export function ApplyAndPay({
         {pending ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
-            Opening payment…
+            {applied?.isFree ? 'Reserving your seat…' : 'Opening payment…'}
+          </>
+        ) : applied?.isFree ? (
+          <>
+            <CheckCircle2 className="h-4 w-4" />
+            Reserve seat — Free
+            <ArrowRight className="h-4 w-4 rtl:rotate-180" />
           </>
         ) : (
           <>
             <CreditCard className="h-4 w-4" />
-            Pay {priceLabel} & reserve seat
+            Pay {effectivePriceLabel} & reserve seat
             <ArrowRight className="h-4 w-4 rtl:rotate-180" />
           </>
         )}
@@ -348,4 +438,30 @@ function Field({
       {children}
     </div>
   )
+}
+
+function formatMinor(minor: number, currency: 'INR' | 'SAR'): string {
+  const major = minor / 100
+  if (currency === 'INR') {
+    return `₹${major.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`
+  }
+  return `SAR ${major.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
+}
+
+function enrollFreeErrorCopy(error: string): string {
+  switch (error) {
+    case 'invalid_code':
+      return "Your code couldn't be confirmed at checkout — please re-apply it."
+    case 'code_exhausted':
+      return 'That code has just been used up. Please reach out for help.'
+    case 'invalid_name':
+    case 'invalid_email':
+    case 'invalid_phone':
+      return 'Please double-check your details.'
+    default:
+      return 'Could not complete enrolment — please try again or contact support.'
+  }
 }

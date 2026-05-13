@@ -8,10 +8,13 @@ import {
   verifyPaymentSignature,
 } from '@/lib/cohort/razorpay'
 import {
+  consumeDiscountCode,
+  createPaidApplicationFree,
   formatPrice,
   getActiveCohortForTrack,
   markApplicationPaid,
   upsertPendingApplication,
+  validateDiscountCode,
 } from '@/lib/cohort/store'
 import { createMarketingLead } from '@/lib/data/leads'
 import type { SupportedLocale } from '@sa/i18n'
@@ -54,6 +57,41 @@ export default async function CohortPage({
   // (Saudi Mu'tamad cohort dates TBA — we still capture leads via the
   // marketing form for that track.)
   const cohort = await getActiveCohortForTrack('india')
+
+  /**
+   * Apply a discount code. Server-only — codes are never enumerated to
+   * the client. Returns the resulting amount; if 100% off, the caller
+   * uses `enrollFree` instead of `createOrder`.
+   */
+  async function applyDiscountCode(input: {
+    cohortId: string
+    code: string
+  }): Promise<
+    | { ok: true; discountPercent: number; discountedAmountMinor: number; isFree: boolean }
+    | { ok: false; reason: string }
+  > {
+    'use server'
+    if (!cohort) return { ok: false, reason: 'no_active_cohort' }
+    if (input.cohortId !== cohort.id) return { ok: false, reason: 'cohort_mismatch' }
+    const res = await validateDiscountCode({
+      code: input.code,
+      cohortId: cohort.id,
+      baseAmountMinor: cohort.discountedPriceMinor,
+    })
+    if (!res.ok) return { ok: false, reason: res.reason }
+    // Only 100%-off codes are supported via this form for now. Partial
+    // codes would need to be plumbed through the Razorpay create-order
+    // path; we'll add that when there's an actual partial code to ship.
+    if (res.discountedAmountMinor !== 0) {
+      return { ok: false, reason: 'partial_not_supported' }
+    }
+    return {
+      ok: true,
+      discountPercent: res.code.discountPercent,
+      discountedAmountMinor: res.discountedAmountMinor,
+      isFree: true,
+    }
+  }
 
   async function createOrder(input: {
     cohortId: string
@@ -134,6 +172,69 @@ export default async function CohortPage({
     }
     await markApplicationPaid(input)
     return { ok: true as const }
+  }
+
+  /**
+   * 100% discount path — skip Razorpay entirely. Re-validates the code
+   * server-side (never trust the client), atomically increments usage,
+   * inserts a paid CohortApplication. Returns ok=false if anything
+   * fails so the caller can show a sensible error.
+   */
+  async function enrollFree(input: {
+    cohortId: string
+    name: string
+    email: string
+    phone: string
+    goal: string
+    code: string
+  }): Promise<{ ok: true } | { ok: false; error: string }> {
+    'use server'
+    const name = input.name.trim()
+    const email = input.email.trim().toLowerCase()
+    const phone = input.phone.trim()
+    const formError = checkApplicantFields({ name, email, phone })
+    if (formError) return { ok: false, error: formError }
+    if (!cohort) return { ok: false, error: 'no_active_cohort' }
+    if (input.cohortId !== cohort.id) return { ok: false, error: 'cohort_mismatch' }
+
+    const res = await validateDiscountCode({
+      code: input.code,
+      cohortId: cohort.id,
+      baseAmountMinor: cohort.discountedPriceMinor,
+    })
+    if (!res.ok || res.discountedAmountMinor !== 0) {
+      return { ok: false, error: 'invalid_code' }
+    }
+
+    const consumed = await consumeDiscountCode(res.code.id)
+    if (!consumed) {
+      return { ok: false, error: 'code_exhausted' }
+    }
+
+    const hdrs = await headers()
+    await createMarketingLead({
+      name,
+      email,
+      phone,
+      source: '/cohort',
+      quizAnswers: { jobGoal: input.goal, discountCode: res.code.code },
+      locale,
+      track: cohort.track,
+      userAgent: hdrs.get('user-agent') ?? null,
+    }).catch(() => {})
+
+    await createPaidApplicationFree({
+      cohortId: cohort.id,
+      name,
+      email,
+      phone,
+      jobGoal: input.goal,
+      discountCode: res.code.code,
+      originalAmountMinor: cohort.discountedPriceMinor,
+      currency: cohort.currency,
+    })
+
+    return { ok: true }
   }
 
   return (
@@ -529,6 +630,8 @@ export default async function CohortPage({
                 originalPriceLabel={formatPrice(cohort.originalPriceMinor, cohort.currency)}
                 createOrder={createOrder}
                 verifyPayment={verifyPayment}
+                applyDiscountCode={applyDiscountCode}
+                enrollFree={enrollFree}
               />
             ) : (
               <div className="rounded-2xl border border-border bg-bg-elev/40 p-6 sm:p-8">
@@ -566,6 +669,15 @@ export default async function CohortPage({
       </div>
     </div>
   )
+}
+
+// Pure validator — kept at module scope so it doesn't push the
+// closing server actions over biome's complexity budget.
+function checkApplicantFields(args: { name: string; email: string; phone: string }): string | null {
+  if (args.name.length < 2) return 'invalid_name'
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(args.email)) return 'invalid_email'
+  if (args.phone.replace(/\D/g, '').length < 7) return 'invalid_phone'
+  return null
 }
 
 // ── Reusable little sub-components ────────────────────────────

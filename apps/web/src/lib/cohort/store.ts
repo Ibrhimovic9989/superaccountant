@@ -200,6 +200,153 @@ export async function getApplicationByOrderId(orderId: string): Promise<CohortAp
   return rows[0] ?? null
 }
 
+// ── DiscountCode ──────────────────────────────────────────────────
+
+export type DiscountCode = {
+  id: string
+  code: string
+  discountPercent: number
+  maxUses: number | null
+  usedCount: number
+  validFrom: Date | null
+  validUntil: Date | null
+  cohortId: string | null
+  active: boolean
+}
+
+export type DiscountValidationError =
+  | 'unknown'
+  | 'inactive'
+  | 'exhausted'
+  | 'not_started'
+  | 'expired'
+  | 'wrong_cohort'
+
+export type DiscountValidationResult =
+  | { ok: true; code: DiscountCode; discountedAmountMinor: number }
+  | { ok: false; reason: DiscountValidationError }
+
+/**
+ * Looks up a code (case-insensitive) and validates it for the given cohort
+ * at the current moment. Returns the resulting amount in minor units so
+ * callers don't recompute. Does NOT increment usage — that happens at
+ * order-create / free-enroll time so we don't burn uses on validation alone.
+ */
+export async function validateDiscountCode(input: {
+  code: string
+  cohortId: string
+  baseAmountMinor: number
+}): Promise<DiscountValidationResult> {
+  const normalized = input.code.trim().toLowerCase()
+  if (!normalized) return { ok: false, reason: 'unknown' }
+
+  const rows = await prisma.$queryRaw<DiscountCode[]>`
+    SELECT "id", "code", "discountPercent", "maxUses", "usedCount",
+           "validFrom", "validUntil", "cohortId", "active"
+    FROM "DiscountCode"
+    WHERE LOWER("code") = ${normalized}
+    LIMIT 1
+  `
+  const c = rows[0]
+  if (!c) return { ok: false, reason: 'unknown' }
+  if (!c.active) return { ok: false, reason: 'inactive' }
+  if (c.maxUses !== null && c.usedCount >= c.maxUses) {
+    return { ok: false, reason: 'exhausted' }
+  }
+  const now = Date.now()
+  if (c.validFrom && c.validFrom.getTime() > now) {
+    return { ok: false, reason: 'not_started' }
+  }
+  if (c.validUntil && c.validUntil.getTime() < now) {
+    return { ok: false, reason: 'expired' }
+  }
+  if (c.cohortId && c.cohortId !== input.cohortId) {
+    return { ok: false, reason: 'wrong_cohort' }
+  }
+
+  const discountedAmountMinor = Math.max(
+    0,
+    Math.round(input.baseAmountMinor * (1 - c.discountPercent / 100)),
+  )
+  return { ok: true, code: c, discountedAmountMinor }
+}
+
+/**
+ * Atomic increment + max-uses guard. Returns true if the bump succeeded
+ * (i.e. the code was active and still had headroom). Use this just
+ * before creating the order so we don't over-issue.
+ */
+export async function consumeDiscountCode(codeId: string): Promise<boolean> {
+  const result = await prisma.$executeRaw`
+    UPDATE "DiscountCode"
+    SET "usedCount" = "usedCount" + 1,
+        "updatedAt" = NOW()
+    WHERE "id" = ${codeId}
+      AND "active" = TRUE
+      AND ("maxUses" IS NULL OR "usedCount" < "maxUses")
+  `
+  return result > 0
+}
+
+/**
+ * Free enrollment — 100% off, no Razorpay round-trip. Inserts (or updates
+ * an existing pending row for the same cohort+email) directly into paid
+ * state. Idempotent on the unique (cohortId, email) key.
+ */
+export async function createPaidApplicationFree(input: {
+  cohortId: string
+  name: string
+  email: string
+  phone: string
+  jobGoal: string | null
+  discountCode: string
+  originalAmountMinor: number
+  currency: string
+}): Promise<string> {
+  const id = randomUUID()
+  await prisma.$executeRaw`
+    INSERT INTO "CohortApplication" (
+      "id", "cohortId", "name", "email", "phone", "jobGoal",
+      "status", "razorpayOrderId",
+      "amountMinor", "currency",
+      "discountCode", "discountPercent", "originalAmountMinor",
+      "paidAt"
+    ) VALUES (
+      ${id},
+      ${input.cohortId},
+      ${input.name},
+      ${input.email.toLowerCase()},
+      ${input.phone},
+      ${input.jobGoal},
+      'paid',
+      ${null},
+      ${0},
+      ${input.currency},
+      ${input.discountCode.toLowerCase()},
+      ${100},
+      ${input.originalAmountMinor},
+      NOW()
+    )
+    ON CONFLICT ("cohortId", "email") DO UPDATE SET
+      "name" = EXCLUDED."name",
+      "phone" = EXCLUDED."phone",
+      "jobGoal" = EXCLUDED."jobGoal",
+      "status" = 'paid',
+      "amountMinor" = 0,
+      "discountCode" = EXCLUDED."discountCode",
+      "discountPercent" = 100,
+      "originalAmountMinor" = EXCLUDED."originalAmountMinor",
+      "paidAt" = COALESCE("CohortApplication"."paidAt", NOW()),
+      "updatedAt" = NOW()
+  `
+  const rows = await prisma.$queryRaw<{ id: string }[]>`
+    SELECT "id" FROM "CohortApplication"
+    WHERE "cohortId" = ${input.cohortId} AND "email" = ${input.email.toLowerCase()}
+    LIMIT 1
+  `
+  return rows[0]?.id ?? id
+}
+
 /** Format paise → '₹24,999' / halalas → 'SAR 1,099.50' etc. */
 export function formatPrice(minor: number, currency: string): string {
   const major = minor / 100
