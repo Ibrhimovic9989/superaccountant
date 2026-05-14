@@ -159,6 +159,8 @@ function reasonCopy(reason: string): string {
     case 'wrong_cohort':
       return "That code isn't valid for this cohort."
     case 'partial_not_supported':
+      // Kept for backwards compatibility — partial codes are now supported,
+      // but old deploys might still emit this reason during the rollover.
       return "That code isn't supported here yet — please contact us."
     case 'server_error':
       return 'Something went wrong on our side — please retry or contact us.'

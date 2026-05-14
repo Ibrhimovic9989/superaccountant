@@ -117,12 +117,22 @@ export async function upsertPendingApplication(input: {
   razorpayOrderId: string
   amountMinor: number
   currency: string
+  /** Discount code applied (lowercased). null = no discount. */
+  discountCode?: string | null
+  /** Display percentage off — kept for reporting. */
+  discountPercent?: number
+  /** Original (pre-discount) price for the audit trail. */
+  originalAmountMinor?: number | null
 }): Promise<string> {
   const id = randomUUID()
+  const discountCode = input.discountCode?.toLowerCase() ?? null
+  const discountPercent = input.discountPercent ?? 0
+  const originalAmountMinor = input.originalAmountMinor ?? null
   await prisma.$executeRaw`
     INSERT INTO "CohortApplication" (
       "id", "cohortId", "name", "email", "phone", "jobGoal",
-      "status", "razorpayOrderId", "amountMinor", "currency"
+      "status", "razorpayOrderId", "amountMinor", "currency",
+      "discountCode", "discountPercent", "originalAmountMinor"
     ) VALUES (
       ${id},
       ${input.cohortId},
@@ -133,7 +143,10 @@ export async function upsertPendingApplication(input: {
       'pending',
       ${input.razorpayOrderId},
       ${input.amountMinor},
-      ${input.currency}
+      ${input.currency},
+      ${discountCode},
+      ${discountPercent},
+      ${originalAmountMinor}
     )
     ON CONFLICT ("cohortId", "email") DO UPDATE SET
       "name" = EXCLUDED."name",
@@ -142,6 +155,9 @@ export async function upsertPendingApplication(input: {
       "razorpayOrderId" = EXCLUDED."razorpayOrderId",
       "amountMinor" = EXCLUDED."amountMinor",
       "currency" = EXCLUDED."currency",
+      "discountCode" = EXCLUDED."discountCode",
+      "discountPercent" = EXCLUDED."discountPercent",
+      "originalAmountMinor" = EXCLUDED."originalAmountMinor",
       -- Reset to pending only if not yet paid; preserve paid state.
       "status" = CASE WHEN "CohortApplication"."status" = 'paid'
                       THEN "CohortApplication"."status"
@@ -229,6 +245,12 @@ export type DiscountCode = {
   id: string
   code: string
   discountPercent: number
+  /**
+   * When set, this is the FINAL price (in the cohort's minor units),
+   * overriding any percent calculation. Used for "pay ₹1" style codes
+   * that don't map cleanly to a percentage.
+   */
+  finalAmountMinor: number | null
   maxUses: number | null
   usedCount: number
   validFrom: Date | null
@@ -264,7 +286,8 @@ export async function validateDiscountCode(input: {
   if (!normalized) return { ok: false, reason: 'unknown' }
 
   const rows = await prisma.$queryRaw<DiscountCode[]>`
-    SELECT "id", "code", "discountPercent", "maxUses", "usedCount",
+    SELECT "id", "code", "discountPercent", "finalAmountMinor",
+           "maxUses", "usedCount",
            "validFrom", "validUntil", "cohortId", "active"
     FROM "DiscountCode"
     WHERE LOWER("code") = ${normalized}
@@ -287,10 +310,13 @@ export async function validateDiscountCode(input: {
     return { ok: false, reason: 'wrong_cohort' }
   }
 
-  const discountedAmountMinor = Math.max(
-    0,
-    Math.round(input.baseAmountMinor * (1 - c.discountPercent / 100)),
-  )
+  // Two pricing modes:
+  //   - finalAmountMinor set: hard override (e.g. "pay ₹1").
+  //   - else: percent off the base price (e.g. 100% off = free).
+  const discountedAmountMinor =
+    c.finalAmountMinor !== null
+      ? Math.max(0, Math.min(input.baseAmountMinor, c.finalAmountMinor))
+      : Math.max(0, Math.round(input.baseAmountMinor * (1 - c.discountPercent / 100)))
   return { ok: true, code: c, discountedAmountMinor }
 }
 

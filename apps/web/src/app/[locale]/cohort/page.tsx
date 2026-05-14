@@ -93,17 +93,11 @@ export default async function CohortPage({
         baseAmountMinor: target.discountedPriceMinor,
       })
       if (!res.ok) return { ok: false, reason: res.reason }
-      // Only 100%-off codes are supported via this form for now. Partial
-      // codes would need to be plumbed through the Razorpay create-order
-      // path; we'll add that when there's an actual partial code to ship.
-      if (res.discountedAmountMinor !== 0) {
-        return { ok: false, reason: 'partial_not_supported' }
-      }
       return {
         ok: true,
         discountPercent: res.code.discountPercent,
         discountedAmountMinor: res.discountedAmountMinor,
-        isFree: true,
+        isFree: res.discountedAmountMinor === 0,
       }
     } catch (err) {
       console.error('[applyDiscountCode] failed', {
@@ -120,6 +114,8 @@ export default async function CohortPage({
     name: string
     phone: string
     goal: string
+    /** Optional discount code applied at apply-time. */
+    discountCode?: string | null
   }) {
     'use server'
     try {
@@ -134,6 +130,36 @@ export default async function CohortPage({
       if (name.length < 2) throw new Error('Name is required')
       if (phone.replace(/\D/g, '').length < 7) throw new Error('Valid phone is required')
 
+      // Re-validate the discount code server-side (never trust the
+      // client). If invalid, fall through to full price — the client
+      // form already validates before showing the Pay button, so this
+      // is just a safety net.
+      let chargeAmountMinor = target.discountedPriceMinor
+      let appliedCode: { id: string; code: string; discountPercent: number } | null = null
+      if (input.discountCode) {
+        const res = await validateDiscountCode({
+          code: input.discountCode,
+          cohortId: target.id,
+          baseAmountMinor: target.discountedPriceMinor,
+        })
+        if (res.ok) {
+          if (res.discountedAmountMinor === 0) {
+            throw new Error('Free codes must use enrollFree path')
+          }
+          chargeAmountMinor = res.discountedAmountMinor
+          appliedCode = res.code
+        }
+      }
+
+      // Atomically consume one use of the code BEFORE creating the
+      // Razorpay order — this is the race-safe boundary. A failed
+      // payment will leave the use consumed (acceptable slippage for
+      // small-volume codes; we can refund + restore manually).
+      if (appliedCode) {
+        const ok = await consumeDiscountCode(appliedCode.id)
+        if (!ok) throw new Error('Discount code is no longer available')
+      }
+
       // Always log the marketing lead too — even if payment is abandoned,
       // we keep the contact for follow-up.
       const hdrs = await headers()
@@ -142,7 +168,10 @@ export default async function CohortPage({
         email,
         phone,
         source: '/cohort',
-        quizAnswers: { jobGoal: input.goal },
+        quizAnswers: {
+          jobGoal: input.goal,
+          ...(appliedCode ? { discountCode: appliedCode.code } : {}),
+        },
         locale,
         track: target.track,
         userAgent: hdrs.get('user-agent') ?? null,
@@ -151,7 +180,7 @@ export default async function CohortPage({
       })
 
       const order = await createRazorpayOrder({
-        amountMinor: target.discountedPriceMinor,
+        amountMinor: chargeAmountMinor,
         currency: target.currency,
         receipt: `coh_${target.slug}_${Date.now()}`,
         notes: {
@@ -161,6 +190,7 @@ export default async function CohortPage({
           email,
           phone,
           jobGoal: input.goal,
+          ...(appliedCode ? { discountCode: appliedCode.code } : {}),
         },
       })
 
@@ -171,8 +201,11 @@ export default async function CohortPage({
         phone,
         jobGoal: input.goal,
         razorpayOrderId: order.id,
-        amountMinor: target.discountedPriceMinor,
+        amountMinor: chargeAmountMinor,
         currency: target.currency,
+        discountCode: appliedCode?.code ?? null,
+        discountPercent: appliedCode?.discountPercent ?? 0,
+        originalAmountMinor: appliedCode ? target.discountedPriceMinor : null,
       })
 
       return {

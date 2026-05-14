@@ -62,6 +62,7 @@ type Props = {
     name: string
     phone: string
     goal: string
+    discountCode?: string | null
   }) => Promise<CreateOrderResponse>
   verifyPayment: (input: {
     razorpayOrderId: string
@@ -290,6 +291,7 @@ function AuthedFormBody({
         name: name.trim(),
         phone: phone.trim(),
         goal,
+        discountCode: applied?.code ?? null,
       })
       if (!order.keyId) {
         throw new Error('Payments not configured — set NEXT_PUBLIC_RAZORPAY_KEY_ID.')
