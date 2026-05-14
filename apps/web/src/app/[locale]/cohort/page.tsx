@@ -347,7 +347,7 @@ export default async function CohortPage({
         </BlurFade>
         <BlurFade delay={0.1}>
           <h1 className="text-4xl font-semibold tracking-tight sm:text-6xl">
-            Superaccountant —{' '}
+            Superaccountant&nbsp;—{' '}
             <span className="bg-gradient-to-br from-accent via-fg to-accent bg-clip-text text-transparent">
               Get Job Ready
             </span>
