@@ -36,8 +36,8 @@ const COPY = {
     titleB: 'in 45 days.',
     subtitle:
       'A 45-day offline cohort backed by a 24/7 AI tutor — built for India (iA26, Hyderabad · 1 June) and Saudi Arabia (sA26, Riyadh · 1 July). Real classroom, real instructors, real placement support. Bilingual EN + AR.',
-    primaryCta: 'Reserve seat — from ₹24,999',
-    secondaryCta: 'See cohort details',
+    primaryCta: 'Join the cohort',
+    secondaryCta: 'Take the 2-minute quiz',
     pillIndia: '🇮🇳 iA26 · India · ₹24,999',
     pillKsa: '🇸🇦 sA26 · KSA · SAR 4,999',
     trustLabel: 'Curriculum built on the regulations that govern your work',
@@ -286,8 +286,8 @@ const COPY = {
     titleB: 'في ٤٥ يومًا.',
     subtitle:
       'دفعة دراسية حضورية لمدة ٤٥ يومًا مدعومة بمدرس ذكي على مدار الساعة — للهند (iA26، حيدر آباد · ١ يونيو) والسعودية (sA26، الرياض · ١ يوليو). فصل حقيقي ومدربون حقيقيون ودعم توظيف. ثنائي اللغة عربي + إنجليزي.',
-    primaryCta: 'احجز مقعدك — من ₹24,999',
-    secondaryCta: 'تفاصيل الدفعة',
+    primaryCta: 'انضم إلى الدفعة',
+    secondaryCta: 'خذ اختبار الدقيقتين',
     pillIndia: '🇮🇳 iA26 · الهند · ₹24,999',
     pillKsa: '🇸🇦 sA26 · السعودية · SAR 4,999',
     trustLabel: 'منهج مبني على الأنظمة التي تحكم عملك',
@@ -606,7 +606,7 @@ export default async function Landing({
               </Button>
             </div>
             <Button asChild variant="secondary" size="lg" className="w-full sm:w-auto">
-              <a href={appLink(locale, '/cohort')}>
+              <a href={appLink(locale, '/quiz')}>
                 {t.secondaryCta}
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </a>
