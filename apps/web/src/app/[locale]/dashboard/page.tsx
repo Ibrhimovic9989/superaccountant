@@ -1,4 +1,7 @@
 import { AppNav } from '@/components/app-nav'
+import { LevelRing } from '@/components/gamification/level-ring'
+import { StreakLadder } from '@/components/gamification/streak-ladder'
+import { XpBar } from '@/components/gamification/xp-bar'
 import { AnimatedList } from '@/components/magicui/animated-list'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { BorderBeam } from '@/components/magicui/border-beam'
@@ -11,6 +14,7 @@ import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
 import { type Badge as AchievementBadge, getAchievements } from '@/lib/data/achievements'
 import { getDashboardSnapshot } from '@/lib/data/dashboard'
 import { getUserProfile } from '@/lib/data/profile'
+import { computeXp, getLevel } from '@/lib/data/xp'
 import { cn } from '@/lib/utils'
 import {
   ArrowRight,
@@ -18,9 +22,9 @@ import {
   Brain,
   CheckCircle2,
   Clock,
-  Flame,
   Sparkles,
   Target,
+  Zap,
 } from 'lucide-react'
 import { Trophy } from 'lucide-react'
 import Link from 'next/link'
@@ -54,6 +58,18 @@ export default async function Dashboard({
 
   const masteryPct = Math.round(snap.averageMastery * 100)
 
+  // Gamification — derive XP + rank from the snapshot. Pure math, no DB call.
+  const earnedBadges = badges.filter((b) => b.earned).length
+  const xp = computeXp({
+    completedLessons: snap.completedLessons,
+    hoursStudied: snap.hoursStudied,
+    streakDays: snap.streakDays,
+    earnedBadges,
+  })
+  const lvl = getLevel(xp)
+  const rankTitle = locale === 'ar' ? lvl.current.titleAr : lvl.current.titleEn
+  const nextRankTitle = lvl.next ? (locale === 'ar' ? lvl.next.titleAr : lvl.next.titleEn) : null
+
   return (
     <div className="min-h-screen bg-bg text-fg">
       <AppNav
@@ -81,7 +97,7 @@ export default async function Dashboard({
           </BlurFade>
         )}
 
-        {/* ── Greeting ─────────────────────────────────────── */}
+        {/* ── Greeting + Level hero ────────────────────────── */}
         <BlurFade delay={0.05}>
           <div className="mb-2 flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-success" />
@@ -95,6 +111,46 @@ export default async function Dashboard({
               ? 'استمر في رحلتك. المدرس الذكي بانتظارك.'
               : 'Pick up where you left off. Your AI tutor is one keystroke away.'}
           </p>
+        </BlurFade>
+
+        {/* ── Level / XP hero strip ────────────────────────── */}
+        <BlurFade delay={0.08}>
+          <div className="relative mt-8 overflow-hidden rounded-2xl border border-border bg-bg-elev p-5 sm:p-6">
+            <div className="flex items-center gap-5 sm:gap-7">
+              <LevelRing level={lvl.current.level} progress={lvl.progressToNext} size={104} />
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">{rankTitle}</h2>
+                  <span className="inline-flex items-center gap-1 rounded-md border border-accent/30 bg-accent-soft px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent">
+                    <Zap className="h-3 w-3" />
+                    <NumberTicker value={lvl.xp} className="tabular-nums" /> XP
+                  </span>
+                </div>
+                <p className="mt-1 text-xs text-fg-muted">
+                  {lvl.next ? (
+                    <>
+                      {lvl.xpForLevel - lvl.xpIntoLevel} XP {locale === 'ar' ? 'إلى رتبة' : 'to'}{' '}
+                      <strong className="text-fg">{nextRankTitle}</strong>
+                    </>
+                  ) : locale === 'ar' ? (
+                    'بلغت أعلى رتبة. أحسنت.'
+                  ) : (
+                    'Top rank achieved. Well done.'
+                  )}
+                </p>
+                <div className="mt-3">
+                  <XpBar progress={lvl.progressToNext} />
+                </div>
+              </div>
+            </div>
+            <BorderBeam
+              size={80}
+              duration={9}
+              colorFrom="#a78bfa"
+              colorTo="#7c3aed"
+              className="opacity-60"
+            />
+          </div>
         </BlurFade>
 
         {/* ── Continue + Streak ────────────────────────────── */}
@@ -171,28 +227,21 @@ export default async function Dashboard({
 
           <BlurFade delay={0.15}>
             <div className="relative h-full overflow-hidden rounded-xl border border-border bg-bg-elev p-6">
-              <div className="flex items-center justify-between">
+              <div className="mb-4 flex items-center justify-between">
                 <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted">
                   {locale === 'ar' ? 'سلسلة' : 'Streak'}
                 </span>
-                <Flame className="h-4 w-4 text-warning" />
+                <span className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+                  {snap.streakDays === 0
+                    ? locale === 'ar'
+                      ? 'ابدأ اليوم'
+                      : 'Start today'
+                    : locale === 'ar'
+                      ? 'استمر'
+                      : 'Keep going'}
+                </span>
               </div>
-              <div className="mt-6 flex items-baseline gap-1">
-                <NumberTicker
-                  value={snap.streakDays}
-                  className="font-mono text-5xl font-medium tracking-tight"
-                />
-                <span className="font-mono text-sm text-fg-subtle">d</span>
-              </div>
-              <p className="mt-2 text-xs text-fg-muted">
-                {snap.streakDays === 0
-                  ? locale === 'ar'
-                    ? 'ابدأ سلسلة جديدة اليوم'
-                    : 'Start a new streak today'
-                  : locale === 'ar'
-                    ? 'حافظ على الزخم'
-                    : 'Keep the momentum going'}
-              </p>
+              <StreakLadder days={snap.streakDays} locale={locale} />
             </div>
           </BlurFade>
         </div>
@@ -257,17 +306,26 @@ export default async function Dashboard({
                 </div>
               ) : (
                 <AnimatedList delay={150}>
-                  {snap.todayItems.map((item, i) => (
-                    <Link
-                      key={`${item.lessonSlug}-${i}`}
-                      href={`/${locale}/lessons/${item.lessonSlug}`}
-                      className="group flex items-center gap-3 rounded-lg border border-border bg-bg p-3 transition-colors hover:border-border-strong hover:bg-bg-overlay"
-                    >
-                      <KindBadge kind={item.kind} locale={locale} />
-                      <span className="flex-1 text-sm font-medium text-fg">{item.lessonTitle}</span>
-                      <ArrowRight className="h-3.5 w-3.5 text-fg-subtle transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
-                    </Link>
-                  ))}
+                  {snap.todayItems.map((item, i) => {
+                    // Reward varies by kind so review is small, new is big.
+                    const xpReward = item.kind === 'new' ? 100 : item.kind === 'weak' ? 80 : 50
+                    return (
+                      <Link
+                        key={`${item.lessonSlug}-${i}`}
+                        href={`/${locale}/lessons/${item.lessonSlug}`}
+                        className="group relative flex items-center gap-3 overflow-hidden rounded-lg border border-border bg-bg p-3 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:bg-bg-overlay hover:shadow-[0_8px_20px_-12px_rgba(139,92,246,0.4)]"
+                      >
+                        <KindBadge kind={item.kind} locale={locale} />
+                        <span className="flex-1 text-sm font-medium text-fg">
+                          {item.lessonTitle}
+                        </span>
+                        <span className="inline-flex items-center gap-1 rounded-md border border-accent/30 bg-accent-soft/60 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-accent">
+                          <Zap className="h-2.5 w-2.5" />+{xpReward} XP
+                        </span>
+                        <ArrowRight className="h-3.5 w-3.5 text-fg-subtle transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
+                      </Link>
+                    )
+                  })}
                 </AnimatedList>
               )}
             </div>
@@ -371,20 +429,43 @@ function AchievementTile({
     <div
       title={`${name} — ${desc}`}
       className={cn(
-        'group relative flex flex-col items-center gap-1.5 rounded-xl border p-3 text-center transition-all',
+        'group relative flex aspect-square flex-col items-center justify-center gap-1.5 overflow-hidden rounded-xl border p-3 text-center transition-all duration-300',
         badge.earned
-          ? 'border-accent/30 bg-accent-soft'
-          : 'border-border bg-bg opacity-50 grayscale',
+          ? 'border-accent/40 bg-gradient-to-br from-accent-soft via-accent-soft/60 to-bg-elev shadow-[inset_0_0_0_1px_rgba(167,139,250,0.15),0_4px_16px_-8px_rgba(139,92,246,0.4)] hover:-translate-y-0.5 hover:border-accent/70 hover:shadow-[inset_0_0_0_1px_rgba(167,139,250,0.25),0_8px_22px_-8px_rgba(139,92,246,0.6)]'
+          : 'border-border bg-bg-elev/40 hover:-translate-y-0.5 hover:border-border-strong',
       )}
     >
-      <span className="text-2xl">{badge.emoji}</span>
-      <span className="text-[10px] font-medium leading-tight">{name}</span>
+      <span
+        className={cn(
+          'text-2xl transition-transform duration-300 group-hover:scale-110',
+          !badge.earned && 'opacity-30 grayscale',
+        )}
+      >
+        {badge.emoji}
+      </span>
+      <span
+        className={cn('text-[10px] font-medium leading-tight', !badge.earned && 'text-fg-subtle')}
+      >
+        {name}
+      </span>
       {!badge.earned && badge.progress > 0 && (
-        <div className="h-0.5 w-full overflow-hidden rounded-full bg-bg-overlay">
+        <div className="absolute inset-x-2 bottom-2 h-0.5 overflow-hidden rounded-full bg-bg-overlay">
           <div
-            className="h-full rounded-full bg-accent"
+            className="h-full rounded-full bg-accent transition-all duration-700"
             style={{ width: `${Math.round(badge.progress * 100)}%` }}
           />
+        </div>
+      )}
+      {badge.earned && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-1/4 top-1 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent"
+        />
+      )}
+      {/* Hover-reveal description (earned tiles only) */}
+      {badge.earned && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full bg-bg-overlay/95 p-2 text-[9px] leading-snug text-fg-muted opacity-0 backdrop-blur transition-all duration-200 group-hover:-translate-y-0 group-hover:opacity-100">
+          {desc}
         </div>
       )}
     </div>
@@ -405,12 +486,12 @@ function StatTile({
   decimals?: number
 }) {
   return (
-    <div className="rounded-xl border border-border bg-bg-elev p-5">
+    <div className="group relative overflow-hidden rounded-xl border border-border bg-bg-elev p-5 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-[0_8px_24px_-12px_rgba(139,92,246,0.4)]">
       <div className="flex items-center justify-between">
         <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted">
           {label}
         </span>
-        <span className="text-fg-subtle">{icon}</span>
+        <span className="text-fg-subtle transition-colors group-hover:text-accent">{icon}</span>
       </div>
       <div className="mt-4 flex items-baseline gap-1">
         <NumberTicker

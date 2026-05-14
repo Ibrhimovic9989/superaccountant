@@ -27,8 +27,8 @@ export default function DashboardLoading() {
 
         {/* Stats */}
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-28 rounded-xl" />
+          {['mastery', 'lessons', 'hours', 'phase'].map((k) => (
+            <Skeleton key={k} className="h-28 rounded-xl" />
           ))}
         </div>
 
@@ -37,7 +37,6 @@ export default function DashboardLoading() {
           <Skeleton className="h-[280px] rounded-xl lg:col-span-3" />
           <Skeleton className="h-[280px] rounded-xl lg:col-span-2" />
         </div>
-
       </main>
       <LoadingFacts floating />
     </div>
