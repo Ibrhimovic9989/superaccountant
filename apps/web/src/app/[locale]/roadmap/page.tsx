@@ -2,6 +2,7 @@ import { AppNav } from '@/components/app-nav'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { BorderBeam } from '@/components/magicui/border-beam'
 import { NumberTicker } from '@/components/magicui/number-ticker'
+import { PageBackdrop } from '@/components/page-backdrop'
 import { Badge } from '@/components/ui/badge'
 import { auth } from '@/lib/auth'
 import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
@@ -74,14 +75,15 @@ export default async function RoadmapPage({
       : 0
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-bg text-fg">
+    <div className="relative min-h-screen overflow-x-hidden bg-bg text-fg">
+      <PageBackdrop />
       <AppNav
         locale={locale}
         userName={session.user.name ?? null}
         userEmail={session.user.email ?? ''}
       />
 
-      <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-16">
+      <main className="relative mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-16">
         {/* Header */}
         <BlurFade delay={0.05}>
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted">

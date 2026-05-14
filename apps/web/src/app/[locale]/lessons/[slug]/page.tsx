@@ -1,5 +1,6 @@
 import { AppNav } from '@/components/app-nav'
 import { LessonShell } from '@/components/lesson/lesson-shell'
+import { PageBackdrop } from '@/components/page-backdrop'
 import { auth } from '@/lib/auth'
 import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
 import { getLessonBySlug } from '@/lib/data/lessons'
@@ -20,13 +21,14 @@ export default async function LessonPage({
   if (!lesson) notFound()
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-bg text-fg">
+    <div className="relative min-h-screen overflow-x-hidden bg-bg text-fg">
+      <PageBackdrop />
       <AppNav
         locale={locale}
         userName={session.user.name ?? null}
         userEmail={session.user.email ?? ''}
       />
-      <main>
+      <main className="relative">
         <LessonShell
           lesson={lesson}
           locale={locale}

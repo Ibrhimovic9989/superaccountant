@@ -1,5 +1,6 @@
 import { AppNav } from '@/components/app-nav'
 import { BlurFade } from '@/components/magicui/blur-fade'
+import { PageBackdrop } from '@/components/page-backdrop'
 import { Button } from '@/components/ui/button'
 import { auth } from '@/lib/auth'
 import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
@@ -118,14 +119,15 @@ export default async function TodayPage({
   })
 
   return (
-    <div className="min-h-screen bg-bg text-fg">
+    <div className="relative min-h-screen bg-bg text-fg">
+      <PageBackdrop />
       <AppNav
         locale={locale}
         userName={session.user.name ?? null}
         userEmail={session.user.email ?? ''}
       />
 
-      <main className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
+      <main className="relative mx-auto max-w-3xl px-6 py-12 sm:py-16">
         <BlurFade delay={0.05}>
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted">
             <CalendarDays className="h-3 w-3 text-accent" />

@@ -5,6 +5,11 @@ import { cn } from '@/lib/utils'
 import { Flame } from 'lucide-react'
 import { motion } from 'motion/react'
 
+// Per-rung colour theme. The ladder feels like a journey because each
+// rung is its own shade — Spark starts warm, the colours cool through
+// the middle, then heat back up at Legend.
+const RUNG_COLORS = ['#38bdf8', '#a78bfa', '#22d3ee', '#10b981', '#fbbf24', '#f472b6'] as const
+
 /**
  * Streak ladder — shows the milestone progression with the current
  * position highlighted. Each rung lights up as the student reaches it.
@@ -43,13 +48,15 @@ export function StreakLadder({ days, locale }: Props) {
 
       {/* Ladder rungs */}
       <div className="grid grid-cols-6 gap-1.5">
-        {STREAK_MILESTONES.map((m) => {
+        {STREAK_MILESTONES.map((m, i) => {
           const reached = days >= m.days
           const isCurrent = next?.days === m.days
+          const color = RUNG_COLORS[i] ?? '#a78bfa'
           return (
             <Rung
               key={m.days}
               milestone={m}
+              color={color}
               reached={reached}
               isCurrent={isCurrent}
               locale={locale}
@@ -63,11 +70,13 @@ export function StreakLadder({ days, locale }: Props) {
 
 function Rung({
   milestone,
+  color,
   reached,
   isCurrent,
   locale,
 }: {
   milestone: StreakMilestone
+  color: string
   reached: boolean
   isCurrent: boolean
   locale: 'en' | 'ar'
@@ -76,17 +85,23 @@ function Rung({
     <div
       className={cn(
         'group relative flex flex-col items-center gap-1 rounded-md border px-1.5 py-2 transition-all',
-        reached
-          ? 'border-warning/40 bg-warning/10 text-warning'
-          : isCurrent
-            ? 'border-accent/40 bg-accent-soft text-accent'
-            : 'border-border bg-bg-overlay/40 text-fg-subtle',
+        !reached && !isCurrent && 'border-border bg-bg-overlay/40 text-fg-subtle',
       )}
+      style={
+        reached || isCurrent
+          ? {
+              borderColor: `${color}66`,
+              background: `${color}1A`,
+              color,
+            }
+          : undefined
+      }
     >
       {isCurrent && (
         <motion.span
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-md border border-accent/60"
+          className="pointer-events-none absolute inset-0 rounded-md"
+          style={{ boxShadow: `inset 0 0 0 1px ${color}99` }}
           initial={{ opacity: 0.2 }}
           animate={{ opacity: [0.2, 0.6, 0.2] }}
           transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}

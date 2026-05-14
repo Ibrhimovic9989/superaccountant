@@ -7,6 +7,7 @@ import { BlurFade } from '@/components/magicui/blur-fade'
 import { BorderBeam } from '@/components/magicui/border-beam'
 import { MagicCard } from '@/components/magicui/magic-card'
 import { NumberTicker } from '@/components/magicui/number-ticker'
+import { PageBackdrop } from '@/components/page-backdrop'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { auth } from '@/lib/auth'
@@ -71,14 +72,15 @@ export default async function Dashboard({
   const nextRankTitle = lvl.next ? (locale === 'ar' ? lvl.next.titleAr : lvl.next.titleEn) : null
 
   return (
-    <div className="min-h-screen bg-bg text-fg">
+    <div className="relative min-h-screen bg-bg text-fg">
+      <PageBackdrop />
       <AppNav
         locale={locale}
         userName={session.user.name ?? null}
         userEmail={session.user.email ?? ''}
       />
 
-      <main className="mx-auto max-w-6xl px-6 py-12">
+      <main className="relative mx-auto max-w-6xl px-6 py-12">
         {/* ── Cohort access pill ──────────────────────────── */}
         {tier.kind === 'paid-cohort' && (
           <BlurFade delay={0.02}>
@@ -403,8 +405,8 @@ export default async function Dashboard({
               </Badge>
             </div>
             <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
-              {badges.map((badge) => (
-                <AchievementTile key={badge.id} badge={badge} locale={locale} />
+              {badges.map((badge, i) => (
+                <AchievementTile key={badge.id} badge={badge} locale={locale} idx={i} />
               ))}
             </div>
           </div>
@@ -416,24 +418,38 @@ export default async function Dashboard({
 
 // ─── Sub-components ────────────────────────────────────────
 
+const BADGE_COLORS = ['#a78bfa', '#38bdf8', '#10b981', '#fbbf24', '#22d3ee', '#f472b6'] as const
+
 function AchievementTile({
   badge,
   locale,
+  idx,
 }: {
   badge: AchievementBadge
   locale: 'en' | 'ar'
+  idx: number
 }) {
   const name = locale === 'ar' ? badge.nameAr : badge.nameEn
   const desc = locale === 'ar' ? badge.descAr : badge.descEn
+  const color = BADGE_COLORS[idx % BADGE_COLORS.length] ?? '#a78bfa'
   return (
     <div
       title={`${name} — ${desc}`}
       className={cn(
         'group relative flex aspect-square flex-col items-center justify-center gap-1.5 overflow-hidden rounded-xl border p-3 text-center transition-all duration-300',
         badge.earned
-          ? 'border-accent/40 bg-gradient-to-br from-accent-soft via-accent-soft/60 to-bg-elev shadow-[inset_0_0_0_1px_rgba(167,139,250,0.15),0_4px_16px_-8px_rgba(139,92,246,0.4)] hover:-translate-y-0.5 hover:border-accent/70 hover:shadow-[inset_0_0_0_1px_rgba(167,139,250,0.25),0_8px_22px_-8px_rgba(139,92,246,0.6)]'
+          ? 'hover:-translate-y-0.5'
           : 'border-border bg-bg-elev/40 hover:-translate-y-0.5 hover:border-border-strong',
       )}
+      style={
+        badge.earned
+          ? {
+              borderColor: `${color}66`,
+              background: `linear-gradient(135deg, ${color}26, ${color}0D 60%, var(--bg-elev))`,
+              boxShadow: `inset 0 0 0 1px ${color}26, 0 4px 16px -8px ${color}88`,
+            }
+          : undefined
+      }
     >
       <span
         className={cn(
@@ -445,6 +461,7 @@ function AchievementTile({
       </span>
       <span
         className={cn('text-[10px] font-medium leading-tight', !badge.earned && 'text-fg-subtle')}
+        style={badge.earned ? { color } : undefined}
       >
         {name}
       </span>
@@ -459,7 +476,8 @@ function AchievementTile({
       {badge.earned && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-x-1/4 top-1 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent"
+          className="pointer-events-none absolute inset-x-1/4 top-1 h-px"
+          style={{ background: `linear-gradient(to right, transparent, ${color}66, transparent)` }}
         />
       )}
       {/* Hover-reveal description (earned tiles only) */}
