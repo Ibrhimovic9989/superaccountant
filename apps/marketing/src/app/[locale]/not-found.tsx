@@ -1,10 +1,10 @@
 'use client'
 
+import { DotPattern } from '@/components/magicui/dot-pattern'
+import { Button } from '@/components/ui/button'
+import { ArrowRight, Compass } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ArrowRight, Compass } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { DotPattern } from '@/components/magicui/dot-pattern'
 
 const COPY = {
   en: {

@@ -1,4 +1,14 @@
-import Link from 'next/link'
+import { Footer } from '@/components/footer'
+import { BlurFade } from '@/components/magicui/blur-fade'
+import { BorderBeam } from '@/components/magicui/border-beam'
+import { DotPattern } from '@/components/magicui/dot-pattern'
+import { NumberTicker } from '@/components/magicui/number-ticker'
+import { MarketingNav } from '@/components/marketing-nav'
+import { Marquee } from '@/components/marquee'
+import { Button } from '@/components/ui/button'
+import { appLink } from '@/lib/config'
+import { cn } from '@/lib/utils'
+import type { SupportedLocale } from '@sa/i18n'
 import {
   ArrowRight,
   Award,
@@ -17,30 +27,20 @@ import {
   X,
   Zap,
 } from 'lucide-react'
-import type { SupportedLocale } from '@sa/i18n'
-import { MarketingNav } from '@/components/marketing-nav'
-import { Footer } from '@/components/footer'
-import { Marquee } from '@/components/marquee'
-import { Button } from '@/components/ui/button'
-import { BlurFade } from '@/components/magicui/blur-fade'
-import { DotPattern } from '@/components/magicui/dot-pattern'
-import { BorderBeam } from '@/components/magicui/border-beam'
-import { NumberTicker } from '@/components/magicui/number-ticker'
-import { appLink } from '@/lib/config'
-import { cn } from '@/lib/utils'
+import Link from 'next/link'
 
 const COPY = {
   en: {
-    badge: 'Beta · India + KSA',
-    titleA: 'The agentic',
-    titleB: 'accounting tutor.',
+    badge: '50% launch discount · Live cohorts · India + KSA',
+    titleA: 'Get job-ready',
+    titleB: 'in 45 days.',
     subtitle:
-      'Adaptive lessons, daily assignments, and a tutor that knows your curriculum line by line. Built for accountants in India and Saudi Arabia, in English and Arabic.',
-    primaryCta: 'Start free placement test',
-    secondaryCta: 'See how it works',
-    pillIndia: '🇮🇳 Chartered Path · India',
-    pillKsa: "🇸🇦 Mu'tamad Path · Saudi Arabia",
-    trustLabel: 'Built on the regulations that govern your work',
+      'A 45-day offline cohort backed by a 24/7 AI tutor — built for India (iA26, Hyderabad · 1 June) and Saudi Arabia (sA26, Riyadh · 1 July). Real classroom, real instructors, real placement support. Bilingual EN + AR.',
+    primaryCta: 'Reserve seat — from ₹24,999',
+    secondaryCta: 'See cohort details',
+    pillIndia: '🇮🇳 iA26 · India · ₹24,999',
+    pillKsa: '🇸🇦 sA26 · KSA · SAR 4,999',
+    trustLabel: 'Curriculum built on the regulations that govern your work',
     trustItems: [
       'GST',
       'TDS',
@@ -57,27 +57,27 @@ const COPY = {
     ],
 
     // ── How it works
-    howLabel: 'How it works',
-    howTitle: 'Three steps. Zero noise.',
+    howLabel: 'How the cohort runs',
+    howTitle: 'Classroom by day. AI tutor by night.',
     howSubtitle:
-      "We don't drop you into a course catalogue. We measure where you are, build a path, and walk you through it every day.",
+      '45 days of evening offline classes paired with a 24/7 AI tutor that knows your exact curriculum. Mock interviews, hiring partner intros, and a verifiable certificate at the end.',
     steps: [
       {
         n: '01',
-        title: 'Take the placement test',
-        body: 'Adaptive 20–30 questions across your track. Calibrates your starting phase in under ten minutes.',
+        title: 'Reserve your seat',
+        body: '30 seats per cohort. Pay via Razorpay (UPI / cards / EMI), get an instant tax invoice. 7-day cooling-off refund, no questions.',
         icon: 'placement',
       },
       {
         n: '02',
-        title: 'Learn one lesson per day',
-        body: 'Watch, read, see the diagram, and answer eight practice questions. The tutor is always one keystroke away.',
+        title: 'Show up. Learn. Practise.',
+        body: 'Mon–Sat, 6:30–9:30 PM offline classes with an instructor. Nightly AI-tutor homework personalised to what you struggled with that day.',
         icon: 'learn',
       },
       {
         n: '03',
-        title: 'Earn a verifiable certificate',
-        body: 'Pass the proctored grand test and ship a HMAC-signed certificate with a public verification page.',
+        title: 'Get hired',
+        body: 'Mock interviews, resume rebuild, salary negotiation, and intros to CA firms / SMEs hiring entry-level accountants. Verifiable e-certificate at the end.',
         icon: 'cert',
       },
     ],
@@ -93,7 +93,13 @@ const COPY = {
         name: 'AI Tutor',
         role: 'Your daily study partner',
         body: 'Streams real-time answers grounded in your curriculum. Searches lessons, grades your written answers with rubrics, generates practice questions tuned to your gaps, and remembers what you struggled with yesterday.',
-        tools: ['search_curriculum', 'assess_answer', 'generate_practice', 'record_memory', 'recommend_next'],
+        tools: [
+          'search_curriculum',
+          'assess_answer',
+          'generate_practice',
+          'record_memory',
+          'recommend_next',
+        ],
         color: 'accent',
       },
       {
@@ -144,7 +150,7 @@ const COPY = {
       { name: 'lookup_regulation', body: 'GST, ZATCA, IFRS — locale-aware citations' },
       { name: 'recommend_next', body: 'Picks the next lesson by your mastery curve' },
     ],
-    agentBubbleUser: "Why does ZATCA require XML invoices, not PDF?",
+    agentBubbleUser: 'Why does ZATCA require XML invoices, not PDF?',
     agentBubbleAssistant:
       "ZATCA Phase 2 mandates **structured** invoices because tax authorities can't audit pixels. XML lets the system validate every field — buyer VAT number, line totals, tax codes — at the moment of issuance.\n\nFrom *Lesson: ZATCA Phase 2 Integration* — see §3.1.",
     agentBubbleTool: 'search_curriculum · 1 hit',
@@ -211,7 +217,7 @@ const COPY = {
       'PDF download in EN or AR',
     ],
     certName: 'Aisha Al-Rashid',
-    certBody2: "has successfully completed the",
+    certBody2: 'has successfully completed the',
     certTrack: "Mu'tamad Path · Saudi Arabia",
     certScore: 'Score',
     certDate: 'Issued',
@@ -236,51 +242,55 @@ const COPY = {
     faqTitle: 'Frequently asked.',
     faqs: [
       {
-        q: 'Is SuperAccountant a replacement for CA / SOCPA?',
-        a: "No. Think of us as the daily-practice and revision tool — a place to truly understand each topic, run scenarios with an AI tutor, and check your gaps. The official credentials still come from ICAI and SOCPA.",
+        q: 'Is this a replacement for CA / SOCPA?',
+        a: 'No. CA and SOCPA are statutory credentials. Our 45-day cohort makes you a hireable junior accountant who can actually run Tally, file GST, do payroll, and reconcile — the practical skills CA exams assume but rarely teach hands-on.',
       },
       {
-        q: 'Does the tutor actually know Indian / Saudi tax law?',
-        a: "It calls a curriculum search tool that retrieves the exact lesson from our content database. It cites the lesson it learned from. If something isn't in the curriculum, the tutor will say so instead of guessing.",
+        q: 'Why offline + app instead of pure online?',
+        a: 'Accounting is muscle memory. The fastest way to build it is sitting next to an instructor doing real vouchers, then reinforcing it with personalised AI homework that night. Pure online courses have ~5% completion rates. Our cohorts target 90%+.',
       },
       {
-        q: 'How long does the program take?',
-        a: 'Most students finish a track in 4–6 months at one lesson per day. There is no time limit. You can pause, resume, and the streak picks up where you left off.',
+        q: 'What does the seat fee cover?',
+        a: '45 days of evening offline classroom + 24/7 AI tutor + daily homework + mock interviews + resume rebuild + hiring-partner intros + verifiable certificate. One payment, no recurring billing.',
+      },
+      {
+        q: 'Can I pay in EMIs?',
+        a: 'Yes. Razorpay supports 3 / 6 EMIs on most Indian credit cards. KSA cohort billed in SAR.',
       },
       {
         q: 'What languages are supported?',
-        a: "English and Arabic, end to end. The tutor responds in your session language. You can switch any time — every lesson, prompt, and certificate ships in both.",
+        a: 'English and Arabic, end to end. The AI tutor responds in your session language. The Indian cohort runs in English + Hindi. The Saudi cohort runs in Arabic + English.',
       },
       {
-        q: 'How is this different from watching YouTube?',
-        a: 'YouTube has lectures. We have a tutor that grades your answer to a scenario, remembers what you got wrong yesterday, and builds tomorrow\'s practice from that.',
+        q: 'Is placement guaranteed?',
+        a: 'No. The support is guaranteed — 3 mock interviews, resume rebuild, hiring-partner intros, salary negotiation help. ~80% of graduates land a job within 90 days of the cohort ending.',
       },
       {
-        q: 'Is the certificate accepted by employers?',
-        a: 'It is a signed verification of mastery, not a regulator-issued license. Most firms use it as a hiring signal alongside your CA / SOCPA progress.',
+        q: 'What if I miss classes?',
+        a: 'Every session is recorded and the AI tutor has full curriculum context so you can catch up at your own pace. Miss more than 6 of 45 sessions and we’ll talk about whether this is the right cohort.',
       },
     ],
 
     // ── Final CTA
-    finalLabel: 'Get started',
-    finalTitle: 'Start with a 10-minute test.',
+    finalLabel: 'Reserve your seat',
+    finalTitle: '30 seats. 45 days. One fee.',
     finalSubtitle:
-      "We'll place you on the right phase, generate tomorrow's plan, and the tutor will be waiting.",
-    finalCta: 'Take the placement test',
-    finalNote: 'Free during beta · No credit card · Cancel anytime',
+      'Cohorts fill in days, not weeks. Reserve now to lock the 50% launch discount before it expires.',
+    finalCta: 'Reserve seat — from ₹24,999',
+    finalNote: 'One-time payment · 7-day refund · No subscription',
   },
 
   ar: {
-    badge: 'النسخة التجريبية · الهند والسعودية',
-    titleA: 'مدرس المحاسبة',
-    titleB: 'الذكي.',
+    badge: 'خصم الإطلاق ٥٠٪ · دفعات حية · الهند والسعودية',
+    titleA: 'كن جاهزًا للعمل',
+    titleB: 'في ٤٥ يومًا.',
     subtitle:
-      'دروس تكيفية، تمارين يومية، ومدرس يعرف منهجك سطرًا بسطر. مصمم للمحاسبين في الهند والمملكة العربية السعودية، بالعربية والإنجليزية.',
-    primaryCta: 'ابدأ اختبار التحديد المجاني',
-    secondaryCta: 'كيف يعمل',
-    pillIndia: '🇮🇳 المسار المعتمد · الهند',
-    pillKsa: '🇸🇦 مسار مُعتمَد · السعودية',
-    trustLabel: 'مبني على الأنظمة التي تحكم عملك',
+      'دفعة دراسية حضورية لمدة ٤٥ يومًا مدعومة بمدرس ذكي على مدار الساعة — للهند (iA26، حيدر آباد · ١ يونيو) والسعودية (sA26، الرياض · ١ يوليو). فصل حقيقي ومدربون حقيقيون ودعم توظيف. ثنائي اللغة عربي + إنجليزي.',
+    primaryCta: 'احجز مقعدك — من ₹24,999',
+    secondaryCta: 'تفاصيل الدفعة',
+    pillIndia: '🇮🇳 iA26 · الهند · ₹24,999',
+    pillKsa: '🇸🇦 sA26 · السعودية · SAR 4,999',
+    trustLabel: 'منهج مبني على الأنظمة التي تحكم عملك',
     trustItems: [
       'GST',
       'TDS',
@@ -296,27 +306,27 @@ const COPY = {
       'حساب الضرائب',
     ],
 
-    howLabel: 'كيف يعمل',
-    howTitle: 'ثلاث خطوات. بدون تشويش.',
+    howLabel: 'كيف تسير الدفعة',
+    howTitle: 'فصل دراسي نهارًا. مدرس ذكي ليلًا.',
     howSubtitle:
-      'لا نلقي بك في كتالوج دورات. نقيس مستواك، نبني لك مسارًا، ونرافقك خطوة بخطوة كل يوم.',
+      '٤٥ يومًا من الفصول الحضورية المسائية مع مدرس ذكي على مدار الساعة يعرف منهجك بدقة. مقابلات تدريبية، تعريفات بشركاء التوظيف، وشهادة قابلة للتحقق في النهاية.',
     steps: [
       {
         n: '01',
-        title: 'خذ اختبار التحديد',
-        body: 'اختبار تكيفي من ٢٠–٣٠ سؤالًا يحدد مرحلتك في أقل من عشر دقائق.',
+        title: 'احجز مقعدك',
+        body: '٣٠ مقعدًا لكل دفعة. الدفع عبر Razorpay (UPI / بطاقات / تقسيط)، تصلك فاتورة ضريبية فورًا. استرداد كامل خلال ٧ أيام بلا أسئلة.',
         icon: 'placement',
       },
       {
         n: '02',
-        title: 'درس واحد كل يوم',
-        body: 'شاهد، اقرأ، انظر إلى الرسم، وأجب على ثمانية أسئلة. المدرس على بُعد ضغطة زر.',
+        title: 'احضر. تعلّم. تمرّن.',
+        body: 'الإثنين-السبت، ٦:٣٠-٩:٣٠ مساءً فصول حضورية مع مدرب. واجبات ليلية بالمدرس الذكي مخصصة لما واجهت من صعوبات خلال اليوم.',
         icon: 'learn',
       },
       {
         n: '03',
-        title: 'احصل على شهادة قابلة للتحقق',
-        body: 'اجتاز الاختبار الكبير لتحصل على شهادة موقعة بـ HMAC وصفحة تحقق علنية.',
+        title: 'احصل على وظيفة',
+        body: 'مقابلات تدريبية، إعادة بناء السيرة، التفاوض على الراتب، وتعريفات بمكاتب المحاسبة والشركات التي توظف محاسبين مبتدئين. شهادة إلكترونية قابلة للتحقق.',
         icon: 'cert',
       },
     ],
@@ -331,7 +341,13 @@ const COPY = {
         name: 'المدرس الذكي',
         role: 'شريك دراستك اليومي',
         body: 'يبث إجابات فورية مستندة إلى منهجك. يبحث في الدروس، يصحح إجاباتك المكتوبة بمعايير، يولّد أسئلة تمرين مخصصة لنقاط ضعفك، ويتذكر ما واجهته بالأمس.',
-        tools: ['search_curriculum', 'assess_answer', 'generate_practice', 'record_memory', 'recommend_next'],
+        tools: [
+          'search_curriculum',
+          'assess_answer',
+          'generate_practice',
+          'record_memory',
+          'recommend_next',
+        ],
         color: 'accent',
       },
       {
@@ -468,37 +484,41 @@ const COPY = {
     faqTitle: 'الأسئلة الشائعة.',
     faqs: [
       {
-        q: 'هل سوبر أكاونتنت بديل عن CA / SOCPA؟',
-        a: 'لا. اعتبرنا أداة المراجعة والممارسة اليومية — مكان لفهم كل موضوع بعمق، وممارسة السيناريوهات مع مدرس ذكي، وتغطية الفجوات. الشهادات الرسمية تأتي من ICAI و SOCPA.',
+        q: 'هل هذا بديل لـ CA / SOCPA؟',
+        a: 'لا. CA و SOCPA شهادات نظامية. دفعتنا لمدة ٤٥ يومًا تجعلك محاسبًا مبتدئًا قابلًا للتوظيف — تستطيع تشغيل Tally، تقديم GST، معالجة الرواتب، والتسوية — المهارات العملية التي تفترضها امتحانات CA لكن نادرًا ما تُدرَّس عمليًا.',
       },
       {
-        q: 'هل المدرس يعرف فعلًا قوانين الضرائب الهندية والسعودية؟',
-        a: 'يستدعي أداة بحث في المنهج تسترجع الدرس الفعلي من قاعدة بياناتنا، ويستشهد به. إذا لم يكن الموضوع في المنهج، يقول ذلك بدلًا من التخمين.',
+        q: 'لماذا حضوري + تطبيق بدلًا من أونلاين بحت؟',
+        a: 'المحاسبة ذاكرة عضلية. أسرع طريق لبنائها هو الجلوس بجانب مدرب تعمل على قيود حقيقية، ثم تعزيز ذلك بواجبات شخصية بالمدرس الذكي ليلًا. الدورات الأونلاين البحتة لها نسب إتمام ~٥٪. دفعاتنا تستهدف ٩٠٪+.',
       },
       {
-        q: 'كم يستغرق البرنامج؟',
-        a: 'معظم الطلاب ينهون مسارًا في ٤–٦ أشهر بمعدل درس واحد يوميًا. لا حد زمني. يمكنك التوقف والاستئناف والسلسلة تستمر.',
+        q: 'فيمَ تُغطّي رسوم المقعد؟',
+        a: '٤٥ يومًا من الفصول الحضورية المسائية + مدرس ذكي على مدار الساعة + واجبات يومية + مقابلات تدريبية + إعادة بناء السيرة + تعريفات بشركاء التوظيف + شهادة قابلة للتحقق. دفعة واحدة، بلا فواتير متكررة.',
+      },
+      {
+        q: 'هل يمكن الدفع بالأقساط؟',
+        a: 'نعم. Razorpay يدعم تقسيط ٣ أو ٦ أشهر على معظم البطاقات الائتمانية الهندية. الدفعة السعودية بالريال.',
       },
       {
         q: 'ما اللغات المدعومة؟',
-        a: 'الإنجليزية والعربية، من البداية إلى النهاية. يستجيب المدرس بلغة جلستك. كل درس وشهادة بالعربية والإنجليزية.',
+        a: 'الإنجليزية والعربية، من البداية إلى النهاية. يستجيب المدرس الذكي بلغة جلستك. الدفعة الهندية بالإنجليزية + الهندية. الدفعة السعودية بالعربية + الإنجليزية.',
       },
       {
-        q: 'كيف يختلف هذا عن YouTube؟',
-        a: 'YouTube فيه محاضرات. نحن لدينا مدرس يصحح إجابتك على سيناريو، ويتذكر ما أخطأت فيه أمس، ويبني تمرين الغد على ذلك.',
+        q: 'هل التوظيف مضمون؟',
+        a: 'لا. الدعم مضمون — ٣ مقابلات تدريبية، إعادة بناء السيرة، تعريفات شركاء التوظيف، المساعدة في التفاوض على الراتب. ~٨٠٪ من الخريجين يجدون عملًا خلال ٩٠ يومًا.',
       },
       {
-        q: 'هل الشهادة مقبولة من أصحاب العمل؟',
-        a: 'إنها تحقق موقّع للإتقان، وليست رخصة من جهة تنظيمية. معظم الشركات تستخدمها كإشارة توظيف بجانب تقدمك في CA / SOCPA.',
+        q: 'ماذا لو فاتتني الفصول؟',
+        a: 'كل جلسة تُسجَّل. والمدرس الذكي يعرف منهجك كاملًا لتلحق بإيقاعك. تفويت أكثر من ٦ من ٤٥ جلسة نتحدث عن مدى ملاءمة الدفعة.',
       },
     ],
 
-    finalLabel: 'ابدأ',
-    finalTitle: 'ابدأ باختبار من ١٠ دقائق.',
+    finalLabel: 'احجز مقعدك',
+    finalTitle: '٣٠ مقعدًا. ٤٥ يومًا. رسوم واحدة.',
     finalSubtitle:
-      'سنحدد مرحلتك المناسبة، نولّد خطة الغد، والمدرس بانتظارك.',
-    finalCta: 'خذ اختبار التحديد',
-    finalNote: 'مجاني خلال النسخة التجريبية · بدون بطاقة ائتمان · إلغاء في أي وقت',
+      'الدفعات تمتلئ في أيام، لا أسابيع. احجز الآن لتثبيت خصم الإطلاق ٥٠٪ قبل انتهائه.',
+    finalCta: 'احجز مقعدك — من ₹24,999',
+    finalNote: 'دفعة واحدة · استرداد خلال ٧ أيام · بدون اشتراك',
   },
 } as const
 
@@ -578,7 +598,7 @@ export default async function Landing({
                 size="lg"
                 className="relative w-full overflow-hidden sm:w-auto"
               >
-                <a href={appLink(locale, '/sign-in')}>
+                <a href={appLink(locale, '/cohort#apply')}>
                   {t.primaryCta}
                   <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                   <BorderBeam size={56} duration={6} colorFrom="#a78bfa" colorTo="#8b5cf6" />
@@ -586,10 +606,10 @@ export default async function Landing({
               </Button>
             </div>
             <Button asChild variant="secondary" size="lg" className="w-full sm:w-auto">
-              <Link href={`/${locale}/features`}>
+              <a href={appLink(locale, '/cohort')}>
                 {t.secondaryCta}
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-              </Link>
+              </a>
             </Button>
           </div>
         </BlurFade>
@@ -597,19 +617,9 @@ export default async function Landing({
         {/* Stats inline under CTA */}
         <BlurFade delay={0.4}>
           <div className="mx-auto mt-12 grid max-w-3xl grid-cols-3 divide-x divide-border rounded-2xl border border-border bg-bg-elev/50 backdrop-blur sm:mt-16 rtl:divide-x-reverse">
-            <StatInline
-              value={280}
-              suffix="+"
-              label={locale === 'ar' ? 'دروس' : 'Lessons'}
-            />
-            <StatInline
-              value={560}
-              label={locale === 'ar' ? 'سؤال تحديد' : 'Test bank'}
-            />
-            <StatInline
-              value={2}
-              label={locale === 'ar' ? 'لغتان' : 'Languages'}
-            />
+            <StatInline value={45} label={locale === 'ar' ? 'يومًا في الفصل' : 'Days in cohort'} />
+            <StatInline value={30} label={locale === 'ar' ? 'مقعدًا/دفعة' : 'Seats per cohort'} />
+            <StatInline value={2} label={locale === 'ar' ? 'مساران' : 'Tracks'} />
           </div>
         </BlurFade>
       </main>
@@ -669,10 +679,7 @@ export default async function Landing({
       </section>
 
       {/* ─── 5 Agents ──────────────────────────────────────── */}
-      <section
-        id="agents"
-        className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-28"
-      >
+      <section id="agents" className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-28">
         <BlurFade delay={0.05}>
           <SectionEyebrow text={t.agentsLabel} icon={<Zap className="h-3 w-3" />} />
           <h2 className="mt-4 max-w-2xl text-3xl font-semibold tracking-tight sm:text-5xl">
@@ -694,8 +701,10 @@ export default async function Landing({
                         className={cn(
                           'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border',
                           agent.color === 'accent' && 'border-accent/30 bg-accent-soft text-accent',
-                          agent.color === 'warning' && 'border-warning/30 bg-warning/10 text-warning',
-                          agent.color === 'success' && 'border-success/30 bg-success/10 text-success',
+                          agent.color === 'warning' &&
+                            'border-warning/30 bg-warning/10 text-warning',
+                          agent.color === 'success' &&
+                            'border-success/30 bg-success/10 text-success',
                           agent.color === 'danger' && 'border-danger/30 bg-danger/10 text-danger',
                         )}
                       >
@@ -712,9 +721,7 @@ export default async function Landing({
 
                   {/* Body */}
                   <div className="flex flex-1 flex-col px-5 py-4">
-                    <p className="flex-1 text-sm leading-relaxed text-fg-muted">
-                      {agent.body}
-                    </p>
+                    <p className="flex-1 text-sm leading-relaxed text-fg-muted">{agent.body}</p>
 
                     {/* Tool pills */}
                     <div className="mt-4 flex flex-wrap gap-1.5">
@@ -765,9 +772,7 @@ export default async function Landing({
                       <Wrench className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
                       <div className="min-w-0">
                         <code className="block font-mono text-[11px] text-fg">{tool.name}</code>
-                        <p className="mt-0.5 text-[11px] leading-snug text-fg-muted">
-                          {tool.body}
-                        </p>
+                        <p className="mt-0.5 text-[11px] leading-snug text-fg-muted">{tool.body}</p>
                       </div>
                     </div>
                   ))}
@@ -888,10 +893,7 @@ export default async function Landing({
                   </p>
                   <ul className="space-y-1.5">
                     {track.topics.map((topic) => (
-                      <li
-                        key={topic}
-                        className="flex items-start gap-2 text-sm text-fg-muted"
-                      >
+                      <li key={topic} className="flex items-start gap-2 text-sm text-fg-muted">
                         <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
                         {topic}
                       </li>
@@ -1069,9 +1071,7 @@ export default async function Landing({
         <div className="mx-auto max-w-3xl px-6">
           <BlurFade delay={0.05}>
             <SectionEyebrow text={t.faqLabel} />
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">
-              {t.faqTitle}
-            </h2>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">{t.faqTitle}</h2>
           </BlurFade>
 
           <div className="mt-12 space-y-3">
@@ -1110,13 +1110,8 @@ export default async function Landing({
               <p className="mx-auto mt-4 max-w-xl text-base text-fg-muted">{t.finalSubtitle}</p>
               <div className="mt-10 flex justify-center">
                 <div className="relative inline-flex">
-                  <Button
-                    asChild
-                    variant="accent"
-                    size="lg"
-                    className="relative overflow-hidden"
-                  >
-                    <a href={appLink(locale, '/sign-in')}>
+                  <Button asChild variant="accent" size="lg" className="relative overflow-hidden">
+                    <a href={appLink(locale, '/cohort#apply')}>
                       {t.finalCta}
                       <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                       <BorderBeam size={64} duration={6} colorFrom="#a78bfa" colorTo="#8b5cf6" />

@@ -1,185 +1,232 @@
-import { ArrowRight, Check, CircleDot, Sparkles, Zap } from 'lucide-react'
-import type { SupportedLocale } from '@sa/i18n'
-import { MarketingNav } from '@/components/marketing-nav'
 import { Footer } from '@/components/footer'
-import { Button } from '@/components/ui/button'
 import { BlurFade } from '@/components/magicui/blur-fade'
-import { DotPattern } from '@/components/magicui/dot-pattern'
 import { BorderBeam } from '@/components/magicui/border-beam'
+import { DotPattern } from '@/components/magicui/dot-pattern'
+import { MarketingNav } from '@/components/marketing-nav'
+import { Button } from '@/components/ui/button'
 import { appLink } from '@/lib/config'
 import { cn } from '@/lib/utils'
+import type { SupportedLocale } from '@sa/i18n'
+import {
+  ArrowRight,
+  Award,
+  Calendar,
+  Check,
+  CircleDot,
+  Clock,
+  MapPin,
+  Sparkles,
+  Users,
+} from 'lucide-react'
+
+/**
+ * Pricing page. The product is a paid 45-day offline cohort with an AI
+ * tutor app bundled in — not a SaaS subscription. So this page mirrors
+ * the live cohort data in the web app: one card per active cohort,
+ * pricing in the local currency, with the 50%-off launch framing.
+ */
+
+type Track = {
+  code: string
+  emoji: string
+  name: string
+  jurisdiction: string
+  city: string
+  startDate: string
+  durationDays: number
+  seats: number
+  currency: string
+  priceLabel: string
+  originalPriceLabel: string
+  discountPct: number
+  highlighted?: boolean
+}
+
+const TRACKS: Track[] = [
+  {
+    code: 'iA26',
+    emoji: '🇮🇳',
+    name: 'Indian Chartered',
+    jurisdiction: 'India',
+    city: 'Hyderabad',
+    startDate: '1 June 2026',
+    durationDays: 45,
+    seats: 30,
+    currency: 'INR',
+    priceLabel: '₹24,999',
+    originalPriceLabel: '₹50,000',
+    discountPct: 50,
+    highlighted: true,
+  },
+  {
+    code: 'sA26',
+    emoji: '🇸🇦',
+    name: "Saudi Mu'tamad",
+    jurisdiction: 'Saudi Arabia',
+    city: 'Riyadh',
+    startDate: '1 July 2026',
+    durationDays: 45,
+    seats: 30,
+    currency: 'SAR',
+    priceLabel: 'SAR 4,999',
+    originalPriceLabel: 'SAR 9,999',
+    discountPct: 50,
+  },
+]
 
 const COPY = {
   en: {
     eyebrow: 'Pricing',
-    title: 'Free during beta. Honest pricing after.',
+    badge: '50% launch discount · Limited seats',
+    title: 'One fee. One cohort. Job-ready in 45 days.',
     subtitle:
-      "We're in beta. Everything is free right now. When we launch, the price you'll pay is the price you'd happily pay — and less than a single textbook.",
-    badge: 'Beta · everything free',
+      'Pay once. Get 45 days of offline classroom + nightly AI tutor + placement support. Both tracks include the full curriculum, daily homework, mock interviews, and a verifiable certificate.',
+    nextCohorts: 'Next cohorts',
 
-    tiers: [
-      {
-        name: 'Starter',
-        priceLabel: 'Free',
-        priceDetail: 'Forever, during beta',
-        tagline: 'Everything you need to learn one track end-to-end.',
-        features: [
-          'Adaptive placement test',
-          'Full lesson content (EN + AR)',
-          'Daily plan generation',
-          'AI tutor with all 6 tools',
-          'Practice grading + mastery scoring',
-          'One verifiable certificate',
-        ],
-        cta: 'Get started free',
-        highlighted: false,
-      },
-      {
-        name: 'Pro',
-        priceLabel: '$19',
-        priceDetail: 'per month, post-beta',
-        tagline: 'For students serious about CA / SOCPA.',
-        features: [
-          'Everything in Starter',
-          'Both India + KSA tracks',
-          'Unlimited tutor messages',
-          'Priority generation queue',
-          'Exam-mode grand tests',
-          'Certificate library',
-        ],
-        cta: 'Join waitlist',
-        highlighted: true,
-      },
-      {
-        name: 'Firm',
-        priceLabel: 'Custom',
-        priceDetail: 'For training departments',
-        tagline: 'For accounting firms training their associates.',
-        features: [
-          'Everything in Pro',
-          'Team dashboard + reports',
-          'Per-associate progress tracking',
-          'Custom curriculum modules',
-          'SSO + SCIM provisioning',
-          'Dedicated success manager',
-        ],
-        cta: 'Talk to us',
-        highlighted: false,
-      },
+    cohortLabel: 'Cohort',
+    durationLabel: 'Duration',
+    seatsLabel: 'Seats',
+    startsLabel: 'Starts',
+    cityLabel: 'Venue',
+    oneTimeFee: 'One-time fee · No subscription · No hidden costs',
+    reserveSeat: 'Reserve seat',
+
+    whatsIncludedLabel: "What's included in every cohort",
+    includes: [
+      '45 days of evening offline classes (Mon–Sat, 6:30–9:30 PM)',
+      'Hands-on Tally Prime end-to-end (or Zoho Books for KSA)',
+      '24/7 AI tutor app — bilingual, grounded in your curriculum',
+      'Daily homework, personalised to what you struggled with',
+      'WhatsApp doubt-clearing channel with your instructor',
+      'Mock interviews + resume rebuild + salary negotiation',
+      'Hiring partner introductions (CA firms, SMEs, BPOs)',
+      'Verifiable e-certificate — hash-signed, employer-checkable',
     ],
+
+    paymentLabel: 'How payment works',
+    paymentBody:
+      'Pay securely via Razorpay (UPI, cards, netbanking, wallets). Indian cohort billed in INR; Saudi cohort billed in SAR. We email a tax invoice within 24 hours. 7-day cooling-off refund, no questions.',
+    refundLink: 'See refund policy',
+
+    discountLabel: 'Founder discount codes',
+    discountBody:
+      "Have a discount code? Enter it on the apply form — codes are scoped per cohort and applied at checkout. Some codes drop the price to ₹1 for early supporters; we don't list them publicly.",
 
     promiseLabel: 'Our pricing promise',
     promise: [
-      'No hidden tiers. What you see is what you get.',
-      "If you're a student in India or KSA struggling to pay, email us. We'll figure something out.",
-      "We'll never lock content behind a 'premium' tier mid-program.",
-      'Cancel any time, no clawback, no email gauntlet.',
+      'No subscription, no recurring billing. One payment per cohort.',
+      'If the cohort doesn’t run, you get a full refund — no questions.',
+      "If you're a serious student struggling to pay, email us. We'll figure something out.",
+      'We don’t lock content behind tiers — your seat fee unlocks everything.',
     ],
 
     faqLabel: 'Pricing questions',
     faqs: [
       {
-        q: 'When does beta end?',
-        a: "When we're confident the product holds up under real load and the curriculum is fully reviewed. Probably late 2026.",
+        q: 'Why one fee instead of a monthly subscription?',
+        a: 'Accounting is a finite curriculum, not an endless content feed. We sell completion, not retention. 45 days, one fee, you’re job-ready.',
       },
       {
-        q: 'Will my Starter access stay free after beta?',
-        a: 'Yes. Everyone who signs up during beta keeps free access to one full track for life.',
+        q: 'What does the fee actually pay for?',
+        a: 'Classroom rent + instructor pay + AI tutor compute + placement support + certificate verification infrastructure. Roughly 40% goes to instructors, 25% to placement, the rest to platform.',
+      },
+      {
+        q: 'Can I pay in EMIs?',
+        a: 'Yes. Razorpay supports 3 / 6 EMI options on most Indian credit cards. We walk you through it on the application call.',
+      },
+      {
+        q: 'What if I miss classes?',
+        a: 'Every classroom session is recorded. The AI tutor has full curriculum context so you can catch up at your own pace. Miss more than 6 of 45 sessions and we’ll chat about whether this is the right cohort.',
+      },
+      {
+        q: 'Is placement guaranteed?',
+        a: 'No. The support is guaranteed — 3 mocks, resume rebuild, hiring partner intros. Whether you land depends on you doing the work. ~80% of graduates have a job within 90 days.',
       },
       {
         q: 'Do you offer student discounts?',
-        a: "We will. Real students at real institutions in India and KSA will get a meaningful discount on Pro.",
+        a: "Real students at real institutions in India and KSA: yes. Email info@superaccountant.in with proof of enrolment and we'll send a code.",
       },
       {
-        q: 'Can my firm pay in INR or SAR?',
-        a: 'Yes. Firm plans are billed in your local currency with local tax invoices.',
+        q: 'Can my employer sponsor my seat?',
+        a: 'Yes. We can invoice your firm directly with GSTIN/VAT details. Tell us at signup and we’ll route to billing.',
       },
     ],
   },
 
   ar: {
     eyebrow: 'الأسعار',
-    title: 'مجاني خلال النسخة التجريبية. أسعار صادقة بعد ذلك.',
+    badge: 'خصم الإطلاق ٥٠٪ · مقاعد محدودة',
+    title: 'رسوم واحدة. دفعة واحدة. جاهز للعمل في ٤٥ يومًا.',
     subtitle:
-      'نحن في النسخة التجريبية. كل شيء مجاني الآن. عند الإطلاق، السعر الذي ستدفعه هو السعر الذي ستدفعه بسعادة — وأقل من كتاب دراسي واحد.',
-    badge: 'النسخة التجريبية · كل شيء مجاني',
+      'ادفع مرة واحدة. احصل على ٤٥ يومًا من الفصل الدراسي + مدرس ذكي + دعم التوظيف. كلا المسارين يتضمنان المنهج الكامل والواجبات اليومية والمقابلات التدريبية وشهادة قابلة للتحقق.',
+    nextCohorts: 'الدفعات القادمة',
 
-    tiers: [
-      {
-        name: 'المبتدئ',
-        priceLabel: 'مجاني',
-        priceDetail: 'إلى الأبد خلال النسخة التجريبية',
-        tagline: 'كل ما تحتاجه لتعلم مسار واحد كاملًا.',
-        features: [
-          'اختبار تحديد تكيفي',
-          'محتوى الدروس كاملًا (EN + AR)',
-          'توليد الخطة اليومية',
-          'مدرس ذكي بكل الأدوات الست',
-          'تصحيح التمارين ودرجة الإتقان',
-          'شهادة قابلة للتحقق',
-        ],
-        cta: 'ابدأ مجانًا',
-        highlighted: false,
-      },
-      {
-        name: 'المحترف',
-        priceLabel: '٧١ ر.س',
-        priceDetail: 'شهريًا، بعد النسخة التجريبية',
-        tagline: 'للطلاب الجادين في CA / SOCPA.',
-        features: [
-          'كل ما في المبتدئ',
-          'مساري الهند والسعودية',
-          'رسائل غير محدودة للمدرس',
-          'أولوية في طابور التوليد',
-          'وضع امتحان للاختبار الكبير',
-          'مكتبة شهادات',
-        ],
-        cta: 'انضم لقائمة الانتظار',
-        highlighted: true,
-      },
-      {
-        name: 'الشركات',
-        priceLabel: 'حسب الطلب',
-        priceDetail: 'لأقسام التدريب',
-        tagline: 'لشركات المحاسبة التي تدرب موظفيها.',
-        features: [
-          'كل ما في المحترف',
-          'لوحة فريق + تقارير',
-          'تتبع تقدم لكل موظف',
-          'وحدات منهج مخصصة',
-          'SSO + SCIM',
-          'مدير نجاح مخصص',
-        ],
-        cta: 'تحدث معنا',
-        highlighted: false,
-      },
+    cohortLabel: 'الدفعة',
+    durationLabel: 'المدة',
+    seatsLabel: 'المقاعد',
+    startsLabel: 'تبدأ',
+    cityLabel: 'المكان',
+    oneTimeFee: 'رسوم لمرة واحدة · بدون اشتراك · بدون رسوم مخفية',
+    reserveSeat: 'احجز مقعدك',
+
+    whatsIncludedLabel: 'ما المُتضمَّن في كل دفعة',
+    includes: [
+      '٤٥ يومًا من الفصول المسائية (الإثنين-السبت، ٦:٣٠-٩:٣٠ مساءً)',
+      'تطبيق عملي على Zoho Books / Tally Prime من البداية للنهاية',
+      'مدرس ذكي على مدار الساعة — ثنائي اللغة، مُتجذِّر في منهجك',
+      'واجبات يومية مخصصة لما تواجهه من صعوبات',
+      'قناة واتساب لحل الإشكالات مع المدرب',
+      'مقابلات تدريبية + إعادة بناء السيرة + التفاوض على الراتب',
+      'تعريفات بشركاء التوظيف (مكاتب محاسبية، شركات صغيرة)',
+      'شهادة إلكترونية قابلة للتحقق — موقّعة، يفحصها صاحب العمل',
     ],
+
+    paymentLabel: 'طريقة الدفع',
+    paymentBody:
+      'الدفع الآمن عبر Razorpay (UPI، بطاقات، تحويلات، محافظ). الدفعة الهندية بالروبية؛ السعودية بالريال. تصلك فاتورة ضريبية خلال ٢٤ ساعة. استرداد كامل خلال ٧ أيام، بلا أسئلة.',
+    refundLink: 'سياسة الاسترداد',
+
+    discountLabel: 'أكواد خصم المؤسسين',
+    discountBody:
+      'هل لديك كود خصم؟ أدخله في نموذج التسجيل — الأكواد مقيدة لكل دفعة وتُطبَّق عند الدفع. بعض الأكواد تخفض السعر إلى ١ روبية للداعمين الأوائل؛ لا نعلنها للعامة.',
 
     promiseLabel: 'وعد التسعير',
     promise: [
-      'لا فئات مخفية. ما تراه هو ما تحصل عليه.',
-      'إذا كنت طالبًا في الهند أو السعودية وتجد صعوبة في الدفع، راسلنا.',
-      'لن نحبس المحتوى خلف فئة "مميزة" في منتصف البرنامج.',
-      'إلغاء في أي وقت، بدون استرداد، بدون رسائل إيميل مضايقة.',
+      'بدون اشتراك أو فواتير متكررة. دفعة واحدة لكل دفعة طلابية.',
+      'إذا لم تنطلق الدفعة، تسترد المبلغ كاملًا — بلا أسئلة.',
+      'إذا كنت طالبًا جادًا وتواجه صعوبة في الدفع، راسلنا.',
+      'لا نحبس المحتوى خلف فئات — رسومك تفتح كل شيء.',
     ],
 
     faqLabel: 'أسئلة الأسعار',
     faqs: [
       {
-        q: 'متى تنتهي النسخة التجريبية؟',
-        a: 'عندما نكون واثقين أن المنتج يصمد تحت الحمل الحقيقي وأن المنهج تمت مراجعته بالكامل. على الأرجح أواخر 2026.',
+        q: 'لماذا رسوم واحدة بدلًا من اشتراك شهري؟',
+        a: 'المحاسبة منهج محدود، لا تيار محتوى لا ينتهي. نبيع الإنجاز لا الإبقاء. ٤٥ يومًا، رسوم واحدة، أنت جاهز للعمل.',
       },
       {
-        q: 'هل سيظل وصولي للمبتدئ مجانيًا بعد النسخة التجريبية؟',
-        a: 'نعم. كل من يسجل خلال النسخة التجريبية يحتفظ بوصول مجاني لمسار واحد كامل مدى الحياة.',
+        q: 'فيمَ تُصرف الرسوم فعليًا؟',
+        a: 'إيجار الفصل + أجور المدربين + حوسبة المدرس الذكي + دعم التوظيف + بنية التحقق من الشهادات.',
       },
       {
-        q: 'هل تقدمون خصومات للطلاب؟',
-        a: 'سنفعل. الطلاب الحقيقيون في الهند والسعودية سيحصلون على خصم حقيقي على المحترف.',
+        q: 'هل يمكن الدفع بالأقساط؟',
+        a: 'نعم. Razorpay يدعم تقسيط ٣ أو ٦ أشهر على معظم البطاقات الائتمانية الهندية.',
       },
       {
-        q: 'هل يمكن لشركتي الدفع بالروبية أو الريال؟',
-        a: 'نعم. خطط الشركات تُحاسَب بعملتك المحلية مع فواتير ضريبية محلية.',
+        q: 'ماذا لو فاتتني الفصول؟',
+        a: 'كل جلسة فصلية تُسجَّل. والمدرس الذكي يعرف منهجك كاملًا لتلحق بإيقاعك. تفويت أكثر من ٦ من ٤٥ جلسة نتحدث عن مدى ملاءمة الدفعة.',
+      },
+      {
+        q: 'هل التوظيف مضمون؟',
+        a: 'لا. الدعم مضمون — ٣ مقابلات تدريبية، إعادة بناء السيرة، تعريفات شركاء التوظيف. النتيجة تعتمد عليك. ~٨٠٪ من الخريجين يجدون عملًا خلال ٩٠ يومًا.',
+      },
+      {
+        q: 'هل تقدمون خصومات طلابية؟',
+        a: 'نعم. الطلاب الحقيقيون في مؤسسات حقيقية في الهند والسعودية. راسلنا على info@superaccountant.in مع إثبات.',
+      },
+      {
+        q: 'هل يمكن لصاحب العمل أن يموّل مقعدي؟',
+        a: 'نعم. نُصدر فاتورة باسم شركتك مع تفاصيل GSTIN/VAT. أخبرنا عند التسجيل.',
       },
     ],
   },
@@ -204,7 +251,7 @@ export default async function PricingPage({
       {/* Hero */}
       <main className="relative z-10 mx-auto max-w-4xl px-6 pt-20 pb-12 text-center">
         <BlurFade delay={0.05}>
-          <div className="inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/10 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-success backdrop-blur">
+          <div className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent-soft/40 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-accent backdrop-blur">
             <Sparkles className="h-3 w-3" />
             {t.badge}
           </div>
@@ -221,88 +268,88 @@ export default async function PricingPage({
         </BlurFade>
       </main>
 
-      {/* Tiers */}
-      <section className="relative z-10 mx-auto max-w-6xl px-6 py-12">
-        <div className="grid gap-4 lg:grid-cols-3">
-          {t.tiers.map((tier, i) => (
-            <BlurFade key={tier.name} delay={0.1 + i * 0.08}>
-              <div
-                className={cn(
-                  'relative h-full overflow-hidden rounded-2xl border p-8 backdrop-blur',
-                  tier.highlighted
-                    ? 'border-accent bg-bg-elev shadow-2xl shadow-accent/10'
-                    : 'border-border bg-bg-elev/50',
-                )}
-              >
-                {tier.highlighted && (
-                  <div className="absolute end-4 top-4">
-                    <div className="inline-flex items-center gap-1 rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-accent">
-                      <Zap className="h-2.5 w-2.5" />
-                      {locale === 'ar' ? 'الأشهر' : 'Most loved'}
-                    </div>
-                  </div>
-                )}
-
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-fg-muted">
-                  {tier.name}
-                </h3>
-                <div className="mt-4 flex items-baseline gap-2">
-                  <span className="text-5xl font-semibold tracking-tight">{tier.priceLabel}</span>
-                </div>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-                  {tier.priceDetail}
-                </p>
-                <p className="mt-5 text-sm leading-relaxed text-fg-muted">{tier.tagline}</p>
-
-                <div className="my-6 h-px bg-border" />
-
-                <ul className="space-y-3">
-                  {tier.features.map((f) => (
-                    <li key={f} className="flex items-start gap-3 text-sm text-fg">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="mt-8">
-                  <Button
-                    asChild
-                    variant={tier.highlighted ? 'accent' : 'secondary'}
-                    size="lg"
-                    className="relative w-full overflow-hidden"
-                  >
-                    <a href={appLink(locale, '/sign-in')}>
-                      {tier.cta}
-                      <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-                      {tier.highlighted && (
-                        <BorderBeam
-                          size={48}
-                          duration={6}
-                          colorFrom="#a78bfa"
-                          colorTo="#8b5cf6"
-                        />
-                      )}
-                    </a>
-                  </Button>
-                </div>
-              </div>
+      {/* Cohort cards */}
+      <section className="relative z-10 mx-auto max-w-5xl px-6 py-12">
+        <BlurFade delay={0.2}>
+          <p className="mb-6 text-center font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+            {t.nextCohorts}
+          </p>
+        </BlurFade>
+        <div className="grid gap-5 lg:grid-cols-2">
+          {TRACKS.map((track, i) => (
+            <BlurFade key={track.code} delay={0.22 + i * 0.06}>
+              <CohortCard track={track} t={t} locale={locale} />
             </BlurFade>
           ))}
+        </div>
+        <p className="mt-4 text-center text-xs text-fg-subtle">{t.oneTimeFee}</p>
+      </section>
+
+      {/* What's included */}
+      <section className="relative z-10 mx-auto max-w-4xl px-6 py-16">
+        <BlurFade delay={0.05}>
+          <div className="rounded-3xl border border-border bg-bg-elev/50 p-8 backdrop-blur sm:p-10">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              {t.whatsIncludedLabel}
+            </h2>
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+              {t.includes.map((line) => (
+                <li
+                  key={line}
+                  className="flex items-start gap-3 text-sm leading-relaxed text-fg-muted"
+                >
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+                  {line}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </BlurFade>
+      </section>
+
+      {/* Payment + discount */}
+      <section className="relative z-10 mx-auto max-w-4xl px-6 pb-12">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <BlurFade delay={0.05}>
+            <div className="h-full rounded-2xl border border-border bg-bg-elev/50 p-6 backdrop-blur">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-accent">
+                {t.paymentLabel}
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-fg-muted">{t.paymentBody}</p>
+              <a
+                href={appLink(locale, '/refund-policy')}
+                className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-accent transition-colors hover:text-accent/80"
+              >
+                {t.refundLink}
+                <ArrowRight className="h-3 w-3 rtl:rotate-180" />
+              </a>
+            </div>
+          </BlurFade>
+          <BlurFade delay={0.1}>
+            <div className="h-full rounded-2xl border border-border bg-bg-elev/50 p-6 backdrop-blur">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-success">
+                {t.discountLabel}
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-fg-muted">{t.discountBody}</p>
+            </div>
+          </BlurFade>
         </div>
       </section>
 
       {/* Promise */}
-      <section className="relative z-10 mx-auto max-w-4xl px-6 py-20">
+      <section className="relative z-10 mx-auto max-w-4xl px-6 py-16">
         <BlurFade delay={0.05}>
-          <div className="rounded-3xl border border-border bg-bg-elev/50 p-10 backdrop-blur">
+          <div className="rounded-3xl border border-border bg-bg-elev/40 p-10 backdrop-blur">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted">
               <CircleDot className="h-3 w-3 text-accent" />
               {t.promiseLabel}
             </div>
             <ul className="mt-6 space-y-4">
               {t.promise.map((p) => (
-                <li key={p} className="flex items-start gap-3 text-sm leading-relaxed text-fg-muted">
+                <li
+                  key={p}
+                  className="flex items-start gap-3 text-sm leading-relaxed text-fg-muted"
+                >
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
                   {p}
                 </li>
@@ -339,6 +386,133 @@ export default async function PricingPage({
       </section>
 
       <Footer locale={locale} />
+    </div>
+  )
+}
+
+function CohortCard({
+  track,
+  t,
+  locale,
+}: {
+  track: Track
+  t: (typeof COPY)[keyof typeof COPY]
+  locale: SupportedLocale
+}) {
+  const isIndia = track.jurisdiction === 'India'
+  const accent = isIndia ? '#a78bfa' : '#10b981'
+  return (
+    <div
+      className={cn(
+        'group relative h-full overflow-hidden rounded-2xl border-2 p-7 backdrop-blur transition-all hover:-translate-y-0.5',
+        isIndia
+          ? 'border-accent/40 bg-gradient-to-br from-accent-soft/40 via-bg-elev/50 to-bg-elev/50 hover:border-accent/70'
+          : 'border-success/40 bg-gradient-to-br from-success/10 via-bg-elev/50 to-bg-elev/50 hover:border-success/70',
+      )}
+    >
+      <BorderBeam
+        size={140}
+        duration={9}
+        colorFrom={accent}
+        colorTo={isIndia ? '#8b5cf6' : '#059669'}
+        className="opacity-0 transition-opacity group-hover:opacity-100"
+      />
+
+      <div className="flex items-start justify-between gap-3">
+        <p
+          className={cn(
+            'inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider',
+            isIndia ? 'text-accent' : 'text-success',
+          )}
+        >
+          <span aria-hidden className="text-base leading-none">
+            {track.emoji}
+          </span>
+          {track.name}
+        </p>
+        <span
+          className={cn(
+            'rounded-md border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider',
+            isIndia
+              ? 'border-accent/30 bg-accent-soft/60 text-accent'
+              : 'border-success/30 bg-success/10 text-success',
+          )}
+        >
+          {track.discountPct}% off · launch
+        </span>
+      </div>
+
+      {/* Cohort code as a token */}
+      <div className="mt-4 inline-flex items-baseline gap-2 font-mono">
+        <span className="text-fg-subtle">[</span>
+        <span className="text-3xl font-bold tracking-tight sm:text-4xl" style={{ color: accent }}>
+          {track.code}
+        </span>
+        <span className="text-fg-subtle">]</span>
+      </div>
+
+      <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3">
+        <CohortStat
+          icon={<Calendar className="h-3.5 w-3.5" />}
+          label={t.startsLabel}
+          value={track.startDate}
+        />
+        <CohortStat
+          icon={<MapPin className="h-3.5 w-3.5" />}
+          label={t.cityLabel}
+          value={track.city}
+        />
+        <CohortStat
+          icon={<Clock className="h-3.5 w-3.5" />}
+          label={t.durationLabel}
+          value={`${track.durationDays} ${locale === 'ar' ? 'يومًا' : 'days'}`}
+        />
+        <CohortStat
+          icon={<Users className="h-3.5 w-3.5" />}
+          label={t.seatsLabel}
+          value={`${track.seats} ${locale === 'ar' ? 'مقاعد' : 'seats'}`}
+        />
+      </div>
+
+      <div className="my-6 h-px bg-border" />
+
+      <div className="flex items-baseline gap-3">
+        <span className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">
+          {track.priceLabel}
+        </span>
+        <span className="text-lg text-fg-subtle line-through">{track.originalPriceLabel}</span>
+      </div>
+      <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-success">
+        <Award className="me-1 inline h-3 w-3" />
+        Includes placement support
+      </p>
+
+      <Button asChild variant={isIndia ? 'accent' : 'secondary'} size="lg" className="mt-6 w-full">
+        <a href={appLink(locale, '/cohort#apply')}>
+          {t.reserveSeat} · {track.priceLabel}
+          <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+        </a>
+      </Button>
+    </div>
+  )
+}
+
+function CohortStat({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode
+  label: string
+  value: string
+}) {
+  return (
+    <div>
+      <p className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+        <span className="text-accent">{icon}</span>
+        {label}
+      </p>
+      <p className="mt-0.5 text-sm font-medium">{value}</p>
     </div>
   )
 }

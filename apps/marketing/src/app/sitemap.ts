@@ -1,8 +1,7 @@
 import type { MetadataRoute } from 'next'
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_MARKETING_URL?.replace(/\/$/, '') ??
-  'https://www.superaccountant.in'
+  process.env.NEXT_PUBLIC_MARKETING_URL?.replace(/\/$/, '') ?? 'https://www.superaccountant.in'
 
 const ROUTES: { path: string; priority: number; changeFrequency: 'weekly' | 'monthly' }[] = [
   { path: '', priority: 1.0, changeFrequency: 'weekly' },

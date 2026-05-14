@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /**
  * SuperAccountant design system — Linear / Vercel inspired.
@@ -51,7 +51,7 @@
 
 /* Auto dark mode for users with system preference, until they toggle. */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
+  :root:not([data-theme="light"]) {
     --bg: oklch(0.13 0 0);
     --bg-elev: oklch(0.16 0 0);
     --bg-overlay: oklch(0.18 0 0);
@@ -70,7 +70,7 @@
   }
 }
 
-[data-theme='dark'],
+[data-theme="dark"],
 .dark {
   /* Manual dark — set by ThemeToggle */
   --bg: oklch(0.13 0 0);
@@ -109,8 +109,8 @@ body {
 }
 
 /* RTL adjustments */
-[dir='rtl'] {
-  font-feature-settings: 'kern';
+[dir="rtl"] {
+  font-feature-settings: "kern";
 }
 
 /* Selection */
@@ -143,20 +143,23 @@ body {
 
 /* Marquee — infinite horizontal scroll */
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-100% - var(--gap, 1rem))); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% - var(--gap, 1rem)));
+  }
 }
 .animate-marquee {
   animation: marquee var(--duration, 40s) linear infinite;
 }
-[dir='rtl'] .animate-marquee {
+[dir="rtl"] .animate-marquee {
   animation-direction: reverse;
 }
 
 /* Hero grid background */
 .bg-grid {
-  background-image:
-    linear-gradient(to right, var(--border) 1px, transparent 1px),
+  background-image: linear-gradient(to right, var(--border) 1px, transparent 1px),
     linear-gradient(to bottom, var(--border) 1px, transparent 1px);
   background-size: 56px 56px;
 }
@@ -179,17 +182,28 @@ body {
 
 /* Magic UI keyframes */
 @keyframes shine {
-  0% { background-position: 0% 0%; }
-  50% { background-position: 100% 100%; }
-  100% { background-position: 0% 0%; }
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
 }
 .animate-shine {
   animation: shine var(--duration, 14s) linear infinite;
 }
 
 @keyframes ripple {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(0.9); }
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(0.9);
+  }
 }
 .animate-ripple {
   animation: ripple var(--duration, 3400ms) ease calc(var(--i, 0) * 0.2s) infinite;
@@ -290,4 +304,3 @@ body {
   border-top: 1px solid var(--border);
   margin: 2.5em 0;
 }
-

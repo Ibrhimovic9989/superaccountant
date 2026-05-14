@@ -1,11 +1,11 @@
 'use client'
 
-import * as React from 'react'
-import { usePathname } from 'next/navigation'
-import { AlertTriangle, RotateCcw } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { DotPattern } from '@/components/magicui/dot-pattern'
+import { Button } from '@/components/ui/button'
 import { captureException } from '@/lib/observability'
+import { AlertTriangle, RotateCcw } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import * as React from 'react'
 
 const COPY = {
   en: {
@@ -59,9 +59,7 @@ export default function MarketingError({
       <h1 className="relative z-10 mt-3 max-w-xl text-3xl font-semibold tracking-tight sm:text-4xl">
         {t.title}
       </h1>
-      <p className="relative z-10 mt-4 max-w-md text-sm leading-relaxed text-fg-muted">
-        {t.body}
-      </p>
+      <p className="relative z-10 mt-4 max-w-md text-sm leading-relaxed text-fg-muted">{t.body}</p>
       <div className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-2">
         <Button type="button" variant="accent" size="lg" onClick={reset}>
           <RotateCcw className="h-4 w-4" />

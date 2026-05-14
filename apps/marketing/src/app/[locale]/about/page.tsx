@@ -1,25 +1,25 @@
-import { ArrowRight, Compass, Heart, Lightbulb, Mail, Sparkles, Target } from 'lucide-react'
-import type { SupportedLocale } from '@sa/i18n'
-import { MarketingNav } from '@/components/marketing-nav'
 import { Footer } from '@/components/footer'
-import { Button } from '@/components/ui/button'
 import { BlurFade } from '@/components/magicui/blur-fade'
-import { DotPattern } from '@/components/magicui/dot-pattern'
 import { BorderBeam } from '@/components/magicui/border-beam'
+import { DotPattern } from '@/components/magicui/dot-pattern'
+import { MarketingNav } from '@/components/marketing-nav'
+import { Button } from '@/components/ui/button'
 import { appLink } from '@/lib/config'
+import type { SupportedLocale } from '@sa/i18n'
+import { ArrowRight, Compass, Heart, Lightbulb, Mail, Sparkles, Target } from 'lucide-react'
 
 const COPY = {
   en: {
     eyebrow: 'About',
-    title: 'We are building the tutor we wish we had.',
+    title: 'We make hireable accountants in 45 days.',
     subtitle:
-      'SuperAccountant exists because the way most people learn accounting is broken. Static PDFs. Generic YouTube playlists. ChatGPT making up tax rates. None of it respects how the human brain actually learns regulation-heavy work.',
+      'SuperAccountant exists because the way most people learn accounting is broken. Universities teach theory then leave you alone. Coaching classes drill for an exam, not a job. Online courses have ~5% completion rates. We do something different: a small, focused cohort that pairs a real instructor with an AI tutor — and ends with a job, not just a certificate.',
 
     storyLabel: 'The story',
     story: [
-      "We grew up watching our siblings, parents, and friends grind through CA and SOCPA exams with stacks of coaching books and prayer.",
-      'The problem was never effort — it was the format. A textbook does not know what you got wrong yesterday. A YouTube lecture does not stop and ask if you understood. A coaching class does not adapt to the gap in your understanding of input tax credit.',
-      "We built SuperAccountant to be the thing in the middle: a tutor that knows the curriculum cold, calls real tools, and refuses to guess. It's the one we wish we'd had.",
+      'We grew up watching our siblings, parents, and friends grind through CA and SOCPA exams with stacks of coaching books and prayer. Many of them passed and still couldn’t do the work — because no one had ever made them sit in front of Tally and process a real invoice.',
+      'The problem was never effort. It was the format. A textbook doesn’t know what you got wrong yesterday. A YouTube lecture doesn’t stop and ask if you understood. A 2,000-student auditorium class doesn’t adapt to your gap with input tax credit.',
+      'So we built the thing in the middle: small cohorts of 30, a real instructor at a real whiteboard, and an AI tutor that knows your curriculum cold and refuses to guess. 45 days, one fee, you walk out hireable.',
     ],
 
     valuesLabel: 'What we believe',
@@ -32,12 +32,12 @@ const COPY = {
       {
         icon: 'parity',
         title: 'Bilingual is non-negotiable',
-        body: "Arabic is not an afterthought. Every lesson, every prompt, every certificate ships in both languages with equal craft. RTL is a first-class rendering mode, not a stylesheet.",
+        body: 'Arabic is not an afterthought. Every lesson, every prompt, every certificate ships in both languages with equal craft. RTL is a first-class rendering mode, not a stylesheet.',
       },
       {
         icon: 'craft',
         title: 'Craft is a feature',
-        body: "We sweat the loading states, the empty states, the keyboard shortcuts, the dark mode, the Arabic kerning. Because the people who use this product are professionals — and professionals can tell.",
+        body: 'We sweat the loading states, the empty states, the keyboard shortcuts, the dark mode, the Arabic kerning. Because the people who use this product are professionals — and professionals can tell.',
       },
       {
         icon: 'access',
@@ -48,35 +48,36 @@ const COPY = {
 
     statsLabel: 'Where we are',
     stats: [
-      { label: 'Markets', value: '2', detail: 'India + Saudi Arabia' },
-      { label: 'Languages', value: '2', detail: 'English + Arabic' },
-      { label: 'Lessons', value: '280+', detail: 'across both tracks' },
-      { label: 'Tools', value: '6', detail: 'in the agent loop' },
+      { label: 'Cohorts', value: '2', detail: 'iA26 + sA26' },
+      { label: 'Days', value: '45', detail: 'per cohort' },
+      { label: 'Seats', value: '30', detail: 'per cohort, max' },
+      { label: 'Tracks', value: '2', detail: 'India + KSA' },
     ],
 
     contactLabel: 'Get in touch',
     contactTitle: 'We read every message.',
     contactBody:
-      "Found a bug? Have a curriculum suggestion? Want us to add your jurisdiction? Email us — we respond within 48 hours.",
+      'Found a bug? Have a curriculum suggestion? Want us to add your jurisdiction? Email us — we respond within 48 hours.',
     contactCta: 'info@superaccountant.in',
     contactEmail: 'mailto:info@superaccountant.in',
 
-    finalTitle: 'Try the product.',
-    finalSubtitle: 'The best way to understand what we do is to use it for ten minutes.',
-    finalCta: 'Start free placement test',
+    finalTitle: 'Take 45 days. Get the rest of your career.',
+    finalSubtitle:
+      'Reserve your seat in iA26 (Hyderabad, 1 June 2026) or sA26 (Riyadh, 1 July 2026) before the cohort fills.',
+    finalCta: 'Reserve seat — from ₹24,999',
   },
 
   ar: {
     eyebrow: 'من نحن',
-    title: 'نبني المدرس الذي تمنينا أن يكون لدينا.',
+    title: 'نصنع محاسبين قابلين للتوظيف في ٤٥ يومًا.',
     subtitle:
-      'سوبر أكاونتنت موجود لأن طريقة تعلم معظم الناس للمحاسبة معطوبة. ملفات PDF ثابتة. قوائم يوتيوب عامة. ChatGPT يخترع معدلات ضرائب. لا شيء من هذا يحترم كيف يتعلم الدماغ البشري العمل الكثيف بالأنظمة.',
+      'سوبر أكاونتنت موجود لأن طريقة تعلم معظم الناس للمحاسبة معطوبة. الجامعات تُدرّس النظرية ثم تتركك وحدك. الكورسات تدرّب على الامتحان لا على الوظيفة. الدورات الأونلاين نسب إتمامها ~٥٪. نفعل شيئًا مختلفًا: دفعة صغيرة مركّزة تجمع مدرّبًا حقيقيًا مع مدرس ذكي — تنتهي بوظيفة لا بشهادة فقط.',
 
     storyLabel: 'القصة',
     story: [
-      'كبرنا نشاهد إخواننا وآباءنا وأصدقاءنا يكافحون في امتحانات CA و SOCPA بأكوام من كتب الكورسات والدعاء.',
-      'المشكلة لم تكن في الجهد — كانت في الصيغة. الكتاب لا يعرف ما أخطأت فيه أمس. محاضرة يوتيوب لا تتوقف لتسألك إن فهمت. الكورس لا يتكيف مع فجوتك في فهم خصم ضريبة المدخلات.',
-      'بنينا سوبر أكاونتنت ليكون الشيء في المنتصف: مدرس يعرف المنهج عن ظهر قلب، يستدعي أدوات حقيقية، ويرفض التخمين.',
+      'كبرنا نشاهد إخواننا وآباءنا وأصدقاءنا يكافحون في امتحانات CA و SOCPA بأكوام من كتب الكورسات والدعاء. كثير منهم نجح ولا يستطيع أداء العمل — لأن لا أحد أجلسه أمام Tally وجعله يعالج فاتورة حقيقية.',
+      'المشكلة لم تكن في الجهد، بل في الصيغة. الكتاب لا يعرف ما أخطأت فيه أمس. محاضرة يوتيوب لا تتوقف لتسألك إن فهمت. فصل بألفي طالب لا يتكيف مع فجوتك في فهم خصم ضريبة المدخلات.',
+      'فبنينا الشيء في المنتصف: دفعات صغيرة بثلاثين طالبًا، مدرب حقيقي على لوح حقيقي، ومدرس ذكي يعرف منهجك عن ظهر قلب ويرفض التخمين. ٤٥ يومًا، رسوم واحدة، تخرج قابلًا للتوظيف.',
     ],
 
     valuesLabel: 'ما نؤمن به',
@@ -105,22 +106,22 @@ const COPY = {
 
     statsLabel: 'أين نحن',
     stats: [
-      { label: 'الأسواق', value: '٢', detail: 'الهند والسعودية' },
-      { label: 'اللغات', value: '٢', detail: 'الإنجليزية والعربية' },
-      { label: 'الدروس', value: '+٢٨٠', detail: 'عبر المسارين' },
-      { label: 'الأدوات', value: '٦', detail: 'في حلقة الوكيل' },
+      { label: 'الدفعات', value: '٢', detail: 'iA26 + sA26' },
+      { label: 'الأيام', value: '٤٥', detail: 'لكل دفعة' },
+      { label: 'المقاعد', value: '٣٠', detail: 'حد أقصى لكل دفعة' },
+      { label: 'المسارات', value: '٢', detail: 'الهند والسعودية' },
     ],
 
     contactLabel: 'تواصل معنا',
     contactTitle: 'نقرأ كل رسالة.',
-    contactBody:
-      'وجدت خطأ؟ لديك اقتراح للمنهج؟ تريد منا إضافة بلدك؟ راسلنا — نرد خلال ٤٨ ساعة.',
+    contactBody: 'وجدت خطأ؟ لديك اقتراح للمنهج؟ تريد منا إضافة بلدك؟ راسلنا — نرد خلال ٤٨ ساعة.',
     contactCta: 'info@superaccountant.in',
     contactEmail: 'mailto:info@superaccountant.in',
 
-    finalTitle: 'جرب المنتج.',
-    finalSubtitle: 'أفضل طريقة لفهم ما نفعله هي استخدامه لعشر دقائق.',
-    finalCta: 'ابدأ اختبار التحديد المجاني',
+    finalTitle: 'خذ ٤٥ يومًا. واحصل على مسار حياتك المهنية.',
+    finalSubtitle:
+      'احجز مقعدك في iA26 (حيدر آباد، ١ يونيو ٢٠٢٦) أو sA26 (الرياض، ١ يوليو ٢٠٢٦) قبل امتلاء الدفعة.',
+    finalCta: 'احجز مقعدك — من ₹24,999',
   },
 } as const
 
@@ -273,7 +274,7 @@ export default async function AboutPage({
           <div className="mt-10 flex justify-center">
             <div className="relative inline-flex">
               <Button asChild variant="accent" size="lg" className="relative overflow-hidden">
-                <a href={appLink(locale, '/sign-in')}>
+                <a href={appLink(locale, '/cohort#apply')}>
                   {t.finalCta}
                   <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                   <BorderBeam size={56} duration={6} colorFrom="#a78bfa" colorTo="#8b5cf6" />

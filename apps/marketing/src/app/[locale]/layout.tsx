@@ -1,11 +1,10 @@
-import { notFound } from 'next/navigation'
+import { LOCALES, type SupportedLocale, dirFor } from '@sa/i18n'
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
-import { LOCALES, dirFor, type SupportedLocale } from '@sa/i18n'
+import { notFound } from 'next/navigation'
 import '../globals.css'
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_MARKETING_URL ?? 'https://www.superaccountant.in'
+const SITE_URL = process.env.NEXT_PUBLIC_MARKETING_URL ?? 'https://www.superaccountant.in'
 
 const inter = Inter({
   subsets: ['latin'],

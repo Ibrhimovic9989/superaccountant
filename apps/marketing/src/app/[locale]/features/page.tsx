@@ -1,3 +1,11 @@
+import { Footer } from '@/components/footer'
+import { BlurFade } from '@/components/magicui/blur-fade'
+import { BorderBeam } from '@/components/magicui/border-beam'
+import { DotPattern } from '@/components/magicui/dot-pattern'
+import { MarketingNav } from '@/components/marketing-nav'
+import { Button } from '@/components/ui/button'
+import { appLink } from '@/lib/config'
+import type { SupportedLocale } from '@sa/i18n'
 import {
   ArrowRight,
   Award,
@@ -19,42 +27,32 @@ import {
   Target,
   Wrench,
 } from 'lucide-react'
-import type { SupportedLocale } from '@sa/i18n'
-import { MarketingNav } from '@/components/marketing-nav'
-import { Footer } from '@/components/footer'
-import { Button } from '@/components/ui/button'
-import { BlurFade } from '@/components/magicui/blur-fade'
-import { DotPattern } from '@/components/magicui/dot-pattern'
-import { BorderBeam } from '@/components/magicui/border-beam'
-import { appLink } from '@/lib/config'
 
 const COPY = {
   en: {
     eyebrow: 'Features',
-    title: 'Everything you need to actually learn accounting.',
+    title: 'Real classroom. AI tutor in your pocket. 45 days to job-ready.',
     subtitle:
-      "Not a course catalogue. Not a chatbot bolted onto YouTube. A purpose-built system for becoming fluent in the regulations that govern your daily work.",
-    primaryCta: 'Start free placement test',
+      'Our cohorts pair an evening offline classroom with a 24/7 AI tutor that knows your exact curriculum — so what you learn at 7 PM gets reinforced at 11 PM with personalised practice.',
+    primaryCta: 'Reserve seat — from ₹24,999',
 
     sections: [
       {
-        eyebrow: 'Adaptive placement',
-        title: 'We measure where you are. Not where the course starts.',
-        body:
-          "Most courses dump you at lesson one. Our placement test asks 20–30 adaptive questions, each one calibrated to your last answer. By the end, we know which phase to start you in — and which lessons you can skip entirely.",
+        eyebrow: 'Offline classroom',
+        title: 'Real instructor. Real laptops. Real vouchers.',
+        body: 'Monday–Saturday, 6:30–9:30 PM, in a real room with a real instructor. Hands-on Tally Prime (Indian cohort) or Zoho Books (Saudi cohort) from day one. The fastest way to build accounting muscle memory is doing the work, not watching it.',
         bullets: [
-          '560-question item bank across both tracks',
-          'Adaptive difficulty after each answer',
-          'Topic + difficulty are scored independently',
-          'Complete in under ten minutes',
+          '3-hour evening sessions, 6 days a week',
+          'Cohort size capped at 30 — no auditorium classes',
+          'Every session recorded for catch-up',
+          'WhatsApp doubt-clearing with your instructor',
         ],
         icon: 'placement',
       },
       {
-        eyebrow: 'The agent',
+        eyebrow: 'AI tutor',
         title: 'A real tutor with real tools.',
-        body:
-          "Most AI tutors are ChatGPT with a system prompt. SuperAccountant is an agent loop — the model can search your curriculum, grade your scenario answer with a rubric, look up a regulation, generate practice questions, and remember what you struggled with last week.",
+        body: 'Most "AI tutors" are ChatGPT with a system prompt. Ours is an agent loop — the model can search your curriculum, grade your scenario answer with a rubric, look up a regulation, generate practice questions, and remember what you struggled with in class today.',
         bullets: [
           'Streaming responses, never a wall of text',
           'Cites the lesson it learned from',
@@ -65,12 +63,11 @@ const COPY = {
       },
       {
         eyebrow: 'Daily plan',
-        title: 'Today, not someday.',
-        body:
-          "Every morning, the agent generates your three-item plan: one spaced repetition, one weak-area drill, one new lesson. Five minutes per item. You don't choose what to study — you study what closes your biggest gap.",
+        title: 'Tonight, not someday.',
+        body: 'After every class, the AI tutor generates a 3-item plan tuned to what you struggled with that day: one spaced review, one weak-area drill, one extension exercise. ~15 minutes of focused practice while the day’s lesson is still fresh.',
         bullets: [
-          'Generated automatically every morning',
-          'Mix of review, weak-area, and new content',
+          'Generated nightly after class',
+          'Mix of review, weak-area, and extension',
           'Approximately five minutes per item',
           'Streaks track your consistency',
         ],
@@ -79,8 +76,7 @@ const COPY = {
       {
         eyebrow: 'Bilingual',
         title: 'Arabic and English. Equal weight.',
-        body:
-          "Every lesson, every prompt, every diagram, every certificate ships in both languages. RTL is not a stylesheet — it's a rendering mode the agent respects end to end.",
+        body: "Every lesson, every prompt, every diagram, every certificate ships in both languages. RTL is not a stylesheet — it's a rendering mode the agent respects end to end.",
         bullets: [
           'Switch language at any moment',
           'Tutor responds in your session language',
@@ -92,8 +88,7 @@ const COPY = {
       {
         eyebrow: 'Lessons',
         title: 'Watch. Read. Diagram. Practice.',
-        body:
-          'Every lesson is built around four loops: a video walkthrough, a written explanation, a mermaid flowchart or mindmap, and an eight-question practice set. The tutor is on the side rail the entire time.',
+        body: 'Every lesson is built around four loops: a video walkthrough, a written explanation, a mermaid flowchart or mindmap, and an eight-question practice set. The tutor is on the side rail the entire time.',
         bullets: [
           'Video narration in EN + AR',
           'Mermaid flowcharts and mindmaps',
@@ -105,8 +100,7 @@ const COPY = {
       {
         eyebrow: 'Certificate',
         title: 'Verifiable by anyone, anywhere.',
-        body:
-          "When you pass the grand test, we issue a HMAC-signed certificate with a public verification page. Anyone with the link can confirm it — no login, no API key, no recruiter contact form.",
+        body: 'When you pass the grand test, we issue a HMAC-signed certificate with a public verification page. Anyone with the link can confirm it — no login, no API key, no recruiter contact form.',
         bullets: [
           'HMAC-signed certificate hash',
           'Public verification page',
@@ -122,45 +116,68 @@ const COPY = {
     grid: [
       { icon: 'spaced', title: 'Spaced repetition', body: 'Review surfaces what is fading.' },
       { icon: 'streak', title: 'Streaks', body: 'Daily consistency, not weekend cramming.' },
-      { icon: 'mastery', title: 'Mastery scoring', body: 'Per-topic mastery curve, not a single grade.' },
-      { icon: 'rubric', title: 'Rubric grading', body: 'Scenarios graded against a rubric, not a regex.' },
-      { icon: 'mermaid', title: 'Mermaid diagrams', body: 'Every lesson has a flowchart and a mindmap.' },
-      { icon: 'memory', title: 'Memory files', body: "The tutor maintains a profile of your strengths." },
-      { icon: 'tools', title: '6 tools at the agent', body: 'Search, assess, explain, lookup, recommend, generate.' },
-      { icon: 'audit', title: 'Source citations', body: 'Every claim cites the lesson it came from.' },
+      {
+        icon: 'mastery',
+        title: 'Mastery scoring',
+        body: 'Per-topic mastery curve, not a single grade.',
+      },
+      {
+        icon: 'rubric',
+        title: 'Rubric grading',
+        body: 'Scenarios graded against a rubric, not a regex.',
+      },
+      {
+        icon: 'mermaid',
+        title: 'Mermaid diagrams',
+        body: 'Every lesson has a flowchart and a mindmap.',
+      },
+      {
+        icon: 'memory',
+        title: 'Memory files',
+        body: 'The tutor maintains a profile of your strengths.',
+      },
+      {
+        icon: 'tools',
+        title: '6 tools at the agent',
+        body: 'Search, assess, explain, lookup, recommend, generate.',
+      },
+      {
+        icon: 'audit',
+        title: 'Source citations',
+        body: 'Every claim cites the lesson it came from.',
+      },
     ],
 
-    finalTitle: 'See it for yourself.',
-    finalSubtitle: 'The fastest path to knowing whether this works for you is to try it.',
-    finalCta: 'Start free placement test',
+    finalTitle: 'Two cohorts. 30 seats each. Reserve before they fill.',
+    finalSubtitle:
+      'iA26 (Indian Chartered, Hyderabad) starts 1 June 2026. sA26 (Saudi Mu’tamad, Riyadh) starts 1 July 2026.',
+    finalCta: 'Reserve seat — from ₹24,999',
   },
 
   ar: {
     eyebrow: 'الميزات',
-    title: 'كل ما تحتاجه لتتعلم المحاسبة فعلًا.',
+    title: 'فصل دراسي حقيقي. مدرس ذكي في جيبك. ٤٥ يومًا لتكون جاهزًا للعمل.',
     subtitle:
-      'ليس كتالوج دورات. ليس روبوت دردشة على يوتيوب. نظام مصمم لتصبح متمكنًا من الأنظمة التي تحكم عملك اليومي.',
-    primaryCta: 'ابدأ اختبار التحديد المجاني',
+      'دفعاتنا تجمع فصلًا دراسيًا حضوريًا مسائيًا مع مدرس ذكي على مدار الساعة يعرف منهجك بدقة — فما تتعلمه في السابعة مساءً يُعزَّز في الحادية عشرة بتمارين شخصية.',
+    primaryCta: 'احجز مقعدك — من ₹24,999',
 
     sections: [
       {
-        eyebrow: 'تحديد تكيفي',
-        title: 'نقيس مكانك. لا حيث تبدأ الدورة.',
-        body:
-          'معظم الدورات تلقي بك في الدرس الأول. اختبار التحديد لدينا يطرح ٢٠–٣٠ سؤالًا تكيفيًا، كل منها معاير حسب إجابتك السابقة. في النهاية نعرف من أي مرحلة نبدأ بك.',
+        eyebrow: 'الفصل الحضوري',
+        title: 'مدرّب حقيقي. أجهزة حقيقية. قيود حقيقية.',
+        body: 'الإثنين-السبت، ٦:٣٠-٩:٣٠ مساءً، في غرفة حقيقية مع مدرّب حقيقي. تطبيق عملي على Tally Prime (الدفعة الهندية) أو Zoho Books (الدفعة السعودية) من اليوم الأول. أسرع طريق لبناء ذاكرة المحاسبة العضلية هو العمل، لا المشاهدة.',
         bullets: [
-          'بنك أسئلة من ٥٦٠ سؤالًا عبر المسارين',
-          'صعوبة تكيفية بعد كل إجابة',
-          'يقاس الموضوع والصعوبة بشكل مستقل',
-          'الإكمال في أقل من عشر دقائق',
+          'جلسات مسائية ٣ ساعات، ٦ أيام أسبوعيًا',
+          'حجم الدفعة محدود بـ٣٠ — لا فصول مدرّجة',
+          'كل جلسة تُسجَّل للاستدراك',
+          'قناة واتساب لحل الإشكالات مع المدرّب',
         ],
         icon: 'placement',
       },
       {
-        eyebrow: 'الوكيل',
+        eyebrow: 'المدرس الذكي',
         title: 'مدرس حقيقي بأدوات حقيقية.',
-        body:
-          'معظم المدرسين الذكيين مجرد ChatGPT بتعليمات. سوبر أكاونتنت وكيل ذكي — يبحث في المنهج، يصحح إجاباتك بمعايير، يبحث عن الأنظمة، يولّد تمارين، ويتذكر نقاط ضعفك من الأسبوع الماضي.',
+        body: 'معظم "المدرسين الذكيين" مجرد ChatGPT بتعليمات. لدينا حلقة وكيل — يبحث في منهجك، يصحح إجاباتك بمعايير، يبحث عن الأنظمة، يولّد تمارين، ويتذكر ما واجهت من صعوبات في الفصل اليوم.',
         bullets: [
           'استجابات متدفقة، لا جدار نصوص',
           'يستشهد بالدرس الفعلي',
@@ -170,13 +187,12 @@ const COPY = {
         icon: 'agent',
       },
       {
-        eyebrow: 'الخطة اليومية',
-        title: 'اليوم، لا يومًا ما.',
-        body:
-          'كل صباح، يولّد الوكيل خطتك من ثلاثة عناصر: مراجعة متباعدة، تمرين على نقطة ضعف، درس جديد. خمس دقائق لكل عنصر. لا تختار ما تدرس — تدرس ما يغلق فجوتك الكبرى.',
+        eyebrow: 'الخطة الليلية',
+        title: 'الليلة، لا يومًا ما.',
+        body: 'بعد كل فصل، يولّد المدرس الذكي خطة من ٣ عناصر مخصصة لما واجهت من صعوبات في اليوم: مراجعة متباعدة، تمرين على نقطة ضعف، تمرين توسعي. ~١٥ دقيقة من التمرين المركّز بينما الدرس لا يزال طازجًا.',
         bullets: [
-          'تُولَّد تلقائيًا كل صباح',
-          'مزيج من المراجعة والضعف والجديد',
+          'تُولَّد ليليًا بعد الفصل',
+          'مزيج من المراجعة والضعف والتوسع',
           'خمس دقائق تقريبًا لكل عنصر',
           'السلاسل تتتبع التزامك',
         ],
@@ -185,8 +201,7 @@ const COPY = {
       {
         eyebrow: 'ثنائي اللغة',
         title: 'العربية والإنجليزية. وزن متساوٍ.',
-        body:
-          'كل درس وتعليمة ورسم وشهادة بالعربية والإنجليزية. RTL ليس مجرد أنماط، بل وضع عرض يحترمه الوكيل من البداية إلى النهاية.',
+        body: 'كل درس وتعليمة ورسم وشهادة بالعربية والإنجليزية. RTL ليس مجرد أنماط، بل وضع عرض يحترمه الوكيل من البداية إلى النهاية.',
         bullets: [
           'بدّل اللغة في أي لحظة',
           'يستجيب الوكيل بلغة جلستك',
@@ -198,8 +213,7 @@ const COPY = {
       {
         eyebrow: 'الدروس',
         title: 'شاهد. اقرأ. ارسم. تمرّن.',
-        body:
-          'كل درس مبني حول أربع حلقات: عرض فيديو، شرح مكتوب، مخطط mermaid، ومجموعة تمارين من ثمانية أسئلة. المدرس على الجانب طوال الوقت.',
+        body: 'كل درس مبني حول أربع حلقات: عرض فيديو، شرح مكتوب، مخطط mermaid، ومجموعة تمارين من ثمانية أسئلة. المدرس على الجانب طوال الوقت.',
         bullets: [
           'تعليق صوتي بالعربية والإنجليزية',
           'مخططات Mermaid ورسوم ذهنية',
@@ -211,8 +225,7 @@ const COPY = {
       {
         eyebrow: 'الشهادة',
         title: 'قابلة للتحقق من أي شخص.',
-        body:
-          'عند اجتيازك الاختبار الكبير، نصدر شهادة موقعة بـ HMAC مع صفحة تحقق علنية. أي شخص لديه الرابط يمكنه التحقق — بدون تسجيل دخول.',
+        body: 'عند اجتيازك الاختبار الكبير، نصدر شهادة موقعة بـ HMAC مع صفحة تحقق علنية. أي شخص لديه الرابط يمكنه التحقق — بدون تسجيل دخول.',
         bullets: [
           'توقيع HMAC للشهادة',
           'صفحة تحقق علنية',
@@ -235,9 +248,10 @@ const COPY = {
       { icon: 'audit', title: 'استشهادات المصادر', body: 'كل ادعاء يستشهد بدرسه.' },
     ],
 
-    finalTitle: 'شاهدها بنفسك.',
-    finalSubtitle: 'أسرع طريق لمعرفة ما إذا كان هذا يناسبك هو التجربة.',
-    finalCta: 'ابدأ اختبار التحديد المجاني',
+    finalTitle: 'دفعتان. ٣٠ مقعدًا لكل دفعة. احجز قبل الامتلاء.',
+    finalSubtitle:
+      'iA26 (الهندي، حيدر آباد) تبدأ ١ يونيو ٢٠٢٦. sA26 (السعودي، الرياض) تبدأ ١ يوليو ٢٠٢٦.',
+    finalCta: 'احجز مقعدك — من ₹24,999',
   },
 } as const
 
@@ -378,7 +392,7 @@ export default async function FeaturesPage({
           <div className="mt-10 flex justify-center">
             <div className="relative inline-flex">
               <Button asChild variant="accent" size="lg" className="relative overflow-hidden">
-                <a href={appLink(locale, '/sign-in')}>
+                <a href={appLink(locale, '/cohort#apply')}>
                   {t.finalCta}
                   <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                   <BorderBeam size={56} duration={6} colorFrom="#a78bfa" colorTo="#8b5cf6" />
@@ -554,9 +568,7 @@ function FeatureMock({ kind, locale }: { kind: MockKind; locale: 'en' | 'ar' }) 
                   <div
                     key={choice}
                     className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-all ${
-                      selected
-                        ? 'border-accent bg-accent-soft'
-                        : 'border-border bg-bg-elev/50'
+                      selected ? 'border-accent bg-accent-soft' : 'border-border bg-bg-elev/50'
                     }`}
                   >
                     <span
@@ -699,9 +711,7 @@ function FeatureMock({ kind, locale }: { kind: MockKind; locale: 'en' | 'ar' }) 
                   <div
                     key={label}
                     className={`rounded-md px-2 py-1.5 font-mono text-[9px] uppercase tracking-wider ${
-                      i === 0
-                        ? 'bg-accent text-accent-fg'
-                        : 'text-fg-muted'
+                      i === 0 ? 'bg-accent text-accent-fg' : 'text-fg-muted'
                     }`}
                   >
                     {label}

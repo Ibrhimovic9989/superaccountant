@@ -108,30 +108,28 @@ export default async function OG() {
             lineHeight: 1.4,
           }}
         >
-          Adaptive lessons, daily practice, and an AI tutor that knows the curriculum — bilingual
-          EN + AR.
+          Adaptive lessons, daily practice, and an AI tutor that knows the curriculum — bilingual EN
+          + AR.
         </div>
       </div>
 
       {/* Footer pills */}
       <div style={{ display: 'flex', gap: 12, zIndex: 1 }}>
-        {['🇮🇳 Chartered Path', "🇸🇦 Mu'tamad Path", 'EN · AR', 'ZATCA · GST · IFRS'].map(
-          (label) => (
-            <div
-              key={label}
-              style={{
-                padding: '8px 16px',
-                border: '1px solid rgba(255,255,255,0.14)',
-                borderRadius: 999,
-                background: 'rgba(255,255,255,0.04)',
-                fontSize: 18,
-                color: 'rgba(250,250,250,0.8)',
-              }}
-            >
-              {label}
-            </div>
-          ),
-        )}
+        {['🇮🇳 Chartered Path', "🇸🇦 Mu'tamad Path", 'EN · AR', 'ZATCA · GST · IFRS'].map((label) => (
+          <div
+            key={label}
+            style={{
+              padding: '8px 16px',
+              border: '1px solid rgba(255,255,255,0.14)',
+              borderRadius: 999,
+              background: 'rgba(255,255,255,0.04)',
+              fontSize: 18,
+              color: 'rgba(250,250,250,0.8)',
+            }}
+          >
+            {label}
+          </div>
+        ))}
       </div>
     </div>,
     { ...size },

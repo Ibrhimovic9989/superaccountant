@@ -1,5 +1,5 @@
-import type { SupportedLocale } from '@sa/i18n'
 import { LegalDoc } from '@/components/legal-doc'
+import type { SupportedLocale } from '@sa/i18n'
 
 export const metadata = {
   title: 'Terms of Use · SuperAccountant',
@@ -48,8 +48,8 @@ function EnglishBody() {
         SuperAccountant is an educational technology platform for accounting students and
         practitioners in India and Saudi Arabia. We provide bilingual lessons, an AI tutor, daily
         practice plans, and certificates of mastery. We are <strong>not</strong> a regulator, an
-        accounting firm, or a substitute for professional advice. Nothing on the Service is
-        official tax, legal, or audit advice.
+        accounting firm, or a substitute for professional advice. Nothing on the Service is official
+        tax, legal, or audit advice.
       </p>
 
       <h2>2. Your account</h2>
@@ -77,18 +77,18 @@ function EnglishBody() {
 
       <h2>4. AI-generated content</h2>
       <p>
-        The AI tutor is trained on our curriculum and is grounded in cited lessons, but it can
-        still make mistakes. Treat its output as a study aid, not as a final authoritative source.
-        Always verify regulatory facts (tax rates, section numbers, due dates) against the
-        official source before relying on them in real work.
+        The AI tutor is trained on our curriculum and is grounded in cited lessons, but it can still
+        make mistakes. Treat its output as a study aid, not as a final authoritative source. Always
+        verify regulatory facts (tax rates, section numbers, due dates) against the official source
+        before relying on them in real work.
       </p>
 
       <h2>5. Certificates</h2>
       <p>
         Certificates issued by SuperAccountant verify that you completed our internal assessment.
-        They are <strong>not</strong> a regulator-issued license and do not replace ICAI, SOCPA,
-        or any other professional credential. Each certificate is HMAC-signed and verifiable on
-        our public verification page; counterfeit certificates are void.
+        They are <strong>not</strong> a regulator-issued license and do not replace ICAI, SOCPA, or
+        any other professional credential. Each certificate is HMAC-signed and verifiable on our
+        public verification page; counterfeit certificates are void.
       </p>
 
       <h2>6. Intellectual property</h2>
@@ -98,9 +98,9 @@ function EnglishBody() {
         for your own learning. The license ends when your account closes.
       </p>
       <p>
-        Content you submit (answers, profile data, tutor messages) remains yours. By submitting
-        it, you grant us a license to store, process, and use it to operate and improve the
-        Service — including grading your answers and personalizing your tutor.
+        Content you submit (answers, profile data, tutor messages) remains yours. By submitting it,
+        you grant us a license to store, process, and use it to operate and improve the Service —
+        including grading your answers and personalizing your tutor.
       </p>
 
       <h2>7. Subscriptions and refunds</h2>
@@ -112,10 +112,10 @@ function EnglishBody() {
 
       <h2>8. Disclaimers</h2>
       <p>
-        The Service is provided "as is" without warranties of any kind. We don't guarantee that
-        the AI tutor will be available 24/7, that lessons will be free of errors, or that you will
-        pass any external exam. Your professional success depends on many things beyond what we
-        can offer.
+        The Service is provided "as is" without warranties of any kind. We don't guarantee that the
+        AI tutor will be available 24/7, that lessons will be free of errors, or that you will pass
+        any external exam. Your professional success depends on many things beyond what we can
+        offer.
       </p>
 
       <h2>9. Limitation of liability</h2>
@@ -134,8 +134,8 @@ function EnglishBody() {
 
       <h2>11. Governing law</h2>
       <p>
-        These terms are governed by the laws of India. Any dispute will be resolved in the courts
-        of Hyderabad, Telangana.
+        These terms are governed by the laws of India. Any dispute will be resolved in the courts of
+        Hyderabad, Telangana.
       </p>
 
       <h2>12. Changes</h2>
@@ -160,24 +160,24 @@ function ArabicBody() {
   return (
     <>
       <p>
-        تحكم هذه الشروط وصولك إلى سوبر أكاونتنت ("الخدمة") واستخدامك لها، التي تشغّلها شركة
-        سوبر أكاونتنت تكنولوجيز، المسجلة في حيدر آباد، الهند. بإنشائك حساباً أو استخدامك للخدمة،
-        فإنك توافق على هذه الشروط. إذا لم توافق، فيرجى عدم استخدام الخدمة.
+        تحكم هذه الشروط وصولك إلى سوبر أكاونتنت ("الخدمة") واستخدامك لها، التي تشغّلها شركة سوبر
+        أكاونتنت تكنولوجيز، المسجلة في حيدر آباد، الهند. بإنشائك حساباً أو استخدامك للخدمة، فإنك
+        توافق على هذه الشروط. إذا لم توافق، فيرجى عدم استخدام الخدمة.
       </p>
 
       <h2>١. ما هو سوبر أكاونتنت</h2>
       <p>
         سوبر أكاونتنت منصة تعليمية لطلاب وممارسي المحاسبة في الهند والمملكة العربية السعودية. نقدم
         دروساً ثنائية اللغة، ومدرساً ذكياً، وخططاً يومية للممارسة، وشهادات إتقان. نحن{' '}
-        <strong>لسنا</strong> جهة تنظيمية، ولا شركة محاسبة، ولا بديلاً عن المشورة المهنية. لا شيء
-        في الخدمة يُعتبر مشورة ضريبية أو قانونية أو تدقيقية رسمية.
+        <strong>لسنا</strong> جهة تنظيمية، ولا شركة محاسبة، ولا بديلاً عن المشورة المهنية. لا شيء في
+        الخدمة يُعتبر مشورة ضريبية أو قانونية أو تدقيقية رسمية.
       </p>
 
       <h2>٢. حسابك</h2>
       <p>
-        يجب أن يكون عمرك ١٦ عاماً على الأقل لإنشاء حساب. أنت مسؤول عن الحفاظ على بيانات تسجيل
-        الدخول الخاصة بك وعن جميع الأنشطة تحت حسابك. لا تشارك حسابك. إذا اشتبهت في وصول غير
-        مصرح به، راسلنا فوراً على info@superaccountant.in.
+        يجب أن يكون عمرك ١٦ عاماً على الأقل لإنشاء حساب. أنت مسؤول عن الحفاظ على بيانات تسجيل الدخول
+        الخاصة بك وعن جميع الأنشطة تحت حسابك. لا تشارك حسابك. إذا اشتبهت في وصول غير مصرح به، راسلنا
+        فوراً على info@superaccountant.in.
       </p>
 
       <h2>٣. الاستخدام المقبول</h2>
@@ -199,75 +199,69 @@ function ArabicBody() {
       <h2>٤. المحتوى المُولَّد بالذكاء الاصطناعي</h2>
       <p>
         المدرس الذكي مدرَّب على منهجنا ومستند إلى دروس مستشهد بها، لكنه لا يزال قد يخطئ. تعامل مع
-        مخرجاته كأداة دراسية، لا كمصدر مرجعي نهائي. تحقق دائماً من الحقائق التنظيمية (معدلات
-        الضرائب، أرقام المواد، تواريخ الاستحقاق) من المصدر الرسمي قبل الاعتماد عليها في العمل
-        الحقيقي.
+        مخرجاته كأداة دراسية، لا كمصدر مرجعي نهائي. تحقق دائماً من الحقائق التنظيمية (معدلات الضرائب،
+        أرقام المواد، تواريخ الاستحقاق) من المصدر الرسمي قبل الاعتماد عليها في العمل الحقيقي.
       </p>
 
       <h2>٥. الشهادات</h2>
       <p>
-        الشهادات الصادرة من سوبر أكاونتنت تثبت أنك أكملت تقييمنا الداخلي. وهي{' '}
-        <strong>ليست</strong> رخصة من جهة تنظيمية ولا تحل محل ICAI أو SOCPA أو أي شهادة مهنية
-        أخرى. كل شهادة موقعة بـ HMAC وقابلة للتحقق على صفحة التحقق العامة؛ الشهادات المزورة
-        لاغية.
+        الشهادات الصادرة من سوبر أكاونتنت تثبت أنك أكملت تقييمنا الداخلي. وهي <strong>ليست</strong>{' '}
+        رخصة من جهة تنظيمية ولا تحل محل ICAI أو SOCPA أو أي شهادة مهنية أخرى. كل شهادة موقعة بـ HMAC
+        وقابلة للتحقق على صفحة التحقق العامة؛ الشهادات المزورة لاغية.
       </p>
 
       <h2>٦. الملكية الفكرية</h2>
       <p>
         جميع محتويات المنهج والدروس والرسوم البيانية والكود وعلامات الهوية مملوكة لشركة سوبر
-        أكاونتنت تكنولوجيز. تحصل على ترخيص شخصي غير قابل للتحويل لاستخدامها للتعلم الخاص بك.
-        ينتهي الترخيص عند إغلاق حسابك.
+        أكاونتنت تكنولوجيز. تحصل على ترخيص شخصي غير قابل للتحويل لاستخدامها للتعلم الخاص بك. ينتهي
+        الترخيص عند إغلاق حسابك.
       </p>
       <p>
         المحتوى الذي تقدمه (الإجابات، بيانات الملف الشخصي، رسائل المدرس) يبقى ملكك. بتقديمه، تمنحنا
-        ترخيصاً لتخزينه ومعالجته واستخدامه لتشغيل الخدمة وتحسينها — بما في ذلك تصحيح إجاباتك
-        وتخصيص مدرسك.
+        ترخيصاً لتخزينه ومعالجته واستخدامه لتشغيل الخدمة وتحسينها — بما في ذلك تصحيح إجاباتك وتخصيص
+        مدرسك.
       </p>
 
       <h2>٧. الاشتراكات والاسترداد</h2>
       <p>
-        خلال النسخة التجريبية، الخدمة مجانية. عند إطلاق الخطط المدفوعة، ستظهر تفاصيل الفوترة
-        بوضوح قبل أي خصم. إذا ألغيت، فإنك تحتفظ بالوصول حتى نهاية فترة الفوترة الحالية. يتم
-        التعامل مع الاسترداد على أساس كل حالة على حدة.
+        خلال النسخة التجريبية، الخدمة مجانية. عند إطلاق الخطط المدفوعة، ستظهر تفاصيل الفوترة بوضوح
+        قبل أي خصم. إذا ألغيت، فإنك تحتفظ بالوصول حتى نهاية فترة الفوترة الحالية. يتم التعامل مع
+        الاسترداد على أساس كل حالة على حدة.
       </p>
 
       <h2>٨. إخلاء المسؤولية</h2>
       <p>
-        تُقدَّم الخدمة "كما هي" بدون أي ضمانات. لا نضمن أن المدرس الذكي سيكون متاحاً ٢٤/٧، أو
-        أن الدروس ستكون خالية من الأخطاء، أو أنك ستجتاز أي امتحان خارجي.
+        تُقدَّم الخدمة "كما هي" بدون أي ضمانات. لا نضمن أن المدرس الذكي سيكون متاحاً ٢٤/٧، أو أن الدروس
+        ستكون خالية من الأخطاء، أو أنك ستجتاز أي امتحان خارجي.
       </p>
 
       <h2>٩. حدود المسؤولية</h2>
       <p>
         إلى أقصى حد يسمح به القانون، شركة سوبر أكاونتنت تكنولوجيز ليست مسؤولة عن الأضرار غير
-        المباشرة أو العرضية أو التبعية الناشئة عن استخدامك للخدمة. مسؤوليتنا الإجمالية لأي
-        مطالبة محدودة بالمبلغ الذي دفعته لنا في الـ ١٢ شهراً السابقة للمطالبة، أو ١٬٠٠٠ روبية،
-        أيهما أكبر.
+        المباشرة أو العرضية أو التبعية الناشئة عن استخدامك للخدمة. مسؤوليتنا الإجمالية لأي مطالبة
+        محدودة بالمبلغ الذي دفعته لنا في الـ ١٢ شهراً السابقة للمطالبة، أو ١٬٠٠٠ روبية، أيهما أكبر.
       </p>
 
       <h2>١٠. إنهاء الحساب</h2>
       <p>
-        يمكنك حذف حسابك في أي وقت من إعدادات الملف الشخصي. قد نعلق أو ننهي الحسابات التي تنتهك
-        هذه الشروط، مع إشعار عندما يكون ذلك ممكناً.
+        يمكنك حذف حسابك في أي وقت من إعدادات الملف الشخصي. قد نعلق أو ننهي الحسابات التي تنتهك هذه
+        الشروط، مع إشعار عندما يكون ذلك ممكناً.
       </p>
 
       <h2>١١. القانون الحاكم</h2>
-      <p>
-        تخضع هذه الشروط لقوانين الهند. أي نزاع سيُحل في محاكم حيدر آباد، تيلانجانا.
-      </p>
+      <p>تخضع هذه الشروط لقوانين الهند. أي نزاع سيُحل في محاكم حيدر آباد، تيلانجانا.</p>
 
       <h2>١٢. التغييرات</h2>
       <p>
-        قد نحدث هذه الشروط مع تطور الخدمة. سيتم الإعلان عن التغييرات الجوهرية عبر البريد
-        الإلكتروني وعلى هذه الصفحة قبل ١٤ يوماً على الأقل من سريانها.
+        قد نحدث هذه الشروط مع تطور الخدمة. سيتم الإعلان عن التغييرات الجوهرية عبر البريد الإلكتروني
+        وعلى هذه الصفحة قبل ١٤ يوماً على الأقل من سريانها.
       </p>
 
       <h2>١٣. اتصل بنا</h2>
       <p>
         أسئلة حول هذه الشروط؟ راسل{' '}
-        <a href="mailto:info@superaccountant.in">info@superaccountant.in</a> أو اكتب إلى: شركة
-        سوبر أكاونتنت تكنولوجيز، وحدة 422، الطابق الرابع، داون تاون مول، لاكديكابول، حيدر آباد،
-        الهند.
+        <a href="mailto:info@superaccountant.in">info@superaccountant.in</a> أو اكتب إلى: شركة سوبر
+        أكاونتنت تكنولوجيز، وحدة 422، الطابق الرابع، داون تاون مول، لاكديكابول، حيدر آباد، الهند.
       </p>
     </>
   )
