@@ -1,11 +1,20 @@
 'use client'
 
-import * as React from 'react'
-import { motion, AnimatePresence } from 'motion/react'
-import { Check, ChevronLeft, ChevronRight, Pause, Play, RotateCcw, Volume2, VolumeX } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { PUBLIC_CONFIG } from '@/lib/config/public'
 import { cn } from '@/lib/utils'
+import {
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Pause,
+  Play,
+  RotateCcw,
+  Volume2,
+  VolumeX,
+} from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import * as React from 'react'
 
 /**
  * Accounting Visualizer — interactive double-entry animation.
@@ -49,8 +58,10 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     amount: 85000,
     explanation: 'Debtor increases (asset ↑), Sales increases (income ↑)',
     explanationAr: 'المدين يزيد (أصل ↑)، المبيعات تزيد (إيراد ↑)',
-    voiceEn: 'We sold goods worth 85 thousand rupees to Patel Enterprises, but they have not paid yet. So Patel now owes us money — that is a debtor, an asset for us. And we earned sales revenue. So we debit the debtor account and credit the sales account.',
-    voiceAr: 'بعنا بضائع بقيمة ٨٥ ألف روبية لشركة باتل، لكنهم لم يدفعوا بعد. فشركة باتل الآن مدينة لنا — وهذا أصل بالنسبة لنا. وحققنا إيراد مبيعات. لذلك نجعل حساب المدين مدينًا ونجعل حساب المبيعات دائنًا.',
+    voiceEn:
+      'We sold goods worth 85 thousand rupees to Patel Enterprises, but they have not paid yet. So Patel now owes us money — that is a debtor, an asset for us. And we earned sales revenue. So we debit the debtor account and credit the sales account.',
+    voiceAr:
+      'بعنا بضائع بقيمة ٨٥ ألف روبية لشركة باتل، لكنهم لم يدفعوا بعد. فشركة باتل الآن مدينة لنا — وهذا أصل بالنسبة لنا. وحققنا إيراد مبيعات. لذلك نجعل حساب المدين مدينًا ونجعل حساب المبيعات دائنًا.',
   },
   {
     id: 't2',
@@ -61,8 +72,10 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     amount: 85000,
     explanation: 'Bank increases (asset ↑), Debtor decreases (asset ↓) — receivable settled',
     explanationAr: 'البنك يزيد (أصل ↑)، المدين ينقص (أصل ↓) — تمت التسوية',
-    voiceEn: 'Patel Enterprises has now paid us 85 thousand rupees into our bank account. Our bank balance goes up — that is an asset increasing, so we debit the bank. And Patel no longer owes us, so the debtor balance goes down — we credit the debtor account. The receivable is now settled.',
-    voiceAr: 'شركة باتل دفعت لنا ٨٥ ألف روبية في حسابنا البنكي. رصيد البنك يرتفع — وهذا أصل يزيد، فنجعل البنك مدينًا. وباتل لم يعد مدينًا لنا، فنجعل حساب المدين دائنًا. تمت التسوية.',
+    voiceEn:
+      'Patel Enterprises has now paid us 85 thousand rupees into our bank account. Our bank balance goes up — that is an asset increasing, so we debit the bank. And Patel no longer owes us, so the debtor balance goes down — we credit the debtor account. The receivable is now settled.',
+    voiceAr:
+      'شركة باتل دفعت لنا ٨٥ ألف روبية في حسابنا البنكي. رصيد البنك يرتفع — وهذا أصل يزيد، فنجعل البنك مدينًا. وباتل لم يعد مدينًا لنا، فنجعل حساب المدين دائنًا. تمت التسوية.',
   },
   {
     id: 't3',
@@ -73,8 +86,10 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     amount: 42000,
     explanation: 'Purchases increase (expense ↑), Creditor increases (liability ↑)',
     explanationAr: 'المشتريات تزيد (مصروف ↑)، الدائن يزيد (التزام ↑)',
-    voiceEn: 'We bought goods worth 42 thousand rupees from Gupta Suppliers, but we have not paid them yet. So our purchases go up — that is an expense. And we now owe Gupta money — that is a creditor, a liability. Debit purchases, credit the creditor.',
-    voiceAr: 'اشترينا بضائع بقيمة ٤٢ ألف روبية من مورد جوبتا، لكن لم ندفع بعد. فالمشتريات تزيد — وهي مصروف. ونحن الآن مدينون لجوبتا — وهذا التزام. نجعل المشتريات مدينة والدائن دائنًا.',
+    voiceEn:
+      'We bought goods worth 42 thousand rupees from Gupta Suppliers, but we have not paid them yet. So our purchases go up — that is an expense. And we now owe Gupta money — that is a creditor, a liability. Debit purchases, credit the creditor.',
+    voiceAr:
+      'اشترينا بضائع بقيمة ٤٢ ألف روبية من مورد جوبتا، لكن لم ندفع بعد. فالمشتريات تزيد — وهي مصروف. ونحن الآن مدينون لجوبتا — وهذا التزام. نجعل المشتريات مدينة والدائن دائنًا.',
   },
   {
     id: 't4',
@@ -85,8 +100,10 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     amount: 42000,
     explanation: 'Creditor decreases (liability ↓), Bank decreases (asset ↓)',
     explanationAr: 'الدائن ينقص (التزام ↓)، البنك ينقص (أصل ↓)',
-    voiceEn: 'We are now paying Gupta Suppliers the 42 thousand we owed them. Our liability to Gupta goes down — we debit the creditor account. And money leaves our bank — bank balance decreases, so we credit the bank account.',
-    voiceAr: 'ندفع الآن لمورد جوبتا ٤٢ ألف روبية التي كنا ندينها. التزامنا لجوبتا ينخفض — فنجعل الدائن مدينًا. والمال يخرج من البنك — فنجعل البنك دائنًا.',
+    voiceEn:
+      'We are now paying Gupta Suppliers the 42 thousand we owed them. Our liability to Gupta goes down — we debit the creditor account. And money leaves our bank — bank balance decreases, so we credit the bank account.',
+    voiceAr:
+      'ندفع الآن لمورد جوبتا ٤٢ ألف روبية التي كنا ندينها. التزامنا لجوبتا ينخفض — فنجعل الدائن مدينًا. والمال يخرج من البنك — فنجعل البنك دائنًا.',
   },
   {
     id: 't5',
@@ -97,8 +114,10 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     amount: 55000,
     explanation: 'Rent expense increases (expense ↑), Bank decreases (asset ↓)',
     explanationAr: 'مصروف الإيجار يزيد (مصروف ↑)، البنك ينقص (أصل ↓)',
-    voiceEn: 'We paid 55 thousand rupees for office rent. Rent is an expense — it goes up, so we debit the rent account. The money came out of our bank, so bank goes down — we credit the bank.',
-    voiceAr: 'دفعنا ٥٥ ألف روبية إيجار المكتب. الإيجار مصروف — يزيد فنجعله مدينًا. والمال خرج من البنك فنجعل البنك دائنًا.',
+    voiceEn:
+      'We paid 55 thousand rupees for office rent. Rent is an expense — it goes up, so we debit the rent account. The money came out of our bank, so bank goes down — we credit the bank.',
+    voiceAr:
+      'دفعنا ٥٥ ألف روبية إيجار المكتب. الإيجار مصروف — يزيد فنجعله مدينًا. والمال خرج من البنك فنجعل البنك دائنًا.',
   },
   {
     id: 't6',
@@ -109,8 +128,10 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     amount: 500000,
     explanation: 'Bank increases (asset ↑), Loan increases (liability ↑)',
     explanationAr: 'البنك يزيد (أصل ↑)، القرض يزيد (التزام ↑)',
-    voiceEn: 'HDFC Bank gave us a loan of 5 lakh rupees. The money came into our bank account — bank goes up, so we debit it. But we now owe HDFC this money — the loan is a liability that increases. So we credit the loan account.',
-    voiceAr: 'أعطانا بنك HDFC قرضًا بقيمة ٥ لاخ روبية. المال دخل حسابنا البنكي — فنجعل البنك مدينًا. لكننا الآن مدينون بهذا المبلغ — القرض التزام يزيد. فنجعل حساب القرض دائنًا.',
+    voiceEn:
+      'HDFC Bank gave us a loan of 5 lakh rupees. The money came into our bank account — bank goes up, so we debit it. But we now owe HDFC this money — the loan is a liability that increases. So we credit the loan account.',
+    voiceAr:
+      'أعطانا بنك HDFC قرضًا بقيمة ٥ لاخ روبية. المال دخل حسابنا البنكي — فنجعل البنك مدينًا. لكننا الآن مدينون بهذا المبلغ — القرض التزام يزيد. فنجعل حساب القرض دائنًا.',
   },
   {
     id: 't7',
@@ -121,8 +142,10 @@ const DEFAULT_TRANSACTIONS: Transaction[] = [
     amount: 215000,
     explanation: 'Salary expense increases (expense ↑), Bank decreases (asset ↓)',
     explanationAr: 'مصروف الرواتب يزيد (مصروف ↑)، البنك ينقص (أصل ↓)',
-    voiceEn: 'We paid 2 lakh 15 thousand rupees in salaries to our employees. Salary is an expense — it increases, so we debit the salary account. The money left our bank, so we credit the bank account.',
-    voiceAr: 'دفعنا ٢ لاخ و١٥ ألف روبية رواتب للموظفين. الراتب مصروف — يزيد فنجعله مدينًا. والمال خرج من البنك فنجعل البنك دائنًا.',
+    voiceEn:
+      'We paid 2 lakh 15 thousand rupees in salaries to our employees. Salary is an expense — it increases, so we debit the salary account. The money left our bank, so we credit the bank account.',
+    voiceAr:
+      'دفعنا ٢ لاخ و١٥ ألف روبية رواتب للموظفين. الراتب مصروف — يزيد فنجعله مدينًا. والمال خرج من البنك فنجعل البنك دائنًا.',
   },
 ]
 
@@ -187,7 +210,10 @@ export function AccountingVisualizer({
         const url = `${PUBLIC_CONFIG.apiUrl}/curriculum/speak?text=${encodeURIComponent(text)}&locale=${locale}`
         const audio = new Audio(url)
         audioRef.current = audio
-        audio.onended = () => { setSpeaking(false); audioRef.current = null }
+        audio.onended = () => {
+          setSpeaking(false)
+          audioRef.current = null
+        }
         audio.onerror = () => {
           // Fallback to browser TTS if Azure fails
           setSpeaking(false)
@@ -206,7 +232,10 @@ export function AccountingVisualizer({
   // Browser TTS fallback (works well for English, spotty for Arabic)
   const speakBrowser = React.useCallback(
     (text: string) => {
-      if (!window.speechSynthesis) { setSpeaking(false); return }
+      if (!window.speechSynthesis) {
+        setSpeaking(false)
+        return
+      }
       const utterance = new SpeechSynthesisUtterance(text)
       const targetLang = locale === 'ar' ? 'ar-SA' : 'en-US'
       utterance.lang = targetLang
@@ -224,14 +253,20 @@ export function AccountingVisualizer({
   // Stop all audio on unmount or when voice is disabled
   React.useEffect(() => {
     return () => {
-      if (audioRef.current) { audioRef.current.pause(); audioRef.current = null }
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current = null
+      }
       if (typeof window !== 'undefined' && window.speechSynthesis) window.speechSynthesis.cancel()
     }
   }, [])
 
   React.useEffect(() => {
     if (!voiceEnabled) {
-      if (audioRef.current) { audioRef.current.pause(); audioRef.current = null }
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current = null
+      }
       if (typeof window !== 'undefined' && window.speechSynthesis) window.speechSynthesis.cancel()
       setSpeaking(false)
     }
@@ -280,7 +315,10 @@ export function AccountingVisualizer({
   }
 
   function stopAllAudio() {
-    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null }
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current = null
+    }
     if (typeof window !== 'undefined' && window.speechSynthesis) window.speechSynthesis.cancel()
     setSpeaking(false)
   }
@@ -355,7 +393,11 @@ export function AccountingVisualizer({
               speaking && voiceEnabled && 'animate-pulse',
             )}
           >
-            {voiceEnabled ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
+            {voiceEnabled ? (
+              <Volume2 className="h-3.5 w-3.5" />
+            ) : (
+              <VolumeX className="h-3.5 w-3.5" />
+            )}
           </button>
           <span className="font-mono text-[10px] tabular-nums text-fg-muted">
             {currentStep + 1}/{transactions.length}
@@ -386,7 +428,8 @@ export function AccountingVisualizer({
                   Cr. {currentTxn.creditAccount}
                 </span>
                 <span className="ms-auto font-mono text-sm font-bold tabular-nums text-fg">
-                  {locale === 'ar' ? '' : '\u20B9'}{currentTxn.amount.toLocaleString('en-IN')}
+                  {locale === 'ar' ? '' : '\u20B9'}
+                  {currentTxn.amount.toLocaleString('en-IN')}
                 </span>
               </div>
               <p className="mt-2 text-xs italic text-fg-muted">
@@ -559,13 +602,16 @@ export function AccountingVisualizer({
             size="sm"
             onClick={() => {
               if (playing) setPlaying(false)
-              else { if (isLast) { reset(); setTimeout(() => setPlaying(true), 100) } else setPlaying(true) }
+              else {
+                if (isLast) {
+                  reset()
+                  setTimeout(() => setPlaying(true), 100)
+                } else setPlaying(true)
+              }
             }}
           >
             {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
-            {playing
-              ? locale === 'ar' ? 'إيقاف' : 'Pause'
-              : locale === 'ar' ? 'تشغيل' : 'Play'}
+            {playing ? (locale === 'ar' ? 'إيقاف' : 'Pause') : locale === 'ar' ? 'تشغيل' : 'Play'}
           </Button>
           <Button type="button" variant="ghost" size="sm" onClick={stepForward} disabled={isLast}>
             <ChevronRight className="h-4 w-4" />
@@ -577,7 +623,10 @@ export function AccountingVisualizer({
             <button
               key={transactions[i]!.id}
               type="button"
-              onClick={() => { setCurrentStep(i); setPlaying(false) }}
+              onClick={() => {
+                setCurrentStep(i)
+                setPlaying(false)
+              }}
               className={cn(
                 'h-1.5 rounded-full transition-all',
                 i <= currentStep ? 'w-4 bg-accent' : 'w-1.5 bg-border',

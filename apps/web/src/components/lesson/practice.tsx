@@ -1,13 +1,13 @@
 'use client'
 
-import * as React from 'react'
-import { useEffect, useState } from 'react'
-import { Check, ChevronLeft, ChevronRight, Sparkles, X } from 'lucide-react'
-import { motion, AnimatePresence } from 'motion/react'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import type { AssessmentItem } from '@/lib/data/lessons'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { Check, ChevronLeft, ChevronRight, Sparkles, X } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import * as React from 'react'
+import { useEffect, useState } from 'react'
 
 type Props = {
   items: AssessmentItem[]
@@ -55,8 +55,7 @@ export function Practice({ items, locale, onAskTutor, onMcqResult }: Props) {
   const isMcq = item.type === 'mcq'
   const wasSubmitted = !!submitted[idx]
   const studentAnswer = answers[idx] ?? ''
-  const isCorrect =
-    isMcq && wasSubmitted && normalize(studentAnswer) === normalize(item.answer)
+  const isCorrect = isMcq && wasSubmitted && normalize(studentAnswer) === normalize(item.answer)
   const promptText = locale === 'ar' ? item.prompt.ar : item.prompt.en
   const choices = item.choices?.map((c) => (locale === 'ar' ? c.ar : c.en)) ?? []
 
@@ -135,7 +134,13 @@ export function Practice({ items, locale, onAskTutor, onMcqResult }: Props) {
                         'border-border bg-bg-elev text-fg-muted group-hover:border-border-strong',
                     )}
                   >
-                    {isAnswer ? <Check className="h-3 w-3" /> : isWrongPick ? <X className="h-3 w-3" /> : letter}
+                    {isAnswer ? (
+                      <Check className="h-3 w-3" />
+                    ) : isWrongPick ? (
+                      <X className="h-3 w-3" />
+                    ) : (
+                      letter
+                    )}
                   </span>
                   <span className="flex-1 leading-relaxed">{c}</span>
                 </label>

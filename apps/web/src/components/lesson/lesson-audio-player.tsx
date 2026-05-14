@@ -1,8 +1,8 @@
 'use client'
 
-import * as React from 'react'
-import { Headphones, Pause, Play, RotateCcw, Volume2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Headphones, Pause, Play, RotateCcw, Volume2 } from 'lucide-react'
+import * as React from 'react'
 
 /**
  * Compact lesson audio player. Narrates the full lesson content in the
@@ -114,11 +114,7 @@ export function LessonAudioPlayer({ audioUrl, locale, title }: Props) {
               : 'bg-accent text-accent-fg shadow-[0_0_0_1px_var(--accent),0_0_24px_-8px_var(--accent)] hover:brightness-110',
           )}
         >
-          {playing ? (
-            <Pause className="h-5 w-5" />
-          ) : (
-            <Play className="h-5 w-5 translate-x-0.5" />
-          )}
+          {playing ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5 translate-x-0.5" />}
         </button>
 
         {/* Middle: title + scrubber */}
@@ -127,8 +123,7 @@ export function LessonAudioPlayer({ audioUrl, locale, title }: Props) {
             <div className="flex min-w-0 items-center gap-1.5">
               <Headphones className="h-3 w-3 shrink-0 text-accent" />
               <span className="truncate font-mono text-[10px] uppercase tracking-wider text-fg-muted">
-                {title ??
-                  (locale === 'ar' ? 'استمع إلى الدرس' : 'Listen to this lesson')}
+                {title ?? (locale === 'ar' ? 'استمع إلى الدرس' : 'Listen to this lesson')}
               </span>
             </div>
             <span className="shrink-0 font-mono text-[10px] tabular-nums text-fg-subtle">

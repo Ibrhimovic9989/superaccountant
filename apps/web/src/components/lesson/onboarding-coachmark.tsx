@@ -1,10 +1,10 @@
 'use client'
 
-import * as React from 'react'
-import { ArrowRight, Check, Command, MessageSquare, PenLine, X } from 'lucide-react'
-import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { ArrowRight, Check, Command, MessageSquare, PenLine, X } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import * as React from 'react'
 
 const STORAGE_KEY = 'sa.lesson.coachmark.dismissed'
 
@@ -29,8 +29,7 @@ const STEPS: Record<'en' | 'ar', Step[]> = {
       hint: (
         <span className="inline-flex items-center gap-1.5">
           <kbd className="rounded border border-border bg-bg-overlay px-1.5 py-0.5 font-mono text-[10px]">
-            <Command className="inline h-2.5 w-2.5" />
-            K
+            <Command className="inline h-2.5 w-2.5" />K
           </kbd>
           to open the tutor anytime
         </span>
@@ -39,7 +38,7 @@ const STEPS: Record<'en' | 'ar', Step[]> = {
     {
       icon: <Check className="h-4 w-4" />,
       title: 'Mark complete to lock in mastery',
-      body: 'Once you finish the practice, hit Mark complete. Your mastery score updates and tomorrow\'s plan adapts to what you got wrong.',
+      body: "Once you finish the practice, hit Mark complete. Your mastery score updates and tomorrow's plan adapts to what you got wrong.",
     },
   ],
   ar: [
@@ -55,8 +54,7 @@ const STEPS: Record<'en' | 'ar', Step[]> = {
       hint: (
         <span className="inline-flex items-center gap-1.5">
           <kbd className="rounded border border-border bg-bg-overlay px-1.5 py-0.5 font-mono text-[10px]">
-            <Command className="inline h-2.5 w-2.5" />
-            K
+            <Command className="inline h-2.5 w-2.5" />K
           </kbd>
           لفتح المدرس في أي وقت
         </span>
@@ -179,9 +177,7 @@ export function OnboardingCoachmark({ locale }: { locale: 'en' | 'ar' }) {
               >
                 <h2 className="text-xl font-semibold tracking-tight">{current.title}</h2>
                 <p className="mt-3 text-sm leading-relaxed text-fg-muted">{current.body}</p>
-                {current.hint && (
-                  <p className="mt-4 text-xs text-fg-subtle">{current.hint}</p>
-                )}
+                {current.hint && <p className="mt-4 text-xs text-fg-subtle">{current.hint}</p>}
               </motion.div>
             </div>
 

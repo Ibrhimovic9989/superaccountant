@@ -29,32 +29,26 @@ function sanitizeMermaid(source: string): string {
     // Patterns: A[Label], A(Label), A{Label}, A((Label)), A[[Label]], A[(Label)]
     // We only touch [ ] and { } shapes — round node syntax () IS a label form
     // mermaid expects, so we leave it alone.
-    line = line.replace(
-      /([A-Za-z0-9_]+)(\[)([^\]"']*?)(\])/g,
-      (_m, id, open, body, close) => {
-        const cleaned = body
-          .replace(/<br\s*\/?>/gi, ' — ')
-          .replace(/[—–]/g, '-')
-          .replace(/"/g, "'")
-          .trim()
-        // Only quote if there's something risky (paren, slash, colon, &, %, comma)
-        const risky = /[()/:&%,]/.test(cleaned)
-        return `${id}${open}${risky ? `"${cleaned}"` : cleaned}${close}`
-      },
-    )
+    line = line.replace(/([A-Za-z0-9_]+)(\[)([^\]"']*?)(\])/g, (_m, id, open, body, close) => {
+      const cleaned = body
+        .replace(/<br\s*\/?>/gi, ' — ')
+        .replace(/[—–]/g, '-')
+        .replace(/"/g, "'")
+        .trim()
+      // Only quote if there's something risky (paren, slash, colon, &, %, comma)
+      const risky = /[()/:&%,]/.test(cleaned)
+      return `${id}${open}${risky ? `"${cleaned}"` : cleaned}${close}`
+    })
 
-    line = line.replace(
-      /([A-Za-z0-9_]+)(\{)([^}"']*?)(\})/g,
-      (_m, id, open, body, close) => {
-        const cleaned = body
-          .replace(/<br\s*\/?>/gi, ' — ')
-          .replace(/[—–]/g, '-')
-          .replace(/"/g, "'")
-          .trim()
-        const risky = /[()/:&%,]/.test(cleaned)
-        return `${id}${open}${risky ? `"${cleaned}"` : cleaned}${close}`
-      },
-    )
+    line = line.replace(/([A-Za-z0-9_]+)(\{)([^}"']*?)(\})/g, (_m, id, open, body, close) => {
+      const cleaned = body
+        .replace(/<br\s*\/?>/gi, ' — ')
+        .replace(/[—–]/g, '-')
+        .replace(/"/g, "'")
+        .trim()
+      const risky = /[()/:&%,]/.test(cleaned)
+      return `${id}${open}${risky ? `"${cleaned}"` : cleaned}${close}`
+    })
 
     // Em-dash arrows → ASCII
     line = line.replace(/[—–]>/g, '-->')
