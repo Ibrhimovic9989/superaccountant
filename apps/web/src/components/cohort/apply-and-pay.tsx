@@ -1,5 +1,6 @@
 'use client'
 
+import { BorderBeam } from '@/components/magicui/border-beam'
 import { ArrowRight, CheckCircle2, CreditCard, Loader2, LogIn, ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -387,28 +388,47 @@ function AuthedFormBody({
           <div className="grid gap-2 sm:grid-cols-2">
             {cohorts.map((c) => {
               const selected = c.id === selectedId
+              const isIndia = c.track === 'india'
               return (
                 <button
                   key={c.id}
                   type="button"
+                  aria-pressed={selected}
                   onClick={() => onSelectCohort(c.id)}
-                  className={`flex flex-col items-start gap-1 rounded-xl border-2 p-4 text-left transition-all ${
+                  className={`group relative flex flex-col items-start gap-1 overflow-hidden rounded-xl border-2 p-4 text-left transition-all ${
                     selected
-                      ? c.track === 'india'
-                        ? 'border-accent bg-accent-soft text-fg'
-                        : 'border-success bg-success/10 text-fg'
-                      : 'border-border bg-bg-elev/50 text-fg hover:border-border-strong'
+                      ? isIndia
+                        ? 'border-accent bg-accent-soft text-fg shadow-[0_0_0_4px_rgba(167,139,250,0.12),0_8px_24px_-12px_rgba(139,92,246,0.5)]'
+                        : 'border-success bg-success/10 text-fg shadow-[0_0_0_4px_rgba(16,185,129,0.12),0_8px_24px_-12px_rgba(5,150,105,0.5)]'
+                      : 'border-border bg-bg-elev/50 text-fg hover:-translate-y-0.5 hover:border-border-strong'
                   }`}
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl" aria-hidden>
-                      {c.track === 'india' ? '🇮🇳' : '🇸🇦'}
-                    </span>
-                    <span className="text-sm font-semibold tracking-tight">
-                      {c.track === 'india' ? 'Indian Chartered' : "Saudi Mu'tamad"}
-                    </span>
+                  {selected && (
+                    <BorderBeam
+                      size={90}
+                      duration={7}
+                      colorFrom={isIndia ? '#a78bfa' : '#10b981'}
+                      colorTo={isIndia ? '#8b5cf6' : '#059669'}
+                    />
+                  )}
+                  <div className="flex w-full items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl" aria-hidden>
+                        {isIndia ? '🇮🇳' : '🇸🇦'}
+                      </span>
+                      <span className="text-sm font-semibold tracking-tight">
+                        {isIndia ? 'Indian Chartered' : "Saudi Mu'tamad"}
+                      </span>
+                    </div>
+                    {selected && (
+                      <CheckCircle2
+                        className={`h-4 w-4 ${isIndia ? 'text-accent' : 'text-success'}`}
+                      />
+                    )}
                   </div>
-                  <p className="text-xs text-fg-muted">{c.name}</p>
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+                    [ {c.name} ]
+                  </p>
                   <div className="mt-1 flex items-baseline gap-2">
                     <span className="text-lg font-bold tracking-tight">{c.priceLabel}</span>
                     <span className="text-xs text-fg-subtle line-through">

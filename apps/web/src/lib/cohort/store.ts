@@ -58,6 +58,19 @@ export async function getActiveCohortForTrack(track: 'india' | 'ksa'): Promise<C
   return rows[0] ?? null
 }
 
+/** Seats claimed per cohort id — used for the live "X seats left" UI. */
+export async function getPaidSeatCounts(): Promise<Map<string, number>> {
+  const rows = await prisma.$queryRaw<{ cohortId: string; n: number }[]>`
+    SELECT "cohortId", COUNT(*)::int AS n
+    FROM "CohortApplication"
+    WHERE "status" = 'paid'
+    GROUP BY "cohortId"
+  `
+  const map = new Map<string, number>()
+  for (const r of rows) map.set(r.cohortId, r.n)
+  return map
+}
+
 export async function getActiveCohorts(): Promise<Cohort[]> {
   return prisma.$queryRaw<Cohort[]>`
     SELECT "id", "slug", "track", "name", "city",

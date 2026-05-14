@@ -2,6 +2,7 @@ import { Logo } from '@/components/brand/logo'
 import { ApplyAndPay } from '@/components/cohort/apply-and-pay'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { BorderBeam } from '@/components/magicui/border-beam'
+import { DotPattern } from '@/components/magicui/dot-pattern'
 import { auth } from '@/lib/auth'
 import {
   createRazorpayOrder,
@@ -14,6 +15,7 @@ import {
   formatPrice,
   getActiveCohorts,
   getCohortById,
+  getPaidSeatCounts,
   markApplicationPaid,
   upsertPendingApplication,
   validateDiscountCode,
@@ -65,9 +67,10 @@ export default async function CohortPage({
 
   // Fetch every active cohort. The applicant picks their track in the
   // form; the chosen cohort's price + currency drives Razorpay.
-  const cohorts = await getActiveCohorts()
+  const [cohorts, paidSeats] = await Promise.all([getActiveCohorts(), getPaidSeatCounts()])
   const indianCohort = cohorts.find((c) => c.track === 'india') ?? null
   const primaryCohort = indianCohort ?? cohorts[0] ?? null
+  const now = Date.now()
 
   /**
    * Apply a discount code. Server-only — codes are never enumerated to
@@ -311,8 +314,19 @@ export default async function CohortPage({
   }
 
   return (
-    <div className="min-h-screen bg-bg text-fg">
-      <main className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-20">
+    <div className="relative min-h-screen overflow-hidden bg-bg text-fg">
+      {/* Hero-zone dot grid — fades out as you scroll past the fold. */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[640px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)]">
+        <DotPattern
+          width={22}
+          height={22}
+          cr={0.9}
+          glow
+          className="text-fg-subtle/35 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]"
+        />
+      </div>
+
+      <main className="relative mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-20">
         {/* ── Brand header ──────────────────────────────────── */}
         <BlurFade delay={0.02}>
           <Link href={`/${locale}/cohort`} className="mb-10 inline-flex items-center gap-2.5">
@@ -322,14 +336,21 @@ export default async function CohortPage({
 
         {/* ── Hero ───────────────────────────────────────────── */}
         <BlurFade delay={0.05}>
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted">
-            <Sparkles className="h-3 w-3 text-accent" />
-            45-day offline cohort · Two tracks
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-bg-elev/80 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted backdrop-blur-sm">
+            <LivePulse />
+            <span className="text-accent">Enrolment open</span>
+            <span className="text-fg-subtle/60">·</span>
+            <span>45-day offline cohort</span>
+            <span className="text-fg-subtle/60">·</span>
+            <span>Two tracks</span>
           </div>
         </BlurFade>
         <BlurFade delay={0.1}>
           <h1 className="text-4xl font-semibold tracking-tight sm:text-6xl">
-            Superaccountant — Get Job Ready
+            Superaccountant —{' '}
+            <span className="bg-gradient-to-br from-accent via-fg to-accent bg-clip-text text-transparent">
+              Get Job Ready
+            </span>
           </h1>
         </BlurFade>
         <BlurFade delay={0.15}>
@@ -342,19 +363,22 @@ export default async function CohortPage({
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a
               href="#apply"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-7 py-4 text-base font-medium text-bg transition-colors hover:bg-accent/90"
+              className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl bg-accent px-7 py-4 text-base font-medium text-bg shadow-[0_0_0_1px_rgba(167,139,250,0.4),0_8px_32px_-12px_rgba(139,92,246,0.5)] transition-all hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-[0_0_0_1px_rgba(167,139,250,0.6),0_12px_40px_-12px_rgba(139,92,246,0.7)]"
             >
+              <span aria-hidden className="absolute inset-0 -z-10 rounded-xl">
+                <BorderBeam size={70} duration={6} colorFrom="#f5f3ff" colorTo="#a78bfa" />
+              </span>
               {primaryCohort
                 ? `Reserve seat — from ${formatPrice(
                     primaryCohort.discountedPriceMinor,
                     primaryCohort.currency,
                   )}`
                 : 'Apply for the next cohort'}
-              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
             </a>
             <Link
               href={`/${locale}/quiz`}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-bg-elev px-6 py-4 text-base font-medium text-fg transition-colors hover:bg-bg-overlay"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-bg-elev/80 px-6 py-4 text-base font-medium text-fg backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:bg-bg-overlay"
             >
               Take the 2-minute quiz first
             </Link>
@@ -365,56 +389,123 @@ export default async function CohortPage({
         {cohorts.length > 0 && (
           <BlurFade delay={0.22}>
             <div className="mt-10 grid gap-4 sm:grid-cols-2">
-              {cohorts.map((c) => (
-                <div
-                  key={c.id}
-                  className={cn(
-                    'overflow-hidden rounded-2xl border-2 p-6',
-                    c.track === 'india'
-                      ? 'border-accent/40 bg-gradient-to-br from-accent-soft/40 via-bg-elev/40 to-bg-elev/40'
-                      : 'border-success/40 bg-gradient-to-br from-success/10 via-bg-elev/40 to-bg-elev/40',
-                  )}
-                >
-                  <p
+              {cohorts.map((c) => {
+                const claimed = paidSeats.get(c.id) ?? 0
+                const remaining = Math.max(0, c.seatsTotal - claimed)
+                const fillPct = Math.min(
+                  100,
+                  Math.round((claimed / Math.max(c.seatsTotal, 1)) * 100),
+                )
+                const daysToStart = Math.max(
+                  0,
+                  Math.ceil((c.startDate.getTime() - now) / (24 * 60 * 60 * 1000)),
+                )
+                const discountPct = Math.round(
+                  ((c.originalPriceMinor - c.discountedPriceMinor) / c.originalPriceMinor) * 100,
+                )
+                const isIndia = c.track === 'india'
+                return (
+                  <div
+                    key={c.id}
                     className={cn(
-                      'font-mono text-[10px] uppercase tracking-wider',
-                      c.track === 'india' ? 'text-accent' : 'text-success',
+                      'group relative overflow-hidden rounded-2xl border-2 p-6 backdrop-blur-sm transition-all hover:-translate-y-1',
+                      isIndia
+                        ? 'border-accent/40 bg-gradient-to-br from-accent-soft/40 via-bg-elev/40 to-bg-elev/40 hover:border-accent/70'
+                        : 'border-success/40 bg-gradient-to-br from-success/10 via-bg-elev/40 to-bg-elev/40 hover:border-success/70',
                     )}
                   >
-                    Next cohort · {c.track === 'india' ? 'Indian Chartered' : "Saudi Mu'tamad"}
-                  </p>
-                  <h2 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">
-                    {c.name}
-                  </h2>
-                  <p className="mt-1.5 text-sm text-fg-muted">
-                    Starts{' '}
-                    <strong className="text-fg">
-                      {c.startDate.toLocaleDateString('en-GB', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                        timeZone: 'UTC',
-                      })}
-                    </strong>
-                    {c.city ? ` · ${c.city}` : ''} · {c.durationDays} days · {c.seatsTotal} seats
-                  </p>
-                  <div className="mt-4 flex items-baseline gap-3">
-                    <span className="text-2xl font-bold tracking-tight text-fg sm:text-3xl">
-                      {formatPrice(c.discountedPriceMinor, c.currency)}
-                    </span>
-                    <span className="text-base text-fg-subtle line-through">
-                      {formatPrice(c.originalPriceMinor, c.currency)}
-                    </span>
+                    {/* Animated halo on hover */}
+                    <BorderBeam
+                      size={140}
+                      duration={9}
+                      colorFrom={isIndia ? '#a78bfa' : '#10b981'}
+                      colorTo={isIndia ? '#8b5cf6' : '#059669'}
+                      className="opacity-0 transition-opacity group-hover:opacity-100"
+                    />
+
+                    <div className="flex items-start justify-between gap-3">
+                      <p
+                        className={cn(
+                          'inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider',
+                          isIndia ? 'text-accent' : 'text-success',
+                        )}
+                      >
+                        <span aria-hidden className="text-base leading-none">
+                          {isIndia ? '🇮🇳' : '🇸🇦'}
+                        </span>
+                        {isIndia ? 'Indian Chartered' : "Saudi Mu'tamad"}
+                      </p>
+                      <span
+                        className={cn(
+                          'rounded-md border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider',
+                          isIndia
+                            ? 'border-accent/30 bg-accent-soft/60 text-accent'
+                            : 'border-success/30 bg-success/10 text-success',
+                        )}
+                      >
+                        {discountPct}% off · launch
+                      </span>
+                    </div>
+
+                    {/* Cohort code rendered as a stylised token */}
+                    <div className="mt-3 inline-flex items-baseline gap-2 font-mono">
+                      <span className="text-fg-subtle">[</span>
+                      <span
+                        className={cn(
+                          'text-3xl font-bold tracking-tight sm:text-4xl',
+                          isIndia ? 'text-accent' : 'text-success',
+                        )}
+                      >
+                        {c.name}
+                      </span>
+                      <span className="text-fg-subtle">]</span>
+                    </div>
+
+                    <p className="mt-3 text-sm text-fg-muted">
+                      <strong className="text-fg">
+                        {c.startDate.toLocaleDateString('en-GB', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric',
+                          timeZone: 'UTC',
+                        })}
+                      </strong>
+                      {c.city ? ` · ${c.city}` : ''} · {c.durationDays} days
+                    </p>
+
+                    {/* Seats progress bar — live data */}
+                    <div className="mt-4">
+                      <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-wider">
+                        <span className="text-fg-subtle">
+                          {remaining} of {c.seatsTotal} seats left
+                        </span>
+                        <span className={cn(isIndia ? 'text-accent' : 'text-success')}>
+                          T-{daysToStart}d
+                        </span>
+                      </div>
+                      <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-bg-overlay">
+                        <div
+                          className={cn(
+                            'h-full rounded-full transition-all duration-700',
+                            isIndia ? 'bg-accent' : 'bg-success',
+                          )}
+                          style={{ width: `${Math.max(fillPct, 4)}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Price + strikethrough */}
+                    <div className="mt-4 flex items-baseline gap-3">
+                      <span className="text-2xl font-bold tracking-tight text-fg sm:text-3xl">
+                        {formatPrice(c.discountedPriceMinor, c.currency)}
+                      </span>
+                      <span className="text-base text-fg-subtle line-through">
+                        {formatPrice(c.originalPriceMinor, c.currency)}
+                      </span>
+                    </div>
                   </div>
-                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-success">
-                    {Math.round(
-                      ((c.originalPriceMinor - c.discountedPriceMinor) / c.originalPriceMinor) *
-                        100,
-                    )}
-                    % launch discount · One-time fee
-                  </p>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </BlurFade>
         )}
@@ -774,6 +865,15 @@ function checkApplicantFields(args: { name: string; email: string; phone: string
 }
 
 // ── Reusable little sub-components ────────────────────────────
+
+function LivePulse() {
+  return (
+    <span aria-hidden className="relative inline-flex h-2 w-2 items-center justify-center">
+      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+      <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+    </span>
+  )
+}
 
 function Section({
   delay,
