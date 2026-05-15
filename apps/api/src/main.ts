@@ -13,19 +13,31 @@ try {
 
 import 'reflect-metadata'
 import { NestFactory } from '@nestjs/core'
-import { AppModule } from './app.module'
 import { loadEnv } from '@sa/config'
+import { AppModule } from './app.module'
 
 async function bootstrap() {
   const env = loadEnv()
   const app = await NestFactory.create(AppModule, { bufferLogs: true })
 
   // CORS — accept the production web app + marketing site, plus localhost in dev.
-  // ALLOWED_ORIGINS is a comma-separated list set in env (Vercel deploy URLs).
-  const allowed = (process.env.ALLOWED_ORIGINS ?? env.NEXTAUTH_URL ?? '')
+  //
+  // ALLOWED_ORIGINS (comma-separated) extends the defaults below. The
+  // production domains are baked in so the API works even before someone
+  // remembers to set the env var on a fresh Azure deploy.
+  const DEFAULT_ORIGINS = [
+    'https://app.superaccountant.in',
+    'https://superaccountant.in',
+    'https://www.superaccountant.in',
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://127.0.0.1:3000',
+  ]
+  const extra = (process.env.ALLOWED_ORIGINS ?? env.NEXTAUTH_URL ?? '')
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)
+  const allowed = new Set([...DEFAULT_ORIGINS, ...extra])
   app.enableCors({
     origin: (origin, cb) => {
       // Allow same-origin (no Origin header) + explicit allowlist + Vercel previews.
@@ -33,7 +45,7 @@ async function bootstrap() {
       // returning false makes Express omit CORS headers and the browser blocks
       // it with the correct error class.
       if (!origin) return cb(null, true)
-      if (allowed.includes(origin)) return cb(null, true)
+      if (allowed.has(origin)) return cb(null, true)
       if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/.test(origin)) return cb(null, true)
       return cb(null, false)
     },
@@ -46,18 +58,21 @@ async function bootstrap() {
 
   // Trust the nginx proxy in front of us — needed so the throttler keys
   // requests by the real client IP and not by 127.0.0.1.
-  const httpAdapter = app.getHttpAdapter().getInstance() as { set?: (k: string, v: unknown) => void }
+  const httpAdapter = app.getHttpAdapter().getInstance() as {
+    set?: (k: string, v: unknown) => void
+  }
   httpAdapter.set?.('trust proxy', 'loopback')
 
   // Health endpoint (used by nginx + Azure load balancers + uptime checks).
   // Mounted at the express level so it bypasses guards/throttling.
   httpAdapter.set?.('etag', false)
-  ;(httpAdapter as unknown as { get: (path: string, h: (req: unknown, res: { json: (b: unknown) => void }) => void) => void }).get?.(
-    '/health',
-    (_req, res) => {
-      res.json({ ok: true, ts: new Date().toISOString(), service: '@sa/api' })
-    },
-  )
+  ;(
+    httpAdapter as unknown as {
+      get: (path: string, h: (req: unknown, res: { json: (b: unknown) => void }) => void) => void
+    }
+  ).get?.('/health', (_req, res) => {
+    res.json({ ok: true, ts: new Date().toISOString(), service: '@sa/api' })
+  })
 
   // Graceful shutdown — wait for in-flight SSE streams to drain on SIGTERM.
   app.enableShutdownHooks()
