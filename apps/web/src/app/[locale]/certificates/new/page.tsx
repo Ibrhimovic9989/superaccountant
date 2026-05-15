@@ -3,10 +3,13 @@ import {
   CertificateBuilder,
   type GenerateRequest,
   type GenerateResult,
+  type SendBatchRequest,
+  type SendBatchResultPayload,
 } from '@/components/certificates/cert-builder'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { auth } from '@/lib/auth'
 import { generateBatch } from '@/lib/certificates/generate'
+import { sendCertificateBatchEmails } from '@/lib/certificates/send'
 import type { SupportedLocale } from '@sa/i18n'
 import { Award } from 'lucide-react'
 import { redirect } from 'next/navigation'
@@ -46,6 +49,18 @@ export default async function NewCertificateBatchPage({
     }
   }
 
+  async function sendBatch(req: SendBatchRequest): Promise<SendBatchResultPayload> {
+    'use server'
+    const res = await sendCertificateBatchEmails({
+      batchId: req.batchId,
+      ownerUserId: userId,
+      subject: req.subject,
+      body: req.body,
+      replyTo: req.replyTo ?? null,
+    })
+    return res
+  }
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-bg text-fg">
       <AppNav
@@ -74,7 +89,7 @@ export default async function NewCertificateBatchPage({
 
         <BlurFade delay={0.22}>
           <div className="mt-10">
-            <CertificateBuilder generate={generate} />
+            <CertificateBuilder generate={generate} sendBatch={sendBatch} />
           </div>
         </BlurFade>
       </main>

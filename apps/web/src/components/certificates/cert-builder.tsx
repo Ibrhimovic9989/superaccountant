@@ -10,6 +10,8 @@ import {
   FileDown,
   FileText,
   Loader2,
+  Mail,
+  Send,
   Upload,
   Users,
   X,
@@ -42,8 +44,22 @@ export type GenerateResult = {
   failures: { recipientName: string; error: string }[]
 }
 
+export type SendBatchRequest = {
+  batchId: string
+  subject: string
+  body: string
+  replyTo?: string | null
+}
+
+export type SendBatchResultPayload = {
+  sent: { recordId: string; recipientName: string; recipientEmail: string; messageId: string }[]
+  skipped: { recordId: string; recipientName: string; reason: string }[]
+  failed: { recordId: string; recipientName: string; recipientEmail: string; error: string }[]
+}
+
 type Props = {
   generate: (req: GenerateRequest) => Promise<GenerateResult>
+  sendBatch: (req: SendBatchRequest) => Promise<SendBatchResultPayload>
 }
 
 const DEFAULT_BODY =
@@ -59,7 +75,7 @@ const ACCENT_OPTIONS: { value: string; label: string }[] = [
   { value: '#0f172a', label: 'Slate' },
 ]
 
-export function CertificateBuilder({ generate }: Props) {
+export function CertificateBuilder({ generate, sendBatch }: Props) {
   const today = new Date().toISOString().slice(0, 10)
 
   const [title, setTitle] = useState('Certificate of Participation')
@@ -170,7 +186,7 @@ export function CertificateBuilder({ generate }: Props) {
 
   // ── Results screen ──────────────────────────────────────────
   if (result) {
-    return <ResultScreen result={result} onReset={() => setResult(null)} />
+    return <ResultScreen result={result} onReset={() => setResult(null)} sendBatch={sendBatch} />
   }
 
   // ── Builder form ────────────────────────────────────────────
@@ -477,7 +493,15 @@ function PreviewCard({
   )
 }
 
-function ResultScreen({ result, onReset }: { result: GenerateResult; onReset: () => void }) {
+function ResultScreen({
+  result,
+  onReset,
+  sendBatch,
+}: {
+  result: GenerateResult
+  onReset: () => void
+  sendBatch: (req: SendBatchRequest) => Promise<SendBatchResultPayload>
+}) {
   const total = result.issued.length + result.failures.length
   return (
     <div className="space-y-6">
@@ -556,6 +580,164 @@ function ResultScreen({ result, onReset }: { result: GenerateResult; onReset: ()
           </tbody>
         </table>
       </div>
+
+      <SendPanel result={result} sendBatch={sendBatch} />
+    </div>
+  )
+}
+
+function SendPanel({
+  result,
+  sendBatch,
+}: {
+  result: GenerateResult
+  sendBatch: (req: SendBatchRequest) => Promise<SendBatchResultPayload>
+}) {
+  const eligible = result.issued.filter((c) => c.recipientEmail).length
+  const noEmail = result.issued.length - eligible
+
+  const [subject, setSubject] = useState('Your certificate from the SuperAccountant Masterclass')
+  const [body, setBody] = useState(
+    'Hi {{name}},\n\nThank you for joining the SuperAccountant Masterclass. Your verified certificate is attached as a PDF — keep it for your records and feel free to share it with employers.\n\nIf you have any questions or want to enrol in the next cohort, just reply to this email.\n\nBest,\nThe SuperAccountant Team',
+  )
+  const [replyTo, setReplyTo] = useState('')
+  const [sending, startTransition] = useTransition()
+  const [sendResult, setSendResult] = useState<SendBatchResultPayload | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  function onSend() {
+    setError(null)
+    if (subject.trim().length < 3) {
+      setError('Subject is required.')
+      return
+    }
+    if (body.trim().length < 10) {
+      setError('Email body is too short.')
+      return
+    }
+    if (eligible === 0) {
+      setError('No recipients have an email address. Re-upload the CSV with emails.')
+      return
+    }
+    startTransition(async () => {
+      try {
+        const res = await sendBatch({
+          batchId: result.batchId,
+          subject: subject.trim(),
+          body: body.trim(),
+          replyTo: replyTo.trim() || null,
+        })
+        setSendResult(res)
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'Send failed — try again.')
+      }
+    })
+  }
+
+  if (sendResult) {
+    return (
+      <div className="rounded-2xl border border-success/30 bg-success/5 p-6 sm:p-8">
+        <div className="flex items-center gap-3">
+          <Mail className="h-5 w-5 text-success" />
+          <h3 className="text-lg font-semibold tracking-tight">
+            {sendResult.sent.length} email{sendResult.sent.length === 1 ? '' : 's'} sent
+          </h3>
+        </div>
+        <p className="mt-2 text-sm text-fg-muted">
+          {sendResult.skipped.length > 0 && `${sendResult.skipped.length} skipped. `}
+          {sendResult.failed.length > 0 && `${sendResult.failed.length} failed.`}
+        </p>
+        {sendResult.failed.length > 0 && (
+          <ul className="mt-4 space-y-1 text-sm text-danger">
+            {sendResult.failed.map((f) => (
+              <li key={f.recordId}>
+                <strong>{f.recipientName}</strong> ({f.recipientEmail}) — {f.error}
+              </li>
+            ))}
+          </ul>
+        )}
+        <button
+          type="button"
+          onClick={() => setSendResult(null)}
+          className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-border bg-bg-elev px-3 py-2 text-xs text-fg-muted transition-colors hover:bg-bg-overlay hover:text-fg"
+        >
+          Send again
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="rounded-2xl border border-border bg-bg-elev/40 p-6 sm:p-8">
+      <div className="mb-5 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <Mail className="h-4 w-4 text-accent" />
+          <h3 className="text-base font-semibold tracking-tight">Email these certificates</h3>
+        </div>
+        <span className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+          {eligible} eligible
+          {noEmail > 0 && ` · ${noEmail} no email`}
+        </span>
+      </div>
+
+      <div className="space-y-4">
+        <Field label="Subject">
+          <input
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            placeholder="Your certificate from the SuperAccountant Masterclass"
+            className={inputCls}
+          />
+        </Field>
+        <Field label="Reply-to email (optional)">
+          <input
+            type="email"
+            value={replyTo}
+            onChange={(e) => setReplyTo(e.target.value)}
+            placeholder="info@superaccountant.in"
+            className={inputCls}
+          />
+        </Field>
+        <Field label="Email body">
+          <textarea
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            rows={9}
+            placeholder="Hi {{name}}, ..."
+            className={cn(inputCls, 'min-h-[180px] resize-y')}
+          />
+          <p className="mt-1.5 text-xs text-fg-subtle">
+            {
+              'Use {{name}} for the recipient. Blank lines start a new paragraph. **bold** is supported.'
+            }
+          </p>
+        </Field>
+      </div>
+
+      {error && (
+        <p className="mt-3 rounded-lg border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+          {error}
+        </p>
+      )}
+
+      <button
+        type="button"
+        onClick={onSend}
+        disabled={sending || eligible === 0}
+        className="mt-5 inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-3.5 text-sm font-medium text-bg transition-colors hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {sending ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Sending {eligible} email{eligible === 1 ? '' : 's'}…
+          </>
+        ) : (
+          <>
+            <Send className="h-4 w-4" />
+            Send {eligible} email{eligible === 1 ? '' : 's'}
+          </>
+        )}
+      </button>
     </div>
   )
 }

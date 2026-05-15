@@ -36,7 +36,8 @@ const COPY = {
     fallbackHeading: 'Button not working?',
     fallbackBody: 'Copy and paste this link into your browser:',
     notyou: "If you didn't request this email, you can safely ignore it. Your account is secure.",
-    address: 'SuperAccountant Technologies · Unit 422, 4th floor, Downtown Mall, Lakdikapul, Hyderabad',
+    address:
+      'SuperAccountant Technologies · Unit 422, 4th floor, Downtown Mall, Lakdikapul, Hyderabad',
     contact: 'Questions? Email info@superaccountant.in',
     rights: '© 2026 SuperAccountant',
   },
@@ -51,7 +52,8 @@ const COPY = {
     fallbackHeading: 'الزر لا يعمل؟',
     fallbackBody: 'انسخ هذا الرابط والصقه في متصفحك:',
     notyou: 'إذا لم تطلب هذا البريد الإلكتروني، يمكنك تجاهله بأمان. حسابك آمن.',
-    address: 'سوبر أكاونتنت تكنولوجيز · وحدة 422، الطابق الرابع، داون تاون مول، لاكديكابول، حيدر آباد',
+    address:
+      'سوبر أكاونتنت تكنولوجيز · وحدة 422، الطابق الرابع، داون تاون مول، لاكديكابول، حيدر آباد',
     contact: 'أسئلة؟ راسل info@superaccountant.in',
     rights: '© 2026 سوبر أكاونتنت',
   },
