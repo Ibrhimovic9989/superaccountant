@@ -47,8 +47,10 @@ export type CertificateData = {
 
 Font.registerHyphenationCallback((word) => [word])
 
-// Palette — professional navy with a subtle accent strip.
-const NAVY = '#1e3a5f'
+// Palette — professional navy. The accent bar uses the brighter
+// medium-blue (`NAVY`); the headline + recipient + signatory use the
+// deeper `NAVY_DARK` for visual hierarchy.
+const NAVY = '#1e5891'
 const NAVY_DARK = '#0f2444'
 const INK = '#0f172a'
 const INK_MUTED = '#475569'

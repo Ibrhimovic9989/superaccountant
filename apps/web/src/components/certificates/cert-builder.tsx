@@ -47,9 +47,10 @@ type Props = {
 }
 
 const DEFAULT_BODY =
-  "For successfully completing the Superaccountant program — demonstrating strong fundamentals in accounting practice, GST compliance, and bookkeeping discipline.\n\nAwarded in recognition of {{name}}'s commitment, effort, and the standards they upheld throughout."
+  "For attending the SuperAccountant Masterclass on GST&TDS Basics, the participant engaged in practical session on GSTreturns, TDScompliance, and the foundations of accounting practices in India. {{name}}'s active participation in the masterclass is highly appreciated."
 
 const ACCENT_OPTIONS: { value: string; label: string }[] = [
+  { value: '#1e5891', label: 'Navy' },
   { value: '#7c3aed', label: 'Purple' },
   { value: '#0ea5e9', label: 'Sky' },
   { value: '#10b981', label: 'Emerald' },
@@ -61,14 +62,14 @@ const ACCENT_OPTIONS: { value: string; label: string }[] = [
 export function CertificateBuilder({ generate }: Props) {
   const today = new Date().toISOString().slice(0, 10)
 
-  const [title, setTitle] = useState('Certificate of Completion')
+  const [title, setTitle] = useState('Certificate of Participation')
   const [body, setBody] = useState(DEFAULT_BODY)
-  const [issuerName, setIssuerName] = useState('')
-  const [issuerRole, setIssuerRole] = useState('Program Director')
+  const [issuerName, setIssuerName] = useState('CA Muneer Ahmed')
+  const [issuerRole, setIssuerRole] = useState('Founder - Muneer and Assosciates')
   const [issueDate, setIssueDate] = useState(today)
   const [heldOn, setHeldOn] = useState('')
-  const [location, setLocation] = useState('')
-  const [accent, setAccent] = useState(ACCENT_OPTIONS[0]?.value ?? '#7c3aed')
+  const [location, setLocation] = useState('Hyderabad')
+  const [accent, setAccent] = useState(ACCENT_OPTIONS[0]?.value ?? '#1e5891')
   const [recipientsRaw, setRecipientsRaw] = useState('')
   const [csvFileName, setCsvFileName] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
