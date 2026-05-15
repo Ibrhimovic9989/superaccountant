@@ -20,6 +20,10 @@ export type BatchTemplateConfig = {
   issueDate: string
   accentColor?: string | null
   logoUrl?: string | null
+  /** Optional venue/city for the "Held on {date} in {location}." line. */
+  location?: string | null
+  /** Optional held-on date (ISO YYYY-MM-DD) — falls back to issueDate. */
+  heldOn?: string | null
 }
 
 export type Recipient = {

@@ -24,6 +24,8 @@ export type GenerateRequest = {
     issuerRole: string | null
     issueDate: string
     accentColor: string | null
+    location: string | null
+    heldOn: string | null
   }
   recipients: { name: string; email: string | null }[]
 }
@@ -64,6 +66,8 @@ export function CertificateBuilder({ generate }: Props) {
   const [issuerName, setIssuerName] = useState('')
   const [issuerRole, setIssuerRole] = useState('Program Director')
   const [issueDate, setIssueDate] = useState(today)
+  const [heldOn, setHeldOn] = useState('')
+  const [location, setLocation] = useState('')
   const [accent, setAccent] = useState(ACCENT_OPTIONS[0]?.value ?? '#7c3aed')
   const [recipientsRaw, setRecipientsRaw] = useState('')
   const [csvFileName, setCsvFileName] = useState<string | null>(null)
@@ -151,6 +155,8 @@ export function CertificateBuilder({ generate }: Props) {
             issuerRole: issuerRole.trim() || null,
             issueDate,
             accentColor: accent,
+            location: location.trim() || null,
+            heldOn: heldOn || null,
           },
           recipients,
         })
@@ -216,6 +222,23 @@ export function CertificateBuilder({ generate }: Props) {
                 type="date"
                 value={issueDate}
                 onChange={(e) => setIssueDate(e.target.value)}
+                className={inputCls}
+              />
+            </Field>
+            <Field label="Held on (optional)">
+              <input
+                type="date"
+                value={heldOn}
+                onChange={(e) => setHeldOn(e.target.value)}
+                className={inputCls}
+              />
+            </Field>
+            <Field label="Venue / city (optional)">
+              <input
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="Hyderabad"
                 className={inputCls}
               />
             </Field>

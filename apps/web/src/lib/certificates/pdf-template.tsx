@@ -2,9 +2,16 @@ import { Document, Font, Image, Page, StyleSheet, Text, View, pdf } from '@react
 /**
  * Server-rendered e-certificate template via @react-pdf/renderer.
  *
- * Renders an A4 landscape PDF with: brand band, title, recipient name,
- * body text (with {{name}} interpolation), issuer + date footer, and a
- * verification URL printed bottom-right for anti-forgery.
+ * A4 landscape, professional layout:
+ *   - Thin navy accent bar top-left
+ *   - SA logo + "Super Accountant / Your AI Tutor" wordmark
+ *   - "Certificate of Participation" headline
+ *   - "This certificate is proudly presented to" subtitle
+ *   - Recipient name (navy, semibold, large)
+ *   - Body paragraph(s) with {{name}} interpolation, split on blank lines
+ *   - Optional "Held on {date} in {location}." line
+ *   - Bottom: signatory (left) + issue date (right)
+ *   - Tiny verify URL footer (anti-forgery, low-contrast)
  *
  * Used by lib/certificates/generate.ts in a Next.js server action.
  */
@@ -18,14 +25,19 @@ void React
 
 export type CertificateTemplate = {
   title: string
-  /** Body markdown-ish text with `{{name}}` placeholder for the recipient. */
+  /** Body text with `{{name}}` placeholder for the recipient.
+   *  Separate paragraphs with `\n\n`. */
   bodyTemplate: string
   issuerName: string
   issuerRole?: string | null
   /** ISO date string (YYYY-MM-DD). */
   issueDate: string
-  /** Hex color like '#7c3aed'. Default purple. */
+  /** Hex color like '#1e3a5f'. Defaults to professional navy. */
   accentColor?: string | null
+  /** Optional venue/city — renders "Held on {date} in {location}." line. */
+  location?: string | null
+  /** Optional "held on" date if different from issueDate. ISO YYYY-MM-DD. */
+  heldOn?: string | null
 }
 
 export type CertificateData = {
@@ -33,109 +45,128 @@ export type CertificateData = {
   verifyUrl: string
 }
 
-// Use a system-safe font stack — no remote fetches at PDF gen time.
 Font.registerHyphenationCallback((word) => [word])
+
+// Palette — professional navy with a subtle accent strip.
+const NAVY = '#1e3a5f'
+const NAVY_DARK = '#0f2444'
+const INK = '#0f172a'
+const INK_MUTED = '#475569'
+const INK_FAINT = '#94a3b8'
 
 const styles = StyleSheet.create({
   page: {
     backgroundColor: '#ffffff',
-    padding: 0,
+    padding: 56,
     fontFamily: 'Helvetica',
-    color: '#0f172a',
+    color: INK,
   },
-  innerBorder: {
-    margin: 24,
-    flex: 1,
-    border: '1.5pt solid',
-    padding: 32,
-    position: 'relative',
+  // Top accent bar — thin, ~35% width, sits above the logo row.
+  accentBar: {
+    height: 4,
+    width: 180,
+    marginBottom: 18,
   },
   brandRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    marginBottom: 24,
+    gap: 14,
+    marginBottom: 40,
   },
   brandLogo: {
-    height: 44,
-    width: 44,
+    height: 40,
+    width: 40,
     objectFit: 'contain',
   },
-  brandBand: {
-    height: 8,
-    width: '40%',
-    marginBottom: 32,
+  brandTextBlock: {
+    flexDirection: 'column',
+    gap: 1,
   },
-  eyebrow: {
-    fontSize: 9,
-    letterSpacing: 4,
+  brandName: {
+    fontSize: 14,
+    fontFamily: 'Helvetica-Bold',
+    color: NAVY_DARK,
+    letterSpacing: 0.2,
+  },
+  brandTagline: {
+    fontSize: 7,
+    color: INK_MUTED,
+    letterSpacing: 1.2,
     textTransform: 'uppercase',
-    color: '#64748b',
-    marginBottom: 8,
   },
   title: {
-    fontSize: 32,
+    fontSize: 38,
     fontFamily: 'Helvetica-Bold',
+    color: NAVY_DARK,
     marginBottom: 28,
-    letterSpacing: 0.5,
+    letterSpacing: 0.2,
   },
   presentedTo: {
-    fontSize: 11,
-    color: '#475569',
-    marginBottom: 10,
+    fontSize: 10,
+    color: INK_MUTED,
+    marginBottom: 8,
   },
-  name: {
-    fontSize: 44,
+  // Recipient name slot. Empty if recipient is blank.
+  recipientName: {
+    fontSize: 28,
     fontFamily: 'Helvetica-Bold',
-    marginBottom: 24,
-    letterSpacing: 0.5,
+    color: NAVY_DARK,
+    marginBottom: 28,
+    letterSpacing: 0.3,
+    minHeight: 36,
   },
   body: {
-    fontSize: 12,
-    lineHeight: 1.55,
-    color: '#1e293b',
-    maxWidth: '85%',
-    marginBottom: 36,
+    fontSize: 11,
+    lineHeight: 1.6,
+    color: INK,
+    marginBottom: 14,
+    maxWidth: '92%',
+  },
+  heldOn: {
+    fontSize: 11,
+    lineHeight: 1.6,
+    color: INK,
+    marginBottom: 14,
   },
   footerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     marginTop: 'auto',
+    paddingTop: 24,
   },
-  footerBlock: {},
-  signatureLine: {
-    width: 180,
-    borderTop: '0.5pt solid #94a3b8',
-    paddingTop: 6,
+  footerLeft: {
+    width: 220,
+  },
+  signatureRule: {
+    height: 0.7,
+    backgroundColor: INK_FAINT,
+    marginBottom: 8,
   },
   issuerName: {
     fontSize: 11,
     fontFamily: 'Helvetica-Bold',
-    color: '#0f172a',
+    color: NAVY_DARK,
   },
   issuerRole: {
     fontSize: 9,
-    color: '#64748b',
+    color: INK_MUTED,
     marginTop: 2,
-  },
-  dateLabel: {
-    fontSize: 9,
-    color: '#64748b',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 4,
   },
   dateValue: {
     fontSize: 11,
     fontFamily: 'Helvetica-Bold',
+    color: NAVY_DARK,
+    letterSpacing: 1.4,
   },
+  // Verify URL — kept on the page for anti-forgery audit, but small
+  // enough that it doesn't break the visual hierarchy.
   verifyBlock: {
     position: 'absolute',
-    bottom: 16,
+    bottom: 14,
     right: 32,
-    fontSize: 7,
-    color: '#94a3b8',
+    fontSize: 6.5,
+    color: INK_FAINT,
   },
 })
 
@@ -145,8 +176,7 @@ function interpolate(template: string, recipientName: string): string {
     .replace(/\{\{\s*recipient\s*\}\}/g, recipientName)
 }
 
-function formatIssueDate(isoDate: string): string {
-  // Render as "11 May 2026". Fall back to the raw string if unparseable.
+function formatDate(isoDate: string): string {
   const d = new Date(`${isoDate}T00:00:00Z`)
   if (Number.isNaN(d.getTime())) return isoDate
   return d.toLocaleDateString('en-GB', {
@@ -164,40 +194,60 @@ function CertificateDocument({
   template: CertificateTemplate
   data: CertificateData
 }): ReactElement {
-  const accent = template.accentColor ?? '#7c3aed'
+  const accent = template.accentColor ?? NAVY
+  const bodyText = interpolate(template.bodyTemplate, data.recipientName)
+  // Split into paragraphs on blank lines so multi-paragraph bodies render
+  // with proper spacing.
+  const paragraphs = bodyText
+    .split(/\n{2,}/)
+    .map((p) => p.replace(/\n/g, ' ').trim())
+    .filter((p) => p.length > 0)
+  const heldOnDate = template.heldOn ?? template.issueDate
+  const heldOnLine =
+    template.location && heldOnDate
+      ? `Held on ${formatDate(heldOnDate)} in ${template.location}.`
+      : null
+
   return (
     <Document>
       <Page size="A4" orientation="landscape" style={styles.page}>
-        <View style={[styles.innerBorder, { borderColor: accent }]}>
-          <View style={[styles.brandBand, { backgroundColor: accent }]} />
-          <View style={styles.brandRow}>
-            {/* The logo PNG is fetched + embedded by @react-pdf/renderer
-                at PDF gen time. Server-side fetch — no client/CORS issues. */}
-            <Image src={LOGO_URL} style={styles.brandLogo} />
-            <Text style={styles.eyebrow}>Superaccountant</Text>
-          </View>
-          <Text style={styles.title}>{template.title}</Text>
-          <Text style={styles.presentedTo}>This certificate is proudly presented to</Text>
-          <Text style={[styles.name, { color: accent }]}>{data.recipientName}</Text>
-          <Text style={styles.body}>{interpolate(template.bodyTemplate, data.recipientName)}</Text>
+        <View style={[styles.accentBar, { backgroundColor: accent }]} />
 
-          <View style={styles.footerRow}>
-            <View style={styles.footerBlock}>
-              <View style={styles.signatureLine}>
-                <Text style={styles.issuerName}>{template.issuerName}</Text>
-                {template.issuerRole && (
-                  <Text style={styles.issuerRole}>{template.issuerRole}</Text>
-                )}
-              </View>
-            </View>
-            <View style={styles.footerBlock}>
-              <Text style={styles.dateLabel}>Issued</Text>
-              <Text style={styles.dateValue}>{formatIssueDate(template.issueDate)}</Text>
-            </View>
+        <View style={styles.brandRow}>
+          <Image src={LOGO_URL} style={styles.brandLogo} />
+          <View style={styles.brandTextBlock}>
+            <Text style={styles.brandName}>Super Accountant</Text>
+            <Text style={styles.brandTagline}>— Your AI Tutor —</Text>
           </View>
-
-          <Text style={styles.verifyBlock}>Verify: {data.verifyUrl}</Text>
         </View>
+
+        <Text style={styles.title}>{template.title}</Text>
+        <Text style={styles.presentedTo}>This certificate is proudly presented to</Text>
+        <Text style={styles.recipientName}>{data.recipientName}</Text>
+
+        {paragraphs.map((p, i) => (
+          // Key by index is fine here — the rendered output is static and
+          // paragraphs is derived deterministically from the template body.
+          // biome-ignore lint/suspicious/noArrayIndexKey: render-only, no reordering
+          <Text key={`p-${i}`} style={styles.body}>
+            {p}
+          </Text>
+        ))}
+
+        {heldOnLine && <Text style={styles.heldOn}>{heldOnLine}</Text>}
+
+        <View style={styles.footerRow}>
+          <View style={styles.footerLeft}>
+            <View style={styles.signatureRule} />
+            <Text style={styles.issuerName}>{template.issuerName}</Text>
+            {template.issuerRole && <Text style={styles.issuerRole}>{template.issuerRole}</Text>}
+          </View>
+          <View>
+            <Text style={styles.dateValue}>{formatDate(template.issueDate)}</Text>
+          </View>
+        </View>
+
+        <Text style={styles.verifyBlock}>Verify: {data.verifyUrl}</Text>
       </Page>
     </Document>
   )

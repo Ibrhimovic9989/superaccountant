@@ -48,6 +48,8 @@ export async function generateBatch(args: {
     issuerRole: args.template.issuerRole ?? null,
     issueDate: args.template.issueDate,
     accentColor: args.template.accentColor ?? null,
+    location: args.template.location ?? null,
+    heldOn: args.template.heldOn ?? null,
   }
 
   const issued: IssuedCertificate[] = []
