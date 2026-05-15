@@ -39,8 +39,19 @@ export type UserProfileSnapshot = {
   name: string | null
   email: string
   profileCompletedAt: Date | null
+  /** When the user agreed to the T&C + refund policy. NULL = not yet consented. */
+  consentedAt: Date | null
+  /** Which dated terms version they agreed to (e.g. '2026-05-13'). */
+  consentedTermsVersion: string | null
   profile: ProfileFields
 }
+
+/**
+ * The active T&C version. Bump this string whenever /terms or
+ * /refund-policy changes materially — the gate will then re-prompt
+ * existing users to re-consent.
+ */
+export const CURRENT_TERMS_VERSION = '2026-05-13'
 
 /**
  * Returns enough of the user record to render the profile + setup pages
@@ -53,6 +64,8 @@ export async function getUserProfile(userId: string): Promise<UserProfileSnapsho
       name: string | null
       email: string
       profileCompletedAt: Date | null
+      consentedAt: Date | null
+      consentedTermsVersion: string | null
       phone: string | null
       country: string | null
       city: string | null
@@ -71,6 +84,8 @@ export async function getUserProfile(userId: string): Promise<UserProfileSnapsho
       "name",
       "email",
       "profileCompletedAt",
+      "consentedAt",
+      "consentedTermsVersion",
       "phone",
       "country",
       "city",
@@ -93,6 +108,8 @@ export async function getUserProfile(userId: string): Promise<UserProfileSnapsho
     name: row.name,
     email: row.email,
     profileCompletedAt: row.profileCompletedAt,
+    consentedAt: row.consentedAt,
+    consentedTermsVersion: row.consentedTermsVersion,
     profile: {
       name: row.name,
       phone: row.phone,
@@ -136,6 +153,28 @@ export async function updateUserProfile(
       "targetExamDate" = ${p.targetExamDate},
       "motivation" = ${p.motivation},
       "profileCompletedAt" = COALESCE(${now}::timestamp, "profileCompletedAt"),
+      "updatedAt" = NOW()
+    WHERE "id" = ${userId}
+  `
+}
+
+/**
+ * Records that the user has agreed to the current T&C + refund policy.
+ * Capturing the IP + user-agent gives us an audit trail for disputes —
+ * Razorpay and DPDP both prefer evidence of explicit consent over a
+ * passive 'continued use means agreement' clause.
+ */
+export async function recordUserConsent(
+  userId: string,
+  args: { version: string; ip: string | null; userAgent: string | null },
+): Promise<void> {
+  await prisma.$executeRaw`
+    UPDATE "IdentityUser"
+    SET
+      "consentedAt" = NOW(),
+      "consentedTermsVersion" = ${args.version},
+      "consentedIp" = ${args.ip},
+      "consentedUserAgent" = ${args.userAgent},
       "updatedAt" = NOW()
     WHERE "id" = ${userId}
   `

@@ -1,12 +1,12 @@
-import { redirect } from 'next/navigation'
+import { AppNav } from '@/components/app-nav'
+import { BlurFade } from '@/components/magicui/blur-fade'
+import { MarketPicker } from '@/components/welcome/market-picker'
 import { auth } from '@/lib/auth'
+import { CURRENT_TERMS_VERSION, getUserProfile } from '@/lib/data/profile'
+import { getPoolCounts } from '@/lib/data/welcome'
 import { prisma } from '@sa/db'
 import type { SupportedLocale } from '@sa/i18n'
-import { AppNav } from '@/components/app-nav'
-import { MarketPicker } from '@/components/welcome/market-picker'
-import { BlurFade } from '@/components/magicui/blur-fade'
-import { getPoolCounts } from '@/lib/data/welcome'
-import { getUserProfile } from '@/lib/data/profile'
+import { redirect } from 'next/navigation'
 
 export default async function WelcomePage({
   params,
@@ -18,8 +18,14 @@ export default async function WelcomePage({
   if (!session?.user?.id) redirect(`/${locale}/sign-in`)
   const userId = session.user.id
 
-  // If they've already picked a market, skip ahead to profile (or beyond).
+  // Consent gate — must run BEFORE any other welcome step so we have an
+  // auditable record before the user picks a track or fills a profile.
   const u = await getUserProfile(userId)
+  if (!u?.consentedAt || u.consentedTermsVersion !== CURRENT_TERMS_VERSION) {
+    redirect(`/${locale}/welcome/consent`)
+  }
+
+  // If they've already picked a market, skip ahead to profile (or beyond).
   if (u?.preferredTrack) {
     if (u.profileCompletedAt) redirect(`/${locale}/welcome/entry-test`)
     redirect(`/${locale}/welcome/profile`)
@@ -60,7 +66,7 @@ export default async function WelcomePage({
         <BlurFade delay={0.15}>
           <p className="mt-4 max-w-xl text-base text-fg-muted">
             {locale === 'ar'
-              ? "ستتعلم القواعد والأدوات الخاصة بالمكان الذي تعمل فيه. لا يمكنك تغيير هذا لاحقاً، لكن تستطيع التبديل بين المسارات."
+              ? 'ستتعلم القواعد والأدوات الخاصة بالمكان الذي تعمل فيه. لا يمكنك تغيير هذا لاحقاً، لكن تستطيع التبديل بين المسارات.'
               : "You'll learn the rules and tools specific to where you work. You can switch tracks later from settings."}
           </p>
         </BlurFade>

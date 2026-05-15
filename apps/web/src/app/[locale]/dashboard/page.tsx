@@ -14,7 +14,7 @@ import { auth } from '@/lib/auth'
 import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
 import { type Badge as AchievementBadge, getAchievements } from '@/lib/data/achievements'
 import { getDashboardSnapshot } from '@/lib/data/dashboard'
-import { getUserProfile } from '@/lib/data/profile'
+import { CURRENT_TERMS_VERSION, getUserProfile } from '@/lib/data/profile'
 import { computeXp, getLevel } from '@/lib/data/xp'
 import { cn } from '@/lib/utils'
 import {
@@ -40,8 +40,11 @@ export default async function Dashboard({
   const session = await auth()
   if (!session?.user?.id) redirect(`/${locale}/sign-in`)
 
-  // First-run gate — market → profile → entry test, then dashboard.
+  // First-run gate — consent → market → profile → entry test, then dashboard.
   const u = await getUserProfile(session.user.id)
+  if (!u?.consentedAt || u.consentedTermsVersion !== CURRENT_TERMS_VERSION) {
+    redirect(`/${locale}/welcome/consent`)
+  }
   if (!u?.preferredTrack) redirect(`/${locale}/welcome`)
   if (!u.profileCompletedAt) redirect(`/${locale}/welcome/profile`)
 
