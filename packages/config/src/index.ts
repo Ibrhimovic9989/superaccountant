@@ -39,7 +39,16 @@ const EnvSchema = z.object({
 
   // Email (Resend)
   RESEND_API_KEY: z.string().min(1),
-  EMAIL_FROM: z.string().email(),
+  // Accepts either a bare 'foo@example.com' or the display-name form
+  // 'Foo Bar <foo@example.com>'. Resend supports both — the latter is
+  // what survives spam filters with a friendly From header.
+  EMAIL_FROM: z
+    .string()
+    .min(3)
+    .refine(
+      (s) => /^[^<>]+@[^<>]+\.[^<>]+$/.test(s) || /^.+\s<[^<>@]+@[^<>@]+\.[^<>@]+>$/.test(s),
+      { message: 'EMAIL_FROM must be an email or "Display Name <email@domain>"' },
+    ),
 
   // Ports
   WEB_PORT: z.coerce.number().int().positive().default(3000),
