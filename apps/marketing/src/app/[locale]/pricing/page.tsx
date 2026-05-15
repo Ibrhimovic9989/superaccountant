@@ -404,7 +404,7 @@ function CohortCard({
   return (
     <div
       className={cn(
-        'group relative h-full overflow-hidden rounded-2xl border-2 p-7 backdrop-blur transition-all hover:-translate-y-0.5',
+        'lift group relative h-full overflow-hidden rounded-2xl border-2 p-7 backdrop-blur transition-all hover:-translate-y-0.5',
         isIndia
           ? 'border-accent/40 bg-gradient-to-br from-accent-soft/40 via-bg-elev/50 to-bg-elev/50 hover:border-accent/70'
           : 'border-success/40 bg-gradient-to-br from-success/10 via-bg-elev/50 to-bg-elev/50 hover:border-success/70',

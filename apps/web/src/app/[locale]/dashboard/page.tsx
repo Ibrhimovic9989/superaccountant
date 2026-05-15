@@ -120,7 +120,7 @@ export default async function Dashboard({
 
         {/* ── Level / XP hero strip ────────────────────────── */}
         <BlurFade delay={0.08}>
-          <div className="relative mt-8 overflow-hidden rounded-2xl border border-border bg-bg-elev p-5 sm:p-6">
+          <div className="lift relative mt-8 overflow-hidden rounded-2xl border border-border bg-bg-elev p-5 sm:p-6">
             <div className="flex items-center gap-5 sm:gap-7">
               <LevelRing level={lvl.current.level} progress={lvl.progressToNext} size={104} />
               <div className="min-w-0 flex-1">
@@ -231,7 +231,7 @@ export default async function Dashboard({
           </BlurFade>
 
           <BlurFade delay={0.15}>
-            <div className="relative h-full overflow-hidden rounded-xl border border-border bg-bg-elev p-6">
+            <div className="relative h-full overflow-hidden lift rounded-xl border border-border bg-bg-elev p-6">
               <div className="mb-4 flex items-center justify-between">
                 <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted">
                   {locale === 'ar' ? 'سلسلة' : 'Streak'}
@@ -285,7 +285,7 @@ export default async function Dashboard({
         {/* ── Today + Phase progress ───────────────────────── */}
         <div className="mt-8 grid gap-4 lg:grid-cols-5">
           <BlurFade delay={0.25} className="lg:col-span-3">
-            <div className="h-full rounded-xl border border-border bg-bg-elev p-6">
+            <div className="h-full lift rounded-xl border border-border bg-bg-elev p-6">
               <div className="mb-5 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-4 w-4 text-fg-muted" />
@@ -337,7 +337,7 @@ export default async function Dashboard({
           </BlurFade>
 
           <BlurFade delay={0.3} className="lg:col-span-2">
-            <div className="h-full rounded-xl border border-border bg-bg-elev p-6">
+            <div className="h-full lift rounded-xl border border-border bg-bg-elev p-6">
               <div className="mb-5 flex items-center gap-2">
                 <Target className="h-4 w-4 text-fg-muted" />
                 <h3 className="text-sm font-semibold">
@@ -395,7 +395,7 @@ export default async function Dashboard({
 
         {/* ── Achievements ─────────────────────────────────── */}
         <BlurFade delay={0.35}>
-          <div className="mt-8 rounded-xl border border-border bg-bg-elev p-6">
+          <div className="mt-8 lift rounded-xl border border-border bg-bg-elev p-6">
             <div className="mb-5 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Trophy className="h-4 w-4 text-fg-muted" />
@@ -507,7 +507,7 @@ function StatTile({
   decimals?: number
 }) {
   return (
-    <div className="group relative overflow-hidden rounded-xl border border-border bg-bg-elev p-5 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-[0_8px_24px_-12px_rgba(139,92,246,0.4)]">
+    <div className="lift group relative overflow-hidden rounded-xl border border-border bg-bg-elev p-5 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-[0_8px_24px_-12px_rgba(139,92,246,0.4)]">
       <div className="flex items-center justify-between">
         <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted">
           {label}
