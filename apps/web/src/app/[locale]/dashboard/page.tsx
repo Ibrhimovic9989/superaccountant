@@ -1,5 +1,4 @@
 import { AppNav } from '@/components/app-nav'
-import { DailyVibe } from '@/components/gamification/daily-vibe'
 import { LevelRing } from '@/components/gamification/level-ring'
 import { StreakLadder } from '@/components/gamification/streak-ladder'
 import { XpBar } from '@/components/gamification/xp-bar'
@@ -11,6 +10,7 @@ import { NumberTicker } from '@/components/magicui/number-ticker'
 import { PageBackdrop } from '@/components/page-backdrop'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { GlowCard } from '@/components/ui/glow-card'
 import { auth } from '@/lib/auth'
 import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
 import { type Badge as AchievementBadge, getAchievements } from '@/lib/data/achievements'
@@ -103,68 +103,80 @@ export default async function Dashboard({
           </BlurFade>
         )}
 
-        {/* ── Greeting ─────────────────────────────────────── */}
-        <BlurFade delay={0.05}>
-          <div className="mb-2 flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-success" />
-            {trackLabel}
+        {/* ── Telemetry strip ───────────────────────────────── */}
+        <BlurFade delay={0.04}>
+          <div className="mb-2 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.2em] text-fg-subtle">
+            <span className="relative inline-flex h-1.5 w-1.5 items-center justify-center">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success/60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-success" />
+            </span>
+            <span>{trackLabel}</span>
+            <span className="text-fg-subtle/40">/</span>
+            <span>{rankTitle}</span>
+            <span className="text-fg-subtle/40">/</span>
+            <span>LVL {lvl.current.level}</span>
+            {snap.streakDays > 0 && (
+              <>
+                <span className="text-fg-subtle/40">/</span>
+                <span className="text-accent">{snap.streakDays}D STREAK</span>
+              </>
+            )}
           </div>
-          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-            {locale === 'ar' ? `مرحبًا، ${firstName} 👋` : `Hey ${firstName}, ready to roll? 👋`}
-          </h1>
         </BlurFade>
 
-        {/* ── Daily vibe — the eye-catcher ─────────────────── */}
-        <BlurFade delay={0.08}>
-          <div className="mt-6">
-            <DailyVibe
-              streakDays={snap.streakDays}
-              level={lvl.current.level}
-              rankTitle={rankTitle}
-              xp={lvl.xp}
-              locale={locale}
-            />
-          </div>
+        {/* ── Greeting ─────────────────────────────────────── */}
+        <BlurFade delay={0.05}>
+          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+            {locale === 'ar' ? `أهلاً، ${firstName}.` : `Welcome back, ${firstName}.`}
+          </h1>
+          <p className="mt-2 text-sm text-fg-muted">
+            {locale === 'ar'
+              ? 'لوحة التحكم جاهزة. اختر مدخلك.'
+              : 'System primed. Pick an entry point.'}
+          </p>
         </BlurFade>
 
         {/* ── Level / XP hero strip ────────────────────────── */}
         <BlurFade delay={0.08}>
-          <div className="lift relative mt-8 overflow-hidden rounded-2xl border border-border bg-bg-elev p-5 sm:p-6">
-            <div className="flex items-center gap-5 sm:gap-7">
+          <GlowCard className="relative mt-8 rounded-2xl">
+            <div className="flex items-center gap-5 px-5 py-5 sm:gap-7 sm:px-7 sm:py-6">
               <LevelRing level={lvl.current.level} progress={lvl.progressToNext} size={104} />
               <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">{rankTitle}</h2>
-                  <span className="inline-flex items-center gap-1 rounded-md border border-accent/30 bg-accent-soft px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent">
-                    <Zap className="h-3 w-3" />
-                    <NumberTicker value={lvl.xp} className="tabular-nums" /> XP
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-fg-subtle">
+                    Rank
                   </span>
+                  <span className="text-fg-subtle/40">·</span>
+                  <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">{rankTitle}</h2>
                 </div>
-                <p className="mt-1 text-xs text-fg-muted">
-                  {lvl.next ? (
-                    <>
-                      {lvl.xpForLevel - lvl.xpIntoLevel} XP {locale === 'ar' ? 'إلى رتبة' : 'to'}{' '}
-                      <strong className="text-fg">{nextRankTitle}</strong>
-                    </>
-                  ) : locale === 'ar' ? (
-                    'بلغت أعلى رتبة. أحسنت.'
-                  ) : (
-                    'Top rank achieved. Well done.'
+                <div className="mt-2 flex items-baseline gap-2 font-mono">
+                  <NumberTicker
+                    value={lvl.xp}
+                    className="text-3xl font-medium tracking-tight tabular-nums"
+                  />
+                  <span className="text-xs uppercase tracking-[0.2em] text-fg-subtle">XP</span>
+                  {lvl.next && (
+                    <span className="ms-auto text-[10px] uppercase tracking-[0.2em] text-fg-subtle">
+                      <span className="text-accent tabular-nums">
+                        {lvl.xpForLevel - lvl.xpIntoLevel}
+                      </span>{' '}
+                      → {nextRankTitle}
+                    </span>
                   )}
-                </p>
+                </div>
                 <div className="mt-3">
                   <XpBar progress={lvl.progressToNext} />
                 </div>
               </div>
             </div>
             <BorderBeam
-              size={80}
-              duration={9}
+              size={70}
+              duration={10}
               colorFrom="#a78bfa"
-              colorTo="#7c3aed"
-              className="opacity-60"
+              colorTo="#22d3ee"
+              className="opacity-70"
             />
-          </div>
+          </GlowCard>
         </BlurFade>
 
         {/* ── Continue + Streak ────────────────────────────── */}
@@ -172,60 +184,50 @@ export default async function Dashboard({
           <BlurFade delay={0.1} className="lg:col-span-2">
             {snap.resume ? (
               <MagicCard className="h-full rounded-xl">
-                <div className="relative flex h-full flex-col gap-6 overflow-hidden p-6 sm:p-8">
-                  {/* Layered colour wash on the card background — pink → violet
-                      bleed in from the top-left corner so the card feels
-                      alive without overwhelming the lesson title. */}
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full opacity-30 blur-3xl"
-                    style={{ background: 'radial-gradient(closest-side, #f472b6, transparent)' }}
-                  />
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute -right-16 -bottom-20 h-72 w-72 rounded-full opacity-25 blur-3xl"
-                    style={{ background: 'radial-gradient(closest-side, #a78bfa, transparent)' }}
-                  />
-
-                  <div className="relative flex items-start justify-between">
-                    <div className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent-soft px-2.5 py-1">
-                      <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
-                      <span className="font-mono text-[10px] uppercase tracking-wider text-accent">
-                        {locale === 'ar' ? '▶ تابع من حيث توقفت' : '▶ Pick up where you left off'}
+                <div className="relative flex h-full flex-col gap-5 p-6 sm:p-8">
+                  <div className="flex items-start justify-between">
+                    <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-fg-subtle">
+                      <span className="relative inline-flex h-1.5 w-1.5 items-center justify-center">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent/60" />
+                        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
                       </span>
-                    </div>
-                    <Badge variant="accent">
-                      {Math.round(snap.resume.mastery * 100)}%{' '}
-                      {locale === 'ar' ? 'إتقان' : 'mastery'}
-                    </Badge>
+                      {locale === 'ar' ? 'الجلسة الحالية' : 'Active session'}
+                    </span>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-fg-subtle">
+                      <span className="text-accent tabular-nums">
+                        {Math.round(snap.resume.mastery * 100)}
+                      </span>
+                      % {locale === 'ar' ? 'إتقان' : 'mastery'}
+                    </span>
                   </div>
 
-                  <h2 className="relative text-2xl font-semibold leading-tight tracking-tight sm:text-4xl">
+                  <h2 className="text-2xl font-semibold leading-[1.1] tracking-tight sm:text-3xl">
                     {locale === 'ar' ? snap.resume.titleAr : snap.resume.titleEn}
                   </h2>
 
-                  <div className="relative space-y-2">
-                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-bg-overlay">
-                      <div
-                        className="h-full rounded-full transition-all duration-700"
-                        style={{
-                          width: `${Math.max(snap.resume.mastery * 100, 4)}%`,
-                          background: 'linear-gradient(90deg, #a78bfa 0%, #f472b6 100%)',
-                          boxShadow: '0 0 12px rgba(167,139,250,0.6)',
-                        }}
-                      />
-                    </div>
+                  <div className="h-px w-full overflow-hidden bg-bg-overlay">
+                    <div
+                      className="h-full transition-all duration-1000"
+                      style={{
+                        width: `${Math.max(snap.resume.mastery * 100, 4)}%`,
+                        background:
+                          'linear-gradient(90deg, transparent, var(--accent) 20%, var(--accent) 80%, transparent)',
+                        boxShadow: '0 0 8px var(--accent)',
+                      }}
+                    />
                   </div>
 
-                  <div className="relative mt-auto flex items-center gap-3">
+                  <div className="mt-auto flex items-center gap-3">
                     <Button asChild variant="accent" size="lg" className="relative overflow-hidden">
                       <Link href={`/${locale}/lessons/${snap.resume.slug}`}>
-                        {locale === 'ar' ? 'ابدأ الجلسة' : "Let's go"}
+                        {locale === 'ar' ? 'استئناف' : 'Resume'}
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
-                        <BorderBeam size={56} duration={5} colorFrom="#f472b6" colorTo="#a78bfa" />
+                        <BorderBeam size={48} duration={5} colorFrom="#a78bfa" colorTo="#22d3ee" />
                       </Link>
                     </Button>
-                    <span className="font-mono text-[11px] text-fg-subtle">⌘ ↵</span>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-fg-subtle">
+                      ⌘ ↵
+                    </span>
                   </div>
                 </div>
               </MagicCard>
@@ -266,41 +268,33 @@ export default async function Dashboard({
           </BlurFade>
         </div>
 
-        {/* ── Stats row — each tile with its own world ─────── */}
+        {/* ── Stats row — sleek mono telemetry ──────────────── */}
         <BlurFade delay={0.2}>
-          <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <StatTile
               label={locale === 'ar' ? 'الإتقان' : 'Mastery'}
-              icon={<Brain className="h-4 w-4" />}
+              icon={<Brain className="h-3.5 w-3.5" />}
               value={masteryPct}
               suffix="%"
-              color="#a78bfa"
-              emoji="🧠"
             />
             <StatTile
               label={locale === 'ar' ? 'الدروس' : 'Lessons'}
-              icon={<CheckCircle2 className="h-4 w-4" />}
+              icon={<CheckCircle2 className="h-3.5 w-3.5" />}
               value={snap.completedLessons}
               suffix={`/${snap.totalLessons}`}
-              color="#10b981"
-              emoji="✅"
             />
             <StatTile
               label={locale === 'ar' ? 'الساعات' : 'Hours'}
-              icon={<Clock className="h-4 w-4" />}
+              icon={<Clock className="h-3.5 w-3.5" />}
               value={snap.hoursStudied}
               suffix="h"
               decimals={1}
-              color="#38bdf8"
-              emoji="⏱️"
             />
             <StatTile
               label={locale === 'ar' ? 'المرحلة' : 'Phase'}
-              icon={<Target className="h-4 w-4" />}
+              icon={<Target className="h-3.5 w-3.5" />}
               value={snap.phases.find((p) => p.completed < p.total)?.order ?? snap.phases.length}
               suffix={`/${snap.phases.length}`}
-              color="#f472b6"
-              emoji="🎯"
             />
           </div>
         </BlurFade>
@@ -444,8 +438,6 @@ export default async function Dashboard({
 
 // ─── Sub-components ────────────────────────────────────────
 
-const BADGE_COLORS = ['#a78bfa', '#38bdf8', '#10b981', '#fbbf24', '#22d3ee', '#f472b6'] as const
-
 function AchievementTile({
   badge,
   locale,
@@ -457,62 +449,68 @@ function AchievementTile({
 }) {
   const name = locale === 'ar' ? badge.nameAr : badge.nameEn
   const desc = locale === 'ar' ? badge.descAr : badge.descEn
-  const color = BADGE_COLORS[idx % BADGE_COLORS.length] ?? '#a78bfa'
-  // Earned stickers get a slight random-ish rotation so the grid feels
-  // hand-placed, not a CSS grid of identical squares.
-  const tilt = badge.earned ? (idx % 4 === 0 ? -3 : idx % 4 === 1 ? 2 : idx % 4 === 2 ? -1 : 3) : 0
+  // Subtle index-based jitter on the accent hue, so the grid has rhythm
+  // without going rainbow. Hue range: violet (-15°) → cyan (+30°).
+  const hue = (idx * 13) % 45
   return (
     <div
       title={`${name} — ${desc}`}
       className={cn(
-        'group relative flex aspect-square flex-col items-center justify-center gap-1.5 overflow-hidden rounded-2xl border-2 p-3 text-center transition-all duration-300',
+        'group relative flex aspect-square flex-col items-center justify-center gap-1.5 overflow-hidden rounded-xl border text-center transition-all duration-300',
         badge.earned
-          ? 'hover:-translate-y-1 hover:rotate-0 hover:scale-105'
-          : 'border-border bg-bg-elev/40 hover:-translate-y-0.5 hover:border-border-strong',
+          ? 'border-accent/40 bg-bg-elev/70 backdrop-blur-sm hover:-translate-y-0.5 hover:border-accent/80'
+          : 'border-border bg-bg-elev/30 hover:border-border-strong',
       )}
       style={
         badge.earned
           ? {
-              transform: `rotate(${tilt}deg)`,
-              borderColor: `${color}88`,
-              background: `radial-gradient(circle at 30% 20%, ${color}55, ${color}11 70%), var(--bg-elev)`,
-              boxShadow: `inset 0 0 0 1px ${color}33, 0 8px 22px -10px ${color}AA, 0 2px 4px rgba(0,0,0,0.06)`,
+              boxShadow:
+                'inset 0 0 0 1px color-mix(in oklab, var(--accent) 18%, transparent), 0 0 30px -8px color-mix(in oklab, var(--accent) 40%, transparent)',
+              filter: `hue-rotate(${hue - 15}deg)`,
             }
           : undefined
       }
     >
+      {/* Faint corner crosshairs — telemetry frame on earned tiles */}
+      {badge.earned && (
+        <>
+          <span aria-hidden className="absolute left-1.5 top-1.5 h-2 w-px bg-accent/50" />
+          <span aria-hidden className="absolute left-1.5 top-1.5 h-px w-2 bg-accent/50" />
+          <span aria-hidden className="absolute right-1.5 top-1.5 h-2 w-px bg-accent/50" />
+          <span aria-hidden className="absolute right-1.5 top-1.5 h-px w-2 bg-accent/50" />
+          <span aria-hidden className="absolute bottom-1.5 left-1.5 h-2 w-px bg-accent/50" />
+          <span aria-hidden className="absolute bottom-1.5 left-1.5 h-px w-2 bg-accent/50" />
+          <span aria-hidden className="absolute bottom-1.5 right-1.5 h-2 w-px bg-accent/50" />
+          <span aria-hidden className="absolute bottom-1.5 right-1.5 h-px w-2 bg-accent/50" />
+        </>
+      )}
       <span
         className={cn(
-          'text-3xl drop-shadow-sm transition-transform duration-300 group-hover:scale-125',
+          'text-2xl transition-transform duration-300 group-hover:scale-110',
           !badge.earned && 'opacity-30 grayscale',
         )}
       >
         {badge.emoji}
       </span>
       <span
-        className={cn('text-[10px] font-medium leading-tight', !badge.earned && 'text-fg-subtle')}
-        style={badge.earned ? { color } : undefined}
+        className={cn(
+          'px-2 text-[10px] font-medium leading-tight',
+          badge.earned ? 'text-fg' : 'text-fg-subtle',
+        )}
       >
         {name}
       </span>
       {!badge.earned && badge.progress > 0 && (
-        <div className="absolute inset-x-2 bottom-2 h-0.5 overflow-hidden rounded-full bg-bg-overlay">
+        <div className="absolute inset-x-2 bottom-2 h-px overflow-hidden bg-bg-overlay">
           <div
-            className="h-full rounded-full bg-accent transition-all duration-700"
+            className="h-full bg-accent transition-all duration-700"
             style={{ width: `${Math.round(badge.progress * 100)}%` }}
           />
         </div>
       )}
-      {badge.earned && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-x-1/4 top-1 h-px"
-          style={{ background: `linear-gradient(to right, transparent, ${color}66, transparent)` }}
-        />
-      )}
       {/* Hover-reveal description (earned tiles only) */}
       {badge.earned && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full bg-bg-overlay/95 p-2 text-[9px] leading-snug text-fg-muted opacity-0 backdrop-blur transition-all duration-200 group-hover:-translate-y-0 group-hover:opacity-100">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full bg-bg-overlay/95 px-2 py-1.5 text-[9px] leading-snug text-fg-muted opacity-0 backdrop-blur transition-all duration-200 group-hover:-translate-y-0 group-hover:opacity-100">
           {desc}
         </div>
       )}
@@ -526,54 +524,39 @@ function StatTile({
   value,
   suffix = '',
   decimals = 0,
-  color,
-  emoji,
 }: {
   label: string
   icon: React.ReactNode
   value: number
   suffix?: string
   decimals?: number
-  color: string
-  emoji: string
 }) {
   return (
-    <div
-      className="lift group relative overflow-hidden rounded-2xl border-2 p-5 transition-all hover:-translate-y-1"
-      style={{
-        borderColor: `${color}33`,
-        background: `linear-gradient(135deg, ${color}14 0%, transparent 60%), var(--bg-elev)`,
-        boxShadow: `inset 0 0 0 1px ${color}1A, 0 6px 20px -10px ${color}40`,
-      }}
-    >
-      {/* Big background emoji — decorative, drifts on hover */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -bottom-3 -right-2 text-6xl opacity-20 transition-all duration-500 group-hover:-translate-y-1 group-hover:rotate-6 group-hover:opacity-30"
-      >
-        {emoji}
-      </span>
-
-      <div className="relative flex items-center justify-between">
-        <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color }}>
-          {label}
-        </span>
+    <GlowCard className="rounded-xl">
+      <div className="relative px-4 py-4 sm:px-5 sm:py-5">
+        <div className="flex items-center justify-between">
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-fg-subtle">
+            {label}
+          </span>
+          <span className="text-fg-subtle transition-colors duration-300 group-hover:text-accent">
+            {icon}
+          </span>
+        </div>
+        <div className="mt-5 flex items-baseline gap-1.5">
+          <NumberTicker
+            value={value}
+            decimalPlaces={decimals}
+            className="font-mono text-3xl font-medium tracking-tight tabular-nums"
+          />
+          <span className="font-mono text-xs text-fg-subtle">{suffix}</span>
+        </div>
+        {/* Bottom accent line — fills on hover */}
         <span
-          className="inline-flex h-7 w-7 items-center justify-center rounded-lg transition-transform group-hover:rotate-12 group-hover:scale-110"
-          style={{ background: `${color}22`, color }}
-        >
-          {icon}
-        </span>
-      </div>
-      <div className="relative mt-4 flex items-baseline gap-1">
-        <NumberTicker
-          value={value}
-          decimalPlaces={decimals}
-          className="font-mono text-3xl font-semibold tracking-tight"
+          aria-hidden
+          className="pointer-events-none absolute inset-x-4 bottom-0 h-px origin-left scale-x-0 bg-gradient-to-r from-transparent via-accent to-transparent transition-transform duration-500 group-hover:scale-x-100"
         />
-        <span className="font-mono text-sm text-fg-subtle">{suffix}</span>
       </div>
-    </div>
+    </GlowCard>
   )
 }
 
