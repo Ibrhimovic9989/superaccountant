@@ -16,8 +16,9 @@ import { buildCertificateEmail, sendEmail } from '@sa/email'
  * Returns a per-recipient status report. The caller surfaces failures
  * but does NOT throw — partial success is a normal outcome.
  *
- * Concurrency: small fixed pool (5) so Resend's rate limits stay happy
- * even on a 500-recipient batch. Sequential within each pool slot.
+ * Rate limiting: Resend's free tier is 2 req/sec. We send strictly
+ * serial with a 510ms gap (~1.96 req/sec — safely under the cap).
+ * On a 429 from Resend we retry up to 3 times with exponential backoff.
  */
 export type SendBatchInput = {
   batchId: string
@@ -33,7 +34,19 @@ export type SendBatchResult = {
   failed: { recordId: string; recipientName: string; recipientEmail: string; error: string }[]
 }
 
-const CONCURRENCY = 5
+/** Gap between sends — Resend free tier caps at 2 req/sec. */
+const SEND_GAP_MS = 510
+/** Max retries on a rate-limit hit before giving up on a row. */
+const MAX_RETRIES = 3
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((r) => setTimeout(r, ms))
+}
+
+function isRateLimit(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err)
+  return /rate.?limit|429|too.?many.?requests/i.test(msg)
+}
 
 export async function sendCertificateBatchEmails(input: SendBatchInput): Promise<SendBatchResult> {
   // Read every record in the batch that's eligible to send.
@@ -89,61 +102,83 @@ export async function sendCertificateBatchEmails(input: SendBatchInput): Promise
     sendable.push(r)
   }
 
-  // Fixed-pool concurrency. Each worker pulls the next row and processes it.
-  let idx = 0
-  async function worker() {
-    while (idx < sendable.length) {
-      const myIdx = idx++
-      const r = sendable[myIdx]
-      if (!r || !r.recipientEmail || !r.pdfUrl) continue
-      try {
-        const pdfBytes = await fetchPdf(r.pdfUrl)
-        const verifyUrl = `${appBaseUrl}/verify/${r.verifyHash}`
-        const { html, text } = buildCertificateEmail({
-          recipientName: r.recipientName,
-          body: input.body,
-          verifyUrl,
-        })
-        const subject = interpolate(input.subject, r.recipientName)
-        const { id: messageId } = await sendEmail({
-          to: r.recipientEmail,
-          subject,
-          html,
-          text,
-          replyTo: input.replyTo ?? undefined,
-          attachments: [
-            {
-              filename: certificateFilename(r.recipientName),
-              content: pdfBytes,
-              contentType: 'application/pdf',
-            },
-          ],
-        })
-        await prisma.$executeRaw`
-          UPDATE "CertificateRecord"
-          SET "emailedAt" = NOW(),
-              "emailMessageId" = ${messageId}
-          WHERE "id" = ${r.id}
-        `
-        result.sent.push({
-          recordId: r.id,
-          recipientName: r.recipientName,
-          recipientEmail: r.recipientEmail,
-          messageId,
-        })
-      } catch (err) {
-        result.failed.push({
-          recordId: r.id,
-          recipientName: r.recipientName,
-          recipientEmail: r.recipientEmail,
-          error: err instanceof Error ? err.message : 'send_failed',
-        })
-      }
+  // Serial send loop — Resend's free tier is 2 req/sec, so we pace
+  // ourselves at slightly under that. Each row may be retried up to
+  // MAX_RETRIES times on a 429, with exponential backoff.
+  for (let i = 0; i < sendable.length; i++) {
+    const r = sendable[i]
+    if (!r || !r.recipientEmail || !r.pdfUrl) continue
+
+    // Pace — sleep AFTER each send, not before, so the first one fires
+    // immediately. The gap protects subsequent sends from the cap.
+    if (i > 0) await sleep(SEND_GAP_MS)
+
+    try {
+      const pdfBytes = await fetchPdf(r.pdfUrl)
+      const verifyUrl = `${appBaseUrl}/verify/${r.verifyHash}`
+      const { html, text } = buildCertificateEmail({
+        recipientName: r.recipientName,
+        body: input.body,
+        verifyUrl,
+      })
+      const subject = interpolate(input.subject, r.recipientName)
+      const messageId = await sendWithRetry({
+        to: r.recipientEmail,
+        subject,
+        html,
+        text,
+        replyTo: input.replyTo ?? undefined,
+        attachments: [
+          {
+            filename: certificateFilename(r.recipientName),
+            content: pdfBytes,
+            contentType: 'application/pdf',
+          },
+        ],
+      })
+      await prisma.$executeRaw`
+        UPDATE "CertificateRecord"
+        SET "emailedAt" = NOW(),
+            "emailMessageId" = ${messageId}
+        WHERE "id" = ${r.id}
+      `
+      result.sent.push({
+        recordId: r.id,
+        recipientName: r.recipientName,
+        recipientEmail: r.recipientEmail,
+        messageId,
+      })
+    } catch (err) {
+      result.failed.push({
+        recordId: r.id,
+        recipientName: r.recipientName,
+        recipientEmail: r.recipientEmail,
+        error: err instanceof Error ? err.message : 'send_failed',
+      })
     }
   }
-  await Promise.all(Array.from({ length: CONCURRENCY }, () => worker()))
 
   return result
+}
+
+/**
+ * Send with up to MAX_RETRIES on rate-limit responses. Backoff is
+ * exponential: 700ms, 1400ms, 2800ms. Any non-rate-limit error throws
+ * immediately so the caller can record it as a real failure.
+ */
+async function sendWithRetry(args: Parameters<typeof sendEmail>[0]): Promise<string> {
+  let lastErr: unknown = null
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const { id } = await sendEmail(args)
+      return id
+    } catch (err) {
+      lastErr = err
+      if (!isRateLimit(err) || attempt === MAX_RETRIES) throw err
+      await sleep(700 * 2 ** attempt)
+    }
+  }
+  throw lastErr instanceof Error ? lastErr : new Error('send_failed')
 }
 
 async function fetchPdf(url: string): Promise<Buffer> {
