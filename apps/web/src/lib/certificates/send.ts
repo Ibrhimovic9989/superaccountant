@@ -53,7 +53,7 @@ export async function sendCertificateBatchEmails(input: SendBatchInput): Promise
     JOIN "CertificateBatch" b ON b."id" = r."batchId"
     WHERE r."batchId" = ${input.batchId}
       AND b."ownerUserId" = ${input.ownerUserId}
-    ORDER BY r."createdAt" ASC
+    ORDER BY r."issuedAt" ASC
   `
 
   const result: SendBatchResult = { sent: [], skipped: [], failed: [] }

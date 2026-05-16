@@ -51,14 +51,34 @@ export default async function NewCertificateBatchPage({
 
   async function sendBatch(req: SendBatchRequest): Promise<SendBatchResultPayload> {
     'use server'
-    const res = await sendCertificateBatchEmails({
-      batchId: req.batchId,
-      ownerUserId: userId,
-      subject: req.subject,
-      body: req.body,
-      replyTo: req.replyTo ?? null,
-    })
-    return res
+    try {
+      const res = await sendCertificateBatchEmails({
+        batchId: req.batchId,
+        ownerUserId: userId,
+        subject: req.subject,
+        body: req.body,
+        replyTo: req.replyTo ?? null,
+      })
+      return res
+    } catch (err) {
+      // Surface as a single 'failed' row rather than throwing — the
+      // builder UI is set up to render the failed array but explodes
+      // into React's generic error overlay on an unhandled action throw.
+      console.error('[sendBatch] failed', { batchId: req.batchId, err })
+      const msg = err instanceof Error ? err.message : 'send_failed'
+      return {
+        sent: [],
+        skipped: [],
+        failed: [
+          {
+            recordId: 'batch',
+            recipientName: 'batch',
+            recipientEmail: '',
+            error: msg,
+          },
+        ],
+      }
+    }
   }
 
   return (
