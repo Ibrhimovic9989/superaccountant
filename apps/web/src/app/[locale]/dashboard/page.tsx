@@ -1,4 +1,6 @@
 import { AppNav } from '@/components/app-nav'
+import { MissedDaysBanner } from '@/components/dashboard/missed-days-banner'
+import { StudyPlanCalendar } from '@/components/dashboard/study-plan-calendar'
 import { LevelRing } from '@/components/gamification/level-ring'
 import { StreakLadder } from '@/components/gamification/streak-ladder'
 import { XpBar } from '@/components/gamification/xp-bar'
@@ -17,6 +19,7 @@ import { formatPrice, getApplicationWithBalance } from '@/lib/cohort/store'
 import { type Badge as AchievementBadge, getAchievements } from '@/lib/data/achievements'
 import { getDashboardSnapshot } from '@/lib/data/dashboard'
 import { CURRENT_TERMS_VERSION, getUserProfile } from '@/lib/data/profile'
+import { getStudyPlan } from '@/lib/data/study-plan'
 import { computeXp, getLevel } from '@/lib/data/xp'
 import { cn } from '@/lib/utils'
 import {
@@ -55,12 +58,13 @@ export default async function Dashboard({
   const tier = await getAccessTier(session.user.id)
   if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
 
-  const [snap, badges, balanceApp] = await Promise.all([
+  const [snap, badges, balanceApp, plan] = await Promise.all([
     getDashboardSnapshot(session.user.id),
     getAchievements(session.user.id, u.preferredTrack),
     session.user.email
       ? getApplicationWithBalance(session.user.email).catch(() => null)
       : Promise.resolve(null),
+    getStudyPlan(session.user.id),
   ])
   const outstandingMinor = balanceApp
     ? Math.max(0, balanceApp.totalAmountMinor - balanceApp.paidAmountMinor)
@@ -108,6 +112,12 @@ export default async function Dashboard({
               <Sparkles className="h-3 w-3" />
               {tier.kind === 'admin' ? 'Admin' : 'Staff'} · full access
             </div>
+          </BlurFade>
+        )}
+
+        {plan.missedDaysLast7 > 0 && (
+          <BlurFade delay={0.03}>
+            <MissedDaysBanner missedDays={plan.missedDaysLast7} locale={locale} />
           </BlurFade>
         )}
 
@@ -338,6 +348,13 @@ export default async function Dashboard({
               value={snap.phases.find((p) => p.completed < p.total)?.order ?? snap.phases.length}
               suffix={`/${snap.phases.length}`}
             />
+          </div>
+        </BlurFade>
+
+        {/* ── Study plan calendar ──────────────────────────── */}
+        <BlurFade delay={0.22}>
+          <div className="mt-8">
+            <StudyPlanCalendar plan={plan} locale={locale} />
           </div>
         </BlurFade>
 
