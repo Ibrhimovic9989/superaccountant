@@ -64,6 +64,7 @@ type Props = {
     phone: string
     goal: string
     discountCode?: string | null
+    paymentPlan?: 'full' | 'installment-2'
   }) => Promise<CreateOrderResponse>
   verifyPayment: (input: {
     razorpayOrderId: string
@@ -223,14 +224,24 @@ function AuthedFormBody({
   const [paid, setPaid] = useState(false)
   const [pending, startTransition] = useTransition()
   const [applied, setApplied] = useState<AppliedDiscount | null>(null)
+  // Installment selector — only meaningful for the Indian cohort and
+  // when no discount is applied (discount + installment is mutually
+  // exclusive; the server enforces the same rule).
+  const [paymentPlan, setPaymentPlan] = useState<'full' | 'installment-2'>('full')
+
+  const installmentsAllowed = cohort.track === 'india' && !applied
+  const effectivePlan: 'full' | 'installment-2' = installmentsAllowed ? paymentPlan : 'full'
 
   // Effective price for display + Razorpay charge amount.
-  const effectiveAmountMinor = applied ? applied.finalAmountMinor : cohort.amountMinor
-  const effectivePriceLabel = applied
-    ? formatMinor(effectiveAmountMinor, cohort.currency)
-    : cohort.priceLabel
+  const fullPriceMinor = applied ? applied.finalAmountMinor : cohort.amountMinor
+  const chargeAmountMinor =
+    effectivePlan === 'installment-2' && cohort.currency === 'INR'
+      ? INSTALLMENT_FIRST_INR_MINOR
+      : fullPriceMinor
+  const effectivePriceLabel = formatMinor(chargeAmountMinor, cohort.currency)
+  const fullPriceLabel = applied ? formatMinor(fullPriceMinor, cohort.currency) : cohort.priceLabel
   const discountPct = Math.round(
-    ((cohort.originalPriceMinor - effectiveAmountMinor) / cohort.originalPriceMinor) * 100,
+    ((cohort.originalPriceMinor - fullPriceMinor) / cohort.originalPriceMinor) * 100,
   )
 
   // Lazy-load Razorpay Checkout once on mount.
@@ -250,11 +261,14 @@ function AuthedFormBody({
   }, [paid, router, successUrl])
 
   // Clear any applied discount when the user switches tracks — a code
-  // valid for one cohort may not be valid for another.
+  // valid for one cohort may not be valid for another. Also drop the
+  // installment selection: installments are INR-only and only offered
+  // for the Indian cohort.
   function onSelectCohort(id: string) {
     if (id === selectedId) return
     setSelectedId(id)
     setApplied(null)
+    setPaymentPlan('full')
     setError(null)
   }
 
@@ -293,6 +307,7 @@ function AuthedFormBody({
         phone: phone.trim(),
         goal,
         discountCode: applied?.code ?? null,
+        paymentPlan: effectivePlan,
       })
       if (!order.keyId) {
         throw new Error('Payments not configured — set NEXT_PUBLIC_RAZORPAY_KEY_ID.')
@@ -446,10 +461,16 @@ function AuthedFormBody({
         <span className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">
           {applied?.isFree ? 'FREE' : effectivePriceLabel}
         </span>
-        <span className="text-lg text-fg-subtle line-through">
-          {applied ? cohort.priceLabel : cohort.originalPriceLabel}
-        </span>
-        {discountPct > 0 && (
+        {effectivePlan === 'installment-2' ? (
+          <span className="font-mono text-[11px] uppercase tracking-wider text-accent">
+            Today · ₹14,999 in 30d
+          </span>
+        ) : (
+          <span className="text-lg text-fg-subtle line-through">
+            {applied ? cohort.priceLabel : cohort.originalPriceLabel}
+          </span>
+        )}
+        {discountPct > 0 && effectivePlan !== 'installment-2' && (
           <span className="rounded-md bg-success/15 px-2 py-1 font-mono text-[11px] font-medium uppercase tracking-wider text-success">
             {discountPct}% OFF
           </span>
@@ -458,8 +479,36 @@ function AuthedFormBody({
       <p className="mt-1 text-xs text-fg-muted">
         {applied?.isFree
           ? 'Discount applied — no payment needed. Your seat will be reserved instantly.'
-          : 'One-time fee · UPI / cards / netbanking / wallets · No hidden costs'}
+          : effectivePlan === 'installment-2'
+            ? `Pay ₹10,000 today to lock your seat — balance of ₹14,999 due ${INSTALLMENT_SECOND_DUE_DAYS} days later.`
+            : 'One-time fee · UPI / cards / netbanking / wallets · No hidden costs'}
       </p>
+
+      {/* Installment toggle — India track only, mutually exclusive with discounts */}
+      {installmentsAllowed && (
+        <fieldset className="mt-5">
+          <legend className="mb-2 block font-mono text-[10px] uppercase tracking-wider text-fg-muted">
+            Payment plan
+          </legend>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <PlanCard
+              selected={effectivePlan === 'full'}
+              onClick={() => setPaymentPlan('full')}
+              title="Pay in full"
+              subtitle={fullPriceLabel}
+              note="Done in one go"
+            />
+            <PlanCard
+              selected={effectivePlan === 'installment-2'}
+              onClick={() => setPaymentPlan('installment-2')}
+              title="2 installments"
+              subtitle="₹10,000 today"
+              note={`+ ₹14,999 in ${INSTALLMENT_SECOND_DUE_DAYS} days`}
+              badge="No interest"
+            />
+          </div>
+        </fieldset>
+      )}
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <Field label="Your name">
@@ -560,6 +609,15 @@ function AuthedFormBody({
   )
 }
 
+/**
+ * First-installment amount for the Indian cohort, in paise.
+ * Mirrors INSTALLMENT_PLAN_INR.firstAmountMinor in lib/cohort/store.ts —
+ * the server is the source of truth; this constant only drives display.
+ */
+const INSTALLMENT_FIRST_INR_MINOR = 1_000_000 // ₹10,000
+const INSTALLMENT_SECOND_INR_MINOR = 1_499_900 // ₹14,999
+const INSTALLMENT_SECOND_DUE_DAYS = 30
+
 const inputCls =
   'block w-full rounded-lg border border-border bg-bg-elev px-4 py-3 text-base text-fg outline-none transition-colors placeholder:text-fg-subtle focus:border-accent'
 
@@ -579,6 +637,47 @@ function Field({
       </div>
       {children}
     </div>
+  )
+}
+
+function PlanCard({
+  selected,
+  onClick,
+  title,
+  subtitle,
+  note,
+  badge,
+}: {
+  selected: boolean
+  onClick: () => void
+  title: string
+  subtitle: string
+  note: string
+  badge?: string
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={selected}
+      onClick={onClick}
+      className={`group relative overflow-hidden rounded-xl border-2 p-4 text-left transition-all ${
+        selected
+          ? 'border-accent bg-accent-soft text-fg shadow-[0_0_0_4px_rgba(167,139,250,0.12),0_8px_24px_-12px_rgba(139,92,246,0.5)]'
+          : 'border-border bg-bg-elev/50 text-fg hover:-translate-y-0.5 hover:border-border-strong'
+      }`}
+    >
+      {selected && <BorderBeam size={90} duration={7} colorFrom="#a78bfa" colorTo="#8b5cf6" />}
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-sm font-semibold tracking-tight">{title}</p>
+        {badge && (
+          <span className="rounded-md border border-success/30 bg-success/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-success">
+            {badge}
+          </span>
+        )}
+      </div>
+      <p className="mt-1.5 text-lg font-bold tracking-tight">{subtitle}</p>
+      <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">{note}</p>
+    </button>
   )
 }
 

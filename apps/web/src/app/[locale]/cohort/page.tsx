@@ -10,8 +10,10 @@ import {
   verifyPaymentSignature,
 } from '@/lib/cohort/razorpay'
 import {
+  type PaymentPlan,
   consumeDiscountCode,
   createPaidApplicationFree,
+  firstInstallmentAmount,
   formatPrice,
   getActiveCohorts,
   getCohortById,
@@ -119,6 +121,8 @@ export default async function CohortPage({
     goal: string
     /** Optional discount code applied at apply-time. */
     discountCode?: string | null
+    /** 'full' (default) or 'installment-2'. Installments are INR-only for now. */
+    paymentPlan?: PaymentPlan
   }) {
     'use server'
     try {
@@ -133,11 +137,16 @@ export default async function CohortPage({
       if (name.length < 2) throw new Error('Name is required')
       if (phone.replace(/\D/g, '').length < 7) throw new Error('Valid phone is required')
 
+      // Discount codes and installments are mutually exclusive — if the
+      // user has a code, charge the full discounted price (no installments).
+      const paymentPlan: PaymentPlan =
+        input.discountCode || target.currency !== 'INR' ? 'full' : (input.paymentPlan ?? 'full')
+
       // Re-validate the discount code server-side (never trust the
       // client). If invalid, fall through to full price — the client
       // form already validates before showing the Pay button, so this
       // is just a safety net.
-      let chargeAmountMinor = target.discountedPriceMinor
+      let totalAmountMinor = target.discountedPriceMinor
       let appliedCode: { id: string; code: string; discountPercent: number } | null = null
       if (input.discountCode) {
         const res = await validateDiscountCode({
@@ -149,10 +158,15 @@ export default async function CohortPage({
           if (res.discountedAmountMinor === 0) {
             throw new Error('Free codes must use enrollFree path')
           }
-          chargeAmountMinor = res.discountedAmountMinor
+          totalAmountMinor = res.discountedAmountMinor
           appliedCode = res.code
         }
       }
+      const chargeAmountMinor = firstInstallmentAmount({
+        plan: paymentPlan,
+        fullAmountMinor: totalAmountMinor,
+        currency: target.currency,
+      })
 
       // Atomically consume one use of the code BEFORE creating the
       // Razorpay order — this is the race-safe boundary. A failed
@@ -193,6 +207,7 @@ export default async function CohortPage({
           email,
           phone,
           jobGoal: input.goal,
+          paymentPlan,
           ...(appliedCode ? { discountCode: appliedCode.code } : {}),
         },
       })
@@ -209,6 +224,8 @@ export default async function CohortPage({
         discountCode: appliedCode?.code ?? null,
         discountPercent: appliedCode?.discountPercent ?? 0,
         originalAmountMinor: appliedCode ? target.discountedPriceMinor : null,
+        paymentPlan,
+        totalAmountMinor,
       })
 
       return {

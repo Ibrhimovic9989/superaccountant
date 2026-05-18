@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { GlowCard } from '@/components/ui/glow-card'
 import { auth } from '@/lib/auth'
 import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
+import { formatPrice, getApplicationWithBalance } from '@/lib/cohort/store'
 import { type Badge as AchievementBadge, getAchievements } from '@/lib/data/achievements'
 import { getDashboardSnapshot } from '@/lib/data/dashboard'
 import { CURRENT_TERMS_VERSION, getUserProfile } from '@/lib/data/profile'
@@ -54,10 +55,17 @@ export default async function Dashboard({
   const tier = await getAccessTier(session.user.id)
   if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
 
-  const [snap, badges] = await Promise.all([
+  const [snap, badges, balanceApp] = await Promise.all([
     getDashboardSnapshot(session.user.id),
     getAchievements(session.user.id, u.preferredTrack),
+    session.user.email
+      ? getApplicationWithBalance(session.user.email).catch(() => null)
+      : Promise.resolve(null),
   ])
+  const outstandingMinor = balanceApp
+    ? Math.max(0, balanceApp.totalAmountMinor - balanceApp.paidAmountMinor)
+    : 0
+  const hasOutstandingBalance = !!balanceApp && outstandingMinor > 0
   const firstName = session.user.name?.split(' ')[0] ?? session.user.email?.split('@')[0] ?? ''
   const trackLabel = snap.market === 'india' ? 'India · Chartered Path' : "KSA · Mu'tamad Path"
 
@@ -100,6 +108,40 @@ export default async function Dashboard({
               <Sparkles className="h-3 w-3" />
               {tier.kind === 'admin' ? 'Admin' : 'Staff'} · full access
             </div>
+          </BlurFade>
+        )}
+
+        {hasOutstandingBalance && balanceApp && (
+          <BlurFade delay={0.03}>
+            <Link
+              href={`/${locale}/pay-balance`}
+              className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-accent/40 bg-accent-soft/40 px-4 py-3 transition-colors hover:border-accent/70 hover:bg-accent-soft/60"
+            >
+              <div className="flex items-center gap-3">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-accent/40 bg-accent/15 text-accent">
+                  <Zap className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-accent">
+                    Installment balance
+                  </p>
+                  <p className="text-sm font-medium text-fg">
+                    {formatPrice(outstandingMinor, balanceApp.currency)} due
+                    {balanceApp.nextInstallmentDueAt
+                      ? ` by ${balanceApp.nextInstallmentDueAt.toLocaleDateString('en-GB', {
+                          day: 'numeric',
+                          month: 'short',
+                          timeZone: 'UTC',
+                        })}`
+                      : ''}
+                  </p>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-accent">
+                Pay now
+                <ArrowRight className="h-3.5 w-3.5 rtl:rotate-180" />
+              </span>
+            </Link>
           </BlurFade>
         )}
 

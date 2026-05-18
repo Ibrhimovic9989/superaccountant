@@ -27,6 +27,8 @@ export type Cohort = {
 
 export type CohortApplicationStatus = 'pending' | 'paid' | 'failed' | 'refunded'
 
+export type PaymentPlan = 'full' | 'installment-2'
+
 export type CohortApplication = {
   id: string
   cohortId: string
@@ -35,12 +37,54 @@ export type CohortApplication = {
   phone: string
   jobGoal: string | null
   status: CohortApplicationStatus
-  razorpayOrderId: string
+  razorpayOrderId: string | null
   razorpayPaymentId: string | null
+  /** First-installment / current-charge amount in minor units. */
   amountMinor: number
   currency: string
+  paymentPlan: PaymentPlan
+  /** Full cohort fee — equals amountMinor when paymentPlan='full'. */
+  totalAmountMinor: number
+  /** Running total of captured payments — bumped on each success. */
+  paidAmountMinor: number
+  /** When the next installment is due (NULL for fully paid / 'full' plan). */
+  nextInstallmentDueAt: Date | null
   paidAt: Date | null
   createdAt: Date
+}
+
+/**
+ * Indian-cohort installment schedule:
+ *   - Installment 1: ₹10,000 today
+ *   - Installment 2: ₹14,999 in 30 days
+ *
+ * Keep these here (not in the DB) since they're product-policy, not
+ * per-cohort. When KSA gets its own plan, add a Saudi variant.
+ */
+export const INSTALLMENT_PLAN_INR = {
+  firstAmountMinor: 1_000_000, // ₹10,000
+  secondAmountMinor: 1_499_900, // ₹14,999
+  /** Days after first payment that the second installment is due. */
+  secondDueAfterDays: 30,
+} as const
+
+/**
+ * Returns the first-installment amount for a given plan + cohort price.
+ * For 'full', it's the full price. For 'installment-2', it's the
+ * canonical first instalment from INSTALLMENT_PLAN_INR.
+ *
+ * Note: discounts ARE NOT compatible with installments today — if a
+ * code is applied we charge it in full. The caller enforces that.
+ */
+export function firstInstallmentAmount(args: {
+  plan: PaymentPlan
+  fullAmountMinor: number
+  currency: 'INR' | 'SAR'
+}): number {
+  if (args.plan === 'full') return args.fullAmountMinor
+  if (args.currency === 'INR') return INSTALLMENT_PLAN_INR.firstAmountMinor
+  // KSA doesn't offer installments yet — fall back to full.
+  return args.fullAmountMinor
 }
 
 /** Pick the currently-open cohort for a given track (lowest startDate). */
@@ -136,16 +180,23 @@ export async function upsertPendingApplication(input: {
   discountPercent?: number
   /** Original (pre-discount) price for the audit trail. */
   originalAmountMinor?: number | null
+  /** Payment plan — 'full' or 'installment-2'. Defaults to 'full'. */
+  paymentPlan?: PaymentPlan
+  /** Full cohort fee (used as totalAmountMinor on the application row). */
+  totalAmountMinor?: number
 }): Promise<string> {
   const id = randomUUID()
   const discountCode = input.discountCode?.toLowerCase() ?? null
   const discountPercent = input.discountPercent ?? 0
   const originalAmountMinor = input.originalAmountMinor ?? null
+  const paymentPlan: PaymentPlan = input.paymentPlan ?? 'full'
+  const totalAmountMinor = input.totalAmountMinor ?? input.amountMinor
   await prisma.$executeRaw`
     INSERT INTO "CohortApplication" (
       "id", "cohortId", "name", "email", "phone", "jobGoal",
       "status", "razorpayOrderId", "amountMinor", "currency",
-      "discountCode", "discountPercent", "originalAmountMinor"
+      "discountCode", "discountPercent", "originalAmountMinor",
+      "paymentPlan", "totalAmountMinor", "paidAmountMinor"
     ) VALUES (
       ${id},
       ${input.cohortId},
@@ -159,7 +210,10 @@ export async function upsertPendingApplication(input: {
       ${input.currency},
       ${discountCode},
       ${discountPercent},
-      ${originalAmountMinor}
+      ${originalAmountMinor},
+      ${paymentPlan},
+      ${totalAmountMinor},
+      ${0}
     )
     ON CONFLICT ("cohortId", "email") DO UPDATE SET
       "name" = EXCLUDED."name",
@@ -171,6 +225,8 @@ export async function upsertPendingApplication(input: {
       "discountCode" = EXCLUDED."discountCode",
       "discountPercent" = EXCLUDED."discountPercent",
       "originalAmountMinor" = EXCLUDED."originalAmountMinor",
+      "paymentPlan" = EXCLUDED."paymentPlan",
+      "totalAmountMinor" = EXCLUDED."totalAmountMinor",
       -- Reset to pending only if not yet paid; preserve paid state.
       "status" = CASE WHEN "CohortApplication"."status" = 'paid'
                       THEN "CohortApplication"."status"
@@ -185,6 +241,18 @@ export async function upsertPendingApplication(input: {
   return rows[0]?.id ?? id
 }
 
+/**
+ * Mark an application paid for a captured Razorpay order. Handles both
+ * full payment and installment payments:
+ *
+ *   - Adds `amountMinor` (the charged amount on this order) to
+ *     `paidAmountMinor`.
+ *   - Sets `status = 'paid'` (grants access). The 'partial' nuance is
+ *     surfaced in the UI by comparing paidAmountMinor vs totalAmountMinor,
+ *     not by a separate status — keeps the access tier check trivial.
+ *   - Computes nextInstallmentDueAt: NULL once paidAmountMinor reaches
+ *     totalAmountMinor, otherwise +30 days from first payment.
+ */
 export async function markApplicationPaid(args: {
   razorpayOrderId: string
   razorpayPaymentId: string
@@ -195,7 +263,15 @@ export async function markApplicationPaid(args: {
     SET "status" = 'paid',
         "razorpayPaymentId" = ${args.razorpayPaymentId},
         "razorpaySignature" = ${args.razorpaySignature},
-        "paidAt" = NOW(),
+        "paidAt" = COALESCE("paidAt", NOW()),
+        "paidAmountMinor" = "paidAmountMinor" + "amountMinor",
+        "nextInstallmentDueAt" = CASE
+          WHEN ("paidAmountMinor" + "amountMinor") >= "totalAmountMinor"
+            THEN NULL
+          WHEN "paymentPlan" = 'installment-2' AND "nextInstallmentDueAt" IS NULL
+            THEN NOW() + INTERVAL '30 days'
+          ELSE "nextInstallmentDueAt"
+        END,
         "updatedAt" = NOW()
     WHERE "razorpayOrderId" = ${args.razorpayOrderId}
   `
@@ -211,14 +287,25 @@ export async function markApplicationPaidByWebhook(args: {
   razorpayOrderId: string
   razorpayPaymentId: string
 }): Promise<void> {
+  // Webhook can fire after the inline verify already credited the
+  // payment — guard the bump so the same razorpayPaymentId can't be
+  // counted twice.
   await prisma.$executeRaw`
     UPDATE "CohortApplication"
     SET "status" = 'paid',
-        "razorpayPaymentId" = ${args.razorpayPaymentId},
         "paidAt" = COALESCE("paidAt", NOW()),
+        "paidAmountMinor" = "paidAmountMinor" + "amountMinor",
+        "nextInstallmentDueAt" = CASE
+          WHEN ("paidAmountMinor" + "amountMinor") >= "totalAmountMinor"
+            THEN NULL
+          WHEN "paymentPlan" = 'installment-2' AND "nextInstallmentDueAt" IS NULL
+            THEN NOW() + INTERVAL '30 days'
+          ELSE "nextInstallmentDueAt"
+        END,
+        "razorpayPaymentId" = ${args.razorpayPaymentId},
         "updatedAt" = NOW()
     WHERE "razorpayOrderId" = ${args.razorpayOrderId}
-      AND "status" <> 'paid'
+      AND "razorpayPaymentId" IS DISTINCT FROM ${args.razorpayPaymentId}
   `
 }
 
@@ -241,11 +328,64 @@ export async function markApplicationRefundedByPaymentId(paymentId: string): Pro
   `
 }
 
+/**
+ * Get the most recent paid-but-not-fully-paid application for a user,
+ * joined to the cohort. Used by /pay-balance to surface what's owed.
+ */
+export async function getApplicationWithBalance(email: string): Promise<
+  | (CohortApplication & {
+      cohortName: string
+      cohortSlug: string
+    })
+  | null
+> {
+  const rows = await prisma.$queryRaw<
+    (CohortApplication & { cohortName: string; cohortSlug: string })[]
+  >`
+    SELECT a."id", a."cohortId", a."name", a."email", a."phone", a."jobGoal",
+           a."status", a."razorpayOrderId", a."razorpayPaymentId",
+           a."amountMinor", a."currency", a."paymentPlan",
+           a."totalAmountMinor", a."paidAmountMinor",
+           a."nextInstallmentDueAt", a."paidAt", a."createdAt",
+           c."name" AS "cohortName", c."slug" AS "cohortSlug"
+    FROM "CohortApplication" a
+    JOIN "Cohort" c ON c."id" = a."cohortId"
+    WHERE a."email" = ${email.toLowerCase()}
+      AND a."status" = 'paid'
+      AND a."paidAmountMinor" < a."totalAmountMinor"
+    ORDER BY a."paidAt" DESC NULLS LAST, a."createdAt" DESC
+    LIMIT 1
+  `
+  return rows[0] ?? null
+}
+
+/**
+ * Record a follow-up Razorpay order for the balance. Just stamps the
+ * new order id on the application — markApplicationPaid bumps
+ * paidAmountMinor when the order completes.
+ */
+export async function setBalanceOrderId(args: {
+  applicationId: string
+  razorpayOrderId: string
+  amountMinor: number
+}): Promise<void> {
+  await prisma.$executeRaw`
+    UPDATE "CohortApplication"
+    SET "razorpayOrderId" = ${args.razorpayOrderId},
+        "amountMinor" = ${args.amountMinor},
+        "updatedAt" = NOW()
+    WHERE "id" = ${args.applicationId}
+  `
+}
+
 export async function getApplicationByOrderId(orderId: string): Promise<CohortApplication | null> {
   const rows = await prisma.$queryRaw<CohortApplication[]>`
     SELECT "id", "cohortId", "name", "email", "phone", "jobGoal",
            "status", "razorpayOrderId", "razorpayPaymentId",
-           "amountMinor", "currency", "paidAt", "createdAt"
+           "amountMinor", "currency",
+           "paymentPlan", "totalAmountMinor", "paidAmountMinor",
+           "nextInstallmentDueAt",
+           "paidAt", "createdAt"
     FROM "CohortApplication"
     WHERE "razorpayOrderId" = ${orderId} LIMIT 1
   `
@@ -372,6 +512,7 @@ export async function createPaidApplicationFree(input: {
       "status", "razorpayOrderId",
       "amountMinor", "currency",
       "discountCode", "discountPercent", "originalAmountMinor",
+      "paymentPlan", "totalAmountMinor", "paidAmountMinor",
       "paidAt"
     ) VALUES (
       ${id},
@@ -387,6 +528,9 @@ export async function createPaidApplicationFree(input: {
       ${input.discountCode.toLowerCase()},
       ${100},
       ${input.originalAmountMinor},
+      ${'full'},
+      ${0},
+      ${0},
       NOW()
     )
     ON CONFLICT ("cohortId", "email") DO UPDATE SET
@@ -398,6 +542,9 @@ export async function createPaidApplicationFree(input: {
       "discountCode" = EXCLUDED."discountCode",
       "discountPercent" = 100,
       "originalAmountMinor" = EXCLUDED."originalAmountMinor",
+      "paymentPlan" = 'full',
+      "totalAmountMinor" = 0,
+      "paidAmountMinor" = 0,
       "paidAt" = COALESCE("CohortApplication"."paidAt", NOW()),
       "updatedAt" = NOW()
   `
