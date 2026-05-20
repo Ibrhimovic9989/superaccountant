@@ -8,6 +8,11 @@ export type {
 } from './templates/verification-email'
 export { buildCertificateEmail } from './templates/certificate-issued'
 export type { CertificateEmailArgs, CertificateEmailContent } from './templates/certificate-issued'
+export { buildEligibilityPassedEmail } from './templates/eligibility-passed'
+export type {
+  EligibilityPassedEmailArgs,
+  EligibilityPassedEmailContent,
+} from './templates/eligibility-passed'
 
 let client: Resend | null = null
 

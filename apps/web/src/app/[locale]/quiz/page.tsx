@@ -1,6 +1,8 @@
 import { Logo } from '@/components/brand/logo'
 import { QuizPlayer } from '@/components/quiz/quiz-player'
 import { createMarketingLead } from '@/lib/data/leads'
+import { QUIZ_BUCKETS, QUIZ_MAX_SCORE } from '@/lib/data/quiz'
+import { buildEligibilityPassedEmail, sendEmail } from '@sa/email'
 import type { SupportedLocale } from '@sa/i18n'
 import { headers } from 'next/headers'
 import Link from 'next/link'
@@ -52,6 +54,29 @@ export default async function QuizPage({
       locale,
       userAgent: hdrs.get('user-agent') ?? null,
     })
+
+    // Fire-and-forget eligibility email. Resend failures must NOT break
+    // the user-facing flow — the lead is already persisted and we'll
+    // retry via a background job if delivery fails.
+    const bucket = QUIZ_BUCKETS.find((b) => b.key === args.bucketKey)
+    if (bucket) {
+      const appBaseUrl = (process.env.NEXTAUTH_URL ?? 'https://app.superaccountant.in').replace(
+        /\/$/,
+        '',
+      )
+      const { subject, html, text } = buildEligibilityPassedEmail({
+        recipientName: name,
+        score: args.score,
+        maxScore: QUIZ_MAX_SCORE,
+        bucketTitle: bucket.title,
+        bucketEmoji: bucket.emoji,
+        bucketHeadline: bucket.headline,
+        cohortUrl: `${appBaseUrl}/${locale}/cohort#apply`,
+      })
+      sendEmail({ to: email, subject, html, text }).catch((err) => {
+        console.error('[quiz] eligibility email failed', err)
+      })
+    }
   }
 
   return (

@@ -106,14 +106,14 @@ export function QuizPlayer({ submitLead }: Props) {
       <div className="mx-auto max-w-2xl px-4 py-14 text-center sm:py-20">
         <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted">
           <Sparkles className="h-3 w-3 text-accent" />
-          2-minute career quiz
+          Cohort eligibility test
         </div>
         <h1 className="text-4xl font-semibold tracking-tight sm:text-6xl">
-          The Accountant DNA Quiz
+          Are you a fit for the cohort?
         </h1>
         <p className="mt-4 text-base text-fg-muted sm:text-lg">
-          10 honest questions. Find out if you're built for the books — and what your specific
-          strengths already are.
+          10 honest questions to check whether you're ready for the 45-day cohort. Pass and we'll
+          email your eligibility confirmation right away.
         </p>
         <p className="mt-3 text-sm text-fg-subtle">
           No CA prerequisite. No accounting jargon. Be honest — every answer is valid.
@@ -124,12 +124,12 @@ export function QuizPlayer({ submitLead }: Props) {
           onClick={() => setPhase('quiz')}
           className="mt-10 inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-7 py-4 text-base font-medium text-bg transition-colors hover:bg-accent/90"
         >
-          Start the quiz
+          Start the test
           <ArrowRight className="h-4 w-4 rtl:rotate-180" />
         </button>
 
         <p className="mt-6 font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
-          ⌁ Takes ~2 minutes · {total} questions · {QUIZ_BUCKETS.length} result types
+          ⌁ Takes ~2 minutes · {total} questions · {QUIZ_BUCKETS.length} eligibility tiers
         </p>
       </div>
     )
@@ -198,14 +198,14 @@ export function QuizPlayer({ submitLead }: Props) {
       <div className="mx-auto max-w-xl px-4 py-12 sm:py-16">
         <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent-soft px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-accent">
           <Trophy className="h-3 w-3" />
-          Your result is ready
+          Your eligibility is ready
         </div>
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          Where should we send it?
+          Where should we send your confirmation?
         </h2>
         <p className="mt-3 text-sm text-fg-muted sm:text-base">
-          We'll show your result on this page + email a copy you can come back to. One email. No
-          spam. Unsubscribe any time.
+          If you're eligible, we'll email your confirmation immediately so you can join the cohort.
+          One email. No spam. Unsubscribe any time.
         </p>
 
         <div className="mt-8 space-y-4">
@@ -263,11 +263,11 @@ export function QuizPlayer({ submitLead }: Props) {
             {submitPending ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Scoring…
+                Checking eligibility…
               </>
             ) : (
               <>
-                Show me my result
+                Check my eligibility
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </>
             )}
@@ -281,6 +281,21 @@ export function QuizPlayer({ submitLead }: Props) {
   const { score, bucket } = scoreAnswers(answers)
   return (
     <div className="mx-auto max-w-2xl px-4 py-12 sm:py-16">
+      {/* ── Congratulations banner ─ shown to everyone who completes ── */}
+      <div className="mb-10 overflow-hidden rounded-2xl border-2 border-success/50 bg-success/10 p-6 text-center sm:p-8">
+        <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-success/40 bg-success/20 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-success">
+          <CheckCircle2 className="h-3 w-3" />
+          Eligible · cohort access unlocked
+        </div>
+        <h1 className="text-3xl font-semibold tracking-tight text-fg sm:text-4xl">
+          🎉 Congratulations, {name.split(' ')[0]} — you're eligible to join the cohort.
+        </h1>
+        <p className="mt-3 text-sm text-fg-muted sm:text-base">
+          A confirmation email is on its way to <span className="font-medium text-fg">{email}</span>
+          . You can now reserve your seat in the next cohort.
+        </p>
+      </div>
+
       <div className="text-center">
         <div className="mb-4 inline-flex h-20 w-20 items-center justify-center rounded-full border border-accent/40 bg-accent-soft/60 text-5xl">
           {bucket.emoji}

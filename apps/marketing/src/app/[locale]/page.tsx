@@ -37,7 +37,7 @@ const COPY = {
     subtitle:
       'A 45-day offline cohort backed by a 24/7 AI tutor — built for India (iA26, Hyderabad · 1 June) and Saudi Arabia (sA26, Riyadh · 1 July). Real classroom, real instructors, real placement support. Bilingual EN + AR.',
     primaryCta: 'Join the cohort',
-    secondaryCta: 'Take the 2-minute quiz',
+    secondaryCta: 'Take the eligibility test',
     pillIndia: '🇮🇳 iA26 · India · ₹24,999',
     pillKsa: '🇸🇦 sA26 · KSA · SAR 4,999',
     trustLabel: 'Curriculum built on the regulations that govern your work',
@@ -287,7 +287,7 @@ const COPY = {
     subtitle:
       'دفعة دراسية حضورية لمدة ٤٥ يومًا مدعومة بمدرس ذكي على مدار الساعة — للهند (iA26، حيدر آباد · ١ يونيو) والسعودية (sA26، الرياض · ١ يوليو). فصل حقيقي ومدربون حقيقيون ودعم توظيف. ثنائي اللغة عربي + إنجليزي.',
     primaryCta: 'انضم إلى الدفعة',
-    secondaryCta: 'خذ اختبار الدقيقتين',
+    secondaryCta: 'خذ اختبار الأهلية',
     pillIndia: '🇮🇳 iA26 · الهند · ₹24,999',
     pillKsa: '🇸🇦 sA26 · السعودية · SAR 4,999',
     trustLabel: 'منهج مبني على الأنظمة التي تحكم عملك',
