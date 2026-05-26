@@ -23,6 +23,8 @@ import {
   validateDiscountCode,
 } from '@/lib/cohort/store'
 import { createMarketingLead } from '@/lib/data/leads'
+import { planRedemption as planSAPointsRedemption } from '@/lib/loyalty/conversion'
+import { getWalletBalance } from '@/lib/loyalty/store'
 import { cn } from '@/lib/utils'
 import type { SupportedLocale } from '@sa/i18n'
 import {
@@ -69,7 +71,15 @@ export default async function CohortPage({
 
   // Fetch every active cohort. The applicant picks their track in the
   // form; the chosen cohort's price + currency drives Razorpay.
-  const [cohorts, paidSeats] = await Promise.all([getActiveCohorts(), getPaidSeatCounts()])
+  const [cohorts, paidSeats, initialWalletBalance] = await Promise.all([
+    getActiveCohorts(),
+    getPaidSeatCounts(),
+    session?.user?.id
+      ? getWalletBalance(session.user.id)
+          .then((b) => b.available)
+          .catch(() => 0)
+      : Promise.resolve(0),
+  ])
   const indianCohort = cohorts.find((c) => c.track === 'india') ?? null
   const primaryCohort = indianCohort ?? cohorts[0] ?? null
   const now = Date.now()
@@ -114,6 +124,45 @@ export default async function CohortPage({
     }
   }
 
+  /**
+   * Preview action — UI calls this to ask "given my balance + this
+   * cohort total, how much can I redeem if I want to spend N points?"
+   * Pure read; idempotent. Returns 0/0 if the user isn't signed in.
+   */
+  async function previewSACash(input: {
+    cohortId: string
+    requestedPoints: number
+  }): Promise<{
+    walletBalance: number
+    pointsToDebit: number
+    discountMinor: number
+  }> {
+    'use server'
+    try {
+      const s = await auth()
+      if (!s?.user?.id) return { walletBalance: 0, pointsToDebit: 0, discountMinor: 0 }
+      const target = await getCohortById(input.cohortId)
+      if (!target || target.status !== 'open') {
+        return { walletBalance: 0, pointsToDebit: 0, discountMinor: 0 }
+      }
+      const balance = await getWalletBalance(s.user.id)
+      const plan = planSAPointsRedemption({
+        requestedPoints: input.requestedPoints,
+        walletBalance: balance.available,
+        orderTotalMinor: target.discountedPriceMinor,
+        currency: target.currency,
+      })
+      return {
+        walletBalance: balance.available,
+        pointsToDebit: plan.pointsToDebit,
+        discountMinor: plan.discountMinor,
+      }
+    } catch (err) {
+      console.error('[previewSACash] failed', { cohortId: input.cohortId, err })
+      return { walletBalance: 0, pointsToDebit: 0, discountMinor: 0 }
+    }
+  }
+
   async function createOrder(input: {
     cohortId: string
     name: string
@@ -123,6 +172,8 @@ export default async function CohortPage({
     discountCode?: string | null
     /** 'full' (default) or 'installment-2'. Installments are INR-only for now. */
     paymentPlan?: PaymentPlan
+    /** SA Points the user wants to spend. Server re-validates against wallet. */
+    saPointsRequested?: number
   }) {
     'use server'
     try {
@@ -162,11 +213,44 @@ export default async function CohortPage({
           appliedCode = res.code
         }
       }
-      const chargeAmountMinor = firstInstallmentAmount({
+      let chargeAmountMinor = firstInstallmentAmount({
         plan: paymentPlan,
         fullAmountMinor: totalAmountMinor,
         currency: target.currency,
       })
+
+      // SA Cash redemption — only on 'full' payment plan, mutually
+      // exclusive with discount codes. The UI enforces this too but we
+      // re-check here. Re-fetch the live wallet balance and re-plan to
+      // avoid trusting client-provided numbers.
+      let saPointsToDebit = 0
+      let saDiscountMinor = 0
+      const reqPoints = Math.max(0, Math.floor(input.saPointsRequested ?? 0))
+      if (reqPoints > 0 && !input.discountCode && paymentPlan === 'full') {
+        const s2 = await auth()
+        if (s2?.user?.id) {
+          const balance = await getWalletBalance(s2.user.id)
+          const plan = planSAPointsRedemption({
+            requestedPoints: reqPoints,
+            walletBalance: balance.available,
+            orderTotalMinor: chargeAmountMinor,
+            currency: target.currency,
+          })
+          saPointsToDebit = plan.pointsToDebit
+          saDiscountMinor = plan.discountMinor
+          chargeAmountMinor = Math.max(0, chargeAmountMinor - saDiscountMinor)
+        }
+      }
+      // 100%-off via SA Cash isn't supported on this path — fall through
+      // to Razorpay with a ₹1 minimum, or extend an enrollFreeSACash
+      // helper later. For MVP we cap the debit so chargeAmountMinor
+      // stays ≥ 100 (1 currency unit) to keep Razorpay happy.
+      if (chargeAmountMinor < 100 && saDiscountMinor > 0) {
+        const shortfall = 100 - chargeAmountMinor
+        saDiscountMinor -= shortfall
+        saPointsToDebit = Math.floor(saDiscountMinor / 100) * (target.currency === 'SAR' ? 22 : 1)
+        chargeAmountMinor = 100
+      }
 
       // Atomically consume one use of the code BEFORE creating the
       // Razorpay order — this is the race-safe boundary. A failed
@@ -226,6 +310,8 @@ export default async function CohortPage({
         originalAmountMinor: appliedCode ? target.discountedPriceMinor : null,
         paymentPlan,
         totalAmountMinor,
+        saPointsRequested: saPointsToDebit,
+        saPointsDiscountMinor: saDiscountMinor,
       })
 
       return {
@@ -833,6 +919,8 @@ export default async function CohortPage({
                 verifyPayment={verifyPayment}
                 applyDiscountCode={applyDiscountCode}
                 enrollFree={enrollFree}
+                previewSACash={previewSACash}
+                initialWalletBalance={initialWalletBalance}
               />
             ) : (
               <div className="rounded-2xl border border-border bg-bg-elev/40 p-6 sm:p-8">

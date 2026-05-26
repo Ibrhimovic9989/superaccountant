@@ -184,6 +184,10 @@ export async function upsertPendingApplication(input: {
   paymentPlan?: PaymentPlan
   /** Full cohort fee (used as totalAmountMinor on the application row). */
   totalAmountMinor?: number
+  /** SA Points the user chose to spend. Debited on payment.captured. */
+  saPointsRequested?: number
+  /** Discount in minor units those SA Points produced. For receipts. */
+  saPointsDiscountMinor?: number
 }): Promise<string> {
   const id = randomUUID()
   const discountCode = input.discountCode?.toLowerCase() ?? null
@@ -191,12 +195,15 @@ export async function upsertPendingApplication(input: {
   const originalAmountMinor = input.originalAmountMinor ?? null
   const paymentPlan: PaymentPlan = input.paymentPlan ?? 'full'
   const totalAmountMinor = input.totalAmountMinor ?? input.amountMinor
+  const saPointsRequested = input.saPointsRequested ?? 0
+  const saPointsDiscountMinor = input.saPointsDiscountMinor ?? 0
   await prisma.$executeRaw`
     INSERT INTO "CohortApplication" (
       "id", "cohortId", "name", "email", "phone", "jobGoal",
       "status", "razorpayOrderId", "amountMinor", "currency",
       "discountCode", "discountPercent", "originalAmountMinor",
-      "paymentPlan", "totalAmountMinor", "paidAmountMinor"
+      "paymentPlan", "totalAmountMinor", "paidAmountMinor",
+      "saPointsRequested", "saPointsDiscountMinor"
     ) VALUES (
       ${id},
       ${input.cohortId},
@@ -213,7 +220,9 @@ export async function upsertPendingApplication(input: {
       ${originalAmountMinor},
       ${paymentPlan},
       ${totalAmountMinor},
-      ${0}
+      ${0},
+      ${saPointsRequested},
+      ${saPointsDiscountMinor}
     )
     ON CONFLICT ("cohortId", "email") DO UPDATE SET
       "name" = EXCLUDED."name",
@@ -227,6 +236,8 @@ export async function upsertPendingApplication(input: {
       "originalAmountMinor" = EXCLUDED."originalAmountMinor",
       "paymentPlan" = EXCLUDED."paymentPlan",
       "totalAmountMinor" = EXCLUDED."totalAmountMinor",
+      "saPointsRequested" = EXCLUDED."saPointsRequested",
+      "saPointsDiscountMinor" = EXCLUDED."saPointsDiscountMinor",
       -- Reset to pending only if not yet paid; preserve paid state.
       "status" = CASE WHEN "CohortApplication"."status" = 'paid'
                       THEN "CohortApplication"."status"

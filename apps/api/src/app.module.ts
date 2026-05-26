@@ -8,6 +8,8 @@ import { LearningModule } from './contexts/learning/learning.module'
 import { TutoringModule } from './contexts/tutoring/tutoring.module'
 import { CertificationModule } from './contexts/certification/certification.module'
 import { NotificationsModule } from './contexts/notifications/notifications.module'
+import { LoyaltyModule } from './contexts/loyalty/loyalty.module'
+import { CareersModule } from './contexts/careers/careers.module'
 
 /**
  * Global throttler. Per-IP rate limits applied to every controller.
@@ -33,6 +35,8 @@ import { NotificationsModule } from './contexts/notifications/notifications.modu
     TutoringModule,
     CertificationModule,
     NotificationsModule,
+    LoyaltyModule,
+    CareersModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

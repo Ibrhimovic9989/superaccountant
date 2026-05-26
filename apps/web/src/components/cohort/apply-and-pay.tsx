@@ -1,7 +1,15 @@
 'use client'
 
 import { BorderBeam } from '@/components/magicui/border-beam'
-import { ArrowRight, CheckCircle2, CreditCard, Loader2, LogIn, ShieldCheck } from 'lucide-react'
+import {
+  ArrowRight,
+  CheckCircle2,
+  CreditCard,
+  Loader2,
+  LogIn,
+  ShieldCheck,
+  Wallet,
+} from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState, useTransition } from 'react'
@@ -65,6 +73,7 @@ type Props = {
     goal: string
     discountCode?: string | null
     paymentPlan?: 'full' | 'installment-2'
+    saPointsRequested?: number
   }) => Promise<CreateOrderResponse>
   verifyPayment: (input: {
     razorpayOrderId: string
@@ -82,6 +91,14 @@ type Props = {
     goal: string
     code: string
   }) => Promise<EnrollFreeResponse>
+  /** Read-only preview of how many points to debit + resulting discount. */
+  previewSACash: (input: { cohortId: string; requestedPoints: number }) => Promise<{
+    walletBalance: number
+    pointsToDebit: number
+    discountMinor: number
+  }>
+  /** SSR-fetched wallet balance so the UI doesn't flash 0. */
+  initialWalletBalance: number
 }
 
 const GOAL_OPTIONS = [
@@ -124,6 +141,8 @@ export function ApplyAndPay({
   verifyPayment,
   applyDiscountCode,
   enrollFree,
+  previewSACash,
+  initialWalletBalance,
 }: Props) {
   const router = useRouter()
 
@@ -142,6 +161,8 @@ export function ApplyAndPay({
       verifyPayment={verifyPayment}
       applyDiscountCode={applyDiscountCode}
       enrollFree={enrollFree}
+      previewSACash={previewSACash}
+      initialWalletBalance={initialWalletBalance}
     />
   )
 }
@@ -212,6 +233,8 @@ function AuthedFormBody({
   verifyPayment,
   applyDiscountCode,
   enrollFree,
+  previewSACash,
+  initialWalletBalance,
   initialCohort,
 }: AuthedFormBodyProps) {
   const [selectedId, setSelectedId] = useState(initialCohort.id)
@@ -228,21 +251,59 @@ function AuthedFormBody({
   // when no discount is applied (discount + installment is mutually
   // exclusive; the server enforces the same rule).
   const [paymentPlan, setPaymentPlan] = useState<'full' | 'installment-2'>('full')
+  // SA Cash redemption. Mutually exclusive with discount codes and with
+  // installment plans (full payment only). Toggling on triggers a server
+  // preview to compute the actual discount; until then we show 0.
+  const [walletBalance, setWalletBalance] = useState(initialWalletBalance)
+  const [useSACash, setUseSACash] = useState(false)
+  const [saRedemption, setSaRedemption] = useState({ pointsToDebit: 0, discountMinor: 0 })
 
   const installmentsAllowed = cohort.track === 'india' && !applied
   const effectivePlan: 'full' | 'installment-2' = installmentsAllowed ? paymentPlan : 'full'
+  const saCashAllowed = !applied && effectivePlan === 'full' && walletBalance > 0
 
   // Effective price for display + Razorpay charge amount.
   const fullPriceMinor = applied ? applied.finalAmountMinor : cohort.amountMinor
-  const chargeAmountMinor =
+  const baseChargeMinor =
     effectivePlan === 'installment-2' && cohort.currency === 'INR'
       ? INSTALLMENT_FIRST_INR_MINOR
       : fullPriceMinor
+  // Apply SA Cash discount after the installment-vs-full calc. Floor at
+  // 100 minor (1 currency unit) so Razorpay can still accept the order.
+  const saDiscountApplied = useSACash && saCashAllowed ? saRedemption.discountMinor : 0
+  const chargeAmountMinor = Math.max(100, baseChargeMinor - saDiscountApplied)
   const effectivePriceLabel = formatMinor(chargeAmountMinor, cohort.currency)
   const fullPriceLabel = applied ? formatMinor(fullPriceMinor, cohort.currency) : cohort.priceLabel
   const discountPct = Math.round(
     ((cohort.originalPriceMinor - fullPriceMinor) / cohort.originalPriceMinor) * 100,
   )
+
+  // Server preview of SA Cash redemption. Fires when the user toggles
+  // SA Cash on, when they switch cohorts (different price/currency), or
+  // when their wallet balance changes. Pure read; safe to call repeatedly.
+  useEffect(() => {
+    if (!useSACash || !saCashAllowed) {
+      setSaRedemption({ pointsToDebit: 0, discountMinor: 0 })
+      return
+    }
+    let cancelled = false
+    ;(async () => {
+      try {
+        const r = await previewSACash({
+          cohortId: cohort.id,
+          requestedPoints: walletBalance,
+        })
+        if (cancelled) return
+        setWalletBalance(r.walletBalance)
+        setSaRedemption({ pointsToDebit: r.pointsToDebit, discountMinor: r.discountMinor })
+      } catch {
+        if (!cancelled) setSaRedemption({ pointsToDebit: 0, discountMinor: 0 })
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [useSACash, saCashAllowed, cohort.id, walletBalance, previewSACash])
 
   // Lazy-load Razorpay Checkout once on mount.
   useEffect(() => {
@@ -269,6 +330,8 @@ function AuthedFormBody({
     setSelectedId(id)
     setApplied(null)
     setPaymentPlan('full')
+    setUseSACash(false)
+    setSaRedemption({ pointsToDebit: 0, discountMinor: 0 })
     setError(null)
   }
 
@@ -308,6 +371,8 @@ function AuthedFormBody({
         goal,
         discountCode: applied?.code ?? null,
         paymentPlan: effectivePlan,
+        saPointsRequested:
+          useSACash && saCashAllowed ? saRedemption.pointsToDebit : 0,
       })
       if (!order.keyId) {
         throw new Error('Payments not configured — set NEXT_PUBLIC_RAZORPAY_KEY_ID.')
@@ -569,6 +634,63 @@ function AuthedFormBody({
           applyDiscountCode={applyDiscountCode}
         />
       </div>
+
+      {/* ─── SA Cash (loyalty redemption) ─────────────────────── */}
+      {walletBalance > 0 && (
+        <div className="mt-4">
+          <label
+            className={`flex cursor-pointer items-start gap-3 rounded-xl border-2 p-4 transition-colors ${
+              useSACash && saCashAllowed
+                ? 'border-success bg-success/10'
+                : 'border-border bg-bg-elev/50 hover:border-border-strong'
+            } ${!saCashAllowed ? 'cursor-not-allowed opacity-60' : ''}`}
+          >
+            <input
+              type="checkbox"
+              className="mt-0.5 h-4 w-4 shrink-0 accent-success"
+              checked={useSACash && saCashAllowed}
+              disabled={!saCashAllowed}
+              onChange={(e) => setUseSACash(e.target.checked)}
+            />
+            <div className="flex-1">
+              <div className="flex items-center justify-between gap-2">
+                <span className="flex items-center gap-1.5 text-sm font-semibold text-fg">
+                  <Wallet className="h-4 w-4 text-success" />
+                  Use SA Cash
+                </span>
+                <span className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+                  Wallet · {walletBalance.toLocaleString()} SA
+                </span>
+              </div>
+              {useSACash && saCashAllowed && saRedemption.discountMinor > 0 ? (
+                <p className="mt-1.5 text-xs text-fg-muted">
+                  Spending{' '}
+                  <strong className="text-fg">
+                    {saRedemption.pointsToDebit.toLocaleString()} SA
+                  </strong>{' '}
+                  →{' '}
+                  <strong className="text-success">
+                    −{formatMinor(saRedemption.discountMinor, cohort.currency)} off
+                  </strong>
+                  . You can change your mind before paying.
+                </p>
+              ) : !saCashAllowed ? (
+                <p className="mt-1.5 text-xs text-fg-subtle">
+                  {applied
+                    ? 'SA Cash can\'t stack with a discount code. Remove the code to use SA Cash.'
+                    : effectivePlan === 'installment-2'
+                      ? 'SA Cash is only available on the full-payment plan.'
+                      : 'No SA Cash available.'}
+                </p>
+              ) : (
+                <p className="mt-1.5 text-xs text-fg-muted">
+                  1 SA = ₹1 INR · 22 SA = ﷼1 SAR. You can redeem up to 100% of this cohort's fee.
+                </p>
+              )}
+            </div>
+          </label>
+        </div>
+      )}
 
       {error && (
         <p className="mt-4 rounded-lg border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">

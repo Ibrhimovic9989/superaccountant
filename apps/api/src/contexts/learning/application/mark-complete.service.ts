@@ -13,8 +13,10 @@
  * doubling on each subsequent revisit (Leitner-style).
  */
 
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { prisma } from '@sa/db'
+import { LoyaltyService } from '../../loyalty/application/loyalty.service'
+import { LOYALTY_SERVICE } from '../../loyalty/interface/loyalty.controller'
 
 export type CompleteArgs = {
   userId: string
@@ -38,6 +40,8 @@ export type CompleteResult = {
 
 @Injectable()
 export class MarkCompleteService {
+  constructor(@Inject(LOYALTY_SERVICE) private readonly loyalty: LoyaltyService) {}
+
   async execute(args: CompleteArgs): Promise<CompleteResult> {
     const lesson = await prisma.curriculumLesson.findUnique({
       where: { slug: args.lessonSlug },
@@ -103,6 +107,41 @@ export class MarkCompleteService {
           lastReviewedAt: now,
           nextDueAt: nextDue,
         },
+      })
+    }
+
+    // ── Phase-completion milestone ─────────────────────────────
+    // After this lesson is recorded, check whether ALL lessons in the
+    // same phase now have progress rows for this enrollment. If so,
+    // credit 200 SA points for completing the phase. Idempotent —
+    // the (userId, phase_complete:<phaseId>) UNIQUE prevents a second
+    // credit if the user revisits a lesson after the phase is done.
+    try {
+      const phase = lesson.module.phase
+      const phaseLessons = await prisma.curriculumLesson.findMany({
+        where: { module: { phaseId: phase.id } },
+        select: { id: true },
+      })
+      if (phaseLessons.length > 0) {
+        const completedInPhase = await prisma.learningProgress.count({
+          where: {
+            enrollmentId: enrollment.id,
+            lessonId: { in: phaseLessons.map((l) => l.id) },
+          },
+        })
+        if (completedInPhase >= phaseLessons.length) {
+          await this.loyalty.creditMilestone({
+            userId: args.userId,
+            milestoneType: 'phase_complete',
+            context: { phaseId: phase.id, phaseName: phase.titleEn },
+          })
+        }
+      }
+    } catch (err) {
+      console.error('[mark-complete] phase milestone credit failed', {
+        userId: args.userId,
+        lessonSlug: args.lessonSlug,
+        err,
       })
     }
 

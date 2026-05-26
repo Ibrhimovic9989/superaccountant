@@ -1,6 +1,7 @@
 import { AppNav } from '@/components/app-nav'
 import { MissedDaysBanner } from '@/components/dashboard/missed-days-banner'
 import { StudyPlanCalendar } from '@/components/dashboard/study-plan-calendar'
+import { WalletTile } from '@/components/dashboard/wallet-tile'
 import { LevelRing } from '@/components/gamification/level-ring'
 import { StreakLadder } from '@/components/gamification/streak-ladder'
 import { XpBar } from '@/components/gamification/xp-bar'
@@ -16,6 +17,7 @@ import { GlowCard } from '@/components/ui/glow-card'
 import { auth } from '@/lib/auth'
 import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
 import { formatPrice, getApplicationWithBalance } from '@/lib/cohort/store'
+import { getWalletBalance } from '@/lib/loyalty/store'
 import { type Badge as AchievementBadge, getAchievements } from '@/lib/data/achievements'
 import { getDashboardSnapshot } from '@/lib/data/dashboard'
 import { CURRENT_TERMS_VERSION, getUserProfile } from '@/lib/data/profile'
@@ -58,13 +60,18 @@ export default async function Dashboard({
   const tier = await getAccessTier(session.user.id)
   if (!hasFullAccess(tier)) redirect(`/${locale}/cohort`)
 
-  const [snap, badges, balanceApp, plan] = await Promise.all([
+  const [snap, badges, balanceApp, plan, wallet] = await Promise.all([
     getDashboardSnapshot(session.user.id),
     getAchievements(session.user.id, u.preferredTrack),
     session.user.email
       ? getApplicationWithBalance(session.user.email).catch(() => null)
       : Promise.resolve(null),
     getStudyPlan(session.user.id),
+    getWalletBalance(session.user.id).catch(() => ({
+      available: 0,
+      pendingExpiry: 0,
+      lifetimeEarned: 0,
+    })),
   ])
   const outstandingMinor = balanceApp
     ? Math.max(0, balanceApp.totalAmountMinor - balanceApp.paidAmountMinor)
@@ -350,6 +357,18 @@ export default async function Dashboard({
             />
           </div>
         </BlurFade>
+
+        {/* ── SA Cash wallet — hidden until first credit ─────── */}
+        {wallet.lifetimeEarned > 0 && (
+          <BlurFade delay={0.21}>
+            <div className="mt-4">
+              <WalletTile
+                available={wallet.available}
+                lifetimeEarned={wallet.lifetimeEarned}
+              />
+            </div>
+          </BlurFade>
+        )}
 
         {/* ── Study plan calendar ──────────────────────────── */}
         <BlurFade delay={0.22}>

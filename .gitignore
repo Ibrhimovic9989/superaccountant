@@ -54,3 +54,11 @@ contexts/curriculum/seed/**/generated/
 
 # Internal handoff docs with credentials — never commit
 docs/INTERNAL-*.md
+
+# Masterclass operational artifacts — registrant PII / one-off assets.
+# Never commit: the responses CSV is 49 people's names/emails/phones.
+*Registration (Responses)*.csv
+*Form Responses*.csv
+pngposter.jpeg
+preview-masterclass-reminder.html
+.playwright-mcp/

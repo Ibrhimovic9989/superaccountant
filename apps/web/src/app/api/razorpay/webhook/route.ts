@@ -4,6 +4,7 @@ import {
   markApplicationPaidByWebhook,
   markApplicationRefundedByPaymentId,
 } from '@/lib/cohort/store'
+import { commitRedemption, getSaCashContextForOrder } from '@/lib/loyalty/store'
 import { type NextRequest, NextResponse } from 'next/server'
 
 /**
@@ -61,6 +62,29 @@ export async function POST(request: NextRequest) {
             razorpayOrderId: p.order_id,
             razorpayPaymentId: p.id,
           })
+
+          // If this order had an SA Cash redemption attached, debit the
+          // wallet now that the payment is confirmed. Idempotent — a
+          // webhook retry hits the partial UNIQUE on LoyaltyLedgerEntry
+          // and returns the existing debit's id.
+          try {
+            const sa = await getSaCashContextForOrder(p.order_id)
+            if (sa) {
+              await commitRedemption({
+                userId: sa.userId,
+                points: sa.saPointsRequested,
+                cohortApplicationId: sa.applicationId,
+              })
+            }
+          } catch (debitErr) {
+            // Log but don't fail the webhook — the payment is real
+            // regardless. Worst case the user keeps their points and
+            // pays the full amount; an admin can debit manually.
+            console.error('[razorpay-webhook] SA Cash debit failed', {
+              orderId: p.order_id,
+              err: debitErr,
+            })
+          }
         }
         break
       }

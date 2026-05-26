@@ -9,9 +9,10 @@ import { DailyAssignmentService } from './application/daily-assignment.service'
 import { GRAND_TEST_SERVICE, GrandTestController } from './interface/grand-test.controller'
 import { GrandTestService } from './application/grand-test.service'
 import { CertificationModule } from '../certification/certification.module'
+import { LoyaltyModule } from '../loyalty/loyalty.module'
 
 @Module({
-  imports: [CertificationModule],
+  imports: [CertificationModule, LoyaltyModule],
   controllers: [EntryTestController, DailyAssignmentController, GrandTestController],
   providers: [
     { provide: ENTRY_TEST_SERVICE, useClass: EntryTestService },

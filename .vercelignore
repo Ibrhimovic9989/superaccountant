@@ -29,3 +29,14 @@ test-results
 
 # Heavy claude-code reference checkout we keep around for codebase studies.
 claude-code
+
+# Masterclass operational artifacts — registrant PII / one-off assets.
+# Never upload to Vercel.
+*Registration (Responses)*.csv
+*Form Responses*.csv
+pngposter.jpeg
+preview-masterclass-reminder.html
+.playwright-mcp
+scripts/send-masterclass-reminder.mjs
+scripts/send-masterclass-plain.mjs
+scripts/send-whatsapp-reminder.mjs

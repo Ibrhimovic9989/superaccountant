@@ -10,8 +10,10 @@
  * not by the model. The proctoring agent (audit logging) lives behind a flag.
  */
 
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { prisma } from '@sa/db'
+import { LoyaltyService } from '../../loyalty/application/loyalty.service'
+import { LOYALTY_SERVICE } from '../../loyalty/interface/loyalty.controller'
 
 const TARGET_QUESTIONS = 30
 const PASS_THRESHOLD = 0.7
@@ -52,6 +54,8 @@ export type SubmitGrandResult = {
 
 @Injectable()
 export class GrandTestService {
+  constructor(@Inject(LOYALTY_SERVICE) private readonly loyalty: LoyaltyService) {}
+
   async start(args: { userId: string }): Promise<StartGrandResult> {
     const user = await prisma.identityUser.findUnique({
       where: { id: args.userId },
@@ -163,6 +167,25 @@ export class GrandTestService {
         } as unknown as object,
       },
     })
+
+    // Credit the grand_test_pass loyalty milestone. Idempotent — the
+    // (userId, 'grand_test_pass') UNIQUE index means a user only gets
+    // this 1000 SA reward once across all attempts. Catch + log on
+    // failure so a loyalty hiccup doesn't break test grading.
+    if (passed) {
+      try {
+        await this.loyalty.creditMilestone({
+          userId: args.userId,
+          milestoneType: 'grand_test_pass',
+        })
+      } catch (err) {
+        console.error('[grand-test] failed to credit grand_test_pass milestone', {
+          userId: args.userId,
+          attemptId: attempt.id,
+          err,
+        })
+      }
+    }
 
     return {
       attemptId: attempt.id,
