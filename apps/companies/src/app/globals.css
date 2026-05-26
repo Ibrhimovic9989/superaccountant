@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/**
+ * SuperAccountant — companies app. Lean copy of the web app's design
+ * tokens (same violet-on-zinc dark theme) so the B2B surface stays
+ * visually consistent with app.superaccountant.in.
+ */
+
+@theme {
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  --color-bg: var(--bg);
+  --color-bg-elev: var(--bg-elev);
+  --color-bg-overlay: var(--bg-overlay);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+}
+
+:root {
+  --bg: oklch(0.13 0 0);
+  --bg-elev: oklch(0.16 0 0);
+  --bg-overlay: oklch(0.18 0 0);
+  --fg: oklch(0.97 0 0);
+  --fg-muted: oklch(0.65 0 0);
+  --fg-subtle: oklch(0.5 0 0);
+  --border: oklch(0.22 0 0);
+  --border-strong: oklch(0.3 0 0);
+  --accent: oklch(0.68 0.22 280);
+  --accent-fg: oklch(0.13 0 0);
+  --accent-soft: oklch(0.22 0.06 280);
+  --success: oklch(0.7 0.2 145);
+  --warning: oklch(0.78 0.18 75);
+  --danger: oklch(0.68 0.24 25);
+  color-scheme: dark;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
