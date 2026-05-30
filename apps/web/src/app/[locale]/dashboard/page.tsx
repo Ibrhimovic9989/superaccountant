@@ -359,16 +359,15 @@ export default async function Dashboard({
         </BlurFade>
 
         {/* ── SA Cash wallet — hidden until first credit ─────── */}
-        {wallet.lifetimeEarned > 0 && (
-          <BlurFade delay={0.21}>
-            <div className="mt-4">
-              <WalletTile
-                available={wallet.available}
-                lifetimeEarned={wallet.lifetimeEarned}
-              />
-            </div>
-          </BlurFade>
-        )}
+        <BlurFade delay={0.21}>
+          <div className="mt-4">
+            <WalletTile
+              locale={locale}
+              available={wallet.available}
+              lifetimeEarned={wallet.lifetimeEarned}
+            />
+          </div>
+        </BlurFade>
 
         {/* ── Study plan calendar ──────────────────────────── */}
         <BlurFade delay={0.22}>
