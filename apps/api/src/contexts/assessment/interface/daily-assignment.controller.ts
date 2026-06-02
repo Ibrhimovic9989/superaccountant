@@ -20,6 +20,12 @@ const GenerateBody = z.object({
   userId: z.string().min(1).optional(),
 })
 
+const SubmitBody = z.object({
+  userId: z.string().min(1),
+  attemptId: z.string().min(1),
+  answers: z.record(z.string()),
+})
+
 /**
  * Cron-callable. Supabase scheduled functions hit POST /assignments/generate-daily
  * with the X-Cron-Secret header set to env.CRON_SECRET (or NEXTAUTH_SECRET as fallback).
@@ -56,5 +62,15 @@ export class DailyAssignmentController {
   async today(@Query('userId') userId: string | undefined) {
     if (!userId) throw new BadRequestException('userId required')
     return (await this.service.getToday(userId)) ?? { items: [], itemCount: 0 }
+  }
+
+  @Post('submit')
+  async submit(@Body() body: unknown) {
+    try {
+      const parsed = SubmitBody.parse(body)
+      return await this.service.submit(parsed)
+    } catch (err) {
+      throw new BadRequestException((err as Error).message)
+    }
   }
 }
