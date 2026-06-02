@@ -177,6 +177,10 @@ model CurriculumLesson {
   contentArMdx        String   @db.Text
   learningObjectives  Json     // string[]
   prerequisiteIds     String[] @default([])
+  /// Slugs of practical software-guide pages (Tally / Zoho / QuickBooks)
+  /// shown under a "See this in practice" panel on the lesson page.
+  /// Populated via packages/db/scripts/seed-related-guides.mjs.
+  relatedGuideSlugs   String[] @default([])
   videoUrl            String?
   flowchartMermaid    String?  @db.Text
   mindmapMermaid      String?  @db.Text

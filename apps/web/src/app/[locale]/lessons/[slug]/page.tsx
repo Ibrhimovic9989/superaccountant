@@ -1,10 +1,11 @@
 import { AppNav } from '@/components/app-nav'
 import { LessonShell } from '@/components/lesson/lesson-shell'
+import { PracticalLinks } from '@/components/lesson/practical-links'
 import { SaPointsHint } from '@/components/loyalty/sa-points-hint'
 import { PageBackdrop } from '@/components/page-backdrop'
 import { auth } from '@/lib/auth'
 import { getAccessTier, hasFullAccess } from '@/lib/cohort/access'
-import { getLessonBySlug } from '@/lib/data/lessons'
+import { getGuideStubsBySlug, getLessonBySlug } from '@/lib/data/lessons'
 import { getPhaseProgressForLesson } from '@/lib/loyalty/phase-progress'
 import { notFound, redirect } from 'next/navigation'
 
@@ -53,6 +54,7 @@ export default async function LessonPage({
             currentLessonSlug: slug,
           }}
         />
+        <PracticalLinks locale={locale} guides={getGuideStubsBySlug(lesson.relatedGuideSlugs)} />
       </main>
     </div>
   )
