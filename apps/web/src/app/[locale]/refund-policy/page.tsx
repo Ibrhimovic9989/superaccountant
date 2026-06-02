@@ -1,6 +1,8 @@
 import { Logo } from '@/components/brand/logo'
 import { BlurFade } from '@/components/magicui/blur-fade'
+import { buildPublicMetadata } from '@/lib/seo/public-metadata'
 import type { SupportedLocale } from '@sa/i18n'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 
 /**
@@ -9,10 +11,19 @@ import Link from 'next/link'
  * friendly language, India consumer-protection compliant.
  */
 
-export const metadata = {
-  title: 'Refund & Cancellation Policy · Superaccountant',
-  description:
-    'Refund and cancellation terms for Superaccountant cohort enrolments. 7-day cooling-off, cohort cancellation rules, and how to request a refund.',
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: SupportedLocale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  return buildPublicMetadata({
+    locale,
+    path: '/refund-policy',
+    title: 'Refund & Cancellation Policy',
+    description:
+      'Refund and cancellation terms for Superaccountant cohort enrolments. 7-day cooling-off, cohort cancellation rules, and how to request a refund.',
+  })
 }
 
 const COPY = {

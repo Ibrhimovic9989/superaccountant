@@ -1,7 +1,7 @@
-import { notFound } from 'next/navigation'
+import { LOCALES, type SupportedLocale, dirFor } from '@sa/i18n'
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
-import { LOCALES, dirFor, type SupportedLocale } from '@sa/i18n'
+import { notFound } from 'next/navigation'
 import '../globals.css'
 
 const SITE_URL = process.env.NEXTAUTH_URL ?? 'https://app.superaccountant.in'
@@ -43,7 +43,9 @@ export const metadata: Metadata = {
     title: 'SuperAccountant',
     description: 'AI tutor for accountants — India and KSA',
   },
-  // The app surfaces are gated behind auth — keep them out of search indexes.
+  // Default to noindex — every public page opts back in via its own
+  // `metadata.robots`. The list of gated tails is also enforced by
+  // robots.ts. This is the safety net.
   robots: { index: false, follow: false },
 }
 
@@ -68,6 +70,26 @@ export default async function LocaleLayout({
   if (!LOCALES.includes(locale as SupportedLocale)) notFound()
   const dir = dirFor(locale as SupportedLocale)
 
+  const orgJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'SuperAccountant',
+    alternateName: 'Superaccountant',
+    url: SITE_URL,
+    logo: `${SITE_URL}/icon.png`,
+    description:
+      'Bilingual (English / Arabic) AI tutor for accountants. India + KSA tracks covering GST, TDS, ZATCA, VAT, Zakat, IFRS, and Ind AS.',
+    sameAs: [],
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        contactType: 'customer support',
+        email: 'info@superaccountant.in',
+        availableLanguage: ['English', 'Arabic', 'Hindi'],
+      },
+    ],
+  }
+
   return (
     <html
       lang={locale}
@@ -75,7 +97,14 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${mono.variable}`}
     >
-      <body className="overflow-x-hidden">{children}</body>
+      <body className="overflow-x-hidden">
+        {children}
+        <script
+          type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: server-rendered, static JSON-LD
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
+      </body>
     </html>
   )
 }

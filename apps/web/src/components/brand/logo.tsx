@@ -16,9 +16,16 @@ import * as React from 'react'
 type MarkProps = {
   size?: number
   className?: string
+  /**
+   * Hint to the browser that this Logomark is the LCP element on the
+   * page (top of the cohort hero, sign-in card, etc.). Sets
+   * `fetchPriority="high"` so the request races CSS for the critical
+   * path. Default `false`; only set true above the fold.
+   */
+  priority?: boolean
 }
 
-export function Logomark({ size = 28, className }: MarkProps) {
+export function Logomark({ size = 28, className, priority = false }: MarkProps) {
   return (
     <img
       src={LOGO_URL}
@@ -28,8 +35,10 @@ export function Logomark({ size = 28, className }: MarkProps) {
       className={cn('shrink-0 object-contain', className)}
       // The logo is decorative when paired with the Wordmark; the
       // alt text only matters when Logomark renders alone.
-      loading="eager"
+      loading={priority ? 'eager' : 'lazy'}
       decoding="async"
+      // biome-ignore lint/style/useNamingConvention: HTML attribute name
+      fetchPriority={priority ? 'high' : 'auto'}
     />
   )
 }

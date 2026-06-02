@@ -1,6 +1,8 @@
 import { Logo } from '@/components/brand/logo'
 import { BlurFade } from '@/components/magicui/blur-fade'
+import { buildPublicMetadata } from '@/lib/seo/public-metadata'
 import type { SupportedLocale } from '@sa/i18n'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 
 /**
@@ -9,10 +11,19 @@ import Link from 'next/link'
  * liability, jurisdiction.
  */
 
-export const metadata = {
-  title: 'Terms & Conditions · Superaccountant',
-  description:
-    'Terms and conditions governing use of the Superaccountant platform, cohort enrolments, certificates, and AI tutor.',
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: SupportedLocale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  return buildPublicMetadata({
+    locale,
+    path: '/terms',
+    title: 'Terms & Conditions',
+    description:
+      'Terms and conditions governing use of the Superaccountant platform, cohort enrolments, certificates, and AI tutor.',
+  })
 }
 
 const COPY = {

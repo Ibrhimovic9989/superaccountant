@@ -396,7 +396,17 @@ function StepScreen({
 
         {step.image && (
           <div className="mt-6 overflow-hidden rounded-xl border border-border">
-            <img src={step.image} alt={step.title} className="w-full" />
+            {/* Step images come from arbitrary URLs in lib/data/guides — we
+                use a raw <img> (not next/image) so we don't have to keep an
+                ever-growing remote-pattern allowlist in next.config.mjs.
+                Lazy + async decode keeps the LCP unblocked. */}
+            <img
+              src={step.image}
+              alt={step.title}
+              className="w-full"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
         )}
 
