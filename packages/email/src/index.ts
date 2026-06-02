@@ -13,6 +13,13 @@ export type {
   EligibilityPassedEmailArgs,
   EligibilityPassedEmailContent,
 } from './templates/eligibility-passed'
+export { buildProgressCardEmail } from './templates/progress-card'
+export type {
+  ProgressAssessmentKind,
+  ProgressCardEmailArgs,
+  ProgressCardEmailContent,
+  ProgressRedoLink,
+} from './templates/progress-card'
 
 let client: Resend | null = null
 

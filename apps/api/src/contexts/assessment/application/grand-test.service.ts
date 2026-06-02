@@ -14,6 +14,10 @@ import { Inject, Injectable } from '@nestjs/common'
 import { prisma } from '@sa/db'
 import { LoyaltyService } from '../../loyalty/application/loyalty.service'
 import { LOYALTY_SERVICE } from '../../loyalty/interface/loyalty.controller'
+import {
+  SEND_PROGRESS_CARD,
+  type SendProgressCardEmail,
+} from './send-progress-card'
 
 const TARGET_QUESTIONS = 30
 const PASS_THRESHOLD = 0.7
@@ -54,7 +58,10 @@ export type SubmitGrandResult = {
 
 @Injectable()
 export class GrandTestService {
-  constructor(@Inject(LOYALTY_SERVICE) private readonly loyalty: LoyaltyService) {}
+  constructor(
+    @Inject(LOYALTY_SERVICE) private readonly loyalty: LoyaltyService,
+    @Inject(SEND_PROGRESS_CARD) private readonly progressCard: SendProgressCardEmail,
+  ) {}
 
   async start(args: { userId: string }): Promise<StartGrandResult> {
     const user = await prisma.identityUser.findUnique({
@@ -145,9 +152,11 @@ export class GrandTestService {
     }
     let correct = 0
     const total = payload.answerKey.length
+    const wronglyAnswered: { topic: string }[] = []
     for (const k of payload.answerKey) {
       const studentAnswer = (args.answers[k.questionId] ?? '').trim().toLowerCase()
       if (studentAnswer === k.answer.trim().toLowerCase()) correct++
+      else wronglyAnswered.push({ topic: humanizeSlug(k.lessonSlug) })
     }
     const score = total > 0 ? correct / total : 0
     const passed = score >= PASS_THRESHOLD
@@ -187,6 +196,28 @@ export class GrandTestService {
       }
     }
 
+    // Progress-card email. Same try/catch + at-most-once policy as the
+    // loyalty hook above — the use-case itself does the idempotency CAS.
+    try {
+      await this.progressCard.execute({
+        userId: args.userId,
+        attemptKey: { table: 'AssessmentAttempt', id: attempt.id },
+        assessmentKind: 'grand-test',
+        scorePct: score * 100,
+        totalQuestions: total,
+        correctCount: correct,
+        passed,
+        wronglyAnswered,
+        market: attempt.trackId as 'india' | 'ksa',
+      })
+    } catch (err) {
+      console.error('[grand-test] progress-card email failed', {
+        userId: args.userId,
+        attemptId: attempt.id,
+        err: (err as Error).message,
+      })
+    }
+
     return {
       attemptId: attempt.id,
       score,
@@ -196,6 +227,15 @@ export class GrandTestService {
       total,
     }
   }
+}
+
+function humanizeSlug(slug: string): string {
+  // 'gst-input-credit' → 'Gst Input Credit'
+  return slug
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ')
 }
 
 function shuffle<T>(arr: T[]): void {

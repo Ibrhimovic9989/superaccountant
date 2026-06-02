@@ -19,10 +19,14 @@
  * Per CLAUDE.md §4.5 — sub-agent with isolated permission scope.
  */
 
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable, Optional } from '@nestjs/common'
 import { z } from 'zod'
 import { prisma } from '@sa/db'
 import { azureOpenAI } from '@sa/ai'
+import {
+  SEND_PROGRESS_CARD,
+  type SendProgressCardEmail,
+} from '../send-progress-card'
 
 const TARGET_QUESTIONS = 10
 
@@ -68,6 +72,12 @@ const QuestionSchema = z.object({
 
 @Injectable()
 export class EntryTestService {
+  constructor(
+    @Optional()
+    @Inject(SEND_PROGRESS_CARD)
+    private readonly progressCard?: SendProgressCardEmail,
+  ) {}
+
   async start({ userId, market, locale }: StartArgs): Promise<StartResult> {
     const id = `et_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`
 
@@ -170,6 +180,33 @@ export class EntryTestService {
         args.userId,
         market,
       )
+
+      // Progress-card email — fire-and-forget, never blocks the response.
+      if (this.progressCard) {
+        const wronglyAnswered = newHistory
+          .filter((h) => !h.isCorrect)
+          .map((h) => ({ topic: h.question.topic }))
+        const correctCount = newHistory.filter((h) => h.isCorrect).length
+        try {
+          await this.progressCard.execute({
+            userId: args.userId,
+            attemptKey: { table: 'EntryTestSession', id: args.sessionId },
+            assessmentKind: 'entry-test',
+            scorePct: placement.score * 100,
+            totalQuestions: newHistory.length,
+            correctCount,
+            wronglyAnswered,
+            market,
+          })
+        } catch (err) {
+          console.error('[entry-test] progress-card email failed', {
+            userId: args.userId,
+            sessionId: args.sessionId,
+            err: (err as Error).message,
+          })
+        }
+      }
+
       return {
         kind: 'done',
         score: placement.score,

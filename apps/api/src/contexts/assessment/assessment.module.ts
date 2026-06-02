@@ -10,6 +10,9 @@ import { GRAND_TEST_SERVICE, GrandTestController } from './interface/grand-test.
 import { GrandTestService } from './application/grand-test.service'
 import { CertificationModule } from '../certification/certification.module'
 import { LoyaltyModule } from '../loyalty/loyalty.module'
+import { EMAIL_PORT } from './application/email-port'
+import { SEND_PROGRESS_CARD, SendProgressCardEmail } from './application/send-progress-card'
+import { ResendEmailAdapter } from './infrastructure/resend-email.adapter'
 
 @Module({
   imports: [CertificationModule, LoyaltyModule],
@@ -18,6 +21,9 @@ import { LoyaltyModule } from '../loyalty/loyalty.module'
     { provide: ENTRY_TEST_SERVICE, useClass: EntryTestService },
     { provide: DAILY_ASSIGNMENT_SERVICE, useClass: DailyAssignmentService },
     { provide: GRAND_TEST_SERVICE, useClass: GrandTestService },
+    // Email port wired to the Resend-backed @sa/email adapter.
+    { provide: EMAIL_PORT, useClass: ResendEmailAdapter },
+    { provide: SEND_PROGRESS_CARD, useClass: SendProgressCardEmail },
   ],
   exports: [ENTRY_TEST_SERVICE, DAILY_ASSIGNMENT_SERVICE, GRAND_TEST_SERVICE],
 })

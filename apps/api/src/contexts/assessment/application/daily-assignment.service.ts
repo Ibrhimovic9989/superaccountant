@@ -12,8 +12,12 @@
  * Idempotent: running twice on the same day for the same user is a no-op.
  */
 
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable, Optional } from '@nestjs/common'
 import { prisma } from '@sa/db'
+import {
+  SEND_PROGRESS_CARD,
+  type SendProgressCardEmail,
+} from './send-progress-card'
 
 export type GenerateDailyResult = {
   userId: string
@@ -23,8 +27,21 @@ export type GenerateDailyResult = {
   isFresh: boolean // false if today's assignment already existed
 }
 
+export type SubmitDailyResult = {
+  attemptId: string
+  scorePct: number
+  totalQuestions: number
+  correctCount: number
+}
+
 @Injectable()
 export class DailyAssignmentService {
+  constructor(
+    @Optional()
+    @Inject(SEND_PROGRESS_CARD)
+    private readonly progressCard?: SendProgressCardEmail,
+  ) {}
+
   async generateForUser(userId: string): Promise<GenerateDailyResult | null> {
     const user = await prisma.identityUser.findUnique({
       where: { id: userId },
@@ -167,6 +184,97 @@ export class DailyAssignmentService {
       if (result?.isFresh) generated++
     }
     return { generated }
+  }
+
+  /**
+   * Submit a daily assignment. Grades the attempt against the stored
+   * answer key (the assessment_blueprint slice captured at generate time)
+   * and fires the progress-card email post-grading.
+   *
+   * Answers are keyed by `${lessonSlug}:${questionIndex}` so the client
+   * can stay stateless. Missing keys count as wrong.
+   */
+  async submit(args: {
+    userId: string
+    attemptId: string
+    answers: Record<string, string>
+  }): Promise<SubmitDailyResult> {
+    const attempt = await prisma.assessmentAttempt.findFirst({
+      where: { id: args.attemptId, userId: args.userId, kind: 'daily' },
+    })
+    if (!attempt) throw new Error('attempt not found')
+    if (attempt.status === 'graded') throw new Error('already graded')
+
+    const payload = attempt.payload as unknown as {
+      items: Array<{
+        kind: 'review' | 'weak' | 'new'
+        lessonSlug: string
+        lessonTitle: string
+        questions: Array<{ answer?: string; topic?: string }>
+      }>
+    }
+    let correct = 0
+    let total = 0
+    const wronglyAnswered: { topic: string }[] = []
+    for (const item of payload.items ?? []) {
+      const qs = Array.isArray(item.questions) ? item.questions : []
+      for (let i = 0; i < qs.length; i++) {
+        const q = qs[i]
+        if (!q || typeof q.answer !== 'string') continue
+        total++
+        const key = `${item.lessonSlug}:${i}`
+        const given = (args.answers[key] ?? '').trim().toLowerCase()
+        if (given === q.answer.trim().toLowerCase()) {
+          correct++
+        } else {
+          wronglyAnswered.push({ topic: q.topic ?? item.lessonTitle ?? item.lessonSlug })
+        }
+      }
+    }
+    const score = total > 0 ? correct / total : 0
+
+    await prisma.assessmentAttempt.update({
+      where: { id: attempt.id },
+      data: {
+        status: 'graded',
+        submittedAt: new Date(),
+        gradedAt: new Date(),
+        score,
+        rubric: {
+          correctCount: correct,
+          total,
+        } as unknown as object,
+      },
+    })
+
+    // Progress-card email — same try/catch policy as grand test.
+    if (this.progressCard) {
+      try {
+        await this.progressCard.execute({
+          userId: args.userId,
+          attemptKey: { table: 'AssessmentAttempt', id: attempt.id },
+          assessmentKind: 'daily-assignment',
+          scorePct: score * 100,
+          totalQuestions: total,
+          correctCount: correct,
+          wronglyAnswered,
+          market: attempt.trackId as 'india' | 'ksa',
+        })
+      } catch (err) {
+        console.error('[daily-assignment] progress-card email failed', {
+          userId: args.userId,
+          attemptId: attempt.id,
+          err: (err as Error).message,
+        })
+      }
+    }
+
+    return {
+      attemptId: attempt.id,
+      scorePct: score * 100,
+      totalQuestions: total,
+      correctCount: correct,
+    }
   }
 
   async getToday(userId: string): Promise<GenerateDailyResult | null> {

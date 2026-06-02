@@ -227,6 +227,10 @@ model AssessmentAttempt {
   rubric      Json?
   payload     Json           // questions + answers
   audit       Json?          // proctoring trace for grand test
+  /// Stamped the first time the progress-card email send is attempted.
+  /// Non-null means "do not re-send" — even on a Resend failure we
+  /// accept the rare miss in exchange for guaranteed at-most-once mail.
+  progressEmailSentAt DateTime?
 
   @@index([userId, kind])
 }
