@@ -6,9 +6,11 @@
  */
 
 import 'server-only'
-import { prisma } from '@sa/db'
 import { azureOpenAI } from '@sa/ai'
+import { prisma } from '@sa/db'
 import { cache } from 'react'
+import { GUIDES } from './guides'
+import type { Guide } from './guides'
 
 export type LessonView = {
   id: string
@@ -30,6 +32,17 @@ export type LessonView = {
   market: 'india' | 'ksa'
   prevSlug: string | null
   nextSlug: string | null
+  /** Slugs of practical software-guide pages this lesson links to. */
+  relatedGuideSlugs: string[]
+}
+
+/** Lightweight projection of a Guide used by the lesson's
+ *  "See this in practice" panel. */
+export type GuideStub = {
+  slug: string
+  title: string
+  family: Guide['family']
+  emoji: string
 }
 
 export type AssessmentItem = {
@@ -96,17 +109,24 @@ export const getLessonBySlug = cache(async (slug: string): Promise<LessonView | 
   })
   if (!lesson) return null
 
-  // Pull the AR objectives + audio URLs via raw SQL — columns added post-hoc,
-  // not yet in the Prisma schema.
+  // Pull the AR objectives + audio URLs + related-guide slugs via raw SQL —
+  // columns added post-hoc via scripts/, not yet always reflected in the
+  // generated Prisma client during dev.
   const extraRow = await prisma.$queryRawUnsafe<
-    Array<{ objectives: unknown; audioUrlEn: string | null; audioUrlAr: string | null }>
+    Array<{
+      objectives: unknown
+      audioUrlEn: string | null
+      audioUrlAr: string | null
+      relatedGuideSlugs: string[] | null
+    }>
   >(
-    `SELECT "learningObjectivesAr" as objectives, "audioUrlEn", "audioUrlAr" FROM "CurriculumLesson" WHERE id = $1`,
+    `SELECT "learningObjectivesAr" as objectives, "audioUrlEn", "audioUrlAr", "relatedGuideSlugs" FROM "CurriculumLesson" WHERE id = $1`,
     lesson.id,
   )
   let learningObjectivesAr = (extraRow[0]?.objectives as string[] | null) ?? []
   const audioUrlEn = extraRow[0]?.audioUrlEn ?? null
   const audioUrlAr = extraRow[0]?.audioUrlAr ?? null
+  const relatedGuideSlugs = extraRow[0]?.relatedGuideSlugs ?? []
   const englishObjectives = (lesson.learningObjectives as string[] | null) ?? []
   // Lazy-translate on first AR access
   if (learningObjectivesAr.length === 0 && englishObjectives.length > 0) {
@@ -162,8 +182,26 @@ export const getLessonBySlug = cache(async (slug: string): Promise<LessonView | 
     market: lesson.module.phase.track.market as 'india' | 'ksa',
     prevSlug,
     nextSlug,
+    relatedGuideSlugs,
   }
 })
+
+/**
+ * Resolve a list of guide slugs to lightweight display stubs by looking
+ * them up in the static GUIDES registry. Slugs that don't match any
+ * guide are silently dropped — keeps stale seed data from breaking the
+ * lesson page if a guide is renamed or removed.
+ */
+export function getGuideStubsBySlug(slugs: string[]): GuideStub[] {
+  if (slugs.length === 0) return []
+  const stubs: GuideStub[] = []
+  for (const slug of slugs) {
+    const g = GUIDES.find((x) => x.slug === slug)
+    if (!g) continue
+    stubs.push({ slug: g.slug, title: g.title, family: g.family, emoji: g.emoji })
+  }
+  return stubs
+}
 
 /** Pick the lesson the student should resume on. v1: first published lesson
  *  in the user's preferred track. Replaced later by mastery-aware logic. */
