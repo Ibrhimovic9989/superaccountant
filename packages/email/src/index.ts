@@ -32,6 +32,11 @@ export type {
   PayoutRejectedEmailArgs,
   PayoutRejectedEmailContent,
 } from './templates/payout-rejected'
+export { buildGenericNotificationEmail } from './templates/generic-notification'
+export type {
+  GenericNotificationArgs,
+  GenericNotificationContent,
+} from './templates/generic-notification'
 
 let client: Resend | null = null
 
