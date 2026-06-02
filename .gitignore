@@ -62,3 +62,6 @@ docs/INTERNAL-*.md
 pngposter.jpeg
 preview-masterclass-reminder.html
 .playwright-mcp/
+
+# Transient working dumps used to brief content-fix agents (regenerable).
+packages/db/scripts/flagged-lessons-dump.json
