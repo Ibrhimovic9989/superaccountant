@@ -13,6 +13,18 @@ export type {
   EligibilityPassedEmailArgs,
   EligibilityPassedEmailContent,
 } from './templates/eligibility-passed'
+export { buildPayoutRequestedEmail } from './templates/payout-requested'
+export type {
+  PayoutRequestedEmailArgs,
+  PayoutRequestedEmailContent,
+} from './templates/payout-requested'
+export { buildPayoutPaidEmail } from './templates/payout-paid'
+export type { PayoutPaidEmailArgs, PayoutPaidEmailContent } from './templates/payout-paid'
+export { buildPayoutRejectedEmail } from './templates/payout-rejected'
+export type {
+  PayoutRejectedEmailArgs,
+  PayoutRejectedEmailContent,
+} from './templates/payout-rejected'
 
 let client: Resend | null = null
 

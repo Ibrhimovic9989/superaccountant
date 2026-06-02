@@ -1,5 +1,13 @@
+import { AppNav } from '@/components/app-nav'
+import { Logo } from '@/components/brand/logo'
+import { NumberTicker } from '@/components/magicui/number-ticker'
+import { auth } from '@/lib/auth'
+import { MILESTONE_CATALOG, SA_POINTS_POLICY } from '@/lib/loyalty/milestones'
+import { getWalletBalance } from '@/lib/loyalty/store'
+import type { SupportedLocale } from '@sa/i18n'
 import {
   ArrowRight,
+  Banknote,
   CheckCircle2,
   Clock,
   Coins,
@@ -10,13 +18,6 @@ import {
   Wallet,
 } from 'lucide-react'
 import Link from 'next/link'
-import type { SupportedLocale } from '@sa/i18n'
-import { AppNav } from '@/components/app-nav'
-import { Logo } from '@/components/brand/logo'
-import { NumberTicker } from '@/components/magicui/number-ticker'
-import { auth } from '@/lib/auth'
-import { MILESTONE_CATALOG, SA_POINTS_POLICY } from '@/lib/loyalty/milestones'
-import { getWalletBalance } from '@/lib/loyalty/store'
 
 /**
  * Public-facing SA Points explainer + (if signed in) the user's
@@ -75,7 +76,8 @@ export default async function RewardsPage({
         <p className="mt-3 max-w-2xl text-base text-fg-muted">
           SA Points are SuperAccountant&apos;s built-in reward currency. Hit a milestone, get
           credited automatically, redeem up to <strong className="text-fg">100%</strong> of any
-          cohort fee at checkout. <strong className="text-fg">1 SA = ₹1 INR · 22 SA = ﷼1 SAR</strong>.
+          cohort fee at checkout.{' '}
+          <strong className="text-fg">1 SA = ₹1 INR · 22 SA = ﷼1 SAR</strong>.
         </p>
 
         {/* ── If signed-in: their balance ────────────────────── */}
@@ -137,7 +139,8 @@ export default async function RewardsPage({
                   )}
                 </span>
                 <span className="inline-flex items-center gap-1 rounded-md border border-border bg-bg-overlay px-2 py-0.5">
-                  Lifetime cap: {m.lifetimeCapPoints === 'unlimited'
+                  Lifetime cap:{' '}
+                  {m.lifetimeCapPoints === 'unlimited'
                     ? 'unlimited'
                     : `${m.lifetimeCapPoints.toLocaleString()} SA`}
                 </span>
@@ -161,8 +164,9 @@ export default async function RewardsPage({
           <ul className="mt-4 space-y-2 text-sm text-fg-muted">
             <li className="flex items-start gap-2">
               <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
-              Redeem up to <strong className="text-fg">{SA_POINTS_POLICY.maxRedemptionPercent}%</strong>{' '}
-              of the cohort fee — pay the rest via Razorpay (UPI / card / EMI).
+              Redeem up to{' '}
+              <strong className="text-fg">{SA_POINTS_POLICY.maxRedemptionPercent}%</strong> of the
+              cohort fee — pay the rest via Razorpay (UPI / card / EMI).
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
@@ -182,6 +186,53 @@ export default async function RewardsPage({
             See cohort options
             <ArrowRight className="h-4 w-4 rtl:rotate-180" />
           </Link>
+        </div>
+
+        {/* ── Cash-out option (cheque payout) ────────────────── */}
+        <h2 className="mt-12 mb-2 font-mono text-[11px] uppercase tracking-wider text-fg-muted">
+          Cash out option
+        </h2>
+        <div className="rounded-2xl border border-success/30 bg-success/5 p-6 sm:p-8">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/10 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-success">
+            <Banknote className="h-3 w-3" />
+            New · earning while learning
+          </div>
+          <p className="text-base text-fg sm:text-lg">
+            Don&apos;t want to take a second course? Convert your wallet to a real cheque or bank
+            transfer instead. Same conversion rate as redemption.
+          </p>
+          <ul className="mt-4 space-y-2 text-sm text-fg-muted">
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+              Submit bank details once — we cut the cheque or initiate transfer within{' '}
+              <strong className="text-fg">5 business days</strong>.
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+              Conversion is identical to checkout: <strong className="text-fg">1 SA = ₹1</strong>{' '}
+              for India, <strong className="text-fg">22 SA = ﷼1</strong> for Saudi.
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+              Bank details are <strong className="text-fg">AES-256 encrypted</strong> at rest; only
+              the admin processing your payout can decrypt them.
+            </li>
+          </ul>
+          {session?.user?.id && balance && balance.available > 0 ? (
+            <Link
+              href={`/${locale}/rewards/payout`}
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-success px-5 py-3 text-sm font-medium text-bg hover:bg-success/90"
+            >
+              Request cash payout
+              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+            </Link>
+          ) : (
+            <p className="mt-6 text-xs text-fg-subtle">
+              {session?.user?.id
+                ? 'Earn some SA Points first to unlock cash-out.'
+                : 'Sign in and earn SA Points to unlock cash-out.'}
+            </p>
+          )}
         </div>
 
         {/* ── Rules / fine print ─────────────────────────────── */}
