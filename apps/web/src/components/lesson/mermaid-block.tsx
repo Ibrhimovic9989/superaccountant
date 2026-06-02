@@ -74,11 +74,30 @@ export function MermaidBlock({ source, id }: { source: string; id: string }) {
     ;(async () => {
       try {
         const mermaid = (await import('mermaid')).default
+        // Bumped-up sizing so flowcharts are actually readable on mobile +
+        // when zoomed into for screen-share. Defaults render text at ~14px
+        // (the strategy review flagged this as illegible). Wider node
+        // padding + bigger arrows help the diagrams breathe.
         mermaid.initialize({
           startOnLoad: false,
           theme,
           securityLevel: 'loose', // allows quoted labels with html-ish chars
           fontFamily: 'inherit',
+          fontSize: 18,
+          themeVariables: {
+            fontSize: '18px',
+            nodeBorder: '#94a3b8',
+            primaryBorderColor: '#94a3b8',
+            lineColor: '#94a3b8',
+          },
+          flowchart: {
+            curve: 'basis',
+            padding: 20,
+            nodeSpacing: 50,
+            rankSpacing: 60,
+            htmlLabels: true,
+            useMaxWidth: false, // let the SVG render at its natural size + scroll
+          },
         })
         const sanitized = sanitizeMermaid(source)
         const { svg } = await mermaid.render(`m-${id}`, sanitized)
@@ -105,9 +124,16 @@ export function MermaidBlock({ source, id }: { source: string; id: string }) {
     )
   }
 
+  // Wide charts horizontally scroll instead of getting squished — small
+  // text on a constrained container is what students complained about.
+  // The `text` selector raises every node + edge label past the 14px
+  // mermaid still bakes into some shapes despite the initialize config.
   return (
     <div className="overflow-x-auto rounded-xl border border-border bg-bg-elev p-6">
-      <div ref={ref} className="flex justify-center [&_svg]:max-w-full [&_svg]:h-auto" />
+      <div
+        ref={ref}
+        className="flex min-w-fit justify-center [&_svg]:h-auto [&_svg_text]:!font-medium [&_svg_text]:!text-[15px] sm:[&_svg_text]:!text-[17px]"
+      />
     </div>
   )
 }
