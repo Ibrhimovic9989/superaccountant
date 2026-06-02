@@ -1,8 +1,25 @@
-import { Briefcase, Building2, MapPin, Wifi } from 'lucide-react'
-import Link from 'next/link'
-import type { SupportedLocale } from '@sa/i18n'
 import { Logo } from '@/components/brand/logo'
 import { type EmploymentType, listPublicJobs } from '@/lib/careers/store'
+import { buildPublicMetadata } from '@/lib/seo/public-metadata'
+import type { SupportedLocale } from '@sa/i18n'
+import { Briefcase, Building2, MapPin, Wifi } from 'lucide-react'
+import type { Metadata } from 'next'
+import Link from 'next/link'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: SupportedLocale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  return buildPublicMetadata({
+    locale,
+    path: '/jobs',
+    title: 'Accounting jobs — vetted candidates, verified employers',
+    description:
+      'Browse openings for accountants from verified companies in India and KSA. Apply with one click as a SuperAccountant cohort graduate.',
+  })
+}
 
 /**
  * Public job board. Anyone can browse — no auth required. Apply is
@@ -119,10 +136,7 @@ export default async function JobsBoardPage({
           >
             Filter
           </button>
-          <Link
-            href={`/${locale}/jobs`}
-            className="text-xs text-fg-subtle hover:text-fg"
-          >
+          <Link href={`/${locale}/jobs`} className="text-xs text-fg-subtle hover:text-fg">
             Clear
           </Link>
         </form>

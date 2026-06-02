@@ -2,8 +2,10 @@ import { Logo } from '@/components/brand/logo'
 import { QuizPlayer } from '@/components/quiz/quiz-player'
 import { createMarketingLead } from '@/lib/data/leads'
 import { QUIZ_BUCKETS, QUIZ_MAX_SCORE } from '@/lib/data/quiz'
+import { buildPublicMetadata } from '@/lib/seo/public-metadata'
 import { buildEligibilityPassedEmail, sendEmail } from '@sa/email'
 import type { SupportedLocale } from '@sa/i18n'
+import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import Link from 'next/link'
 
@@ -15,6 +17,21 @@ import Link from 'next/link'
  * capture form (before they see their result), so we don't lose the
  * lead if they bounce on the result screen.
  */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: SupportedLocale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  return buildPublicMetadata({
+    locale,
+    path: '/quiz',
+    title: 'Free 2-minute eligibility test for accountants',
+    description:
+      'Take a 10-question test to see if you qualify for the SuperAccountant cohort. Find your accounting career fit in 2 minutes — free.',
+  })
+}
+
 export default async function QuizPage({
   params,
 }: {

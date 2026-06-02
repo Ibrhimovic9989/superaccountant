@@ -1,10 +1,13 @@
-import { ArrowLeft, Briefcase, Building2, Clock, MapPin, Wifi } from 'lucide-react'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import type { SupportedLocale } from '@sa/i18n'
 import { Logo } from '@/components/brand/logo'
+import { JobPostingJsonLd } from '@/components/seo/job-posting-jsonld'
 import { auth } from '@/lib/auth'
 import { checkApplyEligibility, getJobWithCompany, hasUserAppliedToJob } from '@/lib/careers/store'
+import { buildPublicMetadata } from '@/lib/seo/public-metadata'
+import type { SupportedLocale } from '@sa/i18n'
+import { ArrowLeft, Briefcase, Building2, Clock, MapPin, Wifi } from 'lucide-react'
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
 /**
  * Public job detail page. Shows the full posting + an "Apply" CTA.
@@ -16,6 +19,35 @@ import { checkApplyEligibility, getJobWithCompany, hasUserAppliedToJob } from '@
  *   - signed-in + not enrolled → "Join the cohort first"
  *   - signed-in + grand test not passed → "Pass the grand test to apply"
  */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: SupportedLocale; id: string }>
+}): Promise<Metadata> {
+  const { locale, id } = await params
+  const job = await getJobWithCompany(id).catch(() => null)
+  if (!job || job.status !== 'open') {
+    // notFound() will render the not-found UI; default the meta to
+    // something sensible so crawlers still see a clean title.
+    return buildPublicMetadata({
+      locale,
+      path: `/jobs/${id}`,
+      title: 'Job not available',
+      description: 'This job is no longer accepting applications.',
+    })
+  }
+  const location = [job.city, job.state, job.country].filter(Boolean).join(', ')
+  const desc = (job.description ?? '').replace(/\s+/g, ' ').trim().slice(0, 155)
+  return buildPublicMetadata({
+    locale,
+    path: `/jobs/${id}`,
+    title: `${job.title} at ${job.companyName}${location ? ` — ${location}` : ''}`,
+    description:
+      desc || `${job.title} at ${job.companyName}. Open role on the SuperAccountant job board.`,
+    ogType: 'article',
+  })
+}
+
 export default async function JobDetailPage({
   params,
 }: {
@@ -36,6 +68,7 @@ export default async function JobDetailPage({
 
   return (
     <div className="min-h-screen bg-bg text-fg">
+      <JobPostingJsonLd job={job} locale={locale} />
       <header className="border-b border-border bg-bg-elev/50 backdrop-blur-sm">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
           <Link href={`/${locale}`} className="inline-flex items-center gap-2">
@@ -133,9 +166,7 @@ function ApplyCta({
   if (alreadyApplied) {
     return (
       <div>
-        <p className="font-mono text-[10px] uppercase tracking-wider text-success">
-          Applied
-        </p>
+        <p className="font-mono text-[10px] uppercase tracking-wider text-success">Applied</p>
         <p className="mt-2 text-base text-fg">
           You&apos;ve already applied to this job. The company will reach out if they want to move
           forward.

@@ -4,6 +4,7 @@ import { NumberTicker } from '@/components/magicui/number-ticker'
 import { auth } from '@/lib/auth'
 import { MILESTONE_CATALOG, SA_POINTS_POLICY } from '@/lib/loyalty/milestones'
 import { getWalletBalance } from '@/lib/loyalty/store'
+import { buildPublicMetadata } from '@/lib/seo/public-metadata'
 import type { SupportedLocale } from '@sa/i18n'
 import {
   ArrowRight,
@@ -17,6 +18,7 @@ import {
   UserPlus,
   Wallet,
 } from 'lucide-react'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 
 /**
@@ -29,6 +31,21 @@ import Link from 'next/link'
  *
  * Linked from the wallet tile, every lesson hint, and the dashboard.
  */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: SupportedLocale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  return buildPublicMetadata({
+    locale,
+    path: '/rewards',
+    title: 'SA Points — earn cohort credit while you learn',
+    description:
+      'Earn SA Points for streaks, lessons, and referrals. Convert them to real money off your SuperAccountant cohort fee. 1 point = ₹1 / 22 SAR.',
+  })
+}
+
 export default async function RewardsPage({
   params,
 }: {

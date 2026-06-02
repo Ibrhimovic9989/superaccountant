@@ -3,6 +3,7 @@ import { ApplyAndPay } from '@/components/cohort/apply-and-pay'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { BorderBeam } from '@/components/magicui/border-beam'
 import { DotPattern } from '@/components/magicui/dot-pattern'
+import { CohortCourseJsonLd } from '@/components/seo/cohort-course-jsonld'
 import { auth } from '@/lib/auth'
 import {
   createRazorpayOrder,
@@ -25,6 +26,7 @@ import {
 import { createMarketingLead } from '@/lib/data/leads'
 import { planRedemption as planSAPointsRedemption } from '@/lib/loyalty/conversion'
 import { getWalletBalance } from '@/lib/loyalty/store'
+import { buildPublicMetadata } from '@/lib/seo/public-metadata'
 import { cn } from '@/lib/utils'
 import type { SupportedLocale } from '@sa/i18n'
 import {
@@ -44,6 +46,7 @@ import {
   Trophy,
   Users,
 } from 'lucide-react'
+import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import Link from 'next/link'
 
@@ -55,6 +58,21 @@ import Link from 'next/link'
  *
  * Lead capture writes to MarketingLead with source='/cohort'.
  */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: SupportedLocale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  return buildPublicMetadata({
+    locale,
+    path: '/cohort',
+    title: 'Get Job Ready — 45-day offline accounting cohort',
+    description:
+      '45-day offline cohort for accountants. Tally Prime, GST + TDS, ZATCA + VAT. Real classroom + AI tutor + placement support. India + KSA tracks.',
+  })
+}
+
 export default async function CohortPage({
   params,
 }: {
@@ -418,6 +436,7 @@ export default async function CohortPage({
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-bg text-fg">
+      <CohortCourseJsonLd cohorts={cohorts} locale={locale} />
       {/* Hero-zone dot grid — fades out as you scroll past the fold. */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[640px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)]">
         <DotPattern
