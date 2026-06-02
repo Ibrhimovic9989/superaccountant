@@ -28,7 +28,8 @@ import { scoreSource } from './lib/audit-flowcharts/scoring.mjs'
 import { renderMarkdown } from './lib/audit-flowcharts/report.mjs'
 
 const __d = dirname(fileURLToPath(import.meta.url))
-const ROOT = resolve(__d, '..')
+// Script lives at packages/db/scripts/, so repo root is two levels up.
+const ROOT = resolve(__d, '../..')
 const FLAG_THRESHOLD = 15
 
 // ── env loading (root first, then packages/db) ────────────────────────────
@@ -54,7 +55,12 @@ const lessons = await prisma.curriculumLesson.findMany({
     contentArMdx: true,
     flowchartMermaid: true,
     mindmapMermaid: true,
-    module: { select: { titleEn: true, track: { select: { code: true } } } },
+    module: {
+      select: {
+        titleEn: true,
+        phase: { select: { track: { select: { market: true } } } },
+      },
+    },
   },
   orderBy: { slug: 'asc' },
 })

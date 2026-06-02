@@ -1,22 +1,6765 @@
 {
-  "_placeholder": true,
-  "_note": "This file is overwritten by scripts/audit-flowcharts.mjs on every run. Until the audit script executes against a populated DB, this stub is all that exists. To populate: cd packages/db && node ../../scripts/audit-flowcharts.mjs",
-  "generatedAt": null,
-  "lessonsAudited": 0,
-  "blocksFound": 0,
-  "blocksFlagged": 0,
+  "generatedAt": "2026-06-02T05:13:34.322Z",
+  "lessonsAudited": 111,
+  "blocksFound": 222,
+  "blocksFlagged": 35,
   "flagThreshold": 15,
-  "buckets": { "0-5": 0, "5-10": 0, "10-20": 0, "20+": 0 },
+  "buckets": {
+    "0-5": 83,
+    "5-10": 61,
+    "10-20": 65,
+    "20+": 13
+  },
   "heuristicHits": {
     "noOrientation": 0,
-    "unquotedParensInSquares": 0,
-    "unquotedSpecialChars": 0,
-    "tooManyNodes": 0,
-    "tooManyLines": 0,
+    "unquotedParensInSquares": 16,
+    "unquotedSpecialChars": 86,
+    "tooManyNodes": 29,
+    "tooManyLines": 110,
     "tooManySubgraphs": 0,
     "unusualType": 0
   },
-  "chartTypes": {},
-  "blocks": [],
-  "flagged": []
+  "chartTypes": {
+    "flowchart": 111,
+    "mindmap": 111
+  },
+  "blocks": [
+    {
+      "slug": "in-adj-accrued-income-expense",
+      "titleEn": "Accrued Income and Accrued Expenses",
+      "module": "Adjusting Entries",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 8,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 16,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 16,
+        "flags": [
+          "unq-specials=8"
+        ]
+      }
+    },
+    {
+      "slug": "in-adj-accrued-income-expense",
+      "titleEn": "Accrued Income and Accrued Expenses",
+      "module": "Adjusting Entries",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 29,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 13.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 13.5,
+        "flags": [
+          "lines=29"
+        ]
+      }
+    },
+    {
+      "slug": "in-adj-bad-debts",
+      "titleEn": "Bad Debts and Provision for Doubtful Debts",
+      "module": "Adjusting Entries",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 14,
+        "lineCount": 14,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 4,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 8,
+        "flags": [
+          "nodes=14",
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-adj-bad-debts",
+      "titleEn": "Bad Debts and Provision for Doubtful Debts",
+      "module": "Adjusting Entries",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 3,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-adj-deferred-prepaid",
+      "titleEn": "Deferred Income and Prepaid Expenses",
+      "module": "Adjusting Entries",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-adj-deferred-prepaid",
+      "titleEn": "Deferred Income and Prepaid Expenses",
+      "module": "Adjusting Entries",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-adj-depreciation",
+      "titleEn": "Depreciation — Concept, Methods (SLM, WDV) and Companies Act vs IT Act",
+      "module": "Adjusting Entries",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 14,
+        "lineCount": 15,
+        "unquotedParensInSquares": 1,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 4,
+          "lineCount": 0,
+          "unquotedParensInSquares": 5,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 15,
+        "flags": [
+          "nodes=14",
+          "unq-parens=1",
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "in-adj-depreciation",
+      "titleEn": "Depreciation — Concept, Methods (SLM, WDV) and Companies Act vs IT Act",
+      "module": "Adjusting Entries",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 37,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 25.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 25.5,
+        "flags": [
+          "lines=37"
+        ]
+      }
+    },
+    {
+      "slug": "in-adj-purpose-and-types",
+      "titleEn": "Why Adjusting Entries Exist — Accrual Drives Everything",
+      "module": "Adjusting Entries",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 14,
+        "lineCount": 14,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 4,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10,
+        "flags": [
+          "nodes=14",
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "in-adj-purpose-and-types",
+      "titleEn": "Why Adjusting Entries Exist — Accrual Drives Everything",
+      "module": "Adjusting Entries",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 2,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-ap-capital-vs-revenue",
+      "titleEn": "Capital Expenditure vs Revenue Expenditure — The Distinction That Matters",
+      "module": "Accounts Receivable and Payable",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 8,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-ap-capital-vs-revenue",
+      "titleEn": "Capital Expenditure vs Revenue Expenditure — The Distinction That Matters",
+      "module": "Accounts Receivable and Payable",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-ap-process",
+      "titleEn": "Accounts Payable Process — Procure to Pay",
+      "module": "Accounts Receivable and Payable",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "in-ap-process",
+      "titleEn": "Accounts Payable Process — Procure to Pay",
+      "module": "Accounts Receivable and Payable",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 36,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 24,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 24,
+        "flags": [
+          "lines=36"
+        ]
+      }
+    },
+    {
+      "slug": "in-ap-vendor-master-and-recon",
+      "titleEn": "Vendor Master, Vendor Statement Reconciliation, and Risks",
+      "module": "Accounts Receivable and Payable",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "in-ap-vendor-master-and-recon",
+      "titleEn": "Vendor Master, Vendor Statement Reconciliation, and Risks",
+      "module": "Accounts Receivable and Payable",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 31,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 16.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 16.5,
+        "flags": [
+          "lines=31"
+        ]
+      }
+    },
+    {
+      "slug": "in-ar-credit-and-collections",
+      "titleEn": "Credit Control, Ageing, and Collections Strategy",
+      "module": "Accounts Receivable and Payable",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 14,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "in-ar-credit-and-collections",
+      "titleEn": "Credit Control, Ageing, and Collections Strategy",
+      "module": "Accounts Receivable and Payable",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 3,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-ar-customer-master",
+      "titleEn": "Customer Master Data and AR Reconciliation",
+      "module": "Accounts Receivable and Payable",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "in-ar-customer-master",
+      "titleEn": "Customer Master Data and AR Reconciliation",
+      "module": "Accounts Receivable and Payable",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 32,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 18,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 18,
+        "flags": [
+          "lines=32"
+        ]
+      }
+    },
+    {
+      "slug": "in-ar-process",
+      "titleEn": "Accounts Receivable Process — Order to Cash",
+      "module": "Accounts Receivable and Payable",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 9,
+        "lineCount": 9,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "in-ar-process",
+      "titleEn": "Accounts Receivable Process — Order to Cash",
+      "module": "Accounts Receivable and Payable",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-as-ind-as-overview",
+      "titleEn": "Ind AS — When and Why a Company Converts",
+      "module": "Accounting Standards (India)",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 15,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-as-ind-as-overview",
+      "titleEn": "Ind AS — When and Why a Company Converts",
+      "module": "Accounting Standards (India)",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-as-key-standards",
+      "titleEn": "The Standards Every Accountant Must Know — AS 1, 2, 9, 10, 22",
+      "module": "Accounting Standards (India)",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 19,
+        "lineCount": 18,
+        "unquotedParensInSquares": 5,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 14,
+          "lineCount": 0,
+          "unquotedParensInSquares": 25,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 41,
+        "flags": [
+          "nodes=19",
+          "unq-parens=5",
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-as-key-standards",
+      "titleEn": "The Standards Every Accountant Must Know — AS 1, 2, 9, 10, 22",
+      "module": "Accounting Standards (India)",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 24,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 6,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "lines=24"
+        ]
+      }
+    },
+    {
+      "slug": "in-as-overview",
+      "titleEn": "Indian Accounting Standards Landscape — AS, Ind AS, ICDS",
+      "module": "Accounting Standards (India)",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-as-overview",
+      "titleEn": "Indian Accounting Standards Landscape — AS, Ind AS, ICDS",
+      "module": "Accounting Standards (India)",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 24,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 6,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "lines=24"
+        ]
+      }
+    },
+    {
+      "slug": "in-bk-classification-of-accounts",
+      "titleEn": "Classification of Accounts — Personal, Real, Nominal",
+      "module": "Book Keeping",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 14,
+        "lineCount": 14,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 7,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 4,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 14,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 18,
+        "flags": [
+          "nodes=14",
+          "unq-specials=7"
+        ]
+      }
+    },
+    {
+      "slug": "in-bk-classification-of-accounts",
+      "titleEn": "Classification of Accounts — Personal, Real, Nominal",
+      "module": "Book Keeping",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-bk-importance-and-process",
+      "titleEn": "Why Book-Keeping Matters and the Book-Keeping Process",
+      "module": "Book Keeping",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 5,
+        "lineCount": 5,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-bk-importance-and-process",
+      "titleEn": "Why Book-Keeping Matters and the Book-Keeping Process",
+      "module": "Book Keeping",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 23,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 4.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4.5,
+        "flags": [
+          "lines=23"
+        ]
+      }
+    },
+    {
+      "slug": "in-bk-record-retention-india",
+      "titleEn": "Record Retention Rules in India (Companies Act, IT Act, GST Act)",
+      "module": "Book Keeping",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-bk-record-retention-india",
+      "titleEn": "Record Retention Rules in India (Companies Act, IT Act, GST Act)",
+      "module": "Book Keeping",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 23,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 4.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4.5,
+        "flags": [
+          "lines=23"
+        ]
+      }
+    },
+    {
+      "slug": "in-brs-introduction",
+      "titleEn": "Why Bank Books and Pass Books Disagree",
+      "module": "Bank Reconciliation",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-brs-introduction",
+      "titleEn": "Why Bank Books and Pass Books Disagree",
+      "module": "Bank Reconciliation",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 32,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 18,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 18,
+        "flags": [
+          "lines=32"
+        ]
+      }
+    },
+    {
+      "slug": "in-brs-preparation",
+      "titleEn": "Preparing a Bank Reconciliation Statement Step by Step",
+      "module": "Bank Reconciliation",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 13,
+        "lineCount": 16,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 2,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "nodes=13"
+        ]
+      }
+    },
+    {
+      "slug": "in-brs-preparation",
+      "titleEn": "Preparing a Bank Reconciliation Statement Step by Step",
+      "module": "Bank Reconciliation",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-brs-tally-bank-recon",
+      "titleEn": "Bank Reconciliation in Tally Prime",
+      "module": "Bank Reconciliation",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-brs-tally-bank-recon",
+      "titleEn": "Bank Reconciliation in Tally Prime",
+      "module": "Bank Reconciliation",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 24,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 6,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "lines=24"
+        ]
+      }
+    },
+    {
+      "slug": "in-final-balance-sheet",
+      "titleEn": "Balance Sheet under Schedule III",
+      "module": "Final Accounts and Schedule III",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 14,
+        "lineCount": 14,
+        "unquotedParensInSquares": 3,
+        "unquotedSpecialChars": 6,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 4,
+          "lineCount": 0,
+          "unquotedParensInSquares": 15,
+          "unquotedSpecialChars": 12,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 31,
+        "flags": [
+          "nodes=14",
+          "unq-parens=3",
+          "unq-specials=6"
+        ]
+      }
+    },
+    {
+      "slug": "in-final-balance-sheet",
+      "titleEn": "Balance Sheet under Schedule III",
+      "module": "Final Accounts and Schedule III",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 22,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 3,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 3,
+        "flags": [
+          "lines=22"
+        ]
+      }
+    },
+    {
+      "slug": "in-final-cash-flow",
+      "titleEn": "Cash Flow Statement — Direct vs Indirect Method",
+      "module": "Final Accounts and Schedule III",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-final-cash-flow",
+      "titleEn": "Cash Flow Statement — Direct vs Indirect Method",
+      "module": "Final Accounts and Schedule III",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-final-notes-and-disclosures",
+      "titleEn": "Notes to Accounts and Significant Accounting Policies",
+      "module": "Final Accounts and Schedule III",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 9,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-final-notes-and-disclosures",
+      "titleEn": "Notes to Accounts and Significant Accounting Policies",
+      "module": "Final Accounts and Schedule III",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 28,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 12,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 12,
+        "flags": [
+          "lines=28"
+        ]
+      }
+    },
+    {
+      "slug": "in-final-pl-statement",
+      "titleEn": "Statement of Profit and Loss under Schedule III",
+      "module": "Final Accounts and Schedule III",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 12,
+        "unquotedParensInSquares": 1,
+        "unquotedSpecialChars": 5,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 5,
+          "unquotedSpecialChars": 10,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 15,
+        "flags": [
+          "unq-parens=1",
+          "unq-specials=5"
+        ]
+      }
+    },
+    {
+      "slug": "in-final-pl-statement",
+      "titleEn": "Statement of Profit and Loss under Schedule III",
+      "module": "Final Accounts and Schedule III",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-fund-accounting-cycle",
+      "titleEn": "The Accounting Cycle End-to-End",
+      "module": "Fundamental Concepts",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 8,
+        "lineCount": 8,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-fund-accounting-cycle",
+      "titleEn": "The Accounting Cycle End-to-End",
+      "module": "Fundamental Concepts",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 22,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 3,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 3,
+        "flags": [
+          "lines=22"
+        ]
+      }
+    },
+    {
+      "slug": "in-fund-double-entry",
+      "titleEn": "Double-Entry System and the Golden Rules",
+      "module": "Fundamental Concepts",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 14,
+        "lineCount": 16,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 4,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "nodes=14",
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-fund-double-entry",
+      "titleEn": "Double-Entry System and the Golden Rules",
+      "module": "Fundamental Concepts",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-fund-elements",
+      "titleEn": "Elements of Accounting — Assets, Liabilities, Capital, Income, Expense",
+      "module": "Fundamental Concepts",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 6,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-fund-elements",
+      "titleEn": "Elements of Accounting — Assets, Liabilities, Capital, Income, Expense",
+      "module": "Fundamental Concepts",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 29,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 13.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 13.5,
+        "flags": [
+          "lines=29"
+        ]
+      }
+    },
+    {
+      "slug": "in-fund-principles-and-conventions",
+      "titleEn": "Accounting Principles, Concepts and Conventions",
+      "module": "Fundamental Concepts",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 13,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 2,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "nodes=13",
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-fund-principles-and-conventions",
+      "titleEn": "Accounting Principles, Concepts and Conventions",
+      "module": "Fundamental Concepts",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 23,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 4.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4.5,
+        "flags": [
+          "lines=23"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-annual-return-gstr9",
+      "titleEn": "GSTR-9 and GSTR-9C — Annual Return and Reconciliation Statement",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-gst-annual-return-gstr9",
+      "titleEn": "GSTR-9 and GSTR-9C — Annual Return and Reconciliation Statement",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 31,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 16.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 16.5,
+        "flags": [
+          "lines=31"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-audit-by-department",
+      "titleEn": "Departmental GST Audit — How to Prepare and What to Expect",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 13,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 2,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "nodes=13",
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-audit-by-department",
+      "titleEn": "Departmental GST Audit — How to Prepare and What to Expect",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 29,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 13.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 13.5,
+        "flags": [
+          "lines=29"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-composition-scheme",
+      "titleEn": "Composition Scheme — When and Why a Small Business Opts In",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 18,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-gst-composition-scheme",
+      "titleEn": "Composition Scheme — When and Why a Small Business Opts In",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 30,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 15,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 15,
+        "flags": [
+          "lines=30"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-e-invoicing",
+      "titleEn": "E-Invoicing under GST — IRN, QR Code, IRP Portal",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-e-invoicing",
+      "titleEn": "E-Invoicing under GST — IRN, QR Code, IRP Portal",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 28,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 12,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 12,
+        "flags": [
+          "lines=28"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-eway-bill",
+      "titleEn": "E-Way Bill — When Required, How to Generate, Penalties",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 14,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-eway-bill",
+      "titleEn": "E-Way Bill — When Required, How to Generate, Penalties",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 25,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 7.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 7.5,
+        "flags": [
+          "lines=25"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-export-and-lut",
+      "titleEn": "Exports under GST — Zero-Rated Supply, LUT, and Refund of Unutilised ITC",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 4,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 8,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 8,
+        "flags": [
+          "unq-specials=4"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-export-and-lut",
+      "titleEn": "Exports under GST — Zero-Rated Supply, LUT, and Refund of Unutilised ITC",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 30,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 15,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 15,
+        "flags": [
+          "lines=30"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-imports-and-customs",
+      "titleEn": "Imports under GST — IGST at Customs, Bill of Entry, ITC Recovery",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 16,
+        "lineCount": 14,
+        "unquotedParensInSquares": 2,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 8,
+          "lineCount": 0,
+          "unquotedParensInSquares": 10,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 20,
+        "flags": [
+          "nodes=16",
+          "unq-parens=2",
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-imports-and-customs",
+      "titleEn": "Imports under GST — IGST at Customs, Bill of Entry, ITC Recovery",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 23,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 4.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4.5,
+        "flags": [
+          "lines=23"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-input-tax-credit",
+      "titleEn": "Input Tax Credit — Eligibility, Conditions, Blocked Credits",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 9,
+        "lineCount": 14,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-input-tax-credit",
+      "titleEn": "Input Tax Credit — Eligibility, Conditions, Blocked Credits",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 29,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 13.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 13.5,
+        "flags": [
+          "lines=29"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-introduction-and-benefits",
+      "titleEn": "GST — One Nation, One Tax (Why GST Replaced VAT/Excise/Service Tax)",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 11,
+        "unquotedParensInSquares": 1,
+        "unquotedSpecialChars": 8,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 5,
+          "unquotedSpecialChars": 16,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 21,
+        "flags": [
+          "unq-parens=1",
+          "unq-specials=8"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-introduction-and-benefits",
+      "titleEn": "GST — One Nation, One Tax (Why GST Replaced VAT/Excise/Service Tax)",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-invoice-and-bill-of-supply",
+      "titleEn": "Tax Invoice, Bill of Supply, Receipt Voucher and Refund Voucher",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-invoice-and-bill-of-supply",
+      "titleEn": "Tax Invoice, Bill of Supply, Receipt Voucher and Refund Voucher",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 22,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 3,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 3,
+        "flags": [
+          "lines=22"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-job-work",
+      "titleEn": "Job Work under GST — ITC-04 and Movement Without Tax",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 5,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 10,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10,
+        "flags": [
+          "unq-specials=5"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-job-work",
+      "titleEn": "Job Work under GST — ITC-04 and Movement Without Tax",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-notices-and-assessments",
+      "titleEn": "GST Notices, Assessments, and the Adjudication Process",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 14,
+        "lineCount": 14,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 4,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "nodes=14",
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-notices-and-assessments",
+      "titleEn": "GST Notices, Assessments, and the Adjudication Process",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 32,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 18,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 18,
+        "flags": [
+          "lines=32"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-payment-and-refunds",
+      "titleEn": "GST Payment, Cash Ledger, Credit Ledger, and Refund Process",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-gst-payment-and-refunds",
+      "titleEn": "GST Payment, Cash Ledger, Credit Ledger, and Refund Process",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 23,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 4.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4.5,
+        "flags": [
+          "lines=23"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-place-of-business-and-isd",
+      "titleEn": "Multiple Place of Business, Input Service Distributor (ISD), and Cross-Charge",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 14,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 5,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 10,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10,
+        "flags": [
+          "unq-specials=5"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-place-of-business-and-isd",
+      "titleEn": "Multiple Place of Business, Input Service Distributor (ISD), and Cross-Charge",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-place-of-supply",
+      "titleEn": "Place of Supply Rules for Goods and Services",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-place-of-supply",
+      "titleEn": "Place of Supply Rules for Goods and Services",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-qrmp-scheme",
+      "titleEn": "QRMP Scheme — Quarterly Returns with Monthly Payment",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 4,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 8,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 8,
+        "flags": [
+          "unq-specials=4"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-qrmp-scheme",
+      "titleEn": "QRMP Scheme — Quarterly Returns with Monthly Payment",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-rates-and-hsn-sac",
+      "titleEn": "GST Rate Slabs and HSN / SAC Classification",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-rates-and-hsn-sac",
+      "titleEn": "GST Rate Slabs and HSN / SAC Classification",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-rcm",
+      "titleEn": "Reverse Charge Mechanism — When the Buyer Pays GST",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 8,
+        "lineCount": 8,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-gst-rcm",
+      "titleEn": "Reverse Charge Mechanism — When the Buyer Pays GST",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 25,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 7.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 7.5,
+        "flags": [
+          "lines=25"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-registration",
+      "titleEn": "GST Registration — Who, When, and How (GST Portal Walkthrough)",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 13,
+        "unquotedParensInSquares": 1,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 5,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "unq-parens=1",
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-registration",
+      "titleEn": "GST Registration — Who, When, and How (GST Portal Walkthrough)",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 34,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 21,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 21,
+        "flags": [
+          "lines=34"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-returns-gstr1",
+      "titleEn": "GSTR-1 — Outward Supplies Return",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-returns-gstr1",
+      "titleEn": "GSTR-1 — Outward Supplies Return",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 31,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 16.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 16.5,
+        "flags": [
+          "lines=31"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-returns-gstr2a-2b",
+      "titleEn": "GSTR-2A vs GSTR-2B — Reading the Auto-Drafted ITC Statements",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 12,
+        "unquotedParensInSquares": 2,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 10,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10,
+        "flags": [
+          "unq-parens=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-returns-gstr2a-2b",
+      "titleEn": "GSTR-2A vs GSTR-2B — Reading the Auto-Drafted ITC Statements",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 22,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 3,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 3,
+        "flags": [
+          "lines=22"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-returns-gstr3b",
+      "titleEn": "GSTR-3B — The Self-Assessed Monthly Return",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-gst-returns-gstr3b",
+      "titleEn": "GSTR-3B — The Self-Assessed Monthly Return",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 32,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 18,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 18,
+        "flags": [
+          "lines=32"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-tally-setup",
+      "titleEn": "Enabling and Using GST in Tally Prime",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-tally-setup",
+      "titleEn": "Enabling and Using GST in Tally Prime",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-tds-tcs-under-gst",
+      "titleEn": "GST TDS and GST TCS — Sections 51 and 52",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 13,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 2,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 8,
+        "flags": [
+          "nodes=13",
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-tds-tcs-under-gst",
+      "titleEn": "GST TDS and GST TCS — Sections 51 and 52",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 3,
+        "lineCount": 51,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 46.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 46.5,
+        "flags": [
+          "lines=51"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-terminology-and-design",
+      "titleEn": "GST Terminology and Design — Supply, Levy, Registration Threshold",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 14,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-terminology-and-design",
+      "titleEn": "GST Terminology and Design — Supply, Levy, Registration Threshold",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 22,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 3,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 3,
+        "flags": [
+          "lines=22"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-time-and-value-of-supply",
+      "titleEn": "Time of Supply and Value of Supply",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 13,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 2,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "nodes=13",
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-time-and-value-of-supply",
+      "titleEn": "Time of Supply and Value of Supply",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 46,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 39,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 39,
+        "flags": [
+          "lines=46"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-types-cgst-sgst-igst-utgst",
+      "titleEn": "CGST, SGST, IGST, UTGST — Which One Applies?",
+      "module": "GST End-to-End",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 6,
+        "lineCount": 6,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-gst-types-cgst-sgst-igst-utgst",
+      "titleEn": "CGST, SGST, IGST, UTGST — Which One Applies?",
+      "module": "GST End-to-End",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-intro-accounting-activities",
+      "titleEn": "Core Accounting Activities and the Information Flow",
+      "module": "Introduction to Accounting",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 8,
+        "lineCount": 9,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-intro-accounting-activities",
+      "titleEn": "Core Accounting Activities and the Information Flow",
+      "module": "Introduction to Accounting",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-intro-stakeholders-and-objectives",
+      "titleEn": "Users of Accounting Information and the Objectives of Accounting",
+      "module": "Introduction to Accounting",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-intro-stakeholders-and-objectives",
+      "titleEn": "Users of Accounting Information and the Objectives of Accounting",
+      "module": "Introduction to Accounting",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-intro-what-is-accounting",
+      "titleEn": "What is Accounting? Purpose, Scope and Why It Matters",
+      "module": "Introduction to Accounting",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-intro-what-is-accounting",
+      "titleEn": "What is Accounting? Purpose, Scope and Why It Matters",
+      "module": "Introduction to Accounting",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 2,
+        "lineCount": 29,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 13.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 13.5,
+        "flags": [
+          "lines=29"
+        ]
+      }
+    },
+    {
+      "slug": "in-inv-as2-lower-of-cost-nrv",
+      "titleEn": "AS 2 / Ind AS 2 — Lower of Cost or Net Realisable Value",
+      "module": "Inventory Valuation",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-inv-as2-lower-of-cost-nrv",
+      "titleEn": "AS 2 / Ind AS 2 — Lower of Cost or Net Realisable Value",
+      "module": "Inventory Valuation",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-inv-fifo-lifo-wac",
+      "titleEn": "FIFO, LIFO and Weighted Average — Methods and Tax Impact",
+      "module": "Inventory Valuation",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 16,
+        "lineCount": 16,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 8,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10,
+        "flags": [
+          "nodes=16",
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-inv-fifo-lifo-wac",
+      "titleEn": "FIFO, LIFO and Weighted Average — Methods and Tax Impact",
+      "module": "Inventory Valuation",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 22,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 3,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 3,
+        "flags": [
+          "lines=22"
+        ]
+      }
+    },
+    {
+      "slug": "in-inv-what-is-inventory",
+      "titleEn": "What Counts as Inventory — Raw Materials, WIP, Finished Goods",
+      "module": "Inventory Valuation",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 8,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 16,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 16,
+        "flags": [
+          "unq-specials=8"
+        ]
+      }
+    },
+    {
+      "slug": "in-inv-what-is-inventory",
+      "titleEn": "What Counts as Inventory — Raw Materials, WIP, Finished Goods",
+      "module": "Inventory Valuation",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 3,
+        "lineCount": 22,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 3,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 3,
+        "flags": [
+          "lines=22"
+        ]
+      }
+    },
+    {
+      "slug": "in-je-common-entries",
+      "titleEn": "25 Most Common Journal Entries Every Accountant Sees",
+      "module": "Journal Entries",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 9,
+        "lineCount": 9,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-je-common-entries",
+      "titleEn": "25 Most Common Journal Entries Every Accountant Sees",
+      "module": "Journal Entries",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 34,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 21,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 21,
+        "flags": [
+          "lines=34"
+        ]
+      }
+    },
+    {
+      "slug": "in-je-compound-and-rectification",
+      "titleEn": "Compound Entries and Rectification of Errors",
+      "module": "Journal Entries",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 13,
+        "lineCount": 18,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 2,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "nodes=13",
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-je-compound-and-rectification",
+      "titleEn": "Compound Entries and Rectification of Errors",
+      "module": "Journal Entries",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 18,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-je-meaning-and-format",
+      "titleEn": "Journal Entries — Format, Narration, and Best Practice",
+      "module": "Journal Entries",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-je-meaning-and-format",
+      "titleEn": "Journal Entries — Format, Narration, and Best Practice",
+      "module": "Journal Entries",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 25,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 7.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 7.5,
+        "flags": [
+          "lines=25"
+        ]
+      }
+    },
+    {
+      "slug": "in-ledger-gl-reconciliation",
+      "titleEn": "General Ledger Reconciliation — Process and Pitfalls",
+      "module": "Posting and Ledger",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 7,
+        "lineCount": 8,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-ledger-gl-reconciliation",
+      "titleEn": "General Ledger Reconciliation — Process and Pitfalls",
+      "module": "Posting and Ledger",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-ledger-posting",
+      "titleEn": "Posting Journal Entries to the General Ledger",
+      "module": "Posting and Ledger",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 15,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-ledger-posting",
+      "titleEn": "Posting Journal Entries to the General Ledger",
+      "module": "Posting and Ledger",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 22,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 3,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 3,
+        "flags": [
+          "lines=22"
+        ]
+      }
+    },
+    {
+      "slug": "in-payroll-intro",
+      "titleEn": "Indian Payroll — Components, Statutory Deductions, Compliance",
+      "module": "Payroll",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 13,
+        "lineCount": 15,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 4,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 2,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 8,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10,
+        "flags": [
+          "nodes=13",
+          "unq-specials=4"
+        ]
+      }
+    },
+    {
+      "slug": "in-payroll-intro",
+      "titleEn": "Indian Payroll — Components, Statutory Deductions, Compliance",
+      "module": "Payroll",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 29,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 13.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 13.5,
+        "flags": [
+          "lines=29"
+        ]
+      }
+    },
+    {
+      "slug": "in-payroll-pf-esi-pt",
+      "titleEn": "PF, ESI, Professional Tax, and Gratuity — Rules and Rates",
+      "module": "Payroll",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 19,
+        "lineCount": 18,
+        "unquotedParensInSquares": 2,
+        "unquotedSpecialChars": 7,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 14,
+          "lineCount": 0,
+          "unquotedParensInSquares": 10,
+          "unquotedSpecialChars": 14,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 38,
+        "flags": [
+          "nodes=19",
+          "unq-parens=2",
+          "unq-specials=7"
+        ]
+      }
+    },
+    {
+      "slug": "in-payroll-pf-esi-pt",
+      "titleEn": "PF, ESI, Professional Tax, and Gratuity — Rules and Rates",
+      "module": "Payroll",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 4,
+        "lineCount": 21,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 1.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 1.5,
+        "flags": [
+          "lines=21"
+        ]
+      }
+    },
+    {
+      "slug": "in-payroll-tally-setup",
+      "titleEn": "Payroll in Tally Prime — Employees, Salary Structure, Pay Slips",
+      "module": "Payroll",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-payroll-tally-setup",
+      "titleEn": "Payroll in Tally Prime — Employees, Salary Structure, Pay Slips",
+      "module": "Payroll",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 32,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 18,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 18,
+        "flags": [
+          "lines=32"
+        ]
+      }
+    },
+    {
+      "slug": "in-ratio-introduction",
+      "titleEn": "Ratio Analysis — What Ratios Reveal and What They Hide",
+      "module": "Ratio Analysis and MIS",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 13,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 2,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "nodes=13",
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-ratio-introduction",
+      "titleEn": "Ratio Analysis — What Ratios Reveal and What They Hide",
+      "module": "Ratio Analysis and MIS",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-ratio-liquidity-solvency",
+      "titleEn": "Liquidity and Solvency Ratios",
+      "module": "Ratio Analysis and MIS",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 14,
+        "lineCount": 15,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 4,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "nodes=14",
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-ratio-liquidity-solvency",
+      "titleEn": "Liquidity and Solvency Ratios",
+      "module": "Ratio Analysis and MIS",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 30,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 15,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 15,
+        "flags": [
+          "lines=30"
+        ]
+      }
+    },
+    {
+      "slug": "in-ratio-profitability-efficiency",
+      "titleEn": "Profitability and Efficiency Ratios",
+      "module": "Ratio Analysis and MIS",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 15,
+        "lineCount": 16,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 6,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 8,
+        "flags": [
+          "nodes=15",
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-ratio-profitability-efficiency",
+      "titleEn": "Profitability and Efficiency Ratios",
+      "module": "Ratio Analysis and MIS",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-spec-forensic-data-analytics",
+      "titleEn": "Data Analytics for Forensic Investigation",
+      "module": "Spec — Forensic and Internal Audit",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "in-spec-forensic-data-analytics",
+      "titleEn": "Data Analytics for Forensic Investigation",
+      "module": "Spec — Forensic and Internal Audit",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 22,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 3,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 3,
+        "flags": [
+          "lines=22"
+        ]
+      }
+    },
+    {
+      "slug": "in-tally-accounting-vouchers",
+      "titleEn": "Accounting Vouchers in Tally — F4 to F9 Walkthrough",
+      "module": "Tally Prime Mastery",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 8,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 16,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 16,
+        "flags": [
+          "unq-specials=8"
+        ]
+      }
+    },
+    {
+      "slug": "in-tally-accounting-vouchers",
+      "titleEn": "Accounting Vouchers in Tally — F4 to F9 Walkthrough",
+      "module": "Tally Prime Mastery",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 2,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-tally-company-creation",
+      "titleEn": "Creating a Company in Tally Prime — Books Beginning, Financial Year, Features",
+      "module": "Tally Prime Mastery",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "in-tally-company-creation",
+      "titleEn": "Creating a Company in Tally Prime — Books Beginning, Financial Year, Features",
+      "module": "Tally Prime Mastery",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-tally-groups-and-ledgers",
+      "titleEn": "Groups and Ledgers — Building the Chart of Accounts in Tally",
+      "module": "Tally Prime Mastery",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 9,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-tally-groups-and-ledgers",
+      "titleEn": "Groups and Ledgers — Building the Chart of Accounts in Tally",
+      "module": "Tally Prime Mastery",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-tally-inventory-vouchers",
+      "titleEn": "Inventory Vouchers in Tally — Stock Items, Units, Godowns",
+      "module": "Tally Prime Mastery",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 13,
+        "lineCount": 17,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 2,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "nodes=13"
+        ]
+      }
+    },
+    {
+      "slug": "in-tally-inventory-vouchers",
+      "titleEn": "Inventory Vouchers in Tally — Stock Items, Units, Godowns",
+      "module": "Tally Prime Mastery",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 22,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 3,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 3,
+        "flags": [
+          "lines=22"
+        ]
+      }
+    },
+    {
+      "slug": "in-tally-what-and-features",
+      "titleEn": "What is Tally Prime and Why It Dominates Indian Accounting",
+      "module": "Tally Prime Mastery",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 9,
+        "lineCount": 9,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-tally-what-and-features",
+      "titleEn": "What is Tally Prime and Why It Dominates Indian Accounting",
+      "module": "Tally Prime Mastery",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-advance-tax",
+      "titleEn": "Advance Tax — Instalments, Interest u/s 234B/C",
+      "module": "Indian Taxation Foundations",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 16,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 8,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 16,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 16,
+        "flags": [
+          "unq-specials=8"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-advance-tax",
+      "titleEn": "Advance Tax — Instalments, Interest u/s 234B/C",
+      "module": "Indian Taxation Foundations",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-capital-gains",
+      "titleEn": "Capital Gains — STCG, LTCG, Indexation, Exemptions",
+      "module": "Indian Taxation Foundations",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 13,
+        "lineCount": 14,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 2,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "nodes=13"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-capital-gains",
+      "titleEn": "Capital Gains — STCG, LTCG, Indexation, Exemptions",
+      "module": "Indian Taxation Foundations",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 29,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 13.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 13.5,
+        "flags": [
+          "lines=29"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-deductions-80c-onwards",
+      "titleEn": "Chapter VI-A Deductions — 80C, 80D, 80G and the Rest",
+      "module": "Indian Taxation Foundations",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-tax-deductions-80c-onwards",
+      "titleEn": "Chapter VI-A Deductions — 80C, 80D, 80G and the Rest",
+      "module": "Indian Taxation Foundations",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-direct-vs-indirect",
+      "titleEn": "Direct vs Indirect Tax — The Indian Tax Map",
+      "module": "Indian Taxation Foundations",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-tax-direct-vs-indirect",
+      "titleEn": "Direct vs Indirect Tax — The Indian Tax Map",
+      "module": "Indian Taxation Foundations",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 28,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 12,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 12,
+        "flags": [
+          "lines=28"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-five-heads",
+      "titleEn": "The Five Heads of Income — A Tour",
+      "module": "Indian Taxation Foundations",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-five-heads",
+      "titleEn": "The Five Heads of Income — A Tour",
+      "module": "Indian Taxation Foundations",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-house-property",
+      "titleEn": "Income from House Property — Self-Occupied, Let-Out, Deemed Let-Out",
+      "module": "Indian Taxation Foundations",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 13,
+        "lineCount": 15,
+        "unquotedParensInSquares": 2,
+        "unquotedSpecialChars": 7,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 2,
+          "lineCount": 0,
+          "unquotedParensInSquares": 10,
+          "unquotedSpecialChars": 14,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 26,
+        "flags": [
+          "nodes=13",
+          "unq-parens=2",
+          "unq-specials=7"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-house-property",
+      "titleEn": "Income from House Property — Self-Occupied, Let-Out, Deemed Let-Out",
+      "module": "Indian Taxation Foundations",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 3,
+        "lineCount": 30,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 15,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 15,
+        "flags": [
+          "lines=30"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-other-sources",
+      "titleEn": "Income from Other Sources",
+      "module": "Indian Taxation Foundations",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 13,
+        "lineCount": 13,
+        "unquotedParensInSquares": 1,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 2,
+          "lineCount": 0,
+          "unquotedParensInSquares": 5,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 7,
+        "flags": [
+          "nodes=13",
+          "unq-parens=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-other-sources",
+      "titleEn": "Income from Other Sources",
+      "module": "Indian Taxation Foundations",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 2,
+        "lineCount": 30,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 15,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 15,
+        "flags": [
+          "lines=30"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-pgbp",
+      "titleEn": "Profits and Gains from Business or Profession (PGBP)",
+      "module": "Indian Taxation Foundations",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 4,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 8,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 8,
+        "flags": [
+          "unq-specials=4"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-pgbp",
+      "titleEn": "Profits and Gains from Business or Profession (PGBP)",
+      "module": "Indian Taxation Foundations",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 22,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 3,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 3,
+        "flags": [
+          "lines=22"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-residential-status",
+      "titleEn": "Residential Status and Scope of Total Income",
+      "module": "Indian Taxation Foundations",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 8,
+        "lineCount": 9,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-residential-status",
+      "titleEn": "Residential Status and Scope of Total Income",
+      "module": "Indian Taxation Foundations",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 25,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 7.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 7.5,
+        "flags": [
+          "lines=25"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-salary-income",
+      "titleEn": "Income from Salary — Components, Allowances, Perquisites",
+      "module": "Indian Taxation Foundations",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 13,
+        "lineCount": 17,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 5,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 2,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 10,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 12,
+        "flags": [
+          "nodes=13",
+          "unq-specials=5"
+        ]
+      }
+    },
+    {
+      "slug": "in-tax-salary-income",
+      "titleEn": "Income from Salary — Components, Allowances, Perquisites",
+      "module": "Indian Taxation Foundations",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-tb-errors-and-suspense",
+      "titleEn": "Errors That Affect (and Don't Affect) the Trial Balance",
+      "module": "Trial Balance",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 14,
+        "lineCount": 14,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 4,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "nodes=14"
+        ]
+      }
+    },
+    {
+      "slug": "in-tb-errors-and-suspense",
+      "titleEn": "Errors That Affect (and Don't Affect) the Trial Balance",
+      "module": "Trial Balance",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 23,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 4.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4.5,
+        "flags": [
+          "lines=23"
+        ]
+      }
+    },
+    {
+      "slug": "in-tb-purpose-and-format",
+      "titleEn": "Trial Balance — Purpose, Format, and What It Proves",
+      "module": "Trial Balance",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 8,
+        "lineCount": 8,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "in-tb-purpose-and-format",
+      "titleEn": "Trial Balance — Purpose, Format, and What It Proves",
+      "module": "Trial Balance",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 25,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 7.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 7.5,
+        "flags": [
+          "lines=25"
+        ]
+      }
+    },
+    {
+      "slug": "in-tcs-overview",
+      "titleEn": "TCS — When the Seller Collects Tax",
+      "module": "TCS (Tax Collected at Source)",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 11,
+        "unquotedParensInSquares": 1,
+        "unquotedSpecialChars": 4,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 5,
+          "unquotedSpecialChars": 8,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 13,
+        "flags": [
+          "unq-parens=1",
+          "unq-specials=4"
+        ]
+      }
+    },
+    {
+      "slug": "in-tcs-overview",
+      "titleEn": "TCS — When the Seller Collects Tax",
+      "module": "TCS (Tax Collected at Source)",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-tcs-tally-and-entries",
+      "titleEn": "TCS in Tally — Setup, Entries, and Returns",
+      "module": "TCS (Tax Collected at Source)",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 9,
+        "lineCount": 9,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "in-tcs-tally-and-entries",
+      "titleEn": "TCS in Tally — Setup, Entries, and Returns",
+      "module": "TCS (Tax Collected at Source)",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "in-tds-certificates-and-returns",
+      "titleEn": "TDS Certificates (Form 16, 16A) and Returns (24Q, 26Q, 27Q)",
+      "module": "TDS",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 6,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 12,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 12,
+        "flags": [
+          "unq-specials=6"
+        ]
+      }
+    },
+    {
+      "slug": "in-tds-certificates-and-returns",
+      "titleEn": "TDS Certificates (Form 16, 16A) and Returns (24Q, 26Q, 27Q)",
+      "module": "TDS",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 31,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 16.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 16.5,
+        "flags": [
+          "lines=31"
+        ]
+      }
+    },
+    {
+      "slug": "in-tds-in-tally",
+      "titleEn": "TDS Setup and Recording in Tally Prime",
+      "module": "TDS (Tax Deducted at Source)",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "in-tds-in-tally",
+      "titleEn": "TDS Setup and Recording in Tally Prime",
+      "module": "TDS (Tax Deducted at Source)",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 25,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 7.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 7.5,
+        "flags": [
+          "lines=25"
+        ]
+      }
+    },
+    {
+      "slug": "in-tds-key-sections",
+      "titleEn": "Key TDS Sections — 192, 194A, 194C, 194H, 194I, 194J, 194Q, 195",
+      "module": "TDS (Tax Deducted at Source)",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 19,
+        "lineCount": 18,
+        "unquotedParensInSquares": 1,
+        "unquotedSpecialChars": 10,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 14,
+          "lineCount": 0,
+          "unquotedParensInSquares": 5,
+          "unquotedSpecialChars": 20,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 39,
+        "flags": [
+          "nodes=19",
+          "unq-parens=1",
+          "unq-specials=10"
+        ]
+      }
+    },
+    {
+      "slug": "in-tds-key-sections",
+      "titleEn": "Key TDS Sections — 192, 194A, 194C, 194H, 194I, 194J, 194Q, 195",
+      "module": "TDS (Tax Deducted at Source)",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-tds-non-compliance",
+      "titleEn": "Consequences of Non-Compliance — Disallowance, Interest, Penalty",
+      "module": "TDS (Tax Deducted at Source)",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 15,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-tds-non-compliance",
+      "titleEn": "Consequences of Non-Compliance — Disallowance, Interest, Penalty",
+      "module": "TDS (Tax Deducted at Source)",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 2,
+        "lineCount": 22,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 3,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 3,
+        "flags": [
+          "lines=22"
+        ]
+      }
+    },
+    {
+      "slug": "in-tds-objective-and-mechanism",
+      "titleEn": "TDS — Why It Exists and How It Works",
+      "module": "TDS (Tax Deducted at Source)",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 6,
+        "lineCount": 6,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-tds-objective-and-mechanism",
+      "titleEn": "TDS — Why It Exists and How It Works",
+      "module": "TDS (Tax Deducted at Source)",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 23,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 4.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4.5,
+        "flags": [
+          "lines=23"
+        ]
+      }
+    },
+    {
+      "slug": "in-voucher-debit-credit-notes",
+      "titleEn": "Debit Notes, Credit Notes and Delivery Challans",
+      "module": "Vouchers and Source Documents",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "in-voucher-debit-credit-notes",
+      "titleEn": "Debit Notes, Credit Notes and Delivery Challans",
+      "module": "Vouchers and Source Documents",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 25,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 7.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 7.5,
+        "flags": [
+          "lines=25"
+        ]
+      }
+    },
+    {
+      "slug": "in-voucher-source-documents",
+      "titleEn": "Source Documents — Invoices, Receipts, Bills, Contracts",
+      "module": "Vouchers and Source Documents",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 11,
+        "unquotedParensInSquares": 1,
+        "unquotedSpecialChars": 5,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 5,
+          "unquotedSpecialChars": 10,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 15,
+        "flags": [
+          "unq-parens=1",
+          "unq-specials=5"
+        ]
+      }
+    },
+    {
+      "slug": "in-voucher-source-documents",
+      "titleEn": "Source Documents — Invoices, Receipts, Bills, Contracts",
+      "module": "Vouchers and Source Documents",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "in-voucher-types",
+      "titleEn": "Voucher Types — Receipt, Payment, Journal, Contra, Sales, Purchase",
+      "module": "Vouchers and Source Documents",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "in-voucher-types",
+      "titleEn": "Voucher Types — Receipt, Payment, Journal, Contra, Sales, Purchase",
+      "module": "Vouchers and Source Documents",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-capstone-grand-test",
+      "titleEn": "Grand Test — Proctored, Bilingual, ZATCA-Centric",
+      "module": "Capstone Project",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-capstone-grand-test",
+      "titleEn": "Grand Test — Proctored, Bilingual, ZATCA-Centric",
+      "module": "Capstone Project",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-erp-landscape",
+      "titleEn": "ERP Landscape in KSA — SAP B1, Odoo, Zoho Books, Microsoft Dynamics",
+      "module": "ERP for KSA Accountants",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 13,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-erp-landscape",
+      "titleEn": "ERP Landscape in KSA — SAP B1, Odoo, Zoho Books, Microsoft Dynamics",
+      "module": "ERP for KSA Accountants",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 23,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 4.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4.5,
+        "flags": [
+          "lines=23"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-excel-financial-statements",
+      "titleEn": "Financial Statements in Excel under IFRS Layout",
+      "module": "Excel for Saudi Accountants",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 3,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 6,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "unq-specials=3"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-excel-financial-statements",
+      "titleEn": "Financial Statements in Excel under IFRS Layout",
+      "module": "Excel for Saudi Accountants",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-fund-elements",
+      "titleEn": "Elements of Financial Statements under IFRS",
+      "module": "Fundamental Concepts",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 9,
+        "lineCount": 18,
+        "unquotedParensInSquares": 2,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 10,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 14,
+        "flags": [
+          "unq-parens=2",
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-fund-elements",
+      "titleEn": "Elements of Financial Statements under IFRS",
+      "module": "Fundamental Concepts",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 24,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 6,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 6,
+        "flags": [
+          "lines=24"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-ifrs16-leases",
+      "titleEn": "IFRS 16 — Leases on the Balance Sheet",
+      "module": "IFRS Standards (Essentials)",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 4,
+        "flags": [
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-ifrs16-leases",
+      "titleEn": "IFRS 16 — Leases on the Balance Sheet",
+      "module": "IFRS Standards (Essentials)",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-ifrs9-financial-instruments",
+      "titleEn": "IFRS 9 — Financial Instruments and ECL Basics",
+      "module": "IFRS Standards (Essentials)",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 11,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "ksa-ifrs9-financial-instruments",
+      "titleEn": "IFRS 9 — Financial Instruments and ECL Basics",
+      "module": "IFRS Standards (Essentials)",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 22,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 3,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 3,
+        "flags": [
+          "lines=22"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-ledger-posting",
+      "titleEn": "Posting to the General Ledger and Sub-Ledgers",
+      "module": "Posting and Ledger",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 10,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
+      "slug": "ksa-ledger-posting",
+      "titleEn": "Posting to the General Ledger and Sub-Ledgers",
+      "module": "Posting and Ledger",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 26,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 9,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "lines=26"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-spec-ifrs-business-combinations",
+      "titleEn": "IFRS 3 — Business Combinations and Goodwill",
+      "module": "Spec — IFRS Deep Dive",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 12,
+        "unquotedParensInSquares": 1,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 5,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 9,
+        "flags": [
+          "unq-parens=1",
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-spec-ifrs-business-combinations",
+      "titleEn": "IFRS 3 — Business Combinations and Goodwill",
+      "module": "Spec — IFRS Deep Dive",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-spec-ifrs16-leases-deep",
+      "titleEn": "IFRS 16 in Depth — Modifications, Sub-Leases, Sale-and-Leaseback",
+      "module": "Spec — IFRS Deep Dive",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 14,
+        "lineCount": 14,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 2,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 4,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 4,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 8,
+        "flags": [
+          "nodes=14",
+          "unq-specials=2"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-spec-ifrs16-leases-deep",
+      "titleEn": "IFRS 16 in Depth — Modifications, Sub-Leases, Sale-and-Leaseback",
+      "module": "Spec — IFRS Deep Dive",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-spec-re-leasing",
+      "titleEn": "Real Estate Leasing under IFRS 16 (Lessor and Lessee)",
+      "module": "Spec — Real Estate, Construction and RETT",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-spec-re-leasing",
+      "titleEn": "Real Estate Leasing under IFRS 16 (Lessor and Lessee)",
+      "module": "Spec — Real Estate, Construction and RETT",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 0,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-spec-zatca-objections",
+      "titleEn": "Filing Objections and Appeals to ZATCA Decisions",
+      "module": "Spec — ZATCA Audit and Disputes",
+      "origin": "flowchartMermaid",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 12,
+        "lineCount": 12,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 1,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 2,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 2,
+        "flags": [
+          "unq-specials=1"
+        ]
+      }
+    },
+    {
+      "slug": "ksa-spec-zatca-objections",
+      "titleEn": "Filing Objections and Appeals to ZATCA Decisions",
+      "module": "Spec — ZATCA Audit and Disputes",
+      "origin": "mindmapMermaid",
+      "score": {
+        "chartType": "mindmap",
+        "nodeCount": 1,
+        "lineCount": 27,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 10.5,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 10.5,
+        "flags": [
+          "lines=27"
+        ]
+      }
+    }
+  ],
+  "flagged": [
+    {
+      "slug": "in-gst-tds-tcs-under-gst",
+      "origin": "mindmapMermaid",
+      "total": 46.5,
+      "flags": [
+        "lines=51"
+      ]
+    },
+    {
+      "slug": "in-as-key-standards",
+      "origin": "flowchartMermaid",
+      "total": 41,
+      "flags": [
+        "nodes=19",
+        "unq-parens=5",
+        "unq-specials=1"
+      ]
+    },
+    {
+      "slug": "in-gst-time-and-value-of-supply",
+      "origin": "mindmapMermaid",
+      "total": 39,
+      "flags": [
+        "lines=46"
+      ]
+    },
+    {
+      "slug": "in-tds-key-sections",
+      "origin": "flowchartMermaid",
+      "total": 39,
+      "flags": [
+        "nodes=19",
+        "unq-parens=1",
+        "unq-specials=10"
+      ]
+    },
+    {
+      "slug": "in-payroll-pf-esi-pt",
+      "origin": "flowchartMermaid",
+      "total": 38,
+      "flags": [
+        "nodes=19",
+        "unq-parens=2",
+        "unq-specials=7"
+      ]
+    },
+    {
+      "slug": "in-final-balance-sheet",
+      "origin": "flowchartMermaid",
+      "total": 31,
+      "flags": [
+        "nodes=14",
+        "unq-parens=3",
+        "unq-specials=6"
+      ]
+    },
+    {
+      "slug": "in-tax-house-property",
+      "origin": "flowchartMermaid",
+      "total": 26,
+      "flags": [
+        "nodes=13",
+        "unq-parens=2",
+        "unq-specials=7"
+      ]
+    },
+    {
+      "slug": "in-adj-depreciation",
+      "origin": "mindmapMermaid",
+      "total": 25.5,
+      "flags": [
+        "lines=37"
+      ]
+    },
+    {
+      "slug": "in-ap-process",
+      "origin": "mindmapMermaid",
+      "total": 24,
+      "flags": [
+        "lines=36"
+      ]
+    },
+    {
+      "slug": "in-gst-introduction-and-benefits",
+      "origin": "flowchartMermaid",
+      "total": 21,
+      "flags": [
+        "unq-parens=1",
+        "unq-specials=8"
+      ]
+    },
+    {
+      "slug": "in-gst-registration",
+      "origin": "mindmapMermaid",
+      "total": 21,
+      "flags": [
+        "lines=34"
+      ]
+    },
+    {
+      "slug": "in-je-common-entries",
+      "origin": "mindmapMermaid",
+      "total": 21,
+      "flags": [
+        "lines=34"
+      ]
+    },
+    {
+      "slug": "in-gst-imports-and-customs",
+      "origin": "flowchartMermaid",
+      "total": 20,
+      "flags": [
+        "nodes=16",
+        "unq-parens=2",
+        "unq-specials=1"
+      ]
+    },
+    {
+      "slug": "in-ar-customer-master",
+      "origin": "mindmapMermaid",
+      "total": 18,
+      "flags": [
+        "lines=32"
+      ]
+    },
+    {
+      "slug": "in-bk-classification-of-accounts",
+      "origin": "flowchartMermaid",
+      "total": 18,
+      "flags": [
+        "nodes=14",
+        "unq-specials=7"
+      ]
+    },
+    {
+      "slug": "in-brs-introduction",
+      "origin": "mindmapMermaid",
+      "total": 18,
+      "flags": [
+        "lines=32"
+      ]
+    },
+    {
+      "slug": "in-gst-notices-and-assessments",
+      "origin": "mindmapMermaid",
+      "total": 18,
+      "flags": [
+        "lines=32"
+      ]
+    },
+    {
+      "slug": "in-gst-returns-gstr3b",
+      "origin": "mindmapMermaid",
+      "total": 18,
+      "flags": [
+        "lines=32"
+      ]
+    },
+    {
+      "slug": "in-payroll-tally-setup",
+      "origin": "mindmapMermaid",
+      "total": 18,
+      "flags": [
+        "lines=32"
+      ]
+    },
+    {
+      "slug": "in-ap-vendor-master-and-recon",
+      "origin": "mindmapMermaid",
+      "total": 16.5,
+      "flags": [
+        "lines=31"
+      ]
+    },
+    {
+      "slug": "in-gst-annual-return-gstr9",
+      "origin": "mindmapMermaid",
+      "total": 16.5,
+      "flags": [
+        "lines=31"
+      ]
+    },
+    {
+      "slug": "in-gst-returns-gstr1",
+      "origin": "mindmapMermaid",
+      "total": 16.5,
+      "flags": [
+        "lines=31"
+      ]
+    },
+    {
+      "slug": "in-tds-certificates-and-returns",
+      "origin": "mindmapMermaid",
+      "total": 16.5,
+      "flags": [
+        "lines=31"
+      ]
+    },
+    {
+      "slug": "in-adj-accrued-income-expense",
+      "origin": "flowchartMermaid",
+      "total": 16,
+      "flags": [
+        "unq-specials=8"
+      ]
+    },
+    {
+      "slug": "in-inv-what-is-inventory",
+      "origin": "flowchartMermaid",
+      "total": 16,
+      "flags": [
+        "unq-specials=8"
+      ]
+    },
+    {
+      "slug": "in-tally-accounting-vouchers",
+      "origin": "flowchartMermaid",
+      "total": 16,
+      "flags": [
+        "unq-specials=8"
+      ]
+    },
+    {
+      "slug": "in-tax-advance-tax",
+      "origin": "flowchartMermaid",
+      "total": 16,
+      "flags": [
+        "unq-specials=8"
+      ]
+    },
+    {
+      "slug": "in-adj-depreciation",
+      "origin": "flowchartMermaid",
+      "total": 15,
+      "flags": [
+        "nodes=14",
+        "unq-parens=1",
+        "unq-specials=3"
+      ]
+    },
+    {
+      "slug": "in-final-pl-statement",
+      "origin": "flowchartMermaid",
+      "total": 15,
+      "flags": [
+        "unq-parens=1",
+        "unq-specials=5"
+      ]
+    },
+    {
+      "slug": "in-gst-composition-scheme",
+      "origin": "mindmapMermaid",
+      "total": 15,
+      "flags": [
+        "lines=30"
+      ]
+    },
+    {
+      "slug": "in-gst-export-and-lut",
+      "origin": "mindmapMermaid",
+      "total": 15,
+      "flags": [
+        "lines=30"
+      ]
+    },
+    {
+      "slug": "in-ratio-liquidity-solvency",
+      "origin": "mindmapMermaid",
+      "total": 15,
+      "flags": [
+        "lines=30"
+      ]
+    },
+    {
+      "slug": "in-tax-house-property",
+      "origin": "mindmapMermaid",
+      "total": 15,
+      "flags": [
+        "lines=30"
+      ]
+    },
+    {
+      "slug": "in-tax-other-sources",
+      "origin": "mindmapMermaid",
+      "total": 15,
+      "flags": [
+        "lines=30"
+      ]
+    },
+    {
+      "slug": "in-voucher-source-documents",
+      "origin": "flowchartMermaid",
+      "total": 15,
+      "flags": [
+        "unq-parens=1",
+        "unq-specials=5"
+      ]
+    }
+  ]
 }
