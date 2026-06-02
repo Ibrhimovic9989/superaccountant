@@ -1,26 +1,26 @@
 {
-  "generatedAt": "2026-06-02T05:13:34.322Z",
+  "generatedAt": "2026-06-02T05:49:51.289Z",
   "lessonsAudited": 111,
-  "blocksFound": 222,
-  "blocksFlagged": 35,
+  "blocksFound": 225,
+  "blocksFlagged": 0,
   "flagThreshold": 15,
   "buckets": {
-    "0-5": 83,
-    "5-10": 61,
-    "10-20": 65,
-    "20+": 13
+    "0-5": 113,
+    "5-10": 70,
+    "10-20": 42,
+    "20+": 0
   },
   "heuristicHits": {
     "noOrientation": 0,
-    "unquotedParensInSquares": 16,
-    "unquotedSpecialChars": 86,
-    "tooManyNodes": 29,
-    "tooManyLines": 110,
+    "unquotedParensInSquares": 4,
+    "unquotedSpecialChars": 57,
+    "tooManyNodes": 27,
+    "tooManyLines": 106,
     "tooManySubgraphs": 0,
     "unusualType": 0
   },
   "chartTypes": {
-    "flowchart": 111,
+    "flowchart": 114,
     "mindmap": 111
   },
   "blocks": [
@@ -34,7 +34,7 @@
         "nodeCount": 11,
         "lineCount": 13,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 8,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -42,15 +42,13 @@
           "nodeCount": 0,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 16,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 16,
-        "flags": [
-          "unq-specials=8"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -61,7 +59,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 1,
-        "lineCount": 29,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -69,16 +67,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 13.5,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 13.5,
+        "total": 9,
         "flags": [
-          "lines=29"
+          "lines=26"
         ]
       }
     },
@@ -206,25 +204,23 @@
         "chartType": "flowchart",
         "nodeCount": 14,
         "lineCount": 15,
-        "unquotedParensInSquares": 1,
-        "unquotedSpecialChars": 3,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 4,
           "lineCount": 0,
-          "unquotedParensInSquares": 5,
-          "unquotedSpecialChars": 6,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 15,
+        "total": 4,
         "flags": [
-          "nodes=14",
-          "unq-parens=1",
-          "unq-specials=3"
+          "nodes=14"
         ]
       }
     },
@@ -236,7 +232,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 1,
-        "lineCount": 37,
+        "lineCount": 16,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -244,17 +240,15 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 25.5,
+          "lineCount": 0,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 25.5,
-        "flags": [
-          "lines=37"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -382,7 +376,7 @@
         "nodeCount": 12,
         "lineCount": 13,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 3,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -390,15 +384,13 @@
           "nodeCount": 0,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 6,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 6,
-        "flags": [
-          "unq-specials=3"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -408,8 +400,8 @@
       "origin": "mindmapMermaid",
       "score": {
         "chartType": "mindmap",
-        "nodeCount": 0,
-        "lineCount": 36,
+        "nodeCount": 1,
+        "lineCount": 19,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -417,17 +409,15 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 24,
+          "lineCount": 0,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 24,
-        "flags": [
-          "lines=36"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -440,7 +430,7 @@
         "nodeCount": 11,
         "lineCount": 12,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 3,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -448,15 +438,13 @@
           "nodeCount": 0,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 6,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 6,
-        "flags": [
-          "unq-specials=3"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -467,7 +455,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 0,
-        "lineCount": 31,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -475,16 +463,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 16.5,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 16.5,
+        "total": 9,
         "flags": [
-          "lines=31"
+          "lines=26"
         ]
       }
     },
@@ -556,7 +544,7 @@
         "nodeCount": 11,
         "lineCount": 12,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 3,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -564,15 +552,13 @@
           "nodeCount": 0,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 6,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 6,
-        "flags": [
-          "unq-specials=3"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -583,7 +569,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 0,
-        "lineCount": 32,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -591,16 +577,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 18,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 18,
+        "total": 9,
         "flags": [
-          "lines=32"
+          "lines=26"
         ]
       }
     },
@@ -727,28 +713,24 @@
       "origin": "flowchartMermaid",
       "score": {
         "chartType": "flowchart",
-        "nodeCount": 19,
-        "lineCount": 18,
-        "unquotedParensInSquares": 5,
-        "unquotedSpecialChars": 1,
+        "nodeCount": 11,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
         "breakdown": {
-          "nodeCount": 14,
+          "nodeCount": 0,
           "lineCount": 0,
-          "unquotedParensInSquares": 25,
-          "unquotedSpecialChars": 2,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 41,
-        "flags": [
-          "nodes=19",
-          "unq-parens=5",
-          "unq-specials=1"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -778,6 +760,33 @@
         "flags": [
           "lines=24"
         ]
+      }
+    },
+    {
+      "slug": "in-as-key-standards",
+      "titleEn": "The Standards Every Accountant Must Know — AS 1, 2, 9, 10, 22",
+      "module": "Accounting Standards (India)",
+      "origin": "contentEnMdx#1",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 8,
+        "lineCount": 9,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -848,7 +857,7 @@
         "nodeCount": 14,
         "lineCount": 14,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 7,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -856,15 +865,14 @@
           "nodeCount": 4,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 14,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 18,
+        "total": 4,
         "flags": [
-          "nodes=14",
-          "unq-specials=7"
+          "nodes=14"
         ]
       }
     },
@@ -1021,7 +1029,7 @@
         "nodeCount": 11,
         "lineCount": 11,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 1,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -1029,15 +1037,13 @@
           "nodeCount": 0,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 2,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 2,
-        "flags": [
-          "unq-specials=1"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -1048,7 +1054,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 1,
-        "lineCount": 32,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -1056,16 +1062,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 18,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 18,
+        "total": 9,
         "flags": [
-          "lines=32"
+          "lines=26"
         ]
       }
     },
@@ -1190,27 +1196,25 @@
       "origin": "flowchartMermaid",
       "score": {
         "chartType": "flowchart",
-        "nodeCount": 14,
+        "nodeCount": 17,
         "lineCount": 14,
-        "unquotedParensInSquares": 3,
-        "unquotedSpecialChars": 6,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
         "breakdown": {
-          "nodeCount": 4,
+          "nodeCount": 10,
           "lineCount": 0,
-          "unquotedParensInSquares": 15,
-          "unquotedSpecialChars": 12,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 31,
+        "total": 10,
         "flags": [
-          "nodes=14",
-          "unq-parens=3",
-          "unq-specials=6"
+          "nodes=17"
         ]
       }
     },
@@ -1368,25 +1372,22 @@
         "chartType": "flowchart",
         "nodeCount": 12,
         "lineCount": 12,
-        "unquotedParensInSquares": 1,
-        "unquotedSpecialChars": 5,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
           "lineCount": 0,
-          "unquotedParensInSquares": 5,
-          "unquotedSpecialChars": 10,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 15,
-        "flags": [
-          "unq-parens=1",
-          "unq-specials=5"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -1685,7 +1686,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 0,
-        "lineCount": 31,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -1693,16 +1694,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 16.5,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 16.5,
+        "total": 9,
         "flags": [
-          "lines=31"
+          "lines=26"
         ]
       }
     },
@@ -1800,7 +1801,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 0,
-        "lineCount": 30,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -1808,16 +1809,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 15,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 15,
+        "total": 9,
         "flags": [
-          "lines=30"
+          "lines=26"
         ]
       }
     },
@@ -1947,7 +1948,7 @@
         "nodeCount": 12,
         "lineCount": 12,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 4,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -1955,15 +1956,13 @@
           "nodeCount": 0,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 8,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 8,
-        "flags": [
-          "unq-specials=4"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -1974,7 +1973,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 1,
-        "lineCount": 30,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -1982,16 +1981,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 15,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 15,
+        "total": 9,
         "flags": [
-          "lines=30"
+          "lines=26"
         ]
       }
     },
@@ -2004,25 +2003,23 @@
         "chartType": "flowchart",
         "nodeCount": 16,
         "lineCount": 14,
-        "unquotedParensInSquares": 2,
-        "unquotedSpecialChars": 1,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 8,
           "lineCount": 0,
-          "unquotedParensInSquares": 10,
-          "unquotedSpecialChars": 2,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 20,
+        "total": 8,
         "flags": [
-          "nodes=16",
-          "unq-parens=2",
-          "unq-specials=1"
+          "nodes=16"
         ]
       }
     },
@@ -2120,26 +2117,25 @@
       "origin": "flowchartMermaid",
       "score": {
         "chartType": "flowchart",
-        "nodeCount": 11,
+        "nodeCount": 15,
         "lineCount": 11,
-        "unquotedParensInSquares": 1,
-        "unquotedSpecialChars": 8,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
         "breakdown": {
-          "nodeCount": 0,
+          "nodeCount": 6,
           "lineCount": 0,
-          "unquotedParensInSquares": 5,
-          "unquotedSpecialChars": 16,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 21,
+        "total": 6,
         "flags": [
-          "unq-parens=1",
-          "unq-specials=8"
+          "nodes=15"
         ]
       }
     },
@@ -2298,7 +2294,7 @@
         "nodeCount": 14,
         "lineCount": 14,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 1,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -2306,15 +2302,14 @@
           "nodeCount": 4,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 2,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 6,
+        "total": 4,
         "flags": [
-          "nodes=14",
-          "unq-specials=1"
+          "nodes=14"
         ]
       }
     },
@@ -2326,7 +2321,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 1,
-        "lineCount": 32,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -2334,16 +2329,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 18,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 18,
+        "total": 9,
         "flags": [
-          "lines=32"
+          "lines=26"
         ]
       }
     },
@@ -2700,25 +2695,22 @@
         "chartType": "flowchart",
         "nodeCount": 12,
         "lineCount": 13,
-        "unquotedParensInSquares": 1,
-        "unquotedSpecialChars": 2,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
           "lineCount": 0,
-          "unquotedParensInSquares": 5,
-          "unquotedSpecialChars": 4,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 9,
-        "flags": [
-          "unq-parens=1",
-          "unq-specials=2"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -2729,7 +2721,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 1,
-        "lineCount": 34,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -2737,16 +2729,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 21,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 21,
+        "total": 9,
         "flags": [
-          "lines=34"
+          "lines=26"
         ]
       }
     },
@@ -2760,7 +2752,7 @@
         "nodeCount": 11,
         "lineCount": 13,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 1,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -2768,15 +2760,13 @@
           "nodeCount": 0,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 2,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 2,
-        "flags": [
-          "unq-specials=1"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -2787,7 +2777,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 1,
-        "lineCount": 31,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -2795,16 +2785,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 16.5,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 16.5,
+        "total": 9,
         "flags": [
-          "lines=31"
+          "lines=26"
         ]
       }
     },
@@ -2901,7 +2891,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 0,
-        "lineCount": 32,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -2909,16 +2899,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 18,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 18,
+        "total": 9,
         "flags": [
-          "lines=32"
+          "lines=26"
         ]
       }
     },
@@ -2990,7 +2980,7 @@
         "nodeCount": 13,
         "lineCount": 13,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 3,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -2998,15 +2988,14 @@
           "nodeCount": 2,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 6,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 8,
+        "total": 2,
         "flags": [
-          "nodes=13",
-          "unq-specials=3"
+          "nodes=13"
         ]
       }
     },
@@ -3017,8 +3006,8 @@
       "origin": "mindmapMermaid",
       "score": {
         "chartType": "mindmap",
-        "nodeCount": 3,
-        "lineCount": 51,
+        "nodeCount": 1,
+        "lineCount": 22,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -3026,16 +3015,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 46.5,
+          "lineCount": 3,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 46.5,
+        "total": 3,
         "flags": [
-          "lines=51"
+          "lines=22"
         ]
       }
     },
@@ -3107,7 +3096,7 @@
         "nodeCount": 13,
         "lineCount": 13,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 1,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -3115,15 +3104,14 @@
           "nodeCount": 2,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 2,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 4,
+        "total": 2,
         "flags": [
-          "nodes=13",
-          "unq-specials=1"
+          "nodes=13"
         ]
       }
     },
@@ -3134,8 +3122,8 @@
       "origin": "mindmapMermaid",
       "score": {
         "chartType": "mindmap",
-        "nodeCount": 0,
-        "lineCount": 46,
+        "nodeCount": 1,
+        "lineCount": 21,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -3143,16 +3131,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 39,
+          "lineCount": 1.5,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 39,
+        "total": 1.5,
         "flags": [
-          "lines=46"
+          "lines=21"
         ]
       }
     },
@@ -3515,7 +3503,7 @@
         "nodeCount": 12,
         "lineCount": 12,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 8,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -3523,15 +3511,13 @@
           "nodeCount": 0,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 16,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 16,
-        "flags": [
-          "unq-specials=8"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -3573,7 +3559,7 @@
         "nodeCount": 9,
         "lineCount": 9,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 1,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -3581,15 +3567,13 @@
           "nodeCount": 0,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 2,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 2,
-        "flags": [
-          "unq-specials=1"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -3600,7 +3584,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 1,
-        "lineCount": 34,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -3608,16 +3592,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 21,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 21,
+        "total": 9,
         "flags": [
-          "lines=34"
+          "lines=26"
         ]
       }
     },
@@ -3916,28 +3900,24 @@
       "origin": "flowchartMermaid",
       "score": {
         "chartType": "flowchart",
-        "nodeCount": 19,
-        "lineCount": 18,
-        "unquotedParensInSquares": 2,
-        "unquotedSpecialChars": 7,
+        "nodeCount": 12,
+        "lineCount": 11,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
         "breakdown": {
-          "nodeCount": 14,
+          "nodeCount": 0,
           "lineCount": 0,
-          "unquotedParensInSquares": 10,
-          "unquotedSpecialChars": 14,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 38,
-        "flags": [
-          "nodes=19",
-          "unq-parens=2",
-          "unq-specials=7"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -3970,6 +3950,33 @@
       }
     },
     {
+      "slug": "in-payroll-pf-esi-pt",
+      "titleEn": "PF, ESI, Professional Tax, and Gratuity — Rules and Rates",
+      "module": "Payroll",
+      "origin": "contentEnMdx#1",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 9,
+        "lineCount": 8,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
+      }
+    },
+    {
       "slug": "in-payroll-tally-setup",
       "titleEn": "Payroll in Tally Prime — Employees, Salary Structure, Pay Slips",
       "module": "Payroll",
@@ -3979,7 +3986,7 @@
         "nodeCount": 12,
         "lineCount": 12,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 1,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -3987,15 +3994,13 @@
           "nodeCount": 0,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 2,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 2,
-        "flags": [
-          "unq-specials=1"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -4006,7 +4011,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 1,
-        "lineCount": 32,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -4014,16 +4019,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 18,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 18,
+        "total": 9,
         "flags": [
-          "lines=32"
+          "lines=26"
         ]
       }
     },
@@ -4096,7 +4101,7 @@
         "nodeCount": 14,
         "lineCount": 15,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 1,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -4104,15 +4109,14 @@
           "nodeCount": 4,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 2,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 6,
+        "total": 4,
         "flags": [
-          "nodes=14",
-          "unq-specials=1"
+          "nodes=14"
         ]
       }
     },
@@ -4124,7 +4128,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 1,
-        "lineCount": 30,
+        "lineCount": 18,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -4132,17 +4136,15 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 15,
+          "lineCount": 0,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 15,
-        "flags": [
-          "lines=30"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -4272,7 +4274,7 @@
         "nodeCount": 12,
         "lineCount": 12,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 8,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -4280,15 +4282,13 @@
           "nodeCount": 0,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 16,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 16,
-        "flags": [
-          "unq-specials=8"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -4560,7 +4560,7 @@
         "nodeCount": 12,
         "lineCount": 16,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 8,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -4568,15 +4568,13 @@
           "nodeCount": 0,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 16,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 16,
-        "flags": [
-          "unq-specials=8"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -4843,27 +4841,25 @@
       "origin": "flowchartMermaid",
       "score": {
         "chartType": "flowchart",
-        "nodeCount": 13,
+        "nodeCount": 15,
         "lineCount": 15,
-        "unquotedParensInSquares": 2,
-        "unquotedSpecialChars": 7,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
         "breakdown": {
-          "nodeCount": 2,
+          "nodeCount": 6,
           "lineCount": 0,
-          "unquotedParensInSquares": 10,
-          "unquotedSpecialChars": 14,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 26,
+        "total": 6,
         "flags": [
-          "nodes=13",
-          "unq-parens=2",
-          "unq-specials=7"
+          "nodes=15"
         ]
       }
     },
@@ -4874,8 +4870,8 @@
       "origin": "mindmapMermaid",
       "score": {
         "chartType": "mindmap",
-        "nodeCount": 3,
-        "lineCount": 30,
+        "nodeCount": 1,
+        "lineCount": 15,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -4883,17 +4879,15 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 15,
+          "lineCount": 0,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 15,
-        "flags": [
-          "lines=30"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -4905,7 +4899,7 @@
         "chartType": "flowchart",
         "nodeCount": 13,
         "lineCount": 13,
-        "unquotedParensInSquares": 1,
+        "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
@@ -4913,16 +4907,15 @@
         "breakdown": {
           "nodeCount": 2,
           "lineCount": 0,
-          "unquotedParensInSquares": 5,
+          "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 7,
+        "total": 2,
         "flags": [
-          "nodes=13",
-          "unq-parens=1"
+          "nodes=13"
         ]
       }
     },
@@ -4934,7 +4927,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 2,
-        "lineCount": 30,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -4942,16 +4935,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 15,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 15,
+        "total": 9,
         "flags": [
-          "lines=30"
+          "lines=26"
         ]
       }
     },
@@ -5373,7 +5366,7 @@
         "nodeCount": 10,
         "lineCount": 11,
         "unquotedParensInSquares": 0,
-        "unquotedSpecialChars": 6,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
@@ -5381,15 +5374,13 @@
           "nodeCount": 0,
           "lineCount": 0,
           "unquotedParensInSquares": 0,
-          "unquotedSpecialChars": 12,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 12,
-        "flags": [
-          "unq-specials=6"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -5400,7 +5391,7 @@
       "score": {
         "chartType": "mindmap",
         "nodeCount": 1,
-        "lineCount": 31,
+        "lineCount": 26,
         "unquotedParensInSquares": 0,
         "unquotedSpecialChars": 0,
         "subgraphCount": 0,
@@ -5408,16 +5399,16 @@
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
-          "lineCount": 16.5,
+          "lineCount": 9,
           "unquotedParensInSquares": 0,
           "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 16.5,
+        "total": 9,
         "flags": [
-          "lines=31"
+          "lines=26"
         ]
       }
     },
@@ -5486,28 +5477,24 @@
       "origin": "flowchartMermaid",
       "score": {
         "chartType": "flowchart",
-        "nodeCount": 19,
-        "lineCount": 18,
-        "unquotedParensInSquares": 1,
-        "unquotedSpecialChars": 10,
+        "nodeCount": 11,
+        "lineCount": 10,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
         "breakdown": {
-          "nodeCount": 14,
+          "nodeCount": 0,
           "lineCount": 0,
-          "unquotedParensInSquares": 5,
-          "unquotedSpecialChars": 20,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 39,
-        "flags": [
-          "nodes=19",
-          "unq-parens=1",
-          "unq-specials=10"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -5537,6 +5524,33 @@
         "flags": [
           "lines=27"
         ]
+      }
+    },
+    {
+      "slug": "in-tds-key-sections",
+      "titleEn": "Key TDS Sections — 192, 194A, 194C, 194H, 194I, 194J, 194Q, 195",
+      "module": "TDS (Tax Deducted at Source)",
+      "origin": "contentEnMdx#1",
+      "score": {
+        "chartType": "flowchart",
+        "nodeCount": 9,
+        "lineCount": 9,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
+        "subgraphCount": 0,
+        "noOrientation": false,
+        "hasUnusualType": false,
+        "breakdown": {
+          "nodeCount": 0,
+          "lineCount": 0,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
+          "hasDisconnectedSubgraphs": 0,
+          "noOrientation": 0,
+          "hasUnusualType": 0
+        },
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -5718,25 +5732,22 @@
         "chartType": "flowchart",
         "nodeCount": 12,
         "lineCount": 11,
-        "unquotedParensInSquares": 1,
-        "unquotedSpecialChars": 5,
+        "unquotedParensInSquares": 0,
+        "unquotedSpecialChars": 0,
         "subgraphCount": 0,
         "noOrientation": false,
         "hasUnusualType": false,
         "breakdown": {
           "nodeCount": 0,
           "lineCount": 0,
-          "unquotedParensInSquares": 5,
-          "unquotedSpecialChars": 10,
+          "unquotedParensInSquares": 0,
+          "unquotedSpecialChars": 0,
           "hasDisconnectedSubgraphs": 0,
           "noOrientation": 0,
           "hasUnusualType": 0
         },
-        "total": 15,
-        "flags": [
-          "unq-parens=1",
-          "unq-specials=5"
-        ]
+        "total": 0,
+        "flags": []
       }
     },
     {
@@ -6462,304 +6473,5 @@
       }
     }
   ],
-  "flagged": [
-    {
-      "slug": "in-gst-tds-tcs-under-gst",
-      "origin": "mindmapMermaid",
-      "total": 46.5,
-      "flags": [
-        "lines=51"
-      ]
-    },
-    {
-      "slug": "in-as-key-standards",
-      "origin": "flowchartMermaid",
-      "total": 41,
-      "flags": [
-        "nodes=19",
-        "unq-parens=5",
-        "unq-specials=1"
-      ]
-    },
-    {
-      "slug": "in-gst-time-and-value-of-supply",
-      "origin": "mindmapMermaid",
-      "total": 39,
-      "flags": [
-        "lines=46"
-      ]
-    },
-    {
-      "slug": "in-tds-key-sections",
-      "origin": "flowchartMermaid",
-      "total": 39,
-      "flags": [
-        "nodes=19",
-        "unq-parens=1",
-        "unq-specials=10"
-      ]
-    },
-    {
-      "slug": "in-payroll-pf-esi-pt",
-      "origin": "flowchartMermaid",
-      "total": 38,
-      "flags": [
-        "nodes=19",
-        "unq-parens=2",
-        "unq-specials=7"
-      ]
-    },
-    {
-      "slug": "in-final-balance-sheet",
-      "origin": "flowchartMermaid",
-      "total": 31,
-      "flags": [
-        "nodes=14",
-        "unq-parens=3",
-        "unq-specials=6"
-      ]
-    },
-    {
-      "slug": "in-tax-house-property",
-      "origin": "flowchartMermaid",
-      "total": 26,
-      "flags": [
-        "nodes=13",
-        "unq-parens=2",
-        "unq-specials=7"
-      ]
-    },
-    {
-      "slug": "in-adj-depreciation",
-      "origin": "mindmapMermaid",
-      "total": 25.5,
-      "flags": [
-        "lines=37"
-      ]
-    },
-    {
-      "slug": "in-ap-process",
-      "origin": "mindmapMermaid",
-      "total": 24,
-      "flags": [
-        "lines=36"
-      ]
-    },
-    {
-      "slug": "in-gst-introduction-and-benefits",
-      "origin": "flowchartMermaid",
-      "total": 21,
-      "flags": [
-        "unq-parens=1",
-        "unq-specials=8"
-      ]
-    },
-    {
-      "slug": "in-gst-registration",
-      "origin": "mindmapMermaid",
-      "total": 21,
-      "flags": [
-        "lines=34"
-      ]
-    },
-    {
-      "slug": "in-je-common-entries",
-      "origin": "mindmapMermaid",
-      "total": 21,
-      "flags": [
-        "lines=34"
-      ]
-    },
-    {
-      "slug": "in-gst-imports-and-customs",
-      "origin": "flowchartMermaid",
-      "total": 20,
-      "flags": [
-        "nodes=16",
-        "unq-parens=2",
-        "unq-specials=1"
-      ]
-    },
-    {
-      "slug": "in-ar-customer-master",
-      "origin": "mindmapMermaid",
-      "total": 18,
-      "flags": [
-        "lines=32"
-      ]
-    },
-    {
-      "slug": "in-bk-classification-of-accounts",
-      "origin": "flowchartMermaid",
-      "total": 18,
-      "flags": [
-        "nodes=14",
-        "unq-specials=7"
-      ]
-    },
-    {
-      "slug": "in-brs-introduction",
-      "origin": "mindmapMermaid",
-      "total": 18,
-      "flags": [
-        "lines=32"
-      ]
-    },
-    {
-      "slug": "in-gst-notices-and-assessments",
-      "origin": "mindmapMermaid",
-      "total": 18,
-      "flags": [
-        "lines=32"
-      ]
-    },
-    {
-      "slug": "in-gst-returns-gstr3b",
-      "origin": "mindmapMermaid",
-      "total": 18,
-      "flags": [
-        "lines=32"
-      ]
-    },
-    {
-      "slug": "in-payroll-tally-setup",
-      "origin": "mindmapMermaid",
-      "total": 18,
-      "flags": [
-        "lines=32"
-      ]
-    },
-    {
-      "slug": "in-ap-vendor-master-and-recon",
-      "origin": "mindmapMermaid",
-      "total": 16.5,
-      "flags": [
-        "lines=31"
-      ]
-    },
-    {
-      "slug": "in-gst-annual-return-gstr9",
-      "origin": "mindmapMermaid",
-      "total": 16.5,
-      "flags": [
-        "lines=31"
-      ]
-    },
-    {
-      "slug": "in-gst-returns-gstr1",
-      "origin": "mindmapMermaid",
-      "total": 16.5,
-      "flags": [
-        "lines=31"
-      ]
-    },
-    {
-      "slug": "in-tds-certificates-and-returns",
-      "origin": "mindmapMermaid",
-      "total": 16.5,
-      "flags": [
-        "lines=31"
-      ]
-    },
-    {
-      "slug": "in-adj-accrued-income-expense",
-      "origin": "flowchartMermaid",
-      "total": 16,
-      "flags": [
-        "unq-specials=8"
-      ]
-    },
-    {
-      "slug": "in-inv-what-is-inventory",
-      "origin": "flowchartMermaid",
-      "total": 16,
-      "flags": [
-        "unq-specials=8"
-      ]
-    },
-    {
-      "slug": "in-tally-accounting-vouchers",
-      "origin": "flowchartMermaid",
-      "total": 16,
-      "flags": [
-        "unq-specials=8"
-      ]
-    },
-    {
-      "slug": "in-tax-advance-tax",
-      "origin": "flowchartMermaid",
-      "total": 16,
-      "flags": [
-        "unq-specials=8"
-      ]
-    },
-    {
-      "slug": "in-adj-depreciation",
-      "origin": "flowchartMermaid",
-      "total": 15,
-      "flags": [
-        "nodes=14",
-        "unq-parens=1",
-        "unq-specials=3"
-      ]
-    },
-    {
-      "slug": "in-final-pl-statement",
-      "origin": "flowchartMermaid",
-      "total": 15,
-      "flags": [
-        "unq-parens=1",
-        "unq-specials=5"
-      ]
-    },
-    {
-      "slug": "in-gst-composition-scheme",
-      "origin": "mindmapMermaid",
-      "total": 15,
-      "flags": [
-        "lines=30"
-      ]
-    },
-    {
-      "slug": "in-gst-export-and-lut",
-      "origin": "mindmapMermaid",
-      "total": 15,
-      "flags": [
-        "lines=30"
-      ]
-    },
-    {
-      "slug": "in-ratio-liquidity-solvency",
-      "origin": "mindmapMermaid",
-      "total": 15,
-      "flags": [
-        "lines=30"
-      ]
-    },
-    {
-      "slug": "in-tax-house-property",
-      "origin": "mindmapMermaid",
-      "total": 15,
-      "flags": [
-        "lines=30"
-      ]
-    },
-    {
-      "slug": "in-tax-other-sources",
-      "origin": "mindmapMermaid",
-      "total": 15,
-      "flags": [
-        "lines=30"
-      ]
-    },
-    {
-      "slug": "in-voucher-source-documents",
-      "origin": "flowchartMermaid",
-      "total": 15,
-      "flags": [
-        "unq-parens=1",
-        "unq-specials=5"
-      ]
-    }
-  ]
+  "flagged": []
 }

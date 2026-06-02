@@ -28,8 +28,8 @@ import { scoreSource } from './lib/audit-flowcharts/scoring.mjs'
 import { renderMarkdown } from './lib/audit-flowcharts/report.mjs'
 
 const __d = dirname(fileURLToPath(import.meta.url))
-// Script lives at packages/db/scripts/, so repo root is two levels up.
-const ROOT = resolve(__d, '../..')
+// Script lives at packages/db/scripts/, so repo root is three levels up.
+const ROOT = resolve(__d, '../../..')
 const FLAG_THRESHOLD = 15
 
 // ── env loading (root first, then packages/db) ────────────────────────────
