@@ -1,0 +1,22 @@
+{
+  "_placeholder": true,
+  "_note": "This file is overwritten by scripts/audit-flowcharts.mjs on every run. Until the audit script executes against a populated DB, this stub is all that exists. To populate: cd packages/db && node ../../scripts/audit-flowcharts.mjs",
+  "generatedAt": null,
+  "lessonsAudited": 0,
+  "blocksFound": 0,
+  "blocksFlagged": 0,
+  "flagThreshold": 15,
+  "buckets": { "0-5": 0, "5-10": 0, "10-20": 0, "20+": 0 },
+  "heuristicHits": {
+    "noOrientation": 0,
+    "unquotedParensInSquares": 0,
+    "unquotedSpecialChars": 0,
+    "tooManyNodes": 0,
+    "tooManyLines": 0,
+    "tooManySubgraphs": 0,
+    "unusualType": 0
+  },
+  "chartTypes": {},
+  "blocks": [],
+  "flagged": []
+}
