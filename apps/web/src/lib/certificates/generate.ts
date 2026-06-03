@@ -42,6 +42,7 @@ export async function generateBatch(args: {
   const batchId = await createBatch(args.ownerUserId, args.template, args.recipients.length)
 
   const tplForPdf: CertificateTemplate = {
+    templateId: args.template.templateId,
     title: args.template.title,
     bodyTemplate: args.template.bodyTemplate,
     issuerName: args.template.issuerName,

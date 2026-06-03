@@ -1,5 +1,6 @@
 import { createHmac, randomUUID } from 'node:crypto'
 import { prisma } from '@sa/db'
+import type { TemplateId } from './templates/types'
 
 /**
  * Persistence + Supabase Storage upload helpers for the bulk e-certificate
@@ -13,6 +14,11 @@ const HMAC_SECRET = process.env.NEXTAUTH_SECRET ?? 'dev-only-cert-secret'
 const BUCKET = 'certificates'
 
 export type BatchTemplateConfig = {
+  /** Design id from the certificate template registry. Optional — when
+   *  omitted, the orchestrator falls back to `classic-navy` for
+   *  backwards-compat. Not persisted yet (no DB column); flows through to
+   *  `renderCertificateBuffer` only. */
+  templateId?: TemplateId
   title: string
   bodyTemplate: string
   issuerName: string
