@@ -8,6 +8,12 @@
 //
 // Run with tsx so the .ts imports resolve:
 //   pnpm --filter @sa/web exec tsx packages/db/scripts/issue-program-certificates.mjs
+//
+// Flags:
+//   --template=<id>   Certificate design id. Defaults to `ornate-cream`
+//                     (the warm cream + gold + navy program-completion
+//                     design). Valid ids are the keys of TEMPLATE_REGISTRY
+//                     in apps/web/src/lib/certificates/templates/index.ts.
 
 import { readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
@@ -32,6 +38,25 @@ const generate = (
 const OWNER_EMAIL = 'ibrahimshaheer91@gmail.com'
 const RECIPIENT_INBOX = 'ibrahimshaheer91@gmail.com'
 
+// Resolve the design id from --template=<id>; default to ornate-cream,
+// which is the program-completion design Ibrahim asked for.
+const VALID_TEMPLATE_IDS = new Set([
+  'classic-navy',
+  'ornate-cream',
+  'tech-cert-aws',
+  'tech-cert-azure',
+  'tech-cert-gcp',
+])
+const templateFlag = process.argv.find((a) => a.startsWith('--template='))
+const TEMPLATE_ID = templateFlag ? templateFlag.split('=')[1] : 'ornate-cream'
+if (!VALID_TEMPLATE_IDS.has(TEMPLATE_ID)) {
+  console.error(
+    `Unknown --template=${TEMPLATE_ID}. Valid ids: ${[...VALID_TEMPLATE_IDS].join(', ')}`,
+  )
+  process.exit(1)
+}
+console.log(`✓ template: ${TEMPLATE_ID}`)
+
 const owner = await prisma.identityUser.findUnique({
   where: { email: OWNER_EMAIL },
   select: { id: true, name: true },
@@ -45,6 +70,7 @@ console.log(`✓ owner: ${owner.id} (${owner.name ?? '(no name)'})`)
 const result = await generate({
   ownerUserId: owner.id,
   template: {
+    templateId: TEMPLATE_ID,
     title: 'Certificate of Completion',
     bodyTemplate:
       'This is to certify that {{name}} has successfully completed the SuperAccountant Program — demonstrating mastery of Excel, Accounting, GST, and TDS.',

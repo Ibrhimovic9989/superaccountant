@@ -1,5 +1,7 @@
 'use client'
 
+import { ALL_TEMPLATES, DEFAULT_TEMPLATE_ID } from '@/lib/certificates/templates'
+import type { TemplateId } from '@/lib/certificates/templates/types'
 import { cn } from '@/lib/utils'
 import {
   ArrowRight,
@@ -11,6 +13,7 @@ import {
   FileText,
   Loader2,
   Mail,
+  Palette,
   Send,
   Upload,
   Users,
@@ -20,6 +23,7 @@ import { useMemo, useState, useTransition } from 'react'
 
 export type GenerateRequest = {
   template: {
+    templateId: TemplateId
     title: string
     bodyTemplate: string
     issuerName: string
@@ -78,6 +82,7 @@ const ACCENT_OPTIONS: { value: string; label: string }[] = [
 export function CertificateBuilder({ generate, sendBatch }: Props) {
   const today = new Date().toISOString().slice(0, 10)
 
+  const [templateId, setTemplateId] = useState<TemplateId>(DEFAULT_TEMPLATE_ID)
   const [title, setTitle] = useState('Certificate of Participation')
   const [body, setBody] = useState(DEFAULT_BODY)
   const [issuerName, setIssuerName] = useState('CA Muneer Ahmed')
@@ -166,6 +171,7 @@ export function CertificateBuilder({ generate, sendBatch }: Props) {
       try {
         const res = await generate({
           template: {
+            templateId,
             title: title.trim(),
             bodyTemplate: body.trim(),
             issuerName: issuerName.trim(),
@@ -194,6 +200,11 @@ export function CertificateBuilder({ generate, sendBatch }: Props) {
     <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
       {/* ── Left: template + recipients ── */}
       <div className="space-y-8">
+        <section className="rounded-2xl border border-border bg-bg-elev/50 p-6 sm:p-8">
+          <SectionHeader icon={<Palette className="h-3 w-3" />} title="Design" />
+          <TemplatePicker selected={templateId} onSelect={setTemplateId} />
+        </section>
+
         <section className="rounded-2xl border border-border bg-bg-elev/50 p-6 sm:p-8">
           <SectionHeader icon={<FileText className="h-3 w-3" />} title="Template" />
           <div className="grid gap-4 sm:grid-cols-2">
@@ -739,6 +750,48 @@ function SendPanel({
         )}
       </button>
     </div>
+  )
+}
+
+function TemplatePicker({
+  selected,
+  onSelect,
+}: {
+  selected: TemplateId
+  onSelect: (id: TemplateId) => void
+}) {
+  return (
+    <fieldset className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <legend className="sr-only">Certificate design</legend>
+      {ALL_TEMPLATES.map((tpl) => {
+        const isActive = tpl.id === selected
+        return (
+          <button
+            key={tpl.id}
+            type="button"
+            onClick={() => onSelect(tpl.id)}
+            aria-pressed={isActive}
+            className={cn(
+              'group rounded-xl border-2 bg-bg-elev p-4 text-start transition-all',
+              isActive
+                ? 'border-accent ring-2 ring-accent/30'
+                : 'border-border hover:border-border-strong hover:bg-bg-overlay/40',
+            )}
+          >
+            <div className="mb-2 flex items-start justify-between gap-2">
+              <h4 className="text-sm font-semibold tracking-tight text-fg">{tpl.name}</h4>
+              {isActive && <CheckCircle2 className="h-4 w-4 shrink-0 text-accent" />}
+            </div>
+            <p className="line-clamp-2 text-xs leading-snug text-fg-muted">{tpl.description}</p>
+            {tpl.recommended && (
+              <span className="mt-3 inline-flex items-center rounded-full bg-accent/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-accent">
+                {tpl.recommended}
+              </span>
+            )}
+          </button>
+        )
+      })}
+    </fieldset>
   )
 }
 
