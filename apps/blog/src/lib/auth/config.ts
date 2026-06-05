@@ -7,9 +7,12 @@
  * Mirrors apps/companies/src/lib/auth/config.ts. The two apps are
  * deliberately separate (not a shared package) so they can diverge.
  *
- * Phase 2: the Google provider will gain
- *   https://www.googleapis.com/auth/analytics.readonly
- * once we wire admin GA4 dashboards. Today: basic openid/profile/email.
+ * The Google provider requests `analytics.readonly` alongside the
+ * default openid/profile/email so the admin's session carries a GA4
+ * access token. The token is stored on `IdentityAccount.access_token`
+ * (the adapter writes it there) and is later used by the analytics
+ * dashboard to query GA4 via the Data API. Admins must click "Continue"
+ * on the Google consent screen the first time they sign in.
  */
 
 import type { NextAuthConfig } from 'next-auth'
@@ -53,6 +56,21 @@ export const authConfig: NextAuthConfig = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
       allowDangerousEmailAccountLinking: true,
+      authorization: {
+        params: {
+          // Force the consent screen so existing accounts re-prompt for the
+          // newly added analytics scope. `access_type=offline` returns a
+          // refresh token so we can read GA4 indefinitely.
+          prompt: 'consent',
+          access_type: 'offline',
+          scope: [
+            'openid',
+            'email',
+            'profile',
+            'https://www.googleapis.com/auth/analytics.readonly',
+          ].join(' '),
+        },
+      },
     }),
     Nodemailer({
       server: { host: 'unused', port: 0, auth: { user: '', pass: '' } },
