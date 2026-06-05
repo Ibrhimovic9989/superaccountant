@@ -97,7 +97,9 @@ export class WritePostService {
       model: 'placeholder', // deployment is locked via AZURE_OPENAI_DEPLOYMENT
       messages,
       response_format: { type: 'json_object' },
-      temperature: 0.5,
+      // gpt-5.x only accepts the default temperature (1.0); passing
+      // anything else triggers a 400. Keeping the parameter omitted
+      // lets a future deployment swap freely without re-tuning.
     })
     return res.choices[0]?.message.content ?? ''
   }
