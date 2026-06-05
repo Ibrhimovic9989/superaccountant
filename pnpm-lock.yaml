@@ -126,6 +126,9 @@ importers:
       '@sa/email':
         specifier: workspace:*
         version: link:../../packages/email
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       lucide-react:
         specifier: ^0.469.0
         version: 0.469.0(react@19.2.4)
@@ -150,6 +153,9 @@ importers:
       remark-gfm:
         specifier: ^4.0.0
         version: 4.0.1
+      tailwind-merge:
+        specifier: ^2.6.0
+        version: 2.6.1
       zod:
         specifier: ^3.24.1
         version: 3.25.76

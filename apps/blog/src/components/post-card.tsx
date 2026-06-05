@@ -11,7 +11,7 @@ import { marketLabel, readingTimeMinutes } from '@/lib/blog/format'
 export function PostCard({ post }: { post: BlogPost }) {
   const minutes = readingTimeMinutes(post.contentEnMdx)
   return (
-    <article className="group flex flex-col rounded-2xl border border-border bg-bg p-6 transition hover:border-border-strong">
+    <article className="group flex flex-col rounded-2xl border border-border bg-bg-elev p-6 transition-colors hover:border-border-strong hover:bg-bg-overlay">
       <div className="mb-3 flex flex-wrap items-center gap-2 text-[10px] font-mono uppercase tracking-wider text-fg-muted">
         <span className="inline-flex items-center gap-1">
           <MapPin className="h-3 w-3" />

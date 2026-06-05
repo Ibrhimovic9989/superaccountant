@@ -9,8 +9,8 @@
  */
 
 @theme {
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
@@ -113,6 +113,44 @@ body {
 ::selection {
   background: var(--accent);
   color: var(--accent-fg);
+}
+
+/* Aurora gradient text — used by the Wordmark in the nav + footer */
+.aurora-text {
+  background: linear-gradient(
+    110deg,
+    var(--fg) 0%,
+    var(--accent) 35%,
+    var(--fg) 70%,
+    var(--accent) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 6s linear infinite;
+}
+
+@keyframes shine {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+/* Tabular numerals utility — matches marketing/web */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Dot pattern hero background — same recipe as apps/marketing's
+ * DotPattern magic-ui component, but inlined as a CSS utility because
+ * the blog doesn't pull in the motion/canvas magic-ui bundle. */
+.bg-dots {
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: 0 0;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
 }
 
 /* ── Article prose ──
