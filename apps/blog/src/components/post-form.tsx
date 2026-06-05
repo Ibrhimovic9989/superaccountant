@@ -130,7 +130,7 @@ export function PostForm({
       <div className="flex flex-wrap items-center gap-3 border-t border-border pt-5">
         <button
           type="submit"
-          className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-bg px-4 py-2 text-sm font-medium hover:bg-bg-soft"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-bg px-4 py-2 text-sm font-medium hover:bg-bg-overlay"
         >
           {saveLabel}
         </button>

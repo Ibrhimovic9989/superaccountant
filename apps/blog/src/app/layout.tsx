@@ -27,7 +27,7 @@ function SiteHeader() {
   return (
     <header className="border-b border-border bg-bg/95 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <Link href="/" className="font-headline text-lg font-semibold tracking-tight">
+        <Link href="/" className="text-lg font-semibold tracking-tight">
           SuperAccountant
           <span className="ms-1 font-sans text-xs font-normal text-fg-muted">Journal</span>
         </Link>
@@ -56,7 +56,7 @@ function SiteHeader() {
 
 function SiteFooter() {
   return (
-    <footer className="mt-16 border-t border-border bg-bg-soft">
+    <footer className="mt-16 border-t border-border bg-bg-overlay">
       <div className="mx-auto max-w-5xl px-6 py-10 text-sm text-fg-muted">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p>© {new Date().getFullYear()} SuperAccountant. All rights reserved.</p>

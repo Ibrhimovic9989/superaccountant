@@ -10,7 +10,7 @@ export default async function AdminTopicsPage() {
   return (
     <div>
       <header className="mb-8">
-        <h1 className="font-headline text-3xl font-semibold tracking-tight">Topic queue</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Topic queue</h1>
         <p className="mt-1 text-sm text-fg-muted">
           Topics surfaced by the SEO/GEO research agent. Click <em>Write post</em> to spin one up
           with prefilled keywords + market.
@@ -18,13 +18,13 @@ export default async function AdminTopicsPage() {
       </header>
 
       {topics.length === 0 ? (
-        <p className="rounded-2xl border border-border bg-bg-soft p-10 text-center text-sm text-fg-muted">
+        <p className="rounded-2xl border border-border bg-bg-overlay p-10 text-center text-sm text-fg-muted">
           No topics in the queue yet. The writer agent will populate this once it runs.
         </p>
       ) : (
         <div className="overflow-x-auto rounded-2xl border border-border">
           <table className="w-full text-sm">
-            <thead className="bg-bg-soft text-left font-mono text-[11px] uppercase tracking-wider text-fg-muted">
+            <thead className="bg-bg-overlay text-left font-mono text-[11px] uppercase tracking-wider text-fg-muted">
               <tr>
                 <th className="px-5 py-3">Topic</th>
                 <th className="px-5 py-3">Status</th>

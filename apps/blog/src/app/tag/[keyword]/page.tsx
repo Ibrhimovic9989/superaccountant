@@ -32,13 +32,13 @@ export default async function TagPage({ params }: { params: Promise<Params> }) {
   return (
     <main className="mx-auto max-w-5xl px-6 py-12">
       <p className="font-mono text-[11px] uppercase tracking-wider text-accent">Tag</p>
-      <h1 className="mt-3 font-headline text-4xl font-semibold tracking-tight">{decoded}</h1>
+      <h1 className="mt-3 text-4xl font-semibold tracking-tight">{decoded}</h1>
       <p className="mt-2 text-sm text-fg-muted">
         {posts.length} {posts.length === 1 ? 'article' : 'articles'} on this topic.
       </p>
 
       {posts.length === 0 ? (
-        <div className="mt-10 rounded-2xl border border-border bg-bg-soft p-10 text-center">
+        <div className="mt-10 rounded-2xl border border-border bg-bg-overlay p-10 text-center">
           <p className="text-sm text-fg-muted">
             Nothing here yet.{' '}
             <Link href="/" className="text-accent hover:underline">

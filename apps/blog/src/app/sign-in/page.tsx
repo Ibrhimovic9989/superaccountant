@@ -42,7 +42,7 @@ export default async function SignInPage({
         <ShieldCheck className="h-3 w-3" />
         Editorial — admin only
       </div>
-      <h1 className="font-headline text-3xl font-semibold tracking-tight">Sign in to the blog</h1>
+      <h1 className="text-3xl font-semibold tracking-tight">Sign in to the blog</h1>
       <p className="mt-2 text-sm text-fg-muted">
         The SuperAccountant blog is open to read. Admin sign-in is only for the editorial team
         to manage posts and the research queue.
@@ -67,7 +67,7 @@ export default async function SignInPage({
       <form action={googleSignIn} className="mt-8">
         <button
           type="submit"
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-bg px-5 py-3 text-sm font-medium hover:bg-bg-soft"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-bg px-5 py-3 text-sm font-medium hover:bg-bg-overlay"
         >
           Continue with Google
         </button>

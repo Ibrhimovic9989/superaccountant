@@ -23,7 +23,7 @@ export function PostCard({ post }: { post: BlogPost }) {
           {minutes} min read
         </span>
       </div>
-      <h3 className="font-headline text-xl font-semibold leading-snug">
+      <h3 className="text-xl font-semibold leading-snug">
         <Link href={`/${post.slug}`} className="hover:text-accent">
           {post.titleEn}
         </Link>
@@ -37,7 +37,7 @@ export function PostCard({ post }: { post: BlogPost }) {
             <Link
               key={kw}
               href={`/tag/${encodeURIComponent(kw)}`}
-              className="inline-flex rounded-full border border-border bg-bg-soft px-2.5 py-0.5 text-[11px] text-fg-muted hover:border-accent hover:text-accent"
+              className="inline-flex rounded-full border border-border bg-bg-overlay px-2.5 py-0.5 text-[11px] text-fg-muted hover:border-accent hover:text-accent"
             >
               {kw}
             </Link>

@@ -42,7 +42,7 @@ export function ArticleView({
             <span>·</span>
             <span>{dateLabel}</span>
           </div>
-          <h1 className="font-headline text-3xl font-semibold leading-tight sm:text-4xl">
+          <h1 className="text-3xl font-semibold leading-tight sm:text-4xl">
             {post.titleEn}
           </h1>
           {post.subtitleEn && (
@@ -72,7 +72,7 @@ export function ArticleView({
               <Link
                 key={kw}
                 href={`/tag/${encodeURIComponent(kw)}`}
-                className="inline-flex rounded-full border border-border bg-bg-soft px-3 py-1 text-xs text-fg-muted hover:border-accent hover:text-accent"
+                className="inline-flex rounded-full border border-border bg-bg-overlay px-3 py-1 text-xs text-fg-muted hover:border-accent hover:text-accent"
               >
                 #{kw}
               </Link>

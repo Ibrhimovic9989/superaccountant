@@ -15,7 +15,7 @@ export default async function HomePage() {
         <p className="font-mono text-[11px] uppercase tracking-wider text-accent">
           The SuperAccountant Journal
         </p>
-        <h1 className="mt-3 font-headline text-4xl font-semibold leading-tight sm:text-5xl">
+        <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-5xl">
           Practical accounting, written for the people doing the work.
         </h1>
         <p className="mt-4 max-w-2xl text-base text-fg-muted">
@@ -58,8 +58,8 @@ export default async function HomePage() {
 
 function EmptyState() {
   return (
-    <div className="rounded-2xl border border-border bg-bg-soft p-10 text-center">
-      <h2 className="font-headline text-2xl font-semibold">First posts coming soon.</h2>
+    <div className="rounded-2xl border border-border bg-bg-overlay p-10 text-center">
+      <h2 className="text-2xl font-semibold">First posts coming soon.</h2>
       <p className="mt-2 text-sm text-fg-muted">
         We&apos;re seeding the journal now. In the meantime,{' '}
         <Link href="/sign-in" className="text-accent hover:underline">

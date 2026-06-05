@@ -47,7 +47,7 @@ export default async function AdminPostsPage({
     <div>
       <header className="mb-8 flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-headline text-3xl font-semibold tracking-tight">Posts</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">Posts</h1>
           <p className="mt-1 text-sm text-fg-muted">All posts, filterable by status + market.</p>
         </div>
         <Link
@@ -71,13 +71,13 @@ export default async function AdminPostsPage({
       </form>
 
       {posts.length === 0 ? (
-        <p className="rounded-2xl border border-border bg-bg-soft p-10 text-center text-sm text-fg-muted">
+        <p className="rounded-2xl border border-border bg-bg-overlay p-10 text-center text-sm text-fg-muted">
           No posts match these filters.
         </p>
       ) : (
         <div className="overflow-x-auto rounded-2xl border border-border">
           <table className="w-full text-sm">
-            <thead className="bg-bg-soft text-left font-mono text-[11px] uppercase tracking-wider text-fg-muted">
+            <thead className="bg-bg-overlay text-left font-mono text-[11px] uppercase tracking-wider text-fg-muted">
               <tr>
                 <th className="px-5 py-3">Title</th>
                 <th className="px-5 py-3">Status</th>
@@ -158,8 +158,8 @@ function StatusBadge({ status }: { status: string }) {
       : status === 'scheduled'
         ? 'border-warning/30 bg-warning/10 text-warning'
         : status === 'archived'
-          ? 'border-border bg-bg-soft text-fg-muted'
-          : 'border-border bg-bg-soft text-fg-muted'
+          ? 'border-border bg-bg-overlay text-fg-muted'
+          : 'border-border bg-bg-overlay text-fg-muted'
   return (
     <span
       className={`inline-flex rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider ${tone}`}

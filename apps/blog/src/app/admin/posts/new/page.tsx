@@ -27,7 +27,7 @@ export default async function NewPostPage({
         <Link href="/admin/posts" className="text-xs text-fg-muted hover:text-fg">
           ← All posts
         </Link>
-        <h1 className="mt-2 font-headline text-3xl font-semibold tracking-tight">New post</h1>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight">New post</h1>
         {topic && (
           <p className="mt-1 text-sm text-fg-muted">
             Prefilled from topic: <strong className="text-fg">{topic.topic}</strong>

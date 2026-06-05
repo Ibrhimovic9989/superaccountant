@@ -19,7 +19,7 @@ export default async function AdminOverviewPage() {
   return (
     <div className="space-y-10">
       <header>
-        <h1 className="font-headline text-3xl font-semibold tracking-tight">Overview</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Overview</h1>
         <p className="mt-1 text-sm text-fg-muted">
           What&apos;s live, what&apos;s in flight, what&apos;s waiting in the queue.
         </p>
@@ -42,7 +42,7 @@ export default async function AdminOverviewPage() {
           </Link>
         </div>
         {recentPosts.length === 0 ? (
-          <p className="rounded-2xl border border-border bg-bg-soft p-6 text-sm text-fg-muted">
+          <p className="rounded-2xl border border-border bg-bg-overlay p-6 text-sm text-fg-muted">
             No posts yet.{' '}
             <Link href="/admin/posts/new" className="text-accent hover:underline">
               Write the first one
@@ -84,7 +84,7 @@ export default async function AdminOverviewPage() {
           </Link>
         </div>
         {recentTopics.length === 0 ? (
-          <p className="rounded-2xl border border-border bg-bg-soft p-6 text-sm text-fg-muted">
+          <p className="rounded-2xl border border-border bg-bg-overlay p-6 text-sm text-fg-muted">
             No researched topics yet. The writer agent will fill this once it runs.
           </p>
         ) : (
@@ -127,7 +127,7 @@ function StatCard({
         {icon}
         {label}
       </p>
-      <p className="mt-2 font-headline text-3xl font-semibold">{value}</p>
+      <p className="mt-2 text-3xl font-semibold">{value}</p>
     </div>
   )
 }

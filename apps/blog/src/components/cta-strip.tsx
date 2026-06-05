@@ -24,7 +24,7 @@ export function CtaStrip({ market = 'global' }: { market?: BlogMarket }) {
   return (
     <aside className="rounded-2xl border border-accent/40 bg-accent-soft p-6 sm:p-8">
       <p className="font-mono text-[11px] uppercase tracking-wider text-accent">Next step</p>
-      <h2 className="mt-2 font-headline text-2xl font-semibold leading-tight">{headline}</h2>
+      <h2 className="mt-2 text-2xl font-semibold leading-tight">{headline}</h2>
       <p className="mt-2 text-sm text-fg-muted">{sub}</p>
       <div className="mt-5 flex flex-wrap gap-3">
         <a
