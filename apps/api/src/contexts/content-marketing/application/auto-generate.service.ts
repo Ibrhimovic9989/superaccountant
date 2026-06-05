@@ -24,7 +24,7 @@
  * itself — research and write are delegated.
  */
 
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import type { AutoGenerateResult, ResearchedTopic } from '../domain/types'
 import { rotate, weekLabel } from '../domain/rotation'
 import { ResearchTopicsService } from './research-topics.service'
@@ -36,9 +36,9 @@ const RECENT_TOPIC_WINDOW_DAYS = 30
 @Injectable()
 export class AutoGenerateService {
   constructor(
-    private readonly research: ResearchTopicsService,
-    private readonly writer: WritePostService,
-    private readonly repo: BlogRepository,
+    @Inject(ResearchTopicsService) private readonly research: ResearchTopicsService,
+    @Inject(WritePostService) private readonly writer: WritePostService,
+    @Inject(BlogRepository) private readonly repo: BlogRepository,
   ) {}
 
   /**
