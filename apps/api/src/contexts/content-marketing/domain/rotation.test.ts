@@ -71,8 +71,9 @@ describe('rotate — market by day-of-year parity', () => {
 
 describe('rotate — combined output', () => {
   it('returns both audience and market in a single object', () => {
+    // Jun 5 2026 is a Friday (students) and day-of-year 156 (even → ksa).
     const r = rotate(utc(2026, 6, 5))
-    expect(r).toEqual({ audience: 'graduates', market: 'ksa' })
+    expect(r).toEqual({ audience: 'students', market: 'ksa' })
   })
 })
 
