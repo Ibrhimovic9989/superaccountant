@@ -10,6 +10,7 @@ import { CertificationModule } from './contexts/certification/certification.modu
 import { NotificationsModule } from './contexts/notifications/notifications.module'
 import { LoyaltyModule } from './contexts/loyalty/loyalty.module'
 import { CareersModule } from './contexts/careers/careers.module'
+import { ContentMarketingModule } from './contexts/content-marketing/content-marketing.module'
 
 /**
  * Global throttler. Per-IP rate limits applied to every controller.
@@ -37,6 +38,7 @@ import { CareersModule } from './contexts/careers/careers.module'
     NotificationsModule,
     LoyaltyModule,
     CareersModule,
+    ContentMarketingModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
