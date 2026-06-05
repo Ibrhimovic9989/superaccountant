@@ -109,7 +109,12 @@ export async function researchTopics(args: ResearchTopicsArgs): Promise<Research
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt },
         ],
-        response_format: { type: 'json_object' },
+        // Perplexity's response_format API differs from OpenAI's: it
+        // accepts only `text`, `json_schema`, or `regex` — never the
+        // OpenAI legacy `json_object`. Rather than tie ourselves to a
+        // verbose JSON Schema for a fast-moving prompt, we omit the
+        // field; the system prompt already asks for STRICT JSON and the
+        // defensive parser handles fenced/prose-wrapped output.
       }),
       signal: controller.signal,
     })
