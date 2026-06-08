@@ -2,9 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "outputDirectory": ".",
   "functions": {
-    "api/index.ts": {
+    "api/index.js": {
       "maxDuration": 90,
-      "memory": 1024,
+      "includeFiles": "dist/**",
       "excludeFiles": "**/{ffmpeg-static,resvg-js,chrome-aws-lambda,puppeteer*}/**"
     }
   },
