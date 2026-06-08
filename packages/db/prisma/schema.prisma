@@ -5,6 +5,10 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
+  // Vercel serverless runs on Amazon Linux 2 (rhel-openssl). Without
+  // these targets the @sa/api function fails at runtime with
+  // "Query engine library for current platform not found".
+  binaryTargets   = ["native", "rhel-openssl-3.0.x", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
