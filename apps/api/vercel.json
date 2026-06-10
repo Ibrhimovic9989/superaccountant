@@ -4,8 +4,7 @@
   "functions": {
     "api/index.js": {
       "maxDuration": 90,
-      "includeFiles": "dist/**",
-      "excludeFiles": "**/{ffmpeg-static,resvg-js,chrome-aws-lambda,puppeteer*}/**"
+      "includeFiles": "dist/vercel-bundle.cjs"
     }
   },
 

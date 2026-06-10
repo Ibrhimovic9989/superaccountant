@@ -3,16 +3,27 @@ import { z } from 'zod'
 const EnvSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
 
-  // Azure OpenAI
-  AZURE_OPENAI_ENDPOINT: z.string().url(),
-  AZURE_OPENAI_API_KEY: z.string().min(1),
-  AZURE_OPENAI_DEPLOYMENT: z.string().min(1),
-  AZURE_OPENAI_API_VERSION: z.string().min(1),
-  AZURE_OPENAI_EMBEDDING_DEPLOYMENT: z.string().min(1),
+  // Chat — OpenRouter (Qwen3-Coder primary + cascade). Required.
+  OPENROUTER_API_KEY: z.string().min(1),
+  // Optional overrides for the cascade. Comma-separated for fallbacks.
+  AI_CHAT_PRIMARY: z.string().min(1).optional(),
+  AI_CHAT_FALLBACKS: z.string().optional(),
 
-  // Azure Document Intelligence
-  AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT: z.string().url(),
-  AZURE_DOCUMENT_INTELLIGENCE_KEY: z.string().min(1),
+  // Embeddings — Jina v3 (1024-d). Required.
+  JINA_API_KEY: z.string().min(1),
+
+  // Azure OpenAI — RETIRED (sponsorship credit exhausted 2026-06-05).
+  // Kept as optional so existing deploy envs don't fail validation; the
+  // openai SDK is gone from @sa/ai, these only survive for transition.
+  AZURE_OPENAI_ENDPOINT: z.string().url().optional(),
+  AZURE_OPENAI_API_KEY: z.string().min(1).optional(),
+  AZURE_OPENAI_DEPLOYMENT: z.string().min(1).optional(),
+  AZURE_OPENAI_API_VERSION: z.string().min(1).optional(),
+  AZURE_OPENAI_EMBEDDING_DEPLOYMENT: z.string().min(1).optional(),
+
+  // Azure Document Intelligence — kept for OCR.
+  AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT: z.string().url().optional(),
+  AZURE_DOCUMENT_INTELLIGENCE_KEY: z.string().min(1).optional(),
 
   // Azure Speech (TTS) — optional. If absent, the video pipeline gracefully
   // falls back to placeholder URLs and logs a warning.

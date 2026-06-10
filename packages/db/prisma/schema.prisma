@@ -161,7 +161,7 @@ model CurriculumLessonChunk {
   locale    String
   heading   String
   body      String   @db.Text
-  embedding Unsupported("vector(1536)")
+  embedding Unsupported("vector(1024)")
   createdAt DateTime @default(now()) @db.Timestamptz()
 
   lesson    CurriculumLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)

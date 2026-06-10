@@ -10,13 +10,20 @@ import { loadEnv } from '@sa/config'
 export const documentIntelligence = {
   async analyzeUrl(url: string, modelId = 'prebuilt-layout'): Promise<unknown> {
     const env = loadEnv()
+    const endpoint = env.AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT
+    const key = env.AZURE_DOCUMENT_INTELLIGENCE_KEY
+    if (!endpoint || !key) {
+      throw new Error(
+        '[doc-intel] AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT / KEY not configured — OCR is unavailable',
+      )
+    }
     const apiVersion = '2024-11-30'
-    const endpoint = `${env.AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT}/documentintelligence/documentModels/${modelId}:analyze?api-version=${apiVersion}`
+    const analyzeUrl = `${endpoint}/documentintelligence/documentModels/${modelId}:analyze?api-version=${apiVersion}`
 
-    const start = await fetch(endpoint, {
+    const start = await fetch(analyzeUrl, {
       method: 'POST',
       headers: {
-        'Ocp-Apim-Subscription-Key': env.AZURE_DOCUMENT_INTELLIGENCE_KEY,
+        'Ocp-Apim-Subscription-Key': key,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ urlSource: url }),
@@ -30,7 +37,7 @@ export const documentIntelligence = {
     for (let i = 0; i < 60; i++) {
       await new Promise((r) => setTimeout(r, 1000))
       const poll = await fetch(operationLocation, {
-        headers: { 'Ocp-Apim-Subscription-Key': env.AZURE_DOCUMENT_INTELLIGENCE_KEY },
+        headers: { 'Ocp-Apim-Subscription-Key': key },
       })
       const data = (await poll.json()) as { status: string; analyzeResult?: unknown }
       if (data.status === 'succeeded') return data.analyzeResult
