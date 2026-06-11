@@ -3,11 +3,9 @@
   "outputDirectory": ".",
   "functions": {
     "api/index.js": {
-      "maxDuration": 90,
-      "includeFiles": "dist/**"
+      "maxDuration": 90
     }
   },
-
   "rewrites": [
     { "source": "/health", "destination": "/api/index" },
     { "source": "/(.*)", "destination": "/api/index" }

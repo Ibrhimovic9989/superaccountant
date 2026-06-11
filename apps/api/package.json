@@ -4,9 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "tsx watch src/main.ts",
-    "build": "pnpm --filter @sa/db generate && nest build && pnpm run bundle:vercel && pnpm run copy:prisma",
-    "bundle:vercel": "esbuild dist/vercel-bootstrap.js --bundle --platform=node --target=node20 --format=cjs --outfile=dist/vercel-bundle.cjs --external:@nestjs/* --external:@prisma/client --external:.prisma/* --external:@react-pdf/renderer --external:ffmpeg-static --external:@resvg/resvg-js --external:reflect-metadata --external:rxjs --external:express --external:@grpc/grpc-js --external:cache-manager --external:class-transformer --external:class-validator --external:fastify --external:fluent-ffmpeg --external:pino --external:yaml --external:zod --external:zod-to-json-schema",
-    "copy:prisma": "node scripts/copy-prisma-runtime.mjs",
+    "build": "pnpm --filter @sa/db generate && nest build",
     "start": "node dist/main.js",
     "start:prod": "tsx src/main.ts",
     "lint": "biome check src",
@@ -47,7 +45,6 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.0",
     "@vercel/node": "^3.2.24",
-    "esbuild": "^0.24.0",
     "express": "^4.21.2",
     "typescript": "^5.6.3",
     "vitest": "^2.1.8"
