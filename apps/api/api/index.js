@@ -59,6 +59,54 @@ module.exports = async function handler(req, res) {
     }
   }
 
+  // --- Probe 5: actually invoke handleRequest (where the crash is)
+  if (url.startsWith('/__probe/5')) {
+    try {
+      const mod = require('../dist/vercel-bundle.cjs')
+      const handle = mod.handleRequest ?? mod.default?.handleRequest
+      // Wrap with process-level rejection capture so unhandled async
+      // errors surface as JSON instead of killing the lambda.
+      let unhandled = null
+      const onUnhandled = (err) => {
+        unhandled = err
+      }
+      process.once('unhandledRejection', onUnhandled)
+      process.once('uncaughtException', onUnhandled)
+      try {
+        // Intercept res.end so we can read what handleRequest emitted
+        // before returning our wrapper response.
+        const chunks = []
+        const origWrite = res.write.bind(res)
+        const origEnd = res.end.bind(res)
+        let ended = false
+        res.write = (chunk, ...rest) => {
+          if (chunk) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(String(chunk)))
+          return origWrite(chunk, ...rest)
+        }
+        res.end = (chunk, ...rest) => {
+          if (chunk) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(String(chunk)))
+          ended = true
+          return origEnd(chunk, ...rest)
+        }
+        // Synthesise a /health-style probe through the actual handler.
+        const proxyReq = req
+        proxyReq.url = '/health'
+        await handle(proxyReq, res)
+        if (ended) return // delegate succeeded
+        // Didn't end? Capture state.
+        res.statusCode = 500
+        res.end(
+          JSON.stringify({ ok: false, where: 'handleRequest', emitted: chunks.length, unhandled }),
+        )
+      } finally {
+        process.removeListener('unhandledRejection', onUnhandled)
+        process.removeListener('uncaughtException', onUnhandled)
+      }
+    } catch (err) {
+      return fail(res, 'invoke handleRequest', err)
+    }
+  }
+
   // --- Default: full handler
   try {
     const mod = require('../dist/vercel-bundle.cjs')
