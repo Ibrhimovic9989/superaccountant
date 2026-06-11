@@ -4,7 +4,7 @@
   "functions": {
     "api/index.js": {
       "maxDuration": 90,
-      "includeFiles": "{dist/vercel-bundle.cjs,node_modules/@prisma/**,node_modules/.prisma/**,../../node_modules/.pnpm/@prisma+*/**,../../node_modules/.pnpm/.prisma+*/**}"
+      "includeFiles": "dist/**"
     }
   },
 
