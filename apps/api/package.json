@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/main.ts",
     "build": "pnpm --filter @sa/db generate && nest build && pnpm run bundle:vercel && pnpm run copy:prisma",
-    "bundle:vercel": "esbuild dist/vercel-bootstrap.js --bundle --platform=node --target=node20 --format=cjs --outfile=dist/vercel-bundle.cjs --external:@prisma/client --external:.prisma/* --external:@react-pdf/renderer --external:ffmpeg-static --external:@resvg/resvg-js --external:@nestjs/microservices --external:@nestjs/websockets --external:@grpc/grpc-js --external:cache-manager --external:class-transformer --external:class-validator --external:fastify --external:fluent-ffmpeg",
+    "bundle:vercel": "esbuild dist/vercel-bootstrap.js --bundle --platform=node --target=node20 --format=cjs --outfile=dist/vercel-bundle.cjs --external:@nestjs/* --external:@prisma/client --external:.prisma/* --external:@react-pdf/renderer --external:ffmpeg-static --external:@resvg/resvg-js --external:reflect-metadata --external:rxjs --external:express --external:@grpc/grpc-js --external:cache-manager --external:class-transformer --external:class-validator --external:fastify --external:fluent-ffmpeg --external:pino --external:yaml --external:zod --external:zod-to-json-schema",
     "copy:prisma": "node scripts/copy-prisma-runtime.mjs",
     "start": "node dist/main.js",
     "start:prod": "tsx src/main.ts",
