@@ -5,20 +5,26 @@
 
 import 'reflect-metadata'
 import express, { type Express, type Request, type Response } from 'express'
-import { NestFactory } from '@nestjs/core'
-import { ExpressAdapter, type NestExpressApplication } from '@nestjs/platform-express'
-import { AppModule } from '../src/app.module'
 
 let cached: Express | null = null
 let bootPromise: Promise<Express> | null = null
+let bootStep = 'idle'
 
 async function bootstrap(): Promise<Express> {
+  // All heavy imports lazy so /__alive still reports honestly even if
+  // the AppModule import chain itself hard-crashes the runtime (the
+  // earlier failure mode under @vercel/node).
+  bootStep = 'importing-nest'
+  const { NestFactory } = await import('@nestjs/core')
+  const { ExpressAdapter } = await import('@nestjs/platform-express')
+  bootStep = 'importing-app-module'
+  const { AppModule } = await import('../src/app.module')
+  bootStep = 'creating-app'
   const expressApp = express()
-  const app = await NestFactory.create<NestExpressApplication>(
-    AppModule,
-    new ExpressAdapter(expressApp),
-    { bufferLogs: true },
-  )
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp), {
+    bufferLogs: true,
+  })
+  bootStep = 'configuring'
 
   // CORS — production hosts plus *.vercel.app preview branches.
   const DEFAULT_ORIGINS = [
@@ -60,13 +66,52 @@ async function bootstrap(): Promise<Express> {
     res.json({ ok: true, ts: new Date().toISOString(), service: '@sa/api', host: 'vercel' })
   })
 
+  bootStep = 'app-init'
   await app.init()
-  return expressApp
+  bootStep = 'ready'
+  return expressApp as unknown as Express
 }
 
 export default async function handler(req: Request, res: Response) {
   // Diagnostic probe — survives even when bootstrap throws/crashes so
   // we can confirm the lambda process is reachable.
+  // /__step/N — each step a separate cold start so a hard crash at
+  // step N tells us where the natives die. Order: nest → app-module →
+  // nest-factory → app-init.
+  const path = req.url || '/'
+  if (path.startsWith('/__step/nest')) {
+    try {
+      const { NestFactory } = await import('@nestjs/core')
+      json(res, 200, { ok: true, step: 'nest', hasNestFactory: !!NestFactory })
+      return
+    } catch (err) {
+      json(res, 500, { ok: false, step: 'nest', message: errMsg(err) })
+      return
+    }
+  }
+  if (path.startsWith('/__step/app-module')) {
+    try {
+      const { AppModule } = await import('../src/app.module')
+      json(res, 200, { ok: true, step: 'app-module', hasAppModule: !!AppModule })
+      return
+    } catch (err) {
+      json(res, 500, { ok: false, step: 'app-module', message: errMsg(err) })
+      return
+    }
+  }
+  if (path.startsWith('/__step/nest-factory')) {
+    try {
+      const { NestFactory } = await import('@nestjs/core')
+      const { AppModule } = await import('../src/app.module')
+      const app = await NestFactory.create(AppModule, { bufferLogs: true })
+      json(res, 200, { ok: true, step: 'nest-factory', appCreated: !!app })
+      return
+    } catch (err) {
+      json(res, 500, { ok: false, step: 'nest-factory', message: errMsg(err) })
+      return
+    }
+  }
+
   if ((req.url || '').startsWith('/__alive')) {
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')
@@ -78,6 +123,7 @@ export default async function handler(req: Request, res: Response) {
         uptime: process.uptime(),
         bootCached: !!cached,
         bootPromiseStarted: !!bootPromise,
+        bootStep,
       }),
     )
     return
@@ -94,6 +140,7 @@ export default async function handler(req: Request, res: Response) {
       JSON.stringify({
         ok: false,
         where: 'bootstrap',
+        step: bootStep,
         message: err instanceof Error ? err.message : String(err),
         stack:
           err instanceof Error && err.stack ? err.stack.split('\n').slice(0, 14) : null,
@@ -104,4 +151,15 @@ export default async function handler(req: Request, res: Response) {
   // @types/express v5 dropped the call signature on Express; in practice
   // the object IS callable as `(req, res) => void`.
   ;(cached as unknown as (req: Request, res: Response) => void)(req, res)
+}
+
+function json(res: Response, status: number, body: unknown): void {
+  res.statusCode = status
+  res.setHeader('Content-Type', 'application/json')
+  res.end(JSON.stringify(body))
+}
+
+function errMsg(err: unknown): string {
+  if (err instanceof Error) return `${err.message}\n${err.stack ?? ''}`.slice(0, 1500)
+  return String(err).slice(0, 1500)
 }
