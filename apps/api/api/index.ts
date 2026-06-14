@@ -65,9 +65,43 @@ async function bootstrap(): Promise<Express> {
 }
 
 export default async function handler(req: Request, res: Response) {
-  if (!cached) {
-    if (!bootPromise) bootPromise = bootstrap()
-    cached = await bootPromise
+  // Diagnostic probe — survives even when bootstrap throws/crashes so
+  // we can confirm the lambda process is reachable.
+  if ((req.url || '').startsWith('/__alive')) {
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'application/json')
+    res.end(
+      JSON.stringify({
+        ok: true,
+        nodeVersion: process.version,
+        pid: process.pid,
+        uptime: process.uptime(),
+        bootCached: !!cached,
+        bootPromiseStarted: !!bootPromise,
+      }),
+    )
+    return
   }
-  return cached(req, res)
+  try {
+    if (!cached) {
+      if (!bootPromise) bootPromise = bootstrap()
+      cached = await bootPromise
+    }
+  } catch (err) {
+    res.statusCode = 500
+    res.setHeader('Content-Type', 'application/json')
+    res.end(
+      JSON.stringify({
+        ok: false,
+        where: 'bootstrap',
+        message: err instanceof Error ? err.message : String(err),
+        stack:
+          err instanceof Error && err.stack ? err.stack.split('\n').slice(0, 14) : null,
+      }),
+    )
+    return
+  }
+  // @types/express v5 dropped the call signature on Express; in practice
+  // the object IS callable as `(req, res) => void`.
+  ;(cached as unknown as (req: Request, res: Response) => void)(req, res)
 }
