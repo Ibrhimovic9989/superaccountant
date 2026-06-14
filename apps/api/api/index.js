@@ -30,6 +30,46 @@ module.exports = async function handler(req, res) {
     })
   }
 
+  // Step-by-step probes so we can isolate which require() crashes the
+  // lambda hard. /__probe/1 = bootstrap module load only.
+  if (url.startsWith('/__probe/1')) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const mod = require('../dist/vercel-bootstrap.js')
+      return write(res, 200, {
+        ok: true,
+        modKeys: Object.keys(mod).slice(0, 10),
+        hasHandleRequest: typeof mod.handleRequest === 'function',
+      })
+    } catch (err) {
+      return write(res, 500, {
+        ok: false,
+        where: 'require-bootstrap',
+        message: err && err.message ? err.message : String(err),
+        stack: err && err.stack ? String(err.stack).split('\n').slice(0, 14) : null,
+      })
+    }
+  }
+
+  // /__probe/2 = NestFactory.create only, no handleRequest call.
+  if (url.startsWith('/__probe/2')) {
+    try {
+      require('reflect-metadata')
+      const { NestFactory } = require('@nestjs/core')
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { AppModule } = require('../dist/app.module.js')
+      const app = await NestFactory.create(AppModule, { bufferLogs: true })
+      return write(res, 200, { ok: true, appCreated: !!app })
+    } catch (err) {
+      return write(res, 500, {
+        ok: false,
+        where: 'nestfactory-create',
+        message: err && err.message ? err.message : String(err),
+        stack: err && err.stack ? String(err.stack).split('\n').slice(0, 18) : null,
+      })
+    }
+  }
+
   try {
     if (!cached) {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
