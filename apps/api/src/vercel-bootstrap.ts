@@ -50,10 +50,17 @@ function buildAllowedOriginPredicate(): (
 async function bootstrap(): Promise<void> {
   if (bootPromise) return bootPromise
   bootPromise = (async () => {
+    console.error('[boot] step 1: NestFactory.create starting')
     const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp), {
       bufferLogs: true,
+      // Surface bootstrap errors as JSON via process.stderr instead of
+      // dropping them in Vercel's bufferLogs cache (which the runtime
+      // discards on hard crashes).
+      logger: ['error', 'warn', 'log'],
     })
+    console.error('[boot] step 2: NestFactory.create done')
     app.enableCors({ origin: buildAllowedOriginPredicate(), credentials: true })
+    console.error('[boot] step 3: CORS configured')
 
     const httpAdapter = app.getHttpAdapter().getInstance() as {
       set?: (k: string, v: unknown) => void
@@ -68,12 +75,33 @@ async function bootstrap(): Promise<void> {
       res.json({ ok: true, ts: new Date().toISOString(), service: '@sa/api', host: 'vercel' })
     })
 
+    console.error('[boot] step 4: app.init starting')
     await app.init()
+    console.error('[boot] step 5: app.init done — booted')
   })()
   return bootPromise
 }
 
 export async function handleRequest(req: Request, res: Response): Promise<void> {
-  await bootstrap()
+  try {
+    await bootstrap()
+  } catch (err) {
+    console.error('[boot] bootstrap threw:', err && (err as Error).stack)
+    res.statusCode = 500
+    res.setHeader('Content-Type', 'application/json')
+    res.end(
+      JSON.stringify({
+        ok: false,
+        where: 'bootstrap',
+        message: err && (err as Error).message ? (err as Error).message : String(err),
+        stack:
+          err && (err as Error).stack
+            ? String((err as Error).stack).split('\n').slice(0, 14)
+            : null,
+      }),
+    )
+    return
+  }
+  console.error('[boot] step 6: delegating to expressApp', req.url)
   expressApp(req, res)
 }
