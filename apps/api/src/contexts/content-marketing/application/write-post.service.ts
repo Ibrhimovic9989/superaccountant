@@ -94,12 +94,10 @@ export class WritePostService {
     messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }>,
   ): Promise<string> {
     const res = await azureOpenAI().chat.completions.create({
-      model: 'placeholder', // deployment is locked via AZURE_OPENAI_DEPLOYMENT
+      // Model is picked by the OpenRouter cascade in @sa/ai/chat.ts.
+      model: 'placeholder',
       messages,
-      response_format: { type: 'json_object' },
-      // gpt-5.x only accepts the default temperature (1.0); passing
-      // anything else triggers a 400. Keeping the parameter omitted
-      // lets a future deployment swap freely without re-tuning.
+      // No response_format — we use the sentinel envelope, not JSON.
     })
     return res.choices[0]?.message.content ?? ''
   }
@@ -159,16 +157,25 @@ function buildSystemPrompt(args: WritePostArgs): string {
     '  - Do NOT invent statistics or surveys you can\'t source.',
     '  - When in doubt, use words like "according to the official portal" rather than fabricated specifics.',
     '',
-    'OUTPUT FORMAT — STRICT JSON ONLY:',
-    '{',
-    '  "title": string,',
-    '  "slug": string,',
-    '  "subtitle": string,           // ≤ 280 chars, hook the reader',
-    '  "metaDescription": string,    // 120–160 chars',
-    '  "contentMdx": string,         // the full post body, MDX, includes the closing CTA',
-    `  "targetKeywords": string[],   // ${MIN_KEYWORDS}–${MAX_KEYWORDS} entries`,
-    `  "market": "${args.market}"`,
-    '}',
+    // We deliberately avoid asking for the whole post as a JSON
+    // string — free OpenRouter models routinely emit unescaped quotes
+    // inside long markdown bodies and that breaks JSON.parse. A
+    // sentinel-delimited plain-text format is robust to any quoting
+    // the model wants to do.
+    'OUTPUT FORMAT — SENTINEL HEADERS THEN ===CONTENT=== BODY:',
+    'Emit exactly these lines, in order, then a single ===CONTENT=== line',
+    'followed by the full MDX body. No JSON, no markdown fences around the',
+    'envelope, no commentary. Field values are everything after the colon',
+    'until end-of-line (no quoting needed).',
+    '',
+    'TITLE: <≤ 70 chars>',
+    'SLUG: <kebab-case, ≤ 60 chars>',
+    'SUBTITLE: <≤ 280 chars>',
+    `META: <120–${MAX_META_DESC_LEN} chars>`,
+    `KEYWORDS: <${MIN_KEYWORDS}–${MAX_KEYWORDS} comma-separated long-tail phrases>`,
+    `MARKET: ${args.market}`,
+    '===CONTENT===',
+    '<full post body in MDX, ≥ 1200 words, includes the closing CTA verbatim>',
   ].join('\n')
 }
 
@@ -182,7 +189,11 @@ function buildUserPrompt(args: WritePostArgs): string {
   if (args.topic.competitorCoverageGap) {
     lines.push(`COMPETITOR GAP TO EXPLOIT: ${args.topic.competitorCoverageGap}`)
   }
-  lines.push('', 'Write the post now. Return STRICT JSON only.')
+  lines.push(
+    '',
+    'Write the post now. Output the sentinel headers (TITLE/SLUG/SUBTITLE/META/KEYWORDS/MARKET)',
+    'followed by ===CONTENT=== and the MDX body. No JSON. No commentary.',
+  )
   return lines.join('\n')
 }
 
@@ -191,7 +202,8 @@ function buildRemediationPrompt(issues: string[]): string {
     'Your previous output did not pass validation. Issues:',
     ...issues.map((i) => `  - ${i}`),
     '',
-    'Return the SAME post, fixed. STRICT JSON only — no commentary, no markdown fences.',
+    'Return the SAME post, fixed. Use the sentinel-headers + ===CONTENT=== format —',
+    'no JSON, no commentary, no markdown fences around the envelope.',
   ].join('\n')
 }
 
@@ -206,34 +218,84 @@ export function tryParse(raw: string): ParseResult {
   if (!raw || raw.trim().length === 0) {
     return { ok: false, issues: ['empty response from model'] }
   }
-  // The model is told to return JSON, but it sometimes wraps in fences.
-  const candidate = extractJson(raw)
+  // The model sometimes wraps the envelope in a markdown fence even
+  // though we asked it not to — strip a leading fence if present.
+  const candidate = stripOuterFence(raw).trim()
+
+  // Two supported envelopes:
+  //   1. Sentinel headers + ===CONTENT=== + body  (preferred, robust)
+  //   2. Legacy strict JSON                       (still accepted for back-compat)
+  const sentinel = tryParseSentinel(candidate)
+  if (sentinel.ok) return sentinel
+
+  // Fall back to the legacy JSON path — useful if a paid model is
+  // wired in later that handles strict JSON cleanly.
+  const json = tryParseJson(candidate)
+  if (json.ok) return json
+
+  return {
+    ok: false,
+    issues: [
+      ...sentinel.issues.map((s) => `sentinel: ${s}`),
+      ...json.issues.map((s) => `json: ${s}`),
+    ],
+  }
+}
+
+const SENTINEL_BOUNDARY = '===CONTENT==='
+
+function tryParseSentinel(text: string): ParseResult {
+  const idx = text.indexOf(SENTINEL_BOUNDARY)
+  if (idx === -1) return { ok: false, issues: ['no ===CONTENT=== boundary'] }
+  const header = text.slice(0, idx)
+  const body = text.slice(idx + SENTINEL_BOUNDARY.length).trim()
+
+  const fields: Record<string, string> = {}
+  for (const line of header.split(/\r?\n/)) {
+    const m = /^\s*([A-Z]+)\s*:\s*(.*)$/.exec(line)
+    if (m) fields[m[1]!] = m[2]!.trim()
+  }
+  const get = (k: string): string => fields[k] ?? ''
+  const market = get('MARKET').toLowerCase()
+  const keywords = get('KEYWORDS')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+
+  const draft = {
+    title: get('TITLE'),
+    slug: get('SLUG'),
+    subtitle: get('SUBTITLE'),
+    metaDescription: get('META'),
+    contentMdx: body,
+    targetKeywords: keywords,
+    market: market === 'ksa' ? 'ksa' : 'india',
+  }
+  const check = DraftSchema.safeParse(draft)
+  if (!check.success) return { ok: false, issues: flattenIssues(check.error) }
+  return { ok: true, value: check.data }
+}
+
+function tryParseJson(text: string): ParseResult {
   let parsed: unknown
   try {
-    parsed = JSON.parse(candidate)
+    parsed = JSON.parse(text)
   } catch {
-    // Free OpenRouter models routinely emit raw control chars inside
-    // JSON string literals (literal LF/CR/TAB instead of \n/\r/\t).
-    // The spec calls these illegal in string values — sanitise and retry
-    // before giving up.
     try {
-      parsed = JSON.parse(sanitiseControlChars(candidate))
+      parsed = JSON.parse(sanitiseControlChars(text))
     } catch (e2) {
       return { ok: false, issues: [`JSON.parse failed: ${(e2 as Error).message}`] }
     }
   }
   const check = DraftSchema.safeParse(parsed)
-  if (!check.success) {
-    const issues = flattenIssues(check.error)
-    return { ok: false, issues }
-  }
+  if (!check.success) return { ok: false, issues: flattenIssues(check.error) }
   return { ok: true, value: check.data }
 }
 
-function extractJson(text: string): string {
-  const fenced = /```(?:json)?\s*([\s\S]*?)```/i.exec(text)
-  if (fenced?.[1]) return fenced[1].trim()
-  return text.trim()
+function stripOuterFence(text: string): string {
+  const fenced = /^\s*```(?:[a-z]+)?\s*\n([\s\S]*?)\n```\s*$/i.exec(text)
+  if (fenced?.[1]) return fenced[1]
+  return text
 }
 
 /**
