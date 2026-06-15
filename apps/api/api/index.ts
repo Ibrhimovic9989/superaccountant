@@ -109,6 +109,45 @@ export default async function handler(req: Request, res: Response) {
       return
     }
   }
+  // /__module/<name> — instantiate just one context module to find
+  // which one's provider graph hard-crashes Nest. Returns module list
+  // when called bare.
+  if (path === '/__module' || path.startsWith('/__module/')) {
+    const which = path.replace('/__module/', '').trim()
+    const MODULES: Record<string, () => Promise<{ default?: unknown } & Record<string, unknown>>> =
+      {
+        identity: () => import('../src/contexts/identity/identity.module'),
+        curriculum: () => import('../src/contexts/curriculum/curriculum.module'),
+        assessment: () => import('../src/contexts/assessment/assessment.module'),
+        learning: () => import('../src/contexts/learning/learning.module'),
+        tutoring: () => import('../src/contexts/tutoring/tutoring.module'),
+        certification: () => import('../src/contexts/certification/certification.module'),
+        notifications: () => import('../src/contexts/notifications/notifications.module'),
+        loyalty: () => import('../src/contexts/loyalty/loyalty.module'),
+        careers: () => import('../src/contexts/careers/careers.module'),
+        'content-marketing': () =>
+          import('../src/contexts/content-marketing/content-marketing.module'),
+      }
+    if (!which || !MODULES[which]) {
+      json(res, 200, { ok: true, available: Object.keys(MODULES) })
+      return
+    }
+    try {
+      const { NestFactory } = await import('@nestjs/core')
+      const mod = await MODULES[which]()
+      const ModuleClass = Object.values(mod).find(
+        (v): v is new (...args: unknown[]) => unknown => typeof v === 'function',
+      )
+      if (!ModuleClass) throw new Error(`no class export found on contexts/${which}`)
+      const app = await NestFactory.create(ModuleClass, { bufferLogs: true })
+      json(res, 200, { ok: true, module: which, appCreated: !!app })
+      return
+    } catch (err) {
+      json(res, 500, { ok: false, module: which, message: errMsg(err) })
+      return
+    }
+  }
+
   if (path === '/__step/nest-factory') {
     try {
       const { NestFactory } = await import('@nestjs/core')
