@@ -15,7 +15,7 @@ import { randomUUID } from 'node:crypto'
 import { Injectable } from '@nestjs/common'
 import { prisma } from '@sa/db'
 import { type SupportedCurrency, pointsToDiscountMinor } from '../domain/conversion'
-import type { LoyaltyService } from './loyalty.service'
+import { LoyaltyService } from './loyalty.service'
 
 export type PayoutStatus = 'requested' | 'approved' | 'paid' | 'rejected'
 
