@@ -211,8 +211,16 @@ export function tryParse(raw: string): ParseResult {
   let parsed: unknown
   try {
     parsed = JSON.parse(candidate)
-  } catch (e) {
-    return { ok: false, issues: [`JSON.parse failed: ${(e as Error).message}`] }
+  } catch {
+    // Free OpenRouter models routinely emit raw control chars inside
+    // JSON string literals (literal LF/CR/TAB instead of \n/\r/\t).
+    // The spec calls these illegal in string values — sanitise and retry
+    // before giving up.
+    try {
+      parsed = JSON.parse(sanitiseControlChars(candidate))
+    } catch (e2) {
+      return { ok: false, issues: [`JSON.parse failed: ${(e2 as Error).message}`] }
+    }
   }
   const check = DraftSchema.safeParse(parsed)
   if (!check.success) {
@@ -226,6 +234,48 @@ function extractJson(text: string): string {
   const fenced = /```(?:json)?\s*([\s\S]*?)```/i.exec(text)
   if (fenced?.[1]) return fenced[1].trim()
   return text.trim()
+}
+
+/**
+ * Walk a JSON-ish string and escape unescaped control characters that
+ * occur inside string literals — the most common cause of JSON.parse
+ * failures on free LLM output. We track quote state to avoid touching
+ * keywords/structure outside strings.
+ */
+function sanitiseControlChars(input: string): string {
+  let inStr = false
+  let escape = false
+  let out = ''
+  for (let i = 0; i < input.length; i++) {
+    const c = input[i]
+    if (!inStr) {
+      if (c === '"') inStr = true
+      out += c
+      continue
+    }
+    if (escape) {
+      out += c
+      escape = false
+      continue
+    }
+    if (c === '\\') {
+      out += c
+      escape = true
+      continue
+    }
+    if (c === '"') {
+      inStr = false
+      out += c
+      continue
+    }
+    if (c === '\n') out += '\\n'
+    else if (c === '\r') out += '\\r'
+    else if (c === '\t') out += '\\t'
+    // Drop other 0x00-0x1F controls silently — they're invisible anyway.
+    else if (c && c.charCodeAt(0) < 0x20) continue
+    else out += c
+  }
+  return out
 }
 
 function flattenIssues(err: z.ZodError): string[] {
