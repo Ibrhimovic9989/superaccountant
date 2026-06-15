@@ -79,6 +79,36 @@ export default async function handler(req: Request, res: Response) {
   // step N tells us where the natives die. Order: nest → app-module →
   // nest-factory → app-init.
   const path = (req.url || '/').split('?')[0]
+  if (path === '/__step/prisma') {
+    try {
+      const { PrismaClient } = await import('@prisma/client')
+      const p = new PrismaClient()
+      const rows = (await p.$queryRaw`SELECT 1 as ok`) as Array<{ ok: number }>
+      await p.$disconnect()
+      json(res, 200, { ok: true, step: 'prisma', rows })
+      return
+    } catch (err) {
+      json(res, 500, { ok: false, step: 'prisma', message: errMsg(err) })
+      return
+    }
+  }
+  if (path === '/__step/nest-min') {
+    try {
+      const { NestFactory } = await import('@nestjs/core')
+      const { Module } = await import('@nestjs/common')
+      // Synthetic minimal module to test Nest infrastructure in isolation
+      // of our AppModule's transitive provider graph.
+      // biome-ignore lint/correctness/noUnusedVariables: decorator side effect
+      @Module({})
+      class TinyModule {}
+      const app = await NestFactory.create(TinyModule, { bufferLogs: true })
+      json(res, 200, { ok: true, step: 'nest-min', appCreated: !!app })
+      return
+    } catch (err) {
+      json(res, 500, { ok: false, step: 'nest-min', message: errMsg(err) })
+      return
+    }
+  }
   if (path === '/__step/nest-factory') {
     try {
       const { NestFactory } = await import('@nestjs/core')
