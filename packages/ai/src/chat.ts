@@ -84,12 +84,19 @@ export type ChatResponse = {
 
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions'
 
-/** Default cascade if env doesn't override. All free tier. */
+/**
+ * Default cascade if env doesn't override. All entries verified free
+ * on OpenRouter at the time of writing (2026-06-15). DeepSeek-v3.1
+ * and Gemini-2.0-Flash-exp dropped their free tier and were replaced.
+ * Refresh via:
+ *   curl -H "Authorization: Bearer $OPENROUTER_API_KEY" \
+ *        https://openrouter.ai/api/v1/models | jq '.data[].id | select(endswith(":free"))'
+ */
 const DEFAULT_PRIMARY = 'qwen/qwen3-coder:free'
 const DEFAULT_FALLBACKS = [
-  'deepseek/deepseek-chat-v3.1:free',
   'meta-llama/llama-3.3-70b-instruct:free',
-  'google/gemini-2.0-flash-exp:free',
+  'openai/gpt-oss-120b:free',
+  'nvidia/nemotron-3-super-120b-a12b:free',
 ]
 
 function getModelCascade(override?: string): string[] {
