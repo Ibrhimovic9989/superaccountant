@@ -78,18 +78,20 @@ export default async function handler(req: Request, res: Response) {
   // /__step/N — each step a separate cold start so a hard crash at
   // step N tells us where the natives die. Order: nest → app-module →
   // nest-factory → app-init.
-  const path = req.url || '/'
-  if (path.startsWith('/__step/nest')) {
+  const path = (req.url || '/').split('?')[0]
+  if (path === '/__step/nest-factory') {
     try {
       const { NestFactory } = await import('@nestjs/core')
-      json(res, 200, { ok: true, step: 'nest', hasNestFactory: !!NestFactory })
+      const { AppModule } = await import('../src/app.module')
+      const app = await NestFactory.create(AppModule, { bufferLogs: true })
+      json(res, 200, { ok: true, step: 'nest-factory', appCreated: !!app })
       return
     } catch (err) {
-      json(res, 500, { ok: false, step: 'nest', message: errMsg(err) })
+      json(res, 500, { ok: false, step: 'nest-factory', message: errMsg(err) })
       return
     }
   }
-  if (path.startsWith('/__step/app-module')) {
+  if (path === '/__step/app-module') {
     try {
       const { AppModule } = await import('../src/app.module')
       json(res, 200, { ok: true, step: 'app-module', hasAppModule: !!AppModule })
@@ -99,15 +101,13 @@ export default async function handler(req: Request, res: Response) {
       return
     }
   }
-  if (path.startsWith('/__step/nest-factory')) {
+  if (path === '/__step/nest') {
     try {
       const { NestFactory } = await import('@nestjs/core')
-      const { AppModule } = await import('../src/app.module')
-      const app = await NestFactory.create(AppModule, { bufferLogs: true })
-      json(res, 200, { ok: true, step: 'nest-factory', appCreated: !!app })
+      json(res, 200, { ok: true, step: 'nest', hasNestFactory: !!NestFactory })
       return
     } catch (err) {
-      json(res, 500, { ok: false, step: 'nest-factory', message: errMsg(err) })
+      json(res, 500, { ok: false, step: 'nest', message: errMsg(err) })
       return
     }
   }
