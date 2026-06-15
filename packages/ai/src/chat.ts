@@ -85,18 +85,28 @@ export type ChatResponse = {
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions'
 
 /**
- * Default cascade if env doesn't override. All entries verified free
- * on OpenRouter at the time of writing (2026-06-15). DeepSeek-v3.1
- * and Gemini-2.0-Flash-exp dropped their free tier and were replaced.
- * Refresh via:
- *   curl -H "Authorization: Bearer $OPENROUTER_API_KEY" \
- *        https://openrouter.ai/api/v1/models | jq '.data[].id | select(endswith(":free"))'
+ * Default cascade. Picked 2026-06-15 once OpenRouter credits landed —
+ * the free-tier cascade we ran before couldn't reliably produce
+ * publish-grade English/Arabic accounting prose.
+ *
+ * Order is quality-first with a cheap rescue lane:
+ *   primary    anthropic/claude-sonnet-4.6   ($3 / $15 per M)
+ *   fallback 1 deepseek/deepseek-chat-v3.1   ($0.21 / $0.79 per M)
+ *   fallback 2 openai/gpt-5.1                ($1.25 / $10 per M)
+ *   fallback 3 google/gemini-2.5-flash       ($0.30 / $2.50 per M)
+ *
+ * The cascade triggers only on 429/5xx — so we pay primary prices on
+ * the happy path. DeepSeek is the cheap parachute when Anthropic
+ * rate-limits; GPT-5.1 + Gemini-Flash are quality+latency backstops.
+ *
+ * Hot-swappable via AI_CHAT_PRIMARY / AI_CHAT_FALLBACKS env vars —
+ * no redeploy needed to flip vendors.
  */
-const DEFAULT_PRIMARY = 'qwen/qwen3-coder:free'
+const DEFAULT_PRIMARY = 'anthropic/claude-sonnet-4.6'
 const DEFAULT_FALLBACKS = [
-  'meta-llama/llama-3.3-70b-instruct:free',
-  'openai/gpt-oss-120b:free',
-  'nvidia/nemotron-3-super-120b-a12b:free',
+  'deepseek/deepseek-chat-v3.1',
+  'openai/gpt-5.1',
+  'google/gemini-2.5-flash',
 ]
 
 function getModelCascade(override?: string): string[] {
