@@ -8,6 +8,11 @@ export type {
 } from './templates/verification-email'
 export { buildCertificateEmail } from './templates/certificate-issued'
 export type { CertificateEmailArgs, CertificateEmailContent } from './templates/certificate-issued'
+export { buildCohortGraduationEmail } from './templates/cohort-graduation'
+export type {
+  CohortGraduationEmailArgs,
+  CohortGraduationEmailContent,
+} from './templates/cohort-graduation'
 export { buildEligibilityPassedEmail } from './templates/eligibility-passed'
 export type {
   EligibilityPassedEmailArgs,

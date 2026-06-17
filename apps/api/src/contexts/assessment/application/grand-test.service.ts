@@ -218,6 +218,32 @@ export class GrandTestService {
       })
     }
 
+    // Cohort graduation bundle: certificate + learning curve PDF + one
+    // combined email. Lives in apps/web (uses @react-pdf/renderer +
+    // Supabase Storage already wired there), so the API calls into it
+    // via an internal HTTP endpoint with a shared bearer.
+    //
+    // Fire-and-await but never block the test response on it: the
+    // student gets their pass result either way; emailing can finish
+    // in the function's remaining budget. If issuance fails, ops sees
+    // the structured log and can re-issue from the admin UI.
+    if (passed) {
+      try {
+        await issueCohortBundle({
+          userId: args.userId,
+          attemptId: attempt.id,
+          market: attempt.trackId as 'india' | 'ksa',
+          score,
+        })
+      } catch (err) {
+        console.error('[grand-test] cohort bundle issuance failed', {
+          userId: args.userId,
+          attemptId: attempt.id,
+          err: (err as Error).message,
+        })
+      }
+    }
+
     return {
       attemptId: attempt.id,
       score,
@@ -226,6 +252,39 @@ export class GrandTestService {
       correctCount: correct,
       total,
     }
+  }
+}
+
+/**
+ * Call the apps/web internal endpoint that does cert + curve + email.
+ * Uses INTERNAL_ISSUE_TOKEN (falls back to NEXTAUTH_SECRET) — same
+ * resolution the web route does, so prod just needs one env var
+ * mirrored across the two projects.
+ */
+async function issueCohortBundle(args: {
+  userId: string
+  attemptId: string
+  market: 'india' | 'ksa'
+  score: number
+}): Promise<void> {
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL ??
+    process.env.WEB_APP_URL ??
+    'https://app.superaccountant.in'
+  const token = process.env.INTERNAL_ISSUE_TOKEN ?? process.env.NEXTAUTH_SECRET
+  if (!token) {
+    console.warn('[grand-test] INTERNAL_ISSUE_TOKEN missing — skipping cohort bundle')
+    return
+  }
+  const url = `${baseUrl.replace(/\/$/, '')}/api/internal/issue-cohort-credentials`
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(args),
+  })
+  if (!res.ok) {
+    const text = await res.text().catch(() => '')
+    throw new Error(`web /api/internal/issue-cohort-credentials returned ${res.status}: ${text.slice(0, 300)}`)
   }
 }
 
