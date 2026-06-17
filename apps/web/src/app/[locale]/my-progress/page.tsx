@@ -1,16 +1,19 @@
 import { AppNav } from '@/components/app-nav'
+import { ActivityHeatmap } from '@/components/learning-curve/activity-heatmap'
+import { InsightCards } from '@/components/learning-curve/insight-cards'
 import { ShareCredentialsCard } from '@/components/learning-curve/share-credentials-card'
+import { SubjectStrengthList } from '@/components/learning-curve/subject-strength-list'
 import { auth } from '@/lib/auth'
 import { prisma } from '@sa/db'
 import { type LearningCurve, getLearningCurve } from '@/lib/learning-curves/aggregate'
+import { getLearningInsights } from '@/lib/learning-curves/insights'
 import { findRecentReportForUser } from '@/lib/learning-curves/store'
-import { MasteryCurveChart } from '@/app/[locale]/admin/learning-curves/[userId]/mastery-curve-chart'
 import type { SupportedLocale } from '@sa/i18n'
 import {
   Award,
   CheckCircle2,
-  Flame,
   GraduationCap,
+  LineChart,
   Sparkles,
   Target,
   TrendingUp,
@@ -19,19 +22,26 @@ import {
 import { redirect } from 'next/navigation'
 
 /**
- * Student-facing live learning curve. The same aggregation the admin
- * page renders, scoped to `session.user.id` — so every student sees
- * their own day-1-to-now trajectory the moment they log in.
+ * Student-facing live learning curve.
  *
- * Founder's ask (CA Muneer, 2026-06-17 voice note):
- *   "The learning curve has to be designed at the back end. Day 1 to
- *    Day 60, the moment he comes out of the cohort, the full curve
- *    should be ready — with graphs, subject-wise marks, command level
- *    — so recruiters can size up the candidate without re-assessing."
+ * Per CA Muneer's voice note (2026-06-17): "from day 1 to day 60... the
+ * full curve should be ready — with graphs, subject-wise marks, command
+ * level — so recruiters can size up the candidate without re-assessing."
  *
- * This page is the "always-on" view of that curve. The PDF that goes
- * to recruiters is rendered from the same data and bundled with the
- * certificate email at issuance time.
+ * The page is structured around what a hiring manager actually wants to
+ * know about a graduate, in this order:
+ *
+ *   1. Headline pass numbers       (entry / overall / grand)
+ *   2. Recruiter-shareable links   (cert + curve verify URLs)
+ *   3. Four "insight" cards
+ *        improvement   how much they grew (entry → grand delta)
+ *        discipline    did they show up (active days, streak, consistency)
+ *        cohort rank   are they above average vs the same-market cohort
+ *        recovery      what they did when they got something wrong
+ *   4. Subject-strength split      top-5 mastery vs bottom-5
+ *   5. 60-day activity heatmap
+ *
+ * All data is live — no cache.
  */
 export default async function MyProgressPage({
   params,
@@ -45,14 +55,11 @@ export default async function MyProgressPage({
 
   const t = COPY[locale === 'ar' ? 'ar' : 'en']
 
-  // Live data — no cache. Per the founder: "should show from day 1 to
-  // student and admin." Re-fetched on every navigation.
-  const curve = await getLearningCurve(userId)
-
-  // Existing PDF report (any age). Pass a 100-year ceiling so we get
-  // whatever's most recent for this user without inventing a new helper.
+  // Live data, in parallel.
   const ONE_HUNDRED_YEARS = 100 * 365 * 24 * 60 * 60 * 1000
-  const [report, latestCert] = await Promise.all([
+  const [curve, insights, report, latestCert] = await Promise.all([
+    getLearningCurve(userId),
+    getLearningInsights(userId).catch(() => null),
     findRecentReportForUser(userId, ONE_HUNDRED_YEARS).catch(() => null),
     prisma.certificationCertificate
       .findFirst({
@@ -85,7 +92,7 @@ export default async function MyProgressPage({
         userName={session.user.name ?? null}
         userEmail={session.user.email ?? ''}
       />
-      <main className="mx-auto max-w-5xl px-6 py-12">
+      <main className="mx-auto max-w-6xl px-6 py-12">
         <div className="mb-3 flex items-center gap-3">
           <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent-soft/50 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-accent">
             <Sparkles className="h-3 w-3" />
@@ -109,28 +116,21 @@ export default async function MyProgressPage({
           )}
         </header>
 
-        {/* ── Key stats ────────────────────────────────────── */}
+        {/* ── Headline pass numbers ────────────────────────── */}
         <section className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
           <StatCard
             icon={<Target className="h-4 w-4" />}
             label={t.entry}
             value={curve.entryTest ? `${Math.round(curve.entryTest.score * 100)}%` : '—'}
             sub={
-              curve.entryTest
-                ? t.placedPhase(curve.entryTest.placedPhase)
-                : t.notYetTaken
+              curve.entryTest ? t.placedPhase(curve.entryTest.placedPhase) : t.notYetTaken
             }
           />
           <StatCard
             icon={<TrendingUp className="h-4 w-4" />}
             label={t.overall}
             value={`${Math.round(curve.overallMastery * 100)}%`}
-            sub={
-              <span className="inline-flex items-center gap-1.5">
-                <Flame className="h-3 w-3 text-warning" />
-                {t.activeDays(curve.totalDaysActive)}
-              </span>
-            }
+            sub={t.activeDays(curve.totalDaysActive)}
           />
           <StatCard
             icon={<Award className="h-4 w-4" />}
@@ -140,7 +140,7 @@ export default async function MyProgressPage({
           />
         </section>
 
-        {/* ── Share with recruiter (only once we have something to share) ── */}
+        {/* ── Share with recruiter ─────────────────────────── */}
         {(report || latestCert) && (
           <section className="mt-10">
             <h2 className="mb-4 font-mono text-[11px] uppercase tracking-wider text-fg-muted">
@@ -155,39 +155,55 @@ export default async function MyProgressPage({
           </section>
         )}
 
-        {/* ── Phase progress bars ──────────────────────────── */}
-        <section className="mt-10">
-          <h2 className="mb-4 font-mono text-[11px] uppercase tracking-wider text-fg-muted">
-            {t.phaseProgress}
-          </h2>
-          {curve.phases.length === 0 ? (
-            <p className="rounded-2xl border border-border bg-bg-elev/40 p-6 text-sm text-fg-muted">
-              {t.noCurriculum}
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {curve.phases.map((p) => (
-                <PhaseProgressRow
-                  key={p.phaseId}
-                  phase={p}
-                  locale={locale}
-                  copy={t}
-                />
-              ))}
-            </div>
-          )}
-        </section>
+        {/* ── Insight cards: improvement / discipline / percentile / recovery ── */}
+        {insights && (
+          <section className="mt-10">
+            <h2 className="mb-1 flex items-center gap-2 text-lg font-semibold tracking-tight">
+              <LineChart className="h-4 w-4 text-accent" />
+              {t.deepEyebrow}
+            </h2>
+            <p className="mb-5 text-sm text-fg-muted">{t.deepSubtitle}</p>
+            <InsightCards
+              insights={insights}
+              labels={{
+                improvement: t.improvement,
+                discipline: t.discipline,
+                percentile: t.percentile,
+                recovery: t.recovery,
+              }}
+            />
+          </section>
+        )}
 
-        {/* ── Trajectory chart ─────────────────────────────── */}
-        <section className="mt-10">
-          <h2 className="mb-4 font-mono text-[11px] uppercase tracking-wider text-fg-muted">
-            {t.trajectory}
-          </h2>
-          <div className="rounded-2xl border border-border bg-bg-elev/40 p-6">
-            <MasteryCurveChart phases={curve.phases} />
-            <p className="mt-3 text-[11px] text-fg-subtle">{t.trajectoryHelp}</p>
-          </div>
-        </section>
+        {/* ── Subject strengths ────────────────────────────── */}
+        {insights && (insights.topModules.length > 0 || insights.bottomModules.length > 0) && (
+          <section className="mt-10">
+            <h2 className="mb-1 text-lg font-semibold tracking-tight">{t.subjectsTitle}</h2>
+            <p className="mb-5 text-sm text-fg-muted">{t.subjectsSubtitle}</p>
+            <SubjectStrengthList
+              top={insights.topModules}
+              bottom={insights.bottomModules}
+              locale={locale}
+              labels={{
+                strongest: t.strongest,
+                weakest: t.weakest,
+                mastery: t.masteryLabel,
+                lessons: t.lessonsLabel,
+              }}
+            />
+          </section>
+        )}
+
+        {/* ── 60-day activity heatmap ──────────────────────── */}
+        {insights && (
+          <section className="mt-10">
+            <h2 className="mb-1 text-lg font-semibold tracking-tight">{t.heatmapTitle}</h2>
+            <p className="mb-5 text-sm text-fg-muted">{t.heatmapSubtitle}</p>
+            <div className="rounded-2xl border border-border bg-bg-elev/40 p-5">
+              <ActivityHeatmap days={insights.activityHeatmap} />
+            </div>
+          </section>
+        )}
       </main>
     </div>
   )
@@ -202,7 +218,7 @@ const COPY = {
     eyebrow: 'Learning curve',
     title: 'Your day-1-to-now trajectory',
     subtitle:
-      "Everything you've mastered, attempted and where you're heading. The same picture recruiters see when you share your profile.",
+      'A working profile — not just lessons completed but signal a recruiter can use. Refreshes the moment you finish a lesson.',
     enrolled: 'Enrolled',
     entry: 'Entry assessment',
     overall: 'Overall mastery',
@@ -214,15 +230,69 @@ const COPY = {
     notPassed: 'Not yet passed',
     notAttempted: 'Not yet attempted',
     shareEyebrow: 'Share with recruiters',
-    phaseProgress: 'Phase progress',
-    noCurriculum: 'Curriculum loading — check back in a moment.',
-    trajectory: 'Mastery over phases',
-    trajectoryHelp:
-      'Mean mastery (0–100%) across each curriculum phase. The line traces your learning trajectory — the same chart that lands in the PDF report to recruiters.',
-    phaseLabel: (n: number) => `Phase ${n}`,
-    lessonsDone: (done: number, total: number) =>
-      `${done}/${total} lessons · ${Math.round((total ? done / total : 0) * 100)}% complete`,
-    mastery: (m: number) => `${Math.round(m * 100)}% mastery`,
+    deepEyebrow: 'Deep insights',
+    deepSubtitle:
+      'Each card answers one question a hiring manager will ask. All numbers are live — computed from your own assessment and lesson data.',
+    subjectsTitle: 'Subject strengths',
+    subjectsSubtitle:
+      "Where you've built command vs. where you're still climbing. Mastery is the system's tuned 0–100% estimate from every attempt across every lesson in that module.",
+    strongest: 'Strongest 5',
+    weakest: 'Still climbing',
+    masteryLabel: 'mastery',
+    lessonsLabel: 'lessons touched',
+    heatmapTitle: 'Activity over the last 60 days',
+    heatmapSubtitle:
+      'One cell per day, darker = more lessons touched that day. The pattern reads at a glance: consistent grind vs. burst-and-rest vs. abandoned days.',
+    improvement: {
+      title: 'Improvement',
+      gain: (pts: number) =>
+        pts > 0
+          ? `From entry to grand — that's real growth on the same syllabus.`
+          : pts < 0
+            ? `Grand test scored below entry. Worth a re-attempt to lift this.`
+            : `Held the same line from entry to grand. Steady but not climbing.`,
+      sub: 'Entry → Grand',
+      needsData: 'Take both entry + grand tests to see this signal.',
+    },
+    discipline: {
+      title: 'Discipline',
+      active: (d: number) =>
+        d >= 30
+          ? 'Heavy active footprint over the cohort.'
+          : d >= 10
+            ? 'Steady but selective on which days they show up.'
+            : 'Early days — the picture sharpens as more days log in.',
+      sub: (streak: number) =>
+        streak <= 1 ? 'no streak yet' : `${streak}-day streak best`,
+      consistencyShort: (pct: number) => `· ${pct}% consistency`,
+    },
+    percentile: {
+      title: 'Cohort rank',
+      top: (n: number) =>
+        n <= 10
+          ? 'Outperforming nearly everyone on the same market track.'
+          : n <= 25
+            ? 'Comfortably above the cohort median.'
+            : n <= 50
+              ? 'In the upper half of the cohort.'
+              : 'Below the cohort median — still room to climb.',
+      sub: (cohort: number) => `vs. ${cohort} same-track peers`,
+      needsCohort: (n: number) =>
+        n === 0
+          ? "Cohort hasn't started recording mastery yet."
+          : `Cohort still too small to rank (${n} peers).`,
+    },
+    recovery: {
+      title: 'Recovery rate',
+      rate: (pct: number) =>
+        pct >= 80
+          ? 'Comes back at hard topics until they stick. Strong grit signal.'
+          : pct >= 50
+            ? 'Half of the topics they struggled with came back to mastery.'
+            : 'A few weak topics still pending review.',
+      sub: (n: number, total: number) => `${n} of ${total} weak lessons mastered`,
+      needsData: 'No weak topics on record yet.',
+    },
     noData:
       "We couldn't load your learning record yet. Refresh in a moment — if this keeps happening, ping your cohort lead.",
   },
@@ -230,7 +300,7 @@ const COPY = {
     eyebrow: 'منحنى التعلم',
     title: 'مسارك من اليوم الأول حتى الآن',
     subtitle:
-      'كل ما أتقنته، حاولته، والمكان الذي تتجه إليه. هذه الصورة نفسها التي يراها المسؤولون عن التوظيف عند مشاركة ملفك.',
+      'ملف حي — ليس فقط دروسًا مكتملة بل إشارات يستطيع المسؤول عن التوظيف استخدامها. يتحدّث فور إنهائك لأي درس.',
     enrolled: 'تاريخ الالتحاق',
     entry: 'تقييم الدخول',
     overall: 'الإتقان الكلي',
@@ -242,22 +312,76 @@ const COPY = {
     notPassed: 'لم تنجح بعد',
     notAttempted: 'لم تحاول بعد',
     shareEyebrow: 'شارك مع المسؤولين عن التوظيف',
-    phaseProgress: 'تقدم المراحل',
-    noCurriculum: 'يتم تحميل المنهج — تحقق بعد لحظات.',
-    trajectory: 'الإتقان عبر المراحل',
-    trajectoryHelp:
-      'متوسط الإتقان (0–100٪) عبر كل مرحلة من مراحل المنهج. الخط يرسم مسار تعلمك — نفس الرسم البياني في تقرير PDF للمسؤولين عن التوظيف.',
-    phaseLabel: (n: number) => `المرحلة ${n}`,
-    lessonsDone: (done: number, total: number) =>
-      `${done}/${total} درس · ${Math.round((total ? done / total : 0) * 100)}٪ مكتمل`,
-    mastery: (m: number) => `${Math.round(m * 100)}٪ إتقان`,
+    deepEyebrow: 'تحليلات عميقة',
+    deepSubtitle:
+      'كل بطاقة تجيب على سؤال يطرحه المسؤول عن التوظيف. كل الأرقام حية — مُحتسبة من بيانات تقييماتك ودروسك.',
+    subjectsTitle: 'نقاط القوة بحسب المادة',
+    subjectsSubtitle:
+      'حيث أتقنت مقابل ما لا يزال يحتاج عملاً. الإتقان هو تقدير النظام المُعدّل من 0–100٪ بناءً على كل محاولاتك في الدروس داخل تلك الوحدة.',
+    strongest: 'أقوى ٥',
+    weakest: 'لا يزال في التقدم',
+    masteryLabel: 'إتقان',
+    lessonsLabel: 'دروس تم تناولها',
+    heatmapTitle: 'النشاط خلال آخر ٦٠ يوماً',
+    heatmapSubtitle:
+      'خلية لكل يوم، الأغمق = دروس أكثر في ذلك اليوم. يُقرأ النمط بنظرة واحدة: مثابرة منتظمة أم انفجار وراحة أم أيام متروكة.',
+    improvement: {
+      title: 'التحسّن',
+      gain: (pts: number) =>
+        pts > 0
+          ? 'من الدخول إلى النهاية — نمو حقيقي على نفس المنهج.'
+          : pts < 0
+            ? 'الاختبار النهائي أقل من الدخول. يستحق إعادة المحاولة للارتقاء.'
+            : 'حافظت على المستوى من الدخول إلى النهاية. ثبات بدون صعود.',
+      sub: 'الدخول ← النهائي',
+      needsData: 'اخضع لاختباري الدخول والنهاية لرؤية هذه الإشارة.',
+    },
+    discipline: {
+      title: 'الانضباط',
+      active: (d: number) =>
+        d >= 30
+          ? 'بصمة نشاط ضخمة خلال الدورة.'
+          : d >= 10
+            ? 'منتظم لكن انتقائي في أيام الحضور.'
+            : 'في البداية — الصورة تتضح مع تسجيل المزيد من الأيام.',
+      sub: (streak: number) =>
+        streak <= 1 ? 'بدون تتابع بعد' : `أفضل تتابع ${streak} أيام`,
+      consistencyShort: (pct: number) => `· ${pct}٪ ثبات`,
+    },
+    percentile: {
+      title: 'الترتيب في الدفعة',
+      top: (n: number) =>
+        n <= 10
+          ? 'يتفوق على معظم زملاء نفس المسار.'
+          : n <= 25
+            ? 'فوق متوسط الدفعة براحة.'
+            : n <= 50
+              ? 'في النصف الأعلى من الدفعة.'
+              : 'تحت متوسط الدفعة — لا يزال هناك مجال للارتقاء.',
+      sub: (cohort: number) => `مقابل ${cohort} زميل في نفس المسار`,
+      needsCohort: (n: number) =>
+        n === 0
+          ? 'الدفعة لم تبدأ تسجيل الإتقان بعد.'
+          : `الدفعة لا تزال صغيرة للترتيب (${n} زميل).`,
+    },
+    recovery: {
+      title: 'معدّل الاستدراك',
+      rate: (pct: number) =>
+        pct >= 80
+          ? 'يعود للمواضيع الصعبة حتى يتقنها. إشارة عزيمة قوية.'
+          : pct >= 50
+            ? 'نصف المواضيع التي واجه فيها صعوبة عاد إليها وأتقنها.'
+            : 'بعض المواضيع الضعيفة لا تزال بانتظار المراجعة.',
+      sub: (n: number, total: number) => `${n} من ${total} درساً ضعيفاً تم إتقانه`,
+      needsData: 'لا توجد مواضيع ضعيفة مُسجّلة بعد.',
+    },
     noData:
       'لم نتمكن من تحميل سجل التعلم الخاص بك بعد. حدّث الصفحة بعد قليل — إذا استمر هذا، تواصل مع قائد المجموعة.',
   },
 } as const
 
 // ──────────────────────────────────────────────────────────────
-// Subcomponents
+// Sub components
 // ──────────────────────────────────────────────────────────────
 
 function GrandTestSub({
@@ -298,46 +422,6 @@ function StatCard({
       </p>
       <p className="mt-2 text-3xl font-semibold tracking-tight">{value}</p>
       <p className="mt-1 text-xs text-fg-muted">{sub}</p>
-    </div>
-  )
-}
-
-function PhaseProgressRow({
-  phase,
-  locale,
-  copy,
-}: {
-  phase: LearningCurve['phases'][number]
-  locale: SupportedLocale
-  copy: typeof COPY[keyof typeof COPY]
-}) {
-  const completionPct = phase.totalLessons > 0 ? phase.completedLessons / phase.totalLessons : 0
-  const title = locale === 'ar' ? phase.titleAr : phase.titleEn
-  return (
-    <div className="rounded-xl border border-border bg-bg-elev/30 p-4">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <p className="text-sm font-semibold">
-          {copy.phaseLabel(phase.order)} · {title}
-        </p>
-        <p className="text-xs text-fg-muted">
-          {copy.lessonsDone(phase.completedLessons, phase.totalLessons)} ·{' '}
-          {copy.mastery(phase.masteryAvg)}
-        </p>
-      </div>
-      {/* Completion bar (filled) + mastery bar (faded) — same dual track
-          the admin view uses so the two surfaces visually match. */}
-      <div className="mt-2 h-2 w-full rounded-full bg-bg-elev">
-        <div
-          className="h-full rounded-full bg-accent"
-          style={{ width: `${Math.round(completionPct * 100)}%` }}
-        />
-      </div>
-      <div className="mt-1 h-1 w-full rounded-full bg-bg-elev">
-        <div
-          className="h-full rounded-full bg-accent/40"
-          style={{ width: `${Math.round(phase.masteryAvg * 100)}%` }}
-        />
-      </div>
     </div>
   )
 }
