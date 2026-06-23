@@ -1,8 +1,11 @@
 import { AppNav } from '@/components/app-nav'
 import { ActivityHeatmap } from '@/components/learning-curve/activity-heatmap'
+import { EngagementLineChart } from '@/components/learning-curve/engagement-line-chart'
 import { InsightCards } from '@/components/learning-curve/insight-cards'
+import { MasteryDistributionDonut } from '@/components/learning-curve/mastery-distribution-donut'
 import { ShareCredentialsCard } from '@/components/learning-curve/share-credentials-card'
 import { SubjectStrengthList } from '@/components/learning-curve/subject-strength-list'
+import { WeeklyAttemptsBars } from '@/components/learning-curve/weekly-attempts-bars'
 import { auth } from '@/lib/auth'
 import { prisma } from '@sa/db'
 import { type LearningCurve, getLearningCurve } from '@/lib/learning-curves/aggregate'
@@ -175,6 +178,57 @@ export default async function MyProgressPage({
           </section>
         )}
 
+        {/* ── Mastery split donut + Engagement line ───────── */}
+        {insights && (
+          <section className="mt-10">
+            <h2 className="mb-1 text-lg font-semibold tracking-tight">{t.shapeTitle}</h2>
+            <p className="mb-5 text-sm text-fg-muted">{t.shapeSubtitle}</p>
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+              <div className="lg:col-span-2">
+                <MasteryDistributionDonut
+                  d={insights.masteryDistribution}
+                  labels={{
+                    eyebrow: t.donutEyebrow,
+                    mastered: t.donutMastered,
+                    proficient: t.donutProficient,
+                    weak: t.donutWeak,
+                    untouched: t.donutUntouched,
+                    center: (m, total) => (total === 0 ? '—' : `${m}/${total}`),
+                    centerSub: t.donutCenterSub,
+                  }}
+                />
+              </div>
+              <div className="lg:col-span-3">
+                <EngagementLineChart
+                  data={insights.dailyEngagement}
+                  labels={{
+                    eyebrow: t.lineEyebrow,
+                    yLabel: t.lineY,
+                    today: t.today,
+                    start: t.dayZero,
+                  }}
+                />
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ── Weekly attempt volume bars ──────────────────── */}
+        {insights && insights.weeklyAttempts.length > 0 && (
+          <section className="mt-10">
+            <h2 className="mb-1 text-lg font-semibold tracking-tight">{t.barsTitle}</h2>
+            <p className="mb-5 text-sm text-fg-muted">{t.barsSubtitle}</p>
+            <WeeklyAttemptsBars
+              data={insights.weeklyAttempts}
+              labels={{
+                eyebrow: t.barsEyebrow,
+                yLabel: t.barsY,
+                noData: t.barsNoData,
+              }}
+            />
+          </section>
+        )}
+
         {/* ── Subject strengths ────────────────────────────── */}
         {insights && (insights.topModules.length > 0 || insights.bottomModules.length > 0) && (
           <section className="mt-10">
@@ -243,6 +297,25 @@ const COPY = {
     heatmapTitle: 'Activity over the last 60 days',
     heatmapSubtitle:
       'One cell per day, darker = more lessons touched that day. The pattern reads at a glance: consistent grind vs. burst-and-rest vs. abandoned days.',
+    shapeTitle: 'Shape of the journey',
+    shapeSubtitle:
+      'Where you are right now (donut) and how you got there (line). A steep ramp early followed by review is a different story than a flat then late-spike pattern.',
+    donutEyebrow: 'Mastery split',
+    donutMastered: 'Mastered (≥ 80%)',
+    donutProficient: 'Proficient (50–80%)',
+    donutWeak: 'Weak (< 50%)',
+    donutUntouched: 'Untouched',
+    donutCenterSub: 'mastered',
+    lineEyebrow: 'Lessons engaged · cumulative',
+    lineY: 'lessons',
+    today: 'today',
+    dayZero: 'from',
+    barsTitle: 'Assessment volume by week',
+    barsSubtitle:
+      'How many tests you took each week — and how well each batch scored. Bar height = volume, colour = mean score (red weak · violet passing · green strong).',
+    barsEyebrow: 'Attempts per week (last 12 ISO weeks)',
+    barsY: 'attempts',
+    barsNoData: 'No graded assessments yet.',
     improvement: {
       title: 'Improvement',
       gain: (pts: number) =>
@@ -325,6 +398,25 @@ const COPY = {
     heatmapTitle: 'النشاط خلال آخر ٦٠ يوماً',
     heatmapSubtitle:
       'خلية لكل يوم، الأغمق = دروس أكثر في ذلك اليوم. يُقرأ النمط بنظرة واحدة: مثابرة منتظمة أم انفجار وراحة أم أيام متروكة.',
+    shapeTitle: 'شكل الرحلة',
+    shapeSubtitle:
+      'أين أنت الآن (الكعكة) وكيف وصلت إلى هنا (الخط). البداية الحادة المتبوعة بالمراجعة قصة مختلفة عن نمط مسطح ثم قفزة متأخرة.',
+    donutEyebrow: 'توزيع الإتقان',
+    donutMastered: 'متقن (≥ ٨٠٪)',
+    donutProficient: 'كفاءة (٥٠–٨٠٪)',
+    donutWeak: 'ضعيف (< ٥٠٪)',
+    donutUntouched: 'لم يُلمس',
+    donutCenterSub: 'متقن',
+    lineEyebrow: 'الدروس التي تم تناولها · تراكمي',
+    lineY: 'دروس',
+    today: 'اليوم',
+    dayZero: 'من',
+    barsTitle: 'حجم التقييمات بحسب الأسبوع',
+    barsSubtitle:
+      'عدد الاختبارات في كل أسبوع — ومدى نجاح كل دفعة. الارتفاع = العدد، اللون = متوسط النتيجة (أحمر ضعيف · بنفسجي مقبول · أخضر قوي).',
+    barsEyebrow: 'المحاولات في الأسبوع (آخر ١٢ أسبوعاً)',
+    barsY: 'محاولات',
+    barsNoData: 'لا توجد تقييمات مُصحَّحة بعد.',
     improvement: {
       title: 'التحسّن',
       gain: (pts: number) =>

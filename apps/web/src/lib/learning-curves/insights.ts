@@ -47,6 +47,35 @@ export type ActivityDay = {
   touches: number
 }
 
+export type MasteryDistribution = {
+  /** mastery ≥ 0.8 — "owns it". */
+  mastered: number
+  /** 0.5 ≤ mastery < 0.8 — comfortable but not a tutor. */
+  proficient: number
+  /** 0 < mastery < 0.5 — touched, still weak. */
+  weak: number
+  /** Lessons in the track they never touched. */
+  untouched: number
+  /** Total lessons in the track. mastered + proficient + weak + untouched. */
+  total: number
+}
+
+export type DailyEngagement = {
+  /** YYYY-MM-DD. */
+  date: string
+  /** Cumulative distinct lessons engaged by end of this day. */
+  cumulativeLessons: number
+}
+
+export type WeeklyAttempts = {
+  /** ISO-week start, YYYY-MM-DD (Mon). */
+  weekStart: string
+  /** Number of graded AssessmentAttempt rows in this ISO week. */
+  attempts: number
+  /** Mean score across this week's attempts, 0..1. */
+  meanScore: number | null
+}
+
 export type LearningInsights = {
   moduleStrengths: ModuleStrength[]
   /** Strongest 5 modules by mastery (only those with lessonsTouched > 0). */
@@ -55,6 +84,12 @@ export type LearningInsights = {
   bottomModules: ModuleStrength[]
   /** Last 60 calendar days, oldest-first. */
   activityHeatmap: ActivityDay[]
+  /** Counts that sum to the track total — feeds the mastery-distribution donut. */
+  masteryDistribution: MasteryDistribution
+  /** Cumulative distinct-lessons-engaged per day across the last 60 days. */
+  dailyEngagement: DailyEngagement[]
+  /** Up to 12 most-recent ISO weeks (~3 months) of assessment volume. */
+  weeklyAttempts: WeeklyAttempts[]
   improvement: {
     entryScorePct: number | null
     grandScorePct: number | null
@@ -106,6 +141,9 @@ export async function getLearningInsights(userId: string): Promise<LearningInsig
     discipline,
     cohortPercentile,
     recovery,
+    masteryDistribution,
+    dailyEngagement,
+    weeklyAttempts,
   ] = await Promise.all([
     fetchModuleStrengths(userId, market),
     fetchActivityHeatmap(userId),
@@ -113,6 +151,9 @@ export async function getLearningInsights(userId: string): Promise<LearningInsig
     fetchDiscipline(userId),
     fetchCohortPercentile(userId, market),
     fetchRecovery(userId),
+    fetchMasteryDistribution(userId, market),
+    fetchDailyEngagement(userId),
+    fetchWeeklyAttempts(userId),
   ])
 
   // Top/bottom callouts: only consider modules the student has touched.
@@ -126,6 +167,9 @@ export async function getLearningInsights(userId: string): Promise<LearningInsig
     topModules,
     bottomModules,
     activityHeatmap,
+    masteryDistribution,
+    dailyEngagement,
+    weeklyAttempts,
     improvement,
     discipline,
     cohortPercentile,
@@ -378,4 +422,122 @@ async function fetchRecovery(userId: string): Promise<LearningInsights['recovery
   }
   const rate = initiallyWeak > 0 ? recovered / initiallyWeak : null
   return { initiallyWeak, recovered, rate }
+}
+
+// ──────────────────────────────────────────────────────────────
+// Mastery distribution — feeds the donut chart
+// ──────────────────────────────────────────────────────────────
+
+async function fetchMasteryDistribution(
+  userId: string,
+  market: 'india' | 'ksa',
+): Promise<MasteryDistribution> {
+  const rows = await prisma.$queryRaw<
+    Array<{
+      total: bigint
+      mastered: bigint
+      proficient: bigint
+      weak: bigint
+      touched: bigint
+    }>
+  >`
+    SELECT
+      COUNT(cl.id)::bigint                                                                  AS total,
+      COUNT(CASE WHEN lp.mastery >= 0.8 THEN 1 END)::bigint                                  AS mastered,
+      COUNT(CASE WHEN lp.mastery >= 0.5 AND lp.mastery < 0.8 THEN 1 END)::bigint             AS proficient,
+      COUNT(CASE WHEN lp.mastery > 0 AND lp.mastery < 0.5 THEN 1 END)::bigint                AS weak,
+      COUNT(lp.id)::bigint                                                                  AS touched
+    FROM "CurriculumLesson" cl
+    JOIN "CurriculumModule" cm ON cm.id = cl."moduleId"
+    JOIN "CurriculumPhase"  cp ON cp.id = cm."phaseId"
+    JOIN "CurriculumTrack"  ct ON ct.id = cp."trackId"
+    LEFT JOIN "LearningProgress" lp
+      ON lp."lessonId" = cl.id
+     AND lp."enrollmentId" IN (
+       SELECT le.id FROM "LearningEnrollment" le
+        WHERE le."userId" = ${userId} AND le."trackId" = ct.id
+     )
+    WHERE ct.market::text = ${market}
+  `
+  const r = rows[0]
+  const total = Number(r?.total ?? 0)
+  const mastered = Number(r?.mastered ?? 0)
+  const proficient = Number(r?.proficient ?? 0)
+  const weak = Number(r?.weak ?? 0)
+  const touched = Number(r?.touched ?? 0)
+  const untouched = Math.max(0, total - touched)
+  return { mastered, proficient, weak, untouched, total }
+}
+
+// ──────────────────────────────────────────────────────────────
+// Daily engagement — cumulative distinct-lessons-engaged per day
+// ──────────────────────────────────────────────────────────────
+
+async function fetchDailyEngagement(userId: string): Promise<DailyEngagement[]> {
+  // First-touch date per lesson, restricted to this user's enrolments.
+  const rows = await prisma.$queryRaw<Array<{ first_seen: Date }>>`
+    SELECT MIN(GREATEST(lp."lastReviewedAt", lp."updatedAt")) AS first_seen
+    FROM "LearningProgress" lp
+    JOIN "LearningEnrollment" le ON le.id = lp."enrollmentId"
+    WHERE le."userId" = ${userId}
+    GROUP BY lp."lessonId"
+  `
+  // Densify across the heatmap window so the chart axis matches.
+  const out: DailyEngagement[] = []
+  const now = new Date()
+  const start = new Date(now)
+  start.setUTCHours(0, 0, 0, 0)
+  start.setUTCDate(start.getUTCDate() - (HEATMAP_DAYS - 1))
+
+  // Count first-seen dates up to each day for the cumulative line. We
+  // also include first-seen dates BEFORE the window so the line doesn't
+  // start at 0 if the student began studying earlier.
+  let runningBefore = 0
+  for (const r of rows) {
+    if (r.first_seen.getTime() < start.getTime()) runningBefore++
+  }
+  const dailyAdds = new Map<string, number>()
+  for (const r of rows) {
+    if (r.first_seen.getTime() < start.getTime()) continue
+    const key = new Date(r.first_seen).toISOString().slice(0, 10)
+    dailyAdds.set(key, (dailyAdds.get(key) ?? 0) + 1)
+  }
+  let running = runningBefore
+  for (let offset = 0; offset < HEATMAP_DAYS; offset++) {
+    const d = new Date(start)
+    d.setUTCDate(d.getUTCDate() + offset)
+    const key = d.toISOString().slice(0, 10)
+    running += dailyAdds.get(key) ?? 0
+    out.push({ date: key, cumulativeLessons: running })
+  }
+  return out
+}
+
+// ──────────────────────────────────────────────────────────────
+// Weekly attempt volume — feeds the bar chart
+// ──────────────────────────────────────────────────────────────
+
+async function fetchWeeklyAttempts(userId: string): Promise<WeeklyAttempts[]> {
+  const rows = await prisma.$queryRaw<
+    Array<{ week_start: Date; attempts: bigint; mean_score: number | null }>
+  >`
+    SELECT
+      DATE_TRUNC('week', COALESCE(aa."gradedAt", aa."startedAt"))::date AS week_start,
+      COUNT(*)::bigint                                                  AS attempts,
+      AVG(aa.score)::float                                              AS mean_score
+    FROM "AssessmentAttempt" aa
+    WHERE aa."userId" = ${userId} AND aa.status = 'graded'
+    GROUP BY 1
+    ORDER BY 1 DESC
+    LIMIT 12
+  `
+  // Return oldest-first for the chart x-axis.
+  return rows
+    .slice()
+    .reverse()
+    .map((r) => ({
+      weekStart: r.week_start.toISOString().slice(0, 10),
+      attempts: Number(r.attempts ?? 0),
+      meanScore: r.mean_score == null ? null : Math.max(0, Math.min(1, r.mean_score)),
+    }))
 }
