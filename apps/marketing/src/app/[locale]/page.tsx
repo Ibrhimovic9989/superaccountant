@@ -727,12 +727,13 @@ export default async function Landing({
       <MarketingNav locale={locale} />
 
       {/* ─── Founder-led hero ──────────────────────────────── */}
-      <main className="relative z-10 mx-auto max-w-6xl px-4 pt-8 pb-12 sm:px-6 sm:pt-16 sm:pb-16">
-        {/* Copy gets ~1.5x weight so the headline never wraps mid-token;
-            portrait caps at 380px so it doesn't dominate. Portrait sits
-            in the DOM AFTER the copy → on lg+ it lands in the right
-            column naturally, no order acrobatics. */}
-        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.5fr_minmax(0,380px)] lg:gap-12">
+      <main className="relative z-10 mx-auto max-w-6xl overflow-x-hidden px-4 pt-8 pb-12 sm:px-6 sm:pt-16 sm:pb-16">
+        {/* Copy lane gets the bigger share; portrait caps at 360px so
+            it doesn't dominate. Portrait sits in the DOM AFTER the copy
+            → on lg+ it lands in the right column naturally. min-w-0 on
+            both children kills the grid-blowout that otherwise lets the
+            headline push the page wider than the viewport. */}
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.4fr_minmax(0,360px)] lg:gap-12">
           {/* ── Left: copy ─────────────────────────────────── */}
           <div className="min-w-0">
             <BlurFade delay={0.05}>
@@ -743,9 +744,14 @@ export default async function Landing({
             </BlurFade>
 
             <BlurFade delay={0.12}>
-              <h1 className="mt-5 text-balance text-3xl font-semibold leading-[1.12] tracking-tight sm:text-4xl lg:text-[2.75rem] xl:text-5xl">
+              {/* Tightened scale + break-words so the headline always fits the
+                  copy column. No whitespace-nowrap on the ₹25,000 Cr span —
+                  let the browser break it if it has to, rather than pushing
+                  the next word off the right edge. max-w-[16ch] gives the
+                  text a natural balanced ragged-right shape on lg+. */}
+              <h1 className="mt-5 max-w-[18ch] text-balance break-words text-[1.75rem] font-semibold leading-[1.12] tracking-tight sm:text-[2.1rem] lg:text-[2.4rem] xl:text-[2.75rem]">
                 {t.founderHookA}
-                <span className="aurora-text whitespace-nowrap">{t.founderHookB}</span>
+                <span className="aurora-text">{t.founderHookB}</span>
                 {t.founderHookC}
                 <br />
                 <span className="text-fg-muted">{t.founderHookD}</span>
