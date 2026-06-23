@@ -6,6 +6,7 @@ import { NumberTicker } from '@/components/magicui/number-ticker'
 import { MarketingNav } from '@/components/marketing-nav'
 import { Marquee } from '@/components/marquee'
 import { Button } from '@/components/ui/button'
+import { FOUNDER_PORTRAIT_URL } from '@/lib/brand'
 import { appLink } from '@/lib/config'
 import { cn } from '@/lib/utils'
 import type { SupportedLocale } from '@sa/i18n'
@@ -31,6 +32,24 @@ import Link from 'next/link'
 
 const COPY = {
   en: {
+    // ── Founder hero
+    founderBadge: 'CA Muneer Ahmed · FCA · 13 years in practice',
+    founderHookA: "I've audited ",
+    founderHookB: '₹25,000 Cr',
+    founderHookC: " across 4 jurisdictions.",
+    founderHookD: 'Now I want to teach you.',
+    founderSub:
+      "Not another ₹2-lakh coaching. Not a SaaS that ghosts you. Sit in my classroom in Hyderabad — or learn from home with my recorded cohort. Either way, the AI is the practice partner. I'm the teacher.",
+    founderCtaLive: 'Sit with me · Hyderabad cohort',
+    founderCtaDigital: 'Learn from home · Digital cohort',
+    founderCredentialsLabel: "What I've built",
+    founderCredentials: [
+      { value: '₹25,000 Cr', label: 'Audit work signed off' },
+      { value: '13 yrs', label: 'In active CA practice' },
+      { value: '120+', label: 'Professionals trained' },
+      { value: '4', label: 'Jurisdictions (IN · US · UAE · KSA)' },
+    ],
+    // ── Legacy hero strings (kept for old call-sites we haven't deleted yet)
     badge: '50% launch discount · Live cohorts · India + KSA',
     titleA: 'Get job-ready',
     titleB: 'in 45 days.',
@@ -40,6 +59,48 @@ const COPY = {
     secondaryCta: 'Take the eligibility test',
     pillIndia: '🇮🇳 iA26 · India · ₹24,999',
     pillKsa: '🇸🇦 sA26 · KSA · SAR 4,999',
+
+    // ── Two ways to learn with me — the founder-centric tracks section
+    twoWaysLabel: 'Two ways to learn with me',
+    twoWaysTitle: 'The agent does the drills. I do the teaching.',
+    twoWaysSubtitle:
+      "SuperAccountant runs in two tiers — pick the one that fits your life. Same curriculum, same AI tutor, same e-certificate. The difference is whether you sit with me in person or watch the recorded sessions.",
+    twoWays: [
+      {
+        kind: 'digital',
+        name: 'Digital cohort',
+        priceIN: '₹9,999',
+        priceKSA: 'SAR 1,999',
+        eyebrow: 'Best for working professionals',
+        what: 'Recorded sessions of every class I teach, the full AI tutor + daily assignments + grand test, certificate + learning curve. Watch when life lets you.',
+        bullets: [
+          'Watch every class recording (Mon–Sat, 6:30–9:30 PM IST)',
+          '24/7 AI tutor + nightly personalised assignments',
+          'Live group doubt-clearing once a week',
+          'Verifiable cert + learning curve at the end',
+          'Lifetime access to the recordings',
+        ],
+        cta: 'Start the digital cohort',
+        href: '/cohort?tier=digital',
+      },
+      {
+        kind: 'live',
+        name: 'Hyderabad live cohort',
+        priceIN: '₹24,999',
+        priceKSA: null,
+        eyebrow: 'Best for full-time learners',
+        what: 'Everything in the digital cohort, plus 45 days of evening classes sitting in my office in Hyderabad. Mock interviews, hiring intros, the works.',
+        bullets: [
+          'Mon–Sat 6:30–9:30 PM, 45 days, in person with me',
+          'Everything in the Digital cohort included',
+          'Mock interviews + resume rebuild + salary coaching',
+          'Direct intros to CA firms + SMEs hiring entry-level',
+          'Only 30 seats per cohort — apply early',
+        ],
+        cta: 'Reserve a Hyderabad seat',
+        href: '/cohort?tier=live',
+      },
+    ],
     trustLabel: 'Curriculum built on the regulations that govern your work',
     trustItems: [
       'GST',
@@ -281,6 +342,24 @@ const COPY = {
   },
 
   ar: {
+    // ── Founder hero (AR)
+    founderBadge: 'سي إيه منير أحمد · زميل ICAI · ١٣ سنة ممارسة',
+    founderHookA: 'دقّقت أعمالاً بقيمة ',
+    founderHookB: '٢٥٬٠٠٠ كرور',
+    founderHookC: ' عبر ٤ ولايات قضائية.',
+    founderHookD: 'الآن أريد أن أعلّمك أنت.',
+    founderSub:
+      'ليست دورة بـ ٢ لاكه. ولا منصة تتركك وحدك. اجلس معي في فصلي في حيدر آباد — أو تعلّم من بيتك مع الدفعة المسجّلة. في كلا الحالتين، الذكاء الاصطناعي هو شريك التمرين. وأنا المعلّم.',
+    founderCtaLive: 'اجلس معي · دفعة حيدر آباد',
+    founderCtaDigital: 'تعلّم من البيت · الدفعة الرقمية',
+    founderCredentialsLabel: 'ما بنيته',
+    founderCredentials: [
+      { value: '₹٢٥٬٠٠٠ كرور', label: 'أعمال تدقيق موقّعة' },
+      { value: '١٣ سنة', label: 'في الممارسة المهنية' },
+      { value: '+١٢٠', label: 'محترف تم تدريبهم' },
+      { value: '٤', label: 'ولايات قضائية (الهند · أمريكا · الإمارات · السعودية)' },
+    ],
+    // ── Legacy hero strings
     badge: 'خصم الإطلاق ٥٠٪ · دفعات حية · الهند والسعودية',
     titleA: 'كن جاهزًا للعمل',
     titleB: 'في ٤٥ يومًا.',
@@ -290,6 +369,48 @@ const COPY = {
     secondaryCta: 'خذ اختبار الأهلية',
     pillIndia: '🇮🇳 iA26 · الهند · ₹24,999',
     pillKsa: '🇸🇦 sA26 · السعودية · SAR 4,999',
+
+    // ── طريقتان للتعلم معي
+    twoWaysLabel: 'طريقتان للتعلم معي',
+    twoWaysTitle: 'الذكاء الاصطناعي يقوم بالتمارين. أنا أقوم بالتدريس.',
+    twoWaysSubtitle:
+      'سوبر أكاونتنت يأتي بطبقتين — اختر ما يناسب حياتك. نفس المنهج، نفس المدرس الذكي، نفس الشهادة. الفرق هو هل تجلس معي شخصياً أم تشاهد الجلسات المسجّلة.',
+    twoWays: [
+      {
+        kind: 'digital',
+        name: 'الدفعة الرقمية',
+        priceIN: '₹9,999',
+        priceKSA: 'SAR 1,999',
+        eyebrow: 'مناسب للعاملين',
+        what: 'تسجيلات كل فصل أعلّمه، مع المدرس الذكي الكامل + الواجبات اليومية + الاختبار النهائي، شهادة + منحنى تعلم. شاهد متى ما سمحت لك الحياة.',
+        bullets: [
+          'شاهد تسجيلات كل الفصول (الإثنين–السبت، ٦:٣٠–٩:٣٠ مساءً بتوقيت الهند)',
+          'مدرس ذكي ٢٤/٧ + واجبات شخصية كل ليلة',
+          'جلسة جماعية لحلّ الشكوك مرة أسبوعياً',
+          'شهادة قابلة للتحقق + منحنى تعلم في النهاية',
+          'وصول مدى الحياة للتسجيلات',
+        ],
+        cta: 'ابدأ الدفعة الرقمية',
+        href: '/cohort?tier=digital',
+      },
+      {
+        kind: 'live',
+        name: 'دفعة حيدر آباد الحضورية',
+        priceIN: '₹24,999',
+        priceKSA: null,
+        eyebrow: 'مناسب للمتفرّغين',
+        what: 'كل ما في الدفعة الرقمية، بالإضافة إلى ٤٥ يوماً من الفصول المسائية في مكتبي في حيدر آباد. مقابلات تجريبية، وصلات توظيف، كل شيء.',
+        bullets: [
+          'الإثنين–السبت ٦:٣٠–٩:٣٠ مساءً، ٤٥ يوماً، حضورياً معي',
+          'كل ما في الدفعة الرقمية مشمول',
+          'مقابلات تجريبية + إعادة بناء السيرة + تدريب على التفاوض',
+          'تعريفات مباشرة بشركات CA + الشركات الصغيرة التي توظف المبتدئين',
+          'فقط ٣٠ مقعداً لكل دفعة — قدّم مبكراً',
+        ],
+        cta: 'احجز مقعداً في حيدر آباد',
+        href: '/cohort?tier=live',
+      },
+    ],
     trustLabel: 'منهج مبني على الأنظمة التي تحكم عملك',
     trustItems: [
       'GST',
@@ -553,75 +674,84 @@ export default async function Landing({
 
       <MarketingNav locale={locale} />
 
-      {/* ─── Hero ──────────────────────────────────────────── */}
-      <main className="relative z-10 mx-auto max-w-5xl px-4 pt-8 pb-16 text-center sm:px-6 sm:pt-20 sm:pb-20">
-        <BlurFade delay={0.05}>
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev/80 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted backdrop-blur">
-            <Sparkles className="h-3 w-3 text-accent" />
-            {t.badge}
+      {/* ─── Founder-led hero ──────────────────────────────── */}
+      <main className="relative z-10 mx-auto max-w-6xl px-4 pt-8 pb-12 sm:px-6 sm:pt-16 sm:pb-16">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-14">
+          {/* ── Left: copy ─────────────────────────────────── */}
+          <div className="order-2 lg:order-1">
+            <BlurFade delay={0.05}>
+              <div className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent-soft/40 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-accent backdrop-blur">
+                <Sparkles className="h-3 w-3" />
+                {t.founderBadge}
+              </div>
+            </BlurFade>
+
+            <BlurFade delay={0.12}>
+              <h1 className="mt-5 text-[2rem] font-semibold leading-[1.1] tracking-tight sm:text-5xl lg:text-[3.4rem]">
+                {t.founderHookA}
+                <span className="aurora-text">{t.founderHookB}</span>
+                {t.founderHookC}
+                <br />
+                <span className="text-fg-muted">{t.founderHookD}</span>
+              </h1>
+            </BlurFade>
+
+            <BlurFade delay={0.2}>
+              <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-fg-muted sm:text-base">
+                {t.founderSub}
+              </p>
+            </BlurFade>
+
+            <BlurFade delay={0.28}>
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <div className="relative inline-flex">
+                  <Button
+                    asChild
+                    variant="accent"
+                    size="lg"
+                    className="relative w-full overflow-hidden sm:w-auto"
+                  >
+                    <a href={appLink(locale, '/cohort?tier=live#apply')}>
+                      {t.founderCtaLive}
+                      <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                      <BorderBeam size={56} duration={6} colorFrom="#a78bfa" colorTo="#8b5cf6" />
+                    </a>
+                  </Button>
+                </div>
+                <Button asChild variant="secondary" size="lg" className="w-full sm:w-auto">
+                  <a href={appLink(locale, '/cohort?tier=digital#apply')}>
+                    {t.founderCtaDigital}
+                    <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                  </a>
+                </Button>
+              </div>
+            </BlurFade>
+
+            {/* Credentials strip — what makes the founder a founder */}
+            <BlurFade delay={0.36}>
+              <div className="mt-10 border-t border-border pt-6">
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-subtle">
+                  {t.founderCredentialsLabel}
+                </p>
+                <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
+                  {t.founderCredentials.map((c) => (
+                    <div key={c.label}>
+                      <dt className="text-xl font-semibold tracking-tight text-fg sm:text-[1.7rem]">
+                        {c.value}
+                      </dt>
+                      <dd className="mt-1 text-[11px] leading-snug text-fg-muted">{c.label}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </BlurFade>
           </div>
-        </BlurFade>
 
-        <BlurFade delay={0.12}>
-          <h1 className="mt-5 text-[2.25rem] font-semibold leading-[1.08] tracking-tight sm:mt-6 sm:text-6xl lg:text-7xl">
-            {t.titleA}
-            <br />
-            <span className="aurora-text">{t.titleB}</span>
-          </h1>
-        </BlurFade>
-
-        <BlurFade delay={0.18}>
-          <p className="mx-auto mt-5 max-w-2xl text-[15px] leading-relaxed text-fg-muted sm:mt-6 sm:text-lg">
-            {t.subtitle}
-          </p>
-        </BlurFade>
-
-        <BlurFade delay={0.24}>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev px-3 py-1 text-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              {t.pillIndia}
-            </span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-bg-elev px-3 py-1 text-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              {t.pillKsa}
-            </span>
-          </div>
-        </BlurFade>
-
-        <BlurFade delay={0.3}>
-          <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center">
-            <div className="relative inline-flex w-full sm:w-auto">
-              <Button
-                asChild
-                variant="accent"
-                size="lg"
-                className="relative w-full overflow-hidden sm:w-auto"
-              >
-                <a href={appLink(locale, '/cohort#apply')}>
-                  {t.primaryCta}
-                  <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-                  <BorderBeam size={56} duration={6} colorFrom="#a78bfa" colorTo="#8b5cf6" />
-                </a>
-              </Button>
-            </div>
-            <Button asChild variant="secondary" size="lg" className="w-full sm:w-auto">
-              <a href={appLink(locale, '/quiz')}>
-                {t.secondaryCta}
-                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-              </a>
-            </Button>
-          </div>
-        </BlurFade>
-
-        {/* Stats inline under CTA */}
-        <BlurFade delay={0.4}>
-          <div className="mx-auto mt-12 grid max-w-3xl grid-cols-3 divide-x divide-border rounded-2xl border border-border bg-bg-elev/50 backdrop-blur sm:mt-16 rtl:divide-x-reverse">
-            <StatInline value={45} label={locale === 'ar' ? 'يومًا في الفصل' : 'Days in cohort'} />
-            <StatInline value={30} label={locale === 'ar' ? 'مقعدًا/دفعة' : 'Seats per cohort'} />
-            <StatInline value={2} label={locale === 'ar' ? 'مساران' : 'Tracks'} />
-          </div>
-        </BlurFade>
+          {/* ── Right: portrait ────────────────────────────── */}
+          <BlurFade delay={0.18}>
+            <FounderPortrait locale={locale} />
+          </BlurFade>
+        </div>
       </main>
 
       {/* ─── Trust marquee ─────────────────────────────────── */}
@@ -644,6 +774,9 @@ export default async function Landing({
           />
         </div>
       </section>
+
+      {/* ─── Two ways to learn with me ─────────────────────── */}
+      <TwoWaysSection locale={locale} t={t} />
 
       {/* ─── How it works ──────────────────────────────────── */}
       <section className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-28">
@@ -1133,6 +1266,160 @@ export default async function Landing({
 }
 
 // ─── Sub-components ─────────────────────────────────────────
+
+function FounderPortrait({ locale }: { locale: SupportedLocale }) {
+  const isAr = locale === 'ar'
+  return (
+    <div className="relative order-1 mx-auto w-full max-w-sm lg:order-2 lg:mx-0 lg:max-w-none">
+      {/* Soft glow behind the portrait */}
+      <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-br from-accent/30 via-accent/10 to-transparent blur-2xl" />
+
+      <div className="relative overflow-hidden rounded-[1.75rem] border border-border bg-bg-elev/60 shadow-[0_30px_80px_-30px_rgba(124,58,237,0.45)] backdrop-blur">
+        {/* biome-ignore lint/performance/noImgElement: hot-link via plain img to avoid next/image domain config + bundling overhead, matches /lib/brand/logo.tsx pattern */}
+        <img
+          src={FOUNDER_PORTRAIT_URL}
+          alt={isAr ? 'سي إيه منير أحمد' : 'CA Muneer Ahmed'}
+          width={640}
+          height={640}
+          className="block aspect-square w-full object-cover"
+          loading="eager"
+          decoding="async"
+        />
+
+        {/* Bottom caption — name + role, anchored on the portrait */}
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-bg/95 via-bg/70 to-transparent p-5 backdrop-blur-sm">
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-accent">
+            {isAr ? 'المؤسس' : 'Founder'}
+          </p>
+          <p className="mt-1 text-base font-semibold tracking-tight text-fg sm:text-lg">
+            {isAr ? 'سي إيه منير أحمد' : 'CA Muneer Ahmed'}
+          </p>
+          <p className="text-xs text-fg-muted">
+            {isAr ? 'زميل ICAI · ١٣ سنة ممارسة · حيدر آباد' : 'FCA · ICAI · 13 yrs · Hyderabad'}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function TwoWaysSection({
+  locale,
+  t,
+}: {
+  locale: SupportedLocale
+  // `as const` makes COPY.en and COPY.ar have different narrow types;
+  // widen to either-or so this section accepts both locales.
+  t: (typeof COPY)[keyof typeof COPY]
+}) {
+  const isAr = locale === 'ar'
+  return (
+    <section
+      id="two-ways"
+      className="relative z-10 border-t border-border bg-bg-elev/20 py-16 backdrop-blur sm:py-24"
+    >
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <BlurFade delay={0.05}>
+          <SectionEyebrow text={t.twoWaysLabel} />
+          <h2 className="mt-4 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
+            {t.twoWaysTitle}
+          </h2>
+          <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-fg-muted sm:text-base">
+            {t.twoWaysSubtitle}
+          </p>
+        </BlurFade>
+
+        <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-2">
+          {t.twoWays.map((way, i) => {
+            const isLive = way.kind === 'live'
+            return (
+              <BlurFade key={way.kind} delay={0.1 + i * 0.06}>
+                <article
+                  className={cn(
+                    'relative flex h-full flex-col overflow-hidden rounded-3xl border p-6 backdrop-blur sm:p-8',
+                    isLive
+                      ? 'border-accent/40 bg-accent-soft/30 shadow-[0_30px_80px_-40px_rgba(124,58,237,0.5)]'
+                      : 'border-border bg-bg-elev/50',
+                  )}
+                >
+                  {isLive && (
+                    <BorderBeam
+                      size={120}
+                      duration={10}
+                      colorFrom="#a78bfa"
+                      colorTo="#8b5cf6"
+                    />
+                  )}
+
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+                        {way.eyebrow}
+                      </p>
+                      <h3 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">
+                        {way.name}
+                      </h3>
+                    </div>
+                    {isLive && (
+                      <span className="rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-accent">
+                        {isAr ? 'مع المؤسس' : 'With founder'}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap items-baseline gap-3">
+                    <span className="text-3xl font-semibold tracking-tight sm:text-4xl">
+                      {way.priceIN}
+                    </span>
+                    <span className="font-mono text-xs uppercase tracking-wider text-fg-subtle">
+                      {isAr ? 'الهند' : 'India'}
+                    </span>
+                    {way.priceKSA && (
+                      <>
+                        <span className="text-fg-subtle/60">·</span>
+                        <span className="text-xl font-semibold tracking-tight">
+                          {way.priceKSA}
+                        </span>
+                        <span className="font-mono text-xs uppercase tracking-wider text-fg-subtle">
+                          {isAr ? 'السعودية' : 'KSA'}
+                        </span>
+                      </>
+                    )}
+                  </div>
+
+                  <p className="mt-5 text-[15px] leading-relaxed text-fg-muted">{way.what}</p>
+
+                  <ul className="mt-6 space-y-2.5 text-sm">
+                    {way.bullets.map((b) => (
+                      <li key={b} className="flex items-start gap-2.5 text-fg">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                        <span className="leading-snug">{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-7 pt-5">
+                    <Button
+                      asChild
+                      variant={isLive ? 'accent' : 'secondary'}
+                      size="lg"
+                      className="w-full"
+                    >
+                      <a href={appLink(locale, way.href)}>
+                        {way.cta}
+                        <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                      </a>
+                    </Button>
+                  </div>
+                </article>
+              </BlurFade>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
 
 function SectionEyebrow({
   text,
