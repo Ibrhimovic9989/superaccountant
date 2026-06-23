@@ -91,12 +91,17 @@ const COPY = {
     twoWaysTitle: 'Pick the one that fits your life.',
     twoWaysSubtitle:
       "Same curriculum I designed. Same instructor bench teaching it. Same AI tutor for nightly practice. Same e-certificate and learning curve at the end. The difference is in-person evenings vs. lifetime recordings.",
+    couponCode: 'LAUNCH50',
+    couponNote: 'Use LAUNCH50 at checkout — 50% off launch pricing',
+    effectivePriceLabel: 'After LAUNCH50',
     twoWays: [
       {
         kind: 'digital',
         name: 'Digital cohort',
-        priceIN: '₹9,999',
-        priceKSA: 'SAR 1,999',
+        priceIN: '₹50,000',
+        priceINAfter: '₹25,000',
+        priceKSA: '$5,000',
+        priceKSAAfter: '$2,500',
         eyebrow: 'Best for working professionals',
         what: 'Recorded sessions of every class the instructor bench teaches, the full AI tutor, daily assignments, grand test, certificate + learning curve. Watch when life lets you.',
         bullets: [
@@ -104,7 +109,7 @@ const COPY = {
           '24/7 AI tutor + nightly personalised assignments',
           'Live group doubt-clearing once a week',
           'Verifiable cert + learning curve at the end',
-          'CA Muneer\'s recorded founder workshops included',
+          "CA Muneer's recorded founder workshops included",
         ],
         cta: 'Start the digital cohort',
         href: '/cohort?tier=digital',
@@ -112,13 +117,15 @@ const COPY = {
       {
         kind: 'live',
         name: 'Hyderabad live cohort',
-        priceIN: '₹24,999',
+        priceIN: '₹50,000',
+        priceINAfter: '₹25,000',
         priceKSA: null,
+        priceKSAAfter: null,
         eyebrow: 'Best for full-time learners',
-        what: 'Everything in the digital cohort, plus 45 days of evening classes in person with the instructor bench, mock interviews, and direct hiring intros from CA Muneer\'s firm.',
+        what: "Everything in the digital cohort, plus 45 days of evening classes in person with the instructor bench, mock interviews, and direct hiring intros from CA Muneer's firm.",
         bullets: [
           'In-person Mon–Sat 6:30–9:30 PM, 45 days, with the instructor bench',
-          'CA Muneer\'s ~2 signature workshops per cohort, in the room',
+          "CA Muneer's ~2 signature workshops per cohort, in the room",
           'Everything in the Digital cohort included',
           'Mock interviews + resume rebuild + salary coaching',
           'Only 30 seats per cohort — apply early',
@@ -427,12 +434,17 @@ const COPY = {
     twoWaysTitle: 'اختر ما يناسب حياتك.',
     twoWaysSubtitle:
       'نفس المنهج الذي صمّمته. نفس فريق المدرّبين الذي يدرّسه. نفس المدرس الذكي للتمرين الليلي. نفس الشهادة ومنحنى التعلم في النهاية. الفرق هو فصول مسائية حضورية مقابل تسجيلات مدى الحياة.',
+    couponCode: 'LAUNCH50',
+    couponNote: 'استخدم الرمز LAUNCH50 عند الدفع — خصم ٥٠٪ على سعر الإطلاق',
+    effectivePriceLabel: 'بعد الرمز LAUNCH50',
     twoWays: [
       {
         kind: 'digital',
         name: 'الدفعة الرقمية',
-        priceIN: '₹9,999',
-        priceKSA: 'SAR 1,999',
+        priceIN: '₹50,000',
+        priceINAfter: '₹25,000',
+        priceKSA: '$5,000',
+        priceKSAAfter: '$2,500',
         eyebrow: 'مناسب للعاملين',
         what: 'تسجيلات كل فصل يقدّمه فريق المدرّبين، المدرس الذكي الكامل، الواجبات اليومية، الاختبار النهائي، شهادة + منحنى تعلم. شاهد متى ما سمحت لك الحياة.',
         bullets: [
@@ -448,8 +460,10 @@ const COPY = {
       {
         kind: 'live',
         name: 'دفعة حيدر آباد الحضورية',
-        priceIN: '₹24,999',
+        priceIN: '₹50,000',
+        priceINAfter: '₹25,000',
         priceKSA: null,
+        priceKSAAfter: null,
         eyebrow: 'مناسب للمتفرّغين',
         what: 'كل ما في الدفعة الرقمية، بالإضافة إلى ٤٥ يوماً من الفصول المسائية حضورياً مع فريق المدرّبين، مقابلات تجريبية، وتعريفات توظيف مباشرة من شركة سي إيه منير.',
         bullets: [
@@ -1346,7 +1360,10 @@ function FounderPortrait({ locale }: { locale: SupportedLocale }) {
           alt={isAr ? 'سي إيه منير أحمد' : 'CA Muneer Ahmed'}
           width={640}
           height={640}
-          className="block aspect-square w-full object-cover"
+          // 4:5 portrait + object-top keeps the founder's head in frame.
+          // The source crops below his blazer cleanly, so eating the
+          // bottom is fine; eating the top sliced his hair off.
+          className="block aspect-[4/5] w-full object-cover object-top"
           loading="eager"
           decoding="async"
         />
@@ -1513,24 +1530,38 @@ function TwoWaysSection({
                     )}
                   </div>
 
-                  <div className="mt-5 flex flex-wrap items-baseline gap-3">
-                    <span className="text-3xl font-semibold tracking-tight sm:text-4xl">
-                      {way.priceIN}
-                    </span>
-                    <span className="font-mono text-xs uppercase tracking-wider text-fg-subtle">
-                      {isAr ? 'الهند' : 'India'}
-                    </span>
+                  <div className="mt-5 space-y-2">
+                    {/* India row — sticker price strikethrough + LAUNCH50
+                        effective price beside it. Reads as a real deal,
+                        not a vague "discount available". */}
+                    <div className="flex flex-wrap items-baseline gap-2">
+                      <span className="text-3xl font-semibold tracking-tight sm:text-4xl">
+                        {way.priceINAfter}
+                      </span>
+                      <span className="text-base text-fg-subtle line-through decoration-fg-subtle/60">
+                        {way.priceIN}
+                      </span>
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+                        {isAr ? 'الهند' : 'India'}
+                      </span>
+                    </div>
                     {way.priceKSA && (
-                      <>
-                        <span className="text-fg-subtle/60">·</span>
+                      <div className="flex flex-wrap items-baseline gap-2">
                         <span className="text-xl font-semibold tracking-tight">
+                          {way.priceKSAAfter}
+                        </span>
+                        <span className="text-sm text-fg-subtle line-through decoration-fg-subtle/60">
                           {way.priceKSA}
                         </span>
-                        <span className="font-mono text-xs uppercase tracking-wider text-fg-subtle">
+                        <span className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
                           {isAr ? 'السعودية' : 'KSA'}
                         </span>
-                      </>
+                      </div>
                     )}
+                    <p className="inline-flex items-center gap-1.5 rounded-md border border-success/30 bg-success/10 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-success">
+                      <Check className="h-3 w-3" />
+                      {t.effectivePriceLabel} · {t.couponCode}
+                    </p>
                   </div>
 
                   <p className="mt-5 text-[15px] leading-relaxed text-fg-muted">{way.what}</p>
