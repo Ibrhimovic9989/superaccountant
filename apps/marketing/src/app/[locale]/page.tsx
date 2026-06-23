@@ -36,18 +36,44 @@ const COPY = {
     founderBadge: 'CA Muneer Ahmed · FCA · 13 years in practice',
     founderHookA: "I've audited ",
     founderHookB: '₹25,000 Cr',
-    founderHookC: " across 4 jurisdictions.",
-    founderHookD: 'Now I want to teach you.',
+    founderHookC: ' across 4 jurisdictions.',
+    founderHookD: 'I built this so the next 10,000 accountants get there faster.',
     founderSub:
-      "Not another ₹2-lakh coaching. Not a SaaS that ghosts you. Sit in my classroom in Hyderabad — or learn from home with my recorded cohort. Either way, the AI is the practice partner. I'm the teacher.",
-    founderCtaLive: 'Sit with me · Hyderabad cohort',
-    founderCtaDigital: 'Learn from home · Digital cohort',
+      'I designed the curriculum. My instructor bench teaches it daily. The AI grades, drills and answers at 3 AM. I show up for the signature workshops where it matters — regulatory updates, career sessions, the hard stuff. That mix is the model.',
+    founderCtaLive: 'Apply · Hyderabad cohort',
+    founderCtaDigital: 'Start · Digital cohort',
     founderCredentialsLabel: "What I've built",
     founderCredentials: [
       { value: '₹25,000 Cr', label: 'Audit work signed off' },
       { value: '13 yrs', label: 'In active CA practice' },
       { value: '120+', label: 'Professionals trained' },
       { value: '4', label: 'Jurisdictions (IN · US · UAE · KSA)' },
+    ],
+
+    // ── Who teaches you — the three-layer model
+    whoLabel: 'Who teaches you',
+    whoTitle: 'Three layers. One outcome.',
+    whoSubtitle:
+      "Agentic at the core, human in the loop. The AI tutor never sleeps; the instructor bench runs daily class; CA Muneer shows up for the signature sessions only a founder-practitioner can deliver. You get all three.",
+    whoLayers: [
+      {
+        tag: 'Daily',
+        name: 'Instructor bench',
+        role: 'Senior CA practitioners, hand-picked',
+        body: 'Mon–Sat evening classes, doubt-clearing, lab sessions on Tally and Excel. Active CA partners and seniors with 5–15 years on real client files — never first-year teachers reading off slides.',
+      },
+      {
+        tag: 'Always-on',
+        name: 'AI tutor',
+        role: '24/7 practice + grading + memory',
+        body: 'Generates your nightly assignments from the day\'s class. Grades your written answers with rubrics. Remembers what you struggled with. Answers questions at 3 AM in the language you asked them in.',
+      },
+      {
+        tag: 'Signature',
+        name: 'CA Muneer himself',
+        role: 'Founder workshops · ~2 per cohort',
+        body: 'Quarterly regulatory deep-dives (GST amendments, ZATCA Phase-2, Companies Act updates), case-walkthroughs from the firm\'s 25,000 Cr book, and the career session that closes every cohort. Rare. On purpose.',
+      },
     ],
     // ── Legacy hero strings (kept for old call-sites we haven't deleted yet)
     badge: '50% launch discount · Live cohorts · India + KSA',
@@ -60,11 +86,11 @@ const COPY = {
     pillIndia: '🇮🇳 iA26 · India · ₹24,999',
     pillKsa: '🇸🇦 sA26 · KSA · SAR 4,999',
 
-    // ── Two ways to learn with me — the founder-centric tracks section
-    twoWaysLabel: 'Two ways to learn with me',
-    twoWaysTitle: 'The agent does the drills. I do the teaching.',
+    // ── Two ways to learn — the founder-curated tracks
+    twoWaysLabel: 'Two ways to enrol',
+    twoWaysTitle: 'Pick the one that fits your life.',
     twoWaysSubtitle:
-      "SuperAccountant runs in two tiers — pick the one that fits your life. Same curriculum, same AI tutor, same e-certificate. The difference is whether you sit with me in person or watch the recorded sessions.",
+      "Same curriculum I designed. Same instructor bench teaching it. Same AI tutor for nightly practice. Same e-certificate and learning curve at the end. The difference is in-person evenings vs. lifetime recordings.",
     twoWays: [
       {
         kind: 'digital',
@@ -72,13 +98,13 @@ const COPY = {
         priceIN: '₹9,999',
         priceKSA: 'SAR 1,999',
         eyebrow: 'Best for working professionals',
-        what: 'Recorded sessions of every class I teach, the full AI tutor + daily assignments + grand test, certificate + learning curve. Watch when life lets you.',
+        what: 'Recorded sessions of every class the instructor bench teaches, the full AI tutor, daily assignments, grand test, certificate + learning curve. Watch when life lets you.',
         bullets: [
-          'Watch every class recording (Mon–Sat, 6:30–9:30 PM IST)',
+          'Lifetime access to every class recording (Mon–Sat, 6:30–9:30 PM IST)',
           '24/7 AI tutor + nightly personalised assignments',
           'Live group doubt-clearing once a week',
           'Verifiable cert + learning curve at the end',
-          'Lifetime access to the recordings',
+          'CA Muneer\'s recorded founder workshops included',
         ],
         cta: 'Start the digital cohort',
         href: '/cohort?tier=digital',
@@ -89,12 +115,12 @@ const COPY = {
         priceIN: '₹24,999',
         priceKSA: null,
         eyebrow: 'Best for full-time learners',
-        what: 'Everything in the digital cohort, plus 45 days of evening classes sitting in my office in Hyderabad. Mock interviews, hiring intros, the works.',
+        what: 'Everything in the digital cohort, plus 45 days of evening classes in person with the instructor bench, mock interviews, and direct hiring intros from CA Muneer\'s firm.',
         bullets: [
-          'Mon–Sat 6:30–9:30 PM, 45 days, in person with me',
+          'In-person Mon–Sat 6:30–9:30 PM, 45 days, with the instructor bench',
+          'CA Muneer\'s ~2 signature workshops per cohort, in the room',
           'Everything in the Digital cohort included',
           'Mock interviews + resume rebuild + salary coaching',
-          'Direct intros to CA firms + SMEs hiring entry-level',
           'Only 30 seats per cohort — apply early',
         ],
         cta: 'Reserve a Hyderabad seat',
@@ -347,17 +373,43 @@ const COPY = {
     founderHookA: 'دقّقت أعمالاً بقيمة ',
     founderHookB: '٢٥٬٠٠٠ كرور',
     founderHookC: ' عبر ٤ ولايات قضائية.',
-    founderHookD: 'الآن أريد أن أعلّمك أنت.',
+    founderHookD: 'بنيت هذا ليصل ١٠٬٠٠٠ محاسب قادم إلى هناك أسرع.',
     founderSub:
-      'ليست دورة بـ ٢ لاكه. ولا منصة تتركك وحدك. اجلس معي في فصلي في حيدر آباد — أو تعلّم من بيتك مع الدفعة المسجّلة. في كلا الحالتين، الذكاء الاصطناعي هو شريك التمرين. وأنا المعلّم.',
-    founderCtaLive: 'اجلس معي · دفعة حيدر آباد',
-    founderCtaDigital: 'تعلّم من البيت · الدفعة الرقمية',
+      'أنا صمّمت المنهج. فريق المدرّبين عندي يقدّمه يومياً. الذكاء الاصطناعي يصحّح ويُمرّن ويجيب الساعة الثالثة فجراً. أنا أحضر لجلسات السيّد فقط — تحديثات تنظيمية، جلسات مهنية، الأشياء الصعبة. هذا المزيج هو النموذج.',
+    founderCtaLive: 'قدّم · دفعة حيدر آباد',
+    founderCtaDigital: 'ابدأ · الدفعة الرقمية',
     founderCredentialsLabel: 'ما بنيته',
     founderCredentials: [
       { value: '₹٢٥٬٠٠٠ كرور', label: 'أعمال تدقيق موقّعة' },
       { value: '١٣ سنة', label: 'في الممارسة المهنية' },
       { value: '+١٢٠', label: 'محترف تم تدريبهم' },
       { value: '٤', label: 'ولايات قضائية (الهند · أمريكا · الإمارات · السعودية)' },
+    ],
+
+    // ── من يُعلّمك
+    whoLabel: 'من يُعلّمك',
+    whoTitle: 'ثلاث طبقات. هدف واحد.',
+    whoSubtitle:
+      'وكلاء في الجوهر، إنسان في الحلقة. المدرس الذكي لا ينام؛ فريق المدرّبين يدير الفصول اليومية؛ سي إيه منير يحضر للجلسات السيّدة التي لا يمكن أن يقدّمها إلا مؤسس-ممارس. تحصل على الثلاثة.',
+    whoLayers: [
+      {
+        tag: 'يومياً',
+        name: 'فريق المدرّبين',
+        role: 'كبار المحاسبين القانونيين، مختارون بدقة',
+        body: 'فصول مسائية الإثنين–السبت، حلّ الشكوك، جلسات مخبرية على Tally وExcel. شركاء CA ممارسون وكبار بخبرة ٥–١٥ سنة على ملفات عملاء حقيقيين — ليسوا معلّمين مبتدئين يقرؤون من شرائح.',
+      },
+      {
+        tag: 'دائم',
+        name: 'المدرس الذكي',
+        role: 'تمرين + تصحيح + ذاكرة ٢٤/٧',
+        body: 'يولّد واجباتك الليلية من فصل اليوم. يصحّح إجاباتك المكتوبة بمعايير. يتذكّر ما واجهت فيه صعوبة. يجيب على أسئلتك الساعة ٣ صباحاً باللغة التي سألت بها.',
+      },
+      {
+        tag: 'سيّد',
+        name: 'سي إيه منير شخصياً',
+        role: 'ورش المؤسس · ~٢ لكل دفعة',
+        body: 'تحديثات تنظيمية ربع سنوية (تعديلات GST، ZATCA المرحلة ٢، تحديثات قانون الشركات)، شروحات حالات من ملفّات الشركة بقيمة ٢٥٬٠٠٠ كرور، وجلسة الختام المهنية لكل دفعة. نادرة. عن قصد.',
+      },
     ],
     // ── Legacy hero strings
     badge: 'خصم الإطلاق ٥٠٪ · دفعات حية · الهند والسعودية',
@@ -370,11 +422,11 @@ const COPY = {
     pillIndia: '🇮🇳 iA26 · الهند · ₹24,999',
     pillKsa: '🇸🇦 sA26 · السعودية · SAR 4,999',
 
-    // ── طريقتان للتعلم معي
-    twoWaysLabel: 'طريقتان للتعلم معي',
-    twoWaysTitle: 'الذكاء الاصطناعي يقوم بالتمارين. أنا أقوم بالتدريس.',
+    // ── طريقتان للالتحاق
+    twoWaysLabel: 'طريقتان للالتحاق',
+    twoWaysTitle: 'اختر ما يناسب حياتك.',
     twoWaysSubtitle:
-      'سوبر أكاونتنت يأتي بطبقتين — اختر ما يناسب حياتك. نفس المنهج، نفس المدرس الذكي، نفس الشهادة. الفرق هو هل تجلس معي شخصياً أم تشاهد الجلسات المسجّلة.',
+      'نفس المنهج الذي صمّمته. نفس فريق المدرّبين الذي يدرّسه. نفس المدرس الذكي للتمرين الليلي. نفس الشهادة ومنحنى التعلم في النهاية. الفرق هو فصول مسائية حضورية مقابل تسجيلات مدى الحياة.',
     twoWays: [
       {
         kind: 'digital',
@@ -382,13 +434,13 @@ const COPY = {
         priceIN: '₹9,999',
         priceKSA: 'SAR 1,999',
         eyebrow: 'مناسب للعاملين',
-        what: 'تسجيلات كل فصل أعلّمه، مع المدرس الذكي الكامل + الواجبات اليومية + الاختبار النهائي، شهادة + منحنى تعلم. شاهد متى ما سمحت لك الحياة.',
+        what: 'تسجيلات كل فصل يقدّمه فريق المدرّبين، المدرس الذكي الكامل، الواجبات اليومية، الاختبار النهائي، شهادة + منحنى تعلم. شاهد متى ما سمحت لك الحياة.',
         bullets: [
-          'شاهد تسجيلات كل الفصول (الإثنين–السبت، ٦:٣٠–٩:٣٠ مساءً بتوقيت الهند)',
+          'وصول مدى الحياة لكل تسجيلات الفصول (الإثنين–السبت، ٦:٣٠–٩:٣٠ مساءً بتوقيت الهند)',
           'مدرس ذكي ٢٤/٧ + واجبات شخصية كل ليلة',
           'جلسة جماعية لحلّ الشكوك مرة أسبوعياً',
           'شهادة قابلة للتحقق + منحنى تعلم في النهاية',
-          'وصول مدى الحياة للتسجيلات',
+          'ورش سي إيه منير المسجّلة مشمولة',
         ],
         cta: 'ابدأ الدفعة الرقمية',
         href: '/cohort?tier=digital',
@@ -399,12 +451,12 @@ const COPY = {
         priceIN: '₹24,999',
         priceKSA: null,
         eyebrow: 'مناسب للمتفرّغين',
-        what: 'كل ما في الدفعة الرقمية، بالإضافة إلى ٤٥ يوماً من الفصول المسائية في مكتبي في حيدر آباد. مقابلات تجريبية، وصلات توظيف، كل شيء.',
+        what: 'كل ما في الدفعة الرقمية، بالإضافة إلى ٤٥ يوماً من الفصول المسائية حضورياً مع فريق المدرّبين، مقابلات تجريبية، وتعريفات توظيف مباشرة من شركة سي إيه منير.',
         bullets: [
-          'الإثنين–السبت ٦:٣٠–٩:٣٠ مساءً، ٤٥ يوماً، حضورياً معي',
+          'حضوري الإثنين–السبت ٦:٣٠–٩:٣٠ مساءً، ٤٥ يوماً، مع فريق المدرّبين',
+          'ورشتا سي إيه منير السيّدتان لكل دفعة، في الغرفة',
           'كل ما في الدفعة الرقمية مشمول',
           'مقابلات تجريبية + إعادة بناء السيرة + تدريب على التفاوض',
-          'تعريفات مباشرة بشركات CA + الشركات الصغيرة التي توظف المبتدئين',
           'فقط ٣٠ مقعداً لكل دفعة — قدّم مبكراً',
         ],
         cta: 'احجز مقعداً في حيدر آباد',
@@ -676,9 +728,13 @@ export default async function Landing({
 
       {/* ─── Founder-led hero ──────────────────────────────── */}
       <main className="relative z-10 mx-auto max-w-6xl px-4 pt-8 pb-12 sm:px-6 sm:pt-16 sm:pb-16">
-        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-14">
+        {/* Copy gets ~1.5x weight so the headline never wraps mid-token;
+            portrait caps at 380px so it doesn't dominate. Portrait sits
+            in the DOM AFTER the copy → on lg+ it lands in the right
+            column naturally, no order acrobatics. */}
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.5fr_minmax(0,380px)] lg:gap-12">
           {/* ── Left: copy ─────────────────────────────────── */}
-          <div className="order-2 lg:order-1">
+          <div className="min-w-0">
             <BlurFade delay={0.05}>
               <div className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent-soft/40 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-accent backdrop-blur">
                 <Sparkles className="h-3 w-3" />
@@ -687,9 +743,9 @@ export default async function Landing({
             </BlurFade>
 
             <BlurFade delay={0.12}>
-              <h1 className="mt-5 text-[2rem] font-semibold leading-[1.1] tracking-tight sm:text-5xl lg:text-[3.4rem]">
+              <h1 className="mt-5 text-balance text-3xl font-semibold leading-[1.12] tracking-tight sm:text-4xl lg:text-[2.75rem] xl:text-5xl">
                 {t.founderHookA}
-                <span className="aurora-text">{t.founderHookB}</span>
+                <span className="aurora-text whitespace-nowrap">{t.founderHookB}</span>
                 {t.founderHookC}
                 <br />
                 <span className="text-fg-muted">{t.founderHookD}</span>
@@ -733,13 +789,13 @@ export default async function Landing({
                 <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-subtle">
                   {t.founderCredentialsLabel}
                 </p>
-                <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
+                <dl className="mt-4 grid grid-cols-2 gap-x-8 gap-y-5 sm:grid-cols-4">
                   {t.founderCredentials.map((c) => (
-                    <div key={c.label}>
-                      <dt className="text-xl font-semibold tracking-tight text-fg sm:text-[1.7rem]">
+                    <div key={c.label} className="min-w-0">
+                      <dt className="whitespace-nowrap text-lg font-semibold tracking-tight text-fg sm:text-xl lg:text-[1.45rem]">
                         {c.value}
                       </dt>
-                      <dd className="mt-1 text-[11px] leading-snug text-fg-muted">{c.label}</dd>
+                      <dd className="mt-1.5 text-[11px] leading-snug text-fg-muted">{c.label}</dd>
                     </div>
                   ))}
                 </dl>
@@ -775,7 +831,10 @@ export default async function Landing({
         </div>
       </section>
 
-      {/* ─── Two ways to learn with me ─────────────────────── */}
+      {/* ─── Who teaches you (three layers) ────────────────── */}
+      <WhoTeachesSection locale={locale} t={t} />
+
+      {/* ─── Two ways to enrol ─────────────────────────────── */}
       <TwoWaysSection locale={locale} t={t} />
 
       {/* ─── How it works ──────────────────────────────────── */}
@@ -1270,12 +1329,12 @@ export default async function Landing({
 function FounderPortrait({ locale }: { locale: SupportedLocale }) {
   const isAr = locale === 'ar'
   return (
-    <div className="relative order-1 mx-auto w-full max-w-sm lg:order-2 lg:mx-0 lg:max-w-none">
-      {/* Soft glow behind the portrait */}
-      <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-br from-accent/30 via-accent/10 to-transparent blur-2xl" />
+    <div className="relative mx-auto w-full max-w-xs sm:max-w-sm lg:mx-0 lg:max-w-none">
+      {/* Soft accent glow behind the card */}
+      <div className="pointer-events-none absolute -inset-5 -z-10 rounded-[2rem] bg-gradient-to-br from-accent/30 via-accent/10 to-transparent blur-2xl" />
 
-      <div className="relative overflow-hidden rounded-[1.75rem] border border-border bg-bg-elev/60 shadow-[0_30px_80px_-30px_rgba(124,58,237,0.45)] backdrop-blur">
-        {/* biome-ignore lint/performance/noImgElement: hot-link via plain img to avoid next/image domain config + bundling overhead, matches /lib/brand/logo.tsx pattern */}
+      <div className="relative overflow-hidden rounded-2xl border border-border bg-bg-elev/60 shadow-[0_30px_80px_-30px_rgba(124,58,237,0.45)] backdrop-blur">
+        {/* biome-ignore lint/performance/noImgElement: hot-link via plain img to avoid next/image domain config; matches the brand/logo pattern */}
         <img
           src={FOUNDER_PORTRAIT_URL}
           alt={isAr ? 'سي إيه منير أحمد' : 'CA Muneer Ahmed'}
@@ -1285,21 +1344,102 @@ function FounderPortrait({ locale }: { locale: SupportedLocale }) {
           loading="eager"
           decoding="async"
         />
+      </div>
 
-        {/* Bottom caption — name + role, anchored on the portrait */}
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-bg/95 via-bg/70 to-transparent p-5 backdrop-blur-sm">
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-accent">
-            {isAr ? 'المؤسس' : 'Founder'}
-          </p>
-          <p className="mt-1 text-base font-semibold tracking-tight text-fg sm:text-lg">
-            {isAr ? 'سي إيه منير أحمد' : 'CA Muneer Ahmed'}
-          </p>
-          <p className="text-xs text-fg-muted">
-            {isAr ? 'زميل ICAI · ١٣ سنة ممارسة · حيدر آباد' : 'FCA · ICAI · 13 yrs · Hyderabad'}
-          </p>
+      {/* Caption lives BELOW the portrait — clearer than the prior overlay
+          gradient which ate the 'Founder' eyebrow against the dark photo. */}
+      <div className="mt-4 rounded-xl border border-border bg-bg-elev/60 px-4 py-3 backdrop-blur">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-accent">
+              {isAr ? 'المؤسس' : 'Founder'}
+            </p>
+            <p className="mt-0.5 text-sm font-semibold tracking-tight text-fg">
+              {isAr ? 'سي إيه منير أحمد' : 'CA Muneer Ahmed'}
+            </p>
+            <p className="mt-0.5 text-[11px] text-fg-muted">
+              {isAr ? 'زميل ICAI · ١٣ سنة · حيدر آباد' : 'FCA · ICAI · 13 yrs · Hyderabad'}
+            </p>
+          </div>
+          <span className="rounded-md border border-accent/30 bg-accent/10 px-2 py-1 font-mono text-[9px] uppercase tracking-wider text-accent">
+            {isAr ? 'ورش السيّد' : 'Signature workshops'}
+          </span>
         </div>
       </div>
     </div>
+  )
+}
+
+function WhoTeachesSection({
+  locale,
+  t,
+}: {
+  locale: SupportedLocale
+  t: (typeof COPY)[keyof typeof COPY]
+}) {
+  const isAr = locale === 'ar'
+  return (
+    <section
+      id="who-teaches"
+      className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20"
+    >
+      <BlurFade delay={0.05}>
+        <SectionEyebrow text={t.whoLabel} />
+        <h2 className="mt-4 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
+          {t.whoTitle}
+        </h2>
+        <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-fg-muted sm:text-base">
+          {t.whoSubtitle}
+        </p>
+      </BlurFade>
+
+      <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">
+        {t.whoLayers.map((layer, i) => {
+          const isFounder = i === 2 // CA Muneer himself
+          return (
+            <BlurFade key={layer.name} delay={0.1 + i * 0.06}>
+              <article
+                className={cn(
+                  'relative flex h-full flex-col rounded-2xl border p-6 backdrop-blur',
+                  isFounder
+                    ? 'border-accent/40 bg-accent-soft/30'
+                    : 'border-border bg-bg-elev/50',
+                )}
+              >
+                <span
+                  className={cn(
+                    'inline-flex w-fit items-center rounded-full px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.16em]',
+                    isFounder
+                      ? 'border border-accent/40 bg-accent/15 text-accent'
+                      : 'border border-border bg-bg text-fg-muted',
+                  )}
+                >
+                  {layer.tag}
+                </span>
+                <h3 className="mt-3 text-xl font-semibold tracking-tight sm:text-2xl">
+                  {layer.name}
+                </h3>
+                <p
+                  className={cn(
+                    'mt-1 text-[11px] font-medium uppercase tracking-wider',
+                    isFounder ? 'text-accent' : 'text-fg-muted',
+                  )}
+                >
+                  {layer.role}
+                </p>
+                <p className="mt-4 text-[14px] leading-relaxed text-fg-muted">{layer.body}</p>
+              </article>
+            </BlurFade>
+          )
+        })}
+      </div>
+
+      <p className="mt-6 max-w-3xl text-xs text-fg-subtle">
+        {isAr
+          ? 'هذا هو النموذج: وكلاء في الجوهر، إنسان في الحلقة. لا روبوت بحت. ولا مؤسس مرهق.'
+          : 'That\'s the model: agentic at the core, human in the loop. No pure-bot. No burnt-out founder.'}
+      </p>
+    </section>
   )
 }
 
@@ -1362,7 +1502,7 @@ function TwoWaysSection({
                     </div>
                     {isLive && (
                       <span className="rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-accent">
-                        {isAr ? 'مع المؤسس' : 'With founder'}
+                        {isAr ? 'حضوري + ذكاء اصطناعي' : 'Hybrid · in-person + AI'}
                       </span>
                     )}
                   </div>
