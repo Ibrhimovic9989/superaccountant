@@ -1,4 +1,6 @@
 import { prisma } from '@sa/db'
+import { unstable_cache } from 'next/cache'
+import { cache } from 'react'
 
 /**
  * Single source of truth for "does this user get full app access?"
@@ -18,7 +20,20 @@ export type AccessTier =
   | { kind: 'paid-cohort'; cohortId: string; cohortName: string } // paid student
   | { kind: 'preview' } // signed-in but no paid cohort
 
-export async function getAccessTier(userId: string): Promise<AccessTier> {
+/**
+ * Returns the user's access tier. Called on every gated page load, so
+ * cached for 60s. Mutation sites (payment-success webhook, manual
+ * role promotion) can call `revalidateTag('tier:${userId}')` to
+ * invalidate the moment status flips.
+ */
+export const getAccessTier = cache((userId: string) =>
+  unstable_cache(() => loadAccessTier(userId), ['access-tier', userId], {
+    revalidate: 60,
+    tags: [`tier:${userId}`],
+  })(),
+)
+
+async function loadAccessTier(userId: string): Promise<AccessTier> {
   // Staff / admin: instant unlimited access
   const roleRows = await prisma.$queryRaw<{ role: string }[]>`
     SELECT "role" FROM "IdentityUser" WHERE "id" = ${userId} LIMIT 1

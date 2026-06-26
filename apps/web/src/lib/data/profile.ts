@@ -1,4 +1,6 @@
 import { prisma } from '@sa/db'
+import { unstable_cache, updateTag } from 'next/cache'
+import { cache } from 'react'
 
 /**
  * Profile read/write helpers backed by raw SQL.
@@ -56,8 +58,25 @@ export const CURRENT_TERMS_VERSION = '2026-05-13'
 /**
  * Returns enough of the user record to render the profile + setup pages
  * and to gate redirects (preferredTrack + profileCompletedAt).
+ *
+ * Called on every authed page load (consent/track/profile gates), so it
+ * lives behind a 60s unstable_cache + per-request React cache. The
+ * `updateUserProfile` / `recordUserConsent` / `resetUserTrack` paths
+ * below tag-invalidate so the gate sees fresh state immediately when
+ * the user moves through the welcome flow.
  */
-export async function getUserProfile(userId: string): Promise<UserProfileSnapshot | null> {
+export function getUserProfile(userId: string): Promise<UserProfileSnapshot | null> {
+  return getUserProfileCached(userId)
+}
+
+const getUserProfileCached = cache((userId: string) =>
+  unstable_cache(() => loadUserProfile(userId), ['user-profile', userId], {
+    revalidate: 60,
+    tags: [`profile:${userId}`],
+  })(),
+)
+
+async function loadUserProfile(userId: string): Promise<UserProfileSnapshot | null> {
   const rows = await prisma.$queryRaw<
     {
       preferredTrack: 'india' | 'ksa' | null
@@ -156,6 +175,7 @@ export async function updateUserProfile(
       "updatedAt" = NOW()
     WHERE "id" = ${userId}
   `
+  updateTag(`profile:${userId}`)
 }
 
 /**
@@ -178,6 +198,7 @@ export async function recordUserConsent(
       "updatedAt" = NOW()
     WHERE "id" = ${userId}
   `
+  updateTag(`profile:${userId}`)
 }
 
 /**
@@ -196,6 +217,7 @@ export async function resetUserTrack(userId: string): Promise<void> {
       "updatedAt" = NOW()
     WHERE "id" = ${userId}
   `
+  updateTag(`profile:${userId}`)
 }
 
 /**
