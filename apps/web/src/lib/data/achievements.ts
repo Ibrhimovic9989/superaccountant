@@ -1,5 +1,6 @@
 import { prisma } from '@sa/db'
 import { unstable_cache } from 'next/cache'
+import { reviveDates } from '@/lib/cache-revive'
 
 /**
  * Achievement badges — computed from existing DB state, no new tables needed.
@@ -205,12 +206,16 @@ const BADGES: BadgeDef[] = [
  * sub-minute freshness for the dashboard sidebar. Tag:
  * `revalidateTag('badges:${userId}')` from those mutation paths.
  */
-export function getAchievements(userId: string, market: 'india' | 'ksa'): Promise<Badge[]> {
-  return unstable_cache(
+export async function getAchievements(
+  userId: string,
+  market: 'india' | 'ksa',
+): Promise<Badge[]> {
+  const cached = await unstable_cache(
     () => buildAchievements(userId, market),
     ['achievements', userId, market],
     { revalidate: 60, tags: [`badges:${userId}`] },
   )()
+  return reviveDates(cached)
 }
 
 async function buildAchievements(userId: string, market: 'india' | 'ksa'): Promise<Badge[]> {

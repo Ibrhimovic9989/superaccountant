@@ -2,6 +2,7 @@ import 'server-only'
 import { prisma } from '@sa/db'
 import { unstable_cache } from 'next/cache'
 import { cache } from 'react'
+import { reviveDates } from '@/lib/cache-revive'
 
 export type DayStatus = 'done' | 'partial' | 'missed' | 'pending' | 'upcoming'
 
@@ -172,9 +173,10 @@ async function buildStudyPlan(userId: string): Promise<StudyPlanSnapshot> {
  * counts is invisible to the user. Mutation hook: SubmitAnswerTool can
  * `revalidateTag('plan:${userId}')` so the pace badge ticks immediately.
  */
-export const getStudyPlan = cache((userId: string) =>
-  unstable_cache(() => buildStudyPlan(userId), ['study-plan', userId], {
+export const getStudyPlan = cache(async (userId: string) => {
+  const cached = await unstable_cache(() => buildStudyPlan(userId), ['study-plan', userId], {
     revalidate: 60,
     tags: [`plan:${userId}`],
-  })(),
-)
+  })()
+  return reviveDates(cached)
+})

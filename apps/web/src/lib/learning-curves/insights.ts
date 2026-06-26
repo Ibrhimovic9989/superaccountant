@@ -1,6 +1,7 @@
 import 'server-only'
 import { prisma } from '@sa/db'
 import { unstable_cache } from 'next/cache'
+import { reviveDates } from '@/lib/cache-revive'
 
 /**
  * Deep-insight aggregation for the learning curve.
@@ -133,12 +134,13 @@ const HEATMAP_DAYS = 60
  * for the recruiter-facing trajectory; mutation paths (lesson complete,
  * grand-test submit) can later call revalidateTag(`insights:${userId}`).
  */
-export function getLearningInsights(userId: string): Promise<LearningInsights | null> {
-  return unstable_cache(
+export async function getLearningInsights(userId: string): Promise<LearningInsights | null> {
+  const cached = await unstable_cache(
     () => buildInsights(userId),
     ['learning-insights', userId],
     { revalidate: 60, tags: [`insights:${userId}`] },
   )()
+  return cached ? reviveDates(cached) : null
 }
 
 async function buildInsights(userId: string): Promise<LearningInsights | null> {

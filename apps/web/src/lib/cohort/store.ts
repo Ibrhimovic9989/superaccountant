@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { prisma } from '@sa/db'
 import { unstable_cache } from 'next/cache'
+import { reviveDates } from '@/lib/cache-revive'
 
 /**
  * Cohort + CohortApplication persistence. Backed by raw SQL because
@@ -350,18 +351,19 @@ export async function markApplicationRefundedByPaymentId(paymentId: string): Pro
  * call this, so a stale read here can't double-spend. Worst case is
  * 60s of "₹X due" lingering after the user pays the balance.
  */
-export function getApplicationWithBalance(email: string): Promise<
+export async function getApplicationWithBalance(email: string): Promise<
   | (CohortApplication & {
       cohortName: string
       cohortSlug: string
     })
   | null
 > {
-  return unstable_cache(
+  const cached = await unstable_cache(
     () => loadApplicationWithBalance(email),
     ['app-with-balance', email.toLowerCase()],
     { revalidate: 60, tags: [`app-balance:${email.toLowerCase()}`] },
   )()
+  return cached ? reviveDates(cached) : null
 }
 
 async function loadApplicationWithBalance(email: string): Promise<

@@ -1,6 +1,7 @@
 import 'server-only'
 import { prisma } from '@sa/db'
 import { unstable_cache } from 'next/cache'
+import { reviveDates } from '@/lib/cache-revive'
 
 /**
  * Learning-curve aggregation — pulls the before/after picture of a
@@ -133,12 +134,13 @@ async function fetchGrandTest(userId: string): Promise<LearningCurve['grandTest'
  * same userId several times in a session. Cache invalidation hook:
  * `revalidateTag('curve:${userId}')` after grand-test grade.
  */
-export function getLearningCurve(userId: string): Promise<LearningCurve | null> {
-  return unstable_cache(
+export async function getLearningCurve(userId: string): Promise<LearningCurve | null> {
+  const cached = await unstable_cache(
     () => buildLearningCurve(userId),
     ['learning-curve', userId],
     { revalidate: 60, tags: [`curve:${userId}`] },
   )()
+  return cached ? reviveDates(cached) : null
 }
 
 async function buildLearningCurve(userId: string): Promise<LearningCurve | null> {

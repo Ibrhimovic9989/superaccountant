@@ -1,5 +1,6 @@
 import { prisma } from '@sa/db'
 import { unstable_cache } from 'next/cache'
+import { reviveDates } from '@/lib/cache-revive'
 
 /**
  * Full curriculum roadmap for a student — phases, modules, lessons, progress.
@@ -43,13 +44,21 @@ export type RoadmapData = {
 /**
  * Curriculum × per-lesson progress join — heavy read backing /roadmap.
  * 60s unstable_cache; mastery typically updates a few times per session.
+ *
+ * `unstable_cache` JSON-serializes its return value, which turns Date
+ * objects into ISO strings. We rehydrate `targetExamDate` here so the
+ * page can keep calling `.toLocaleDateString(...)` on it.
  */
-export function getRoadmap(userId: string, market: 'india' | 'ksa'): Promise<RoadmapData> {
-  return unstable_cache(
+export async function getRoadmap(
+  userId: string,
+  market: 'india' | 'ksa',
+): Promise<RoadmapData> {
+  const cached = await unstable_cache(
     () => buildRoadmap(userId, market),
     ['roadmap', userId, market],
     { revalidate: 60, tags: [`roadmap:${userId}`] },
   )()
+  return reviveDates(cached)
 }
 
 async function buildRoadmap(

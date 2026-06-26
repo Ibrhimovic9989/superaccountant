@@ -1,6 +1,7 @@
 import { prisma } from '@sa/db'
 import { unstable_cache, updateTag } from 'next/cache'
 import { cache } from 'react'
+import { reviveDates } from '@/lib/cache-revive'
 
 /**
  * Profile read/write helpers backed by raw SQL.
@@ -69,12 +70,13 @@ export function getUserProfile(userId: string): Promise<UserProfileSnapshot | nu
   return getUserProfileCached(userId)
 }
 
-const getUserProfileCached = cache((userId: string) =>
-  unstable_cache(() => loadUserProfile(userId), ['user-profile', userId], {
+const getUserProfileCached = cache(async (userId: string) => {
+  const cached = await unstable_cache(() => loadUserProfile(userId), ['user-profile', userId], {
     revalidate: 60,
     tags: [`profile:${userId}`],
-  })(),
-)
+  })()
+  return cached ? reviveDates(cached) : null
+})
 
 async function loadUserProfile(userId: string): Promise<UserProfileSnapshot | null> {
   const rows = await prisma.$queryRaw<
