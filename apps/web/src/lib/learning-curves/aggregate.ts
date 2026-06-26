@@ -1,5 +1,6 @@
 import 'server-only'
 import { prisma } from '@sa/db'
+import { unstable_cache } from 'next/cache'
 
 /**
  * Learning-curve aggregation — pulls the before/after picture of a
@@ -125,7 +126,22 @@ async function fetchGrandTest(userId: string): Promise<LearningCurve['grandTest'
 
 // ── Aggregate one student ─────────────────────────────────────
 
-export async function getLearningCurve(userId: string): Promise<LearningCurve | null> {
+/**
+ * Public entry — wrapped in unstable_cache (60s). The aggregate is the
+ * heaviest read on the student-facing /my-progress page (~6 queries
+ * including the per-phase join), and admin recruiter exports re-fetch the
+ * same userId several times in a session. Cache invalidation hook:
+ * `revalidateTag('curve:${userId}')` after grand-test grade.
+ */
+export function getLearningCurve(userId: string): Promise<LearningCurve | null> {
+  return unstable_cache(
+    () => buildLearningCurve(userId),
+    ['learning-curve', userId],
+    { revalidate: 60, tags: [`curve:${userId}`] },
+  )()
+}
+
+async function buildLearningCurve(userId: string): Promise<LearningCurve | null> {
   const userRows = await prisma.$queryRaw<
     Array<{ id: string; name: string | null; email: string; preferredTrack: string | null }>
   >`

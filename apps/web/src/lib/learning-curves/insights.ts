@@ -1,5 +1,6 @@
 import 'server-only'
 import { prisma } from '@sa/db'
+import { unstable_cache } from 'next/cache'
 
 /**
  * Deep-insight aggregation for the learning curve.
@@ -125,7 +126,22 @@ const MIN_COHORT_FOR_PERCENTILE = 8
 /** Days shown in the heatmap. */
 const HEATMAP_DAYS = 60
 
-export async function getLearningInsights(userId: string): Promise<LearningInsights | null> {
+/**
+ * Heavy aggregator — 9 parallel SQL queries on read-heavy tables. Wrapped
+ * in unstable_cache (60s) so /my-progress refreshes don't re-pay the
+ * Mumbai→Seoul fan-out every time. Stats only need to be ~minute-fresh
+ * for the recruiter-facing trajectory; mutation paths (lesson complete,
+ * grand-test submit) can later call revalidateTag(`insights:${userId}`).
+ */
+export function getLearningInsights(userId: string): Promise<LearningInsights | null> {
+  return unstable_cache(
+    () => buildInsights(userId),
+    ['learning-insights', userId],
+    { revalidate: 60, tags: [`insights:${userId}`] },
+  )()
+}
+
+async function buildInsights(userId: string): Promise<LearningInsights | null> {
   const user = await prisma.identityUser.findUnique({
     where: { id: userId },
     select: { preferredTrack: true },

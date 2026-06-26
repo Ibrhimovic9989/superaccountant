@@ -1,5 +1,6 @@
 import 'server-only'
 import { prisma } from '@sa/db'
+import { unstable_cache } from 'next/cache'
 import { cache } from 'react'
 
 export type DayStatus = 'done' | 'partial' | 'missed' | 'pending' | 'upcoming'
@@ -113,7 +114,7 @@ function classifyPace(attemptCount: number, missedDaysLast7: number): StudyPlanS
   return 'behind'
 }
 
-export const getStudyPlan = cache(async (userId: string): Promise<StudyPlanSnapshot> => {
+async function buildStudyPlan(userId: string): Promise<StudyPlanSnapshot> {
   const user = await prisma.identityUser.findUnique({
     where: { id: userId },
     select: { targetExamDate: true, studyHoursPerWeek: true },
@@ -163,4 +164,17 @@ export const getStudyPlan = cache(async (userId: string): Promise<StudyPlanSnaps
     todayItemCount: todayDay?.itemCount ?? 0,
     todayDone: todayDay?.status === 'done',
   }
-})
+}
+
+/**
+ * 60s unstable_cache + React per-request dedup. The 14-day window's
+ * bounds only shift at midnight, so a minute of staleness on attempt
+ * counts is invisible to the user. Mutation hook: SubmitAnswerTool can
+ * `revalidateTag('plan:${userId}')` so the pace badge ticks immediately.
+ */
+export const getStudyPlan = cache((userId: string) =>
+  unstable_cache(() => buildStudyPlan(userId), ['study-plan', userId], {
+    revalidate: 60,
+    tags: [`plan:${userId}`],
+  })(),
+)
