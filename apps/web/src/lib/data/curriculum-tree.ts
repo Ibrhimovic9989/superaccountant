@@ -10,6 +10,7 @@
  */
 
 import { prisma } from '@sa/db'
+import { unstable_cache } from 'next/cache'
 import { cache } from 'react'
 
 export type SidebarLesson = {
@@ -49,8 +50,27 @@ export type CurriculumTree = {
 
 const COMPLETION_THRESHOLD = 0.8
 
-export const getCurriculumTree = cache(
-  async (market: 'india' | 'ksa', userId: string): Promise<CurriculumTree | null> => {
+/**
+ * Sidebar curriculum tree for the lesson page. Heavy join (track →
+ * phases → modules → lessons) + per-user mastery overlay. The static
+ * structure changes only when curriculum is republished, but mastery
+ * shifts on every lesson complete, so 60s cache tagged by userId.
+ *
+ * `revalidateTag('curriculum-tree:<userId>')` on lesson-complete keeps
+ * the sidebar dots fresh; the static tree itself rides the 60s TTL.
+ */
+export const getCurriculumTree = cache((market: 'india' | 'ksa', userId: string) =>
+  unstable_cache(
+    () => loadCurriculumTree(market, userId),
+    ['curriculum-tree', market, userId],
+    { revalidate: 60, tags: [`curriculum-tree:${userId}`] },
+  )(),
+)
+
+async function loadCurriculumTree(
+  market: 'india' | 'ksa',
+  userId: string,
+): Promise<CurriculumTree | null> {
     const track = await prisma.curriculumTrack.findUnique({
       where: { market },
       include: {
@@ -120,5 +140,4 @@ export const getCurriculumTree = cache(
         })),
       })),
     }
-  },
-)
+}

@@ -8,6 +8,7 @@
 import 'server-only'
 import { azureOpenAI } from '@sa/ai'
 import { prisma } from '@sa/db'
+import { unstable_cache } from 'next/cache'
 import { cache } from 'react'
 import { GUIDES } from './guides'
 import type { Guide } from './guides'
@@ -99,8 +100,28 @@ async function translateObjectives(
   }
 }
 
-/** React `cache()` so two server components on the same page hit Prisma once. */
-export const getLessonBySlug = cache(async (slug: string): Promise<LessonView | null> => {
+/**
+ * Published lesson body — title, MDX, mermaid, audio, prev/next sibling
+ * slugs. The MDX + assessment blueprint can easily run 50 KB+, so a
+ * cold fetch over Mumbai→Seoul is the single biggest tax on lesson
+ * page loads.
+ *
+ * Wrapped in:
+ *  - React `cache()` so two server components on the same render share
+ *    the lookup.
+ *  - `unstable_cache` with a 5-minute TTL, tagged by slug. Lessons are
+ *    publisher-controlled content; an editor saving a lesson should
+ *    call `updateTag('lesson:<slug>')` to push the new copy
+ *    immediately. Until then 5 min of stale-while-revalidate is fine.
+ */
+export const getLessonBySlug = cache((slug: string) =>
+  unstable_cache(() => loadLessonBySlug(slug), ['lesson-by-slug', slug], {
+    revalidate: 300,
+    tags: [`lesson:${slug}`],
+  })(),
+)
+
+async function loadLessonBySlug(slug: string): Promise<LessonView | null> {
   const lesson = await prisma.curriculumLesson.findUnique({
     where: { slug },
     include: {
@@ -184,7 +205,7 @@ export const getLessonBySlug = cache(async (slug: string): Promise<LessonView | 
     nextSlug,
     relatedGuideSlugs,
   }
-})
+}
 
 /**
  * Resolve a list of guide slugs to lightweight display stubs by looking

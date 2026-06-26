@@ -1,4 +1,6 @@
 import { prisma } from '@sa/db'
+import { unstable_cache } from 'next/cache'
+import { cache } from 'react'
 
 /**
  * Phase-progress computation for the SA Points lesson hint.
@@ -27,7 +29,28 @@ export type LessonPhaseProgress = {
 
 const PHASE_AWARD = 200
 
-export async function getPhaseProgressForLesson(args: {
+/**
+ * Lesson-page SA-points hint — 4 sequential queries (lesson lookup,
+ * phase lessons, enrollment, milestone check), each ~80ms Mumbai→Seoul.
+ * 60s cache keyed by (userId, lessonId), tagged by userId so
+ * lesson-complete invalidations sweep the user's whole lesson grid.
+ */
+export function getPhaseProgressForLesson(args: {
+  userId: string
+  lessonId: string
+}): Promise<LessonPhaseProgress | null> {
+  return getPhaseProgressCached(args.userId, args.lessonId)
+}
+
+const getPhaseProgressCached = cache((userId: string, lessonId: string) =>
+  unstable_cache(
+    () => loadPhaseProgress({ userId, lessonId }),
+    ['phase-progress', userId, lessonId],
+    { revalidate: 60, tags: [`phase-progress:${userId}`] },
+  )(),
+)
+
+async function loadPhaseProgress(args: {
   userId: string
   lessonId: string
 }): Promise<LessonPhaseProgress | null> {
