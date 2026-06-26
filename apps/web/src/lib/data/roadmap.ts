@@ -1,4 +1,5 @@
 import { prisma } from '@sa/db'
+import { unstable_cache } from 'next/cache'
 
 /**
  * Full curriculum roadmap for a student — phases, modules, lessons, progress.
@@ -39,7 +40,19 @@ export type RoadmapData = {
   targetExamDate: Date | null
 }
 
-export async function getRoadmap(
+/**
+ * Curriculum × per-lesson progress join — heavy read backing /roadmap.
+ * 60s unstable_cache; mastery typically updates a few times per session.
+ */
+export function getRoadmap(userId: string, market: 'india' | 'ksa'): Promise<RoadmapData> {
+  return unstable_cache(
+    () => buildRoadmap(userId, market),
+    ['roadmap', userId, market],
+    { revalidate: 60, tags: [`roadmap:${userId}`] },
+  )()
+}
+
+async function buildRoadmap(
   userId: string,
   market: 'india' | 'ksa',
 ): Promise<RoadmapData> {

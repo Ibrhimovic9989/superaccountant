@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { prisma } from '@sa/db'
+import { unstable_cache } from 'next/cache'
 
 /**
  * Cohort + CohortApplication persistence. Backed by raw SQL because
@@ -343,7 +344,27 @@ export async function markApplicationRefundedByPaymentId(paymentId: string): Pro
  * Get the most recent paid-but-not-fully-paid application for a user,
  * joined to the cohort. Used by /pay-balance to surface what's owed.
  */
-export async function getApplicationWithBalance(email: string): Promise<
+/**
+ * Read-only lookup for the dashboard balance banner — cached for 60s.
+ * The mutation side (markApplicationPaid*, setBalanceOrderId) doesn't
+ * call this, so a stale read here can't double-spend. Worst case is
+ * 60s of "₹X due" lingering after the user pays the balance.
+ */
+export function getApplicationWithBalance(email: string): Promise<
+  | (CohortApplication & {
+      cohortName: string
+      cohortSlug: string
+    })
+  | null
+> {
+  return unstable_cache(
+    () => loadApplicationWithBalance(email),
+    ['app-with-balance', email.toLowerCase()],
+    { revalidate: 60, tags: [`app-balance:${email.toLowerCase()}`] },
+  )()
+}
+
+async function loadApplicationWithBalance(email: string): Promise<
   | (CohortApplication & {
       cohortName: string
       cohortSlug: string
