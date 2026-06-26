@@ -12,6 +12,51 @@
 
 import type { NextAuthConfig } from 'next-auth'
 import { prisma } from '@sa/db'
+import { unstable_cache, updateTag } from 'next/cache'
+import { cache } from 'react'
+
+/**
+ * Per-user enrichment fields surfaced into the session payload — locale,
+ * role, preferredTrack, emailVerified. Pulled out of `sessionCallback`
+ * so we can cache the lookup; otherwise every authed page would pay an
+ * extra Mumbai→Seoul round-trip for fields that almost never change.
+ *
+ * 60s unstable_cache, tagged session-enrich:<userId>. The mutation
+ * paths that flip these fields (track switch in profile.ts already
+ * tags profile:<id>; locale change in settings; role bumps) should
+ * `updateTag('session-enrich:<userId>')` so the next page load sees
+ * fresh values without waiting for the TTL.
+ */
+type SessionEnrichment = {
+  locale: string | null
+  role: string | null
+  preferredTrack: 'india' | 'ksa' | null
+  emailVerified: boolean
+}
+
+const getSessionEnrichment = cache((userId: string): Promise<SessionEnrichment | null> =>
+  unstable_cache(
+    async () => {
+      const row = await prisma.identityUser.findUnique({
+        where: { id: userId },
+        select: { locale: true, role: true, preferredTrack: true, emailVerifiedAt: true },
+      })
+      if (!row) return null
+      return {
+        locale: row.locale,
+        role: row.role,
+        preferredTrack: row.preferredTrack,
+        emailVerified: row.emailVerifiedAt !== null,
+      }
+    },
+    ['session-enrich', userId],
+    { revalidate: 60, tags: [`session-enrich:${userId}`] },
+  )(),
+)
+
+export function bustSessionEnrichment(userId: string): void {
+  updateTag(`session-enrich:${userId}`)
+}
 
 type SignIn = NonNullable<NonNullable<NextAuthConfig['callbacks']>['signIn']>
 type Session = NonNullable<NonNullable<NextAuthConfig['callbacks']>['session']>
@@ -44,21 +89,16 @@ export const signInCallback: SignIn = async ({ user, account, profile }) => {
 }
 
 export const sessionCallback: Session = async ({ session, user }) => {
-  // Surface the IdentityUser fields the frontend actually cares about.
   if (session.user && user) {
     // biome-ignore lint/suspicious/noExplicitAny: extending session.user shape
     const u = session.user as any
     u.id = user.id
-    // Pull locale + role + market from the DB so the client can render correctly.
-    const row = await prisma.identityUser.findUnique({
-      where: { id: user.id },
-      select: { locale: true, role: true, preferredTrack: true, emailVerifiedAt: true },
-    })
+    const row = await getSessionEnrichment(user.id)
     if (row) {
       u.locale = row.locale
       u.role = row.role
       u.preferredTrack = row.preferredTrack
-      u.emailVerified = row.emailVerifiedAt !== null
+      u.emailVerified = row.emailVerified
     }
   }
   return session
