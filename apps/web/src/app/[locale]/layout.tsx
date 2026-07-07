@@ -2,7 +2,13 @@ import { LOCALES, type SupportedLocale, dirFor } from '@sa/i18n'
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import { notFound } from 'next/navigation'
+import Script from 'next/script'
 import '../globals.css'
+
+// Same GA property as the marketing site — GA4 stitches subdomain
+// sessions together automatically, so the app-side funnel lands in the
+// same reports as the /pricing → /apply flow.
+const GA_MEASUREMENT_ID = 'G-7Y8NMLPKJH'
 
 const SITE_URL = process.env.NEXTAUTH_URL ?? 'https://app.superaccountant.in'
 
@@ -104,6 +110,16 @@ export default async function LocaleLayout({
           // biome-ignore lint/security/noDangerouslySetInnerHtml: server-rendered, static JSON-LD
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
         />
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');`}
+        </Script>
       </body>
     </html>
   )

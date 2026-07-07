@@ -2,7 +2,13 @@ import { LOCALES, type SupportedLocale, dirFor } from '@sa/i18n'
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import { notFound } from 'next/navigation'
+import Script from 'next/script'
 import '../globals.css'
+
+// Google Analytics 4 — property "Superaccountant", stream superaccountant.in.
+// One measurement ID covers every subdomain (marketing / app / blog /
+// companies) since GA4 handles cross-subdomain automatically.
+const GA_MEASUREMENT_ID = 'G-7Y8NMLPKJH'
 
 const SITE_URL = process.env.NEXT_PUBLIC_MARKETING_URL ?? 'https://www.superaccountant.in'
 
@@ -94,7 +100,19 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${mono.variable}`}
     >
-      <body className="overflow-x-hidden">{children}</body>
+      <body className="overflow-x-hidden">
+        {children}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');`}
+        </Script>
+      </body>
     </html>
   )
 }

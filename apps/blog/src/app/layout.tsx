@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
+import Script from 'next/script'
 import { BlogNav } from '@/components/blog-nav'
 import { BlogFooter } from '@/components/blog-footer'
 import './globals.css'
+
+const GA_MEASUREMENT_ID = 'G-7Y8NMLPKJH'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains-mono', display: 'swap' })
@@ -45,6 +48,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         {children}
         <BlogFooter appUrl={APP_URL} />
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');`}
+        </Script>
       </body>
     </html>
   )

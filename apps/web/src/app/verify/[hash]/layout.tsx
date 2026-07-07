@@ -1,6 +1,9 @@
 import type { ReactNode } from 'react'
 import { Inter, JetBrains_Mono } from 'next/font/google'
+import Script from 'next/script'
 import '../../globals.css'
+
+const GA_MEASUREMENT_ID = 'G-7Y8NMLPKJH'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -31,7 +34,19 @@ export const metadata = {
 export default function VerifyLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');`}
+        </Script>
+      </body>
     </html>
   )
 }
