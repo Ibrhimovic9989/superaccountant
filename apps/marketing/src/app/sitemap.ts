@@ -1,7 +1,13 @@
 import type { MetadataRoute } from 'next'
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_MARKETING_URL?.replace(/\/$/, '') ?? 'https://www.superaccountant.in'
+// `.replace(/[\s/]+$/, '')` — strip both trailing slashes AND whitespace.
+// The Vercel env we inherited from the old app has a literal newline at
+// the end of `NEXT_PUBLIC_MARKETING_URL`; without this strip the sitemap
+// emits `https://superaccountant.in\n/en` and Google silently drops most
+// entries (GSC was showing 5 of 12).
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_MARKETING_URL ?? 'https://www.superaccountant.in'
+).replace(/[\s/]+$/, '')
 
 const ROUTES: { path: string; priority: number; changeFrequency: 'weekly' | 'monthly' }[] = [
   { path: '', priority: 1.0, changeFrequency: 'weekly' },
