@@ -69,9 +69,24 @@ const EnvSchema = z.object({
   // if the SA key is absent the aggregator no-ops and the writer agent
   // runs without the "state of the blog" briefing (so a missing
   // credential can never crash the daily post cron).
-  GOOGLE_SERVICE_ACCOUNT_KEY: z.string().min(50).optional(),
-  GA4_PROPERTY_ID: z.string().regex(/^\d+$/).optional(),
-  GSC_SITE_URL: z.string().min(3).optional(),
+  //
+  // `preprocess((v) => v === '' ? undefined : v, …)` — Vercel emits
+  // empty strings for env vars set-but-empty. Without this coercion
+  // the .optional() branch never fires and the whole EnvSchema fails
+  // validation, throwing "Invalid environment" everywhere loadEnv is
+  // called. Mirrors the SUPABASE_ANON_KEY pattern above.
+  GOOGLE_SERVICE_ACCOUNT_KEY: z.preprocess(
+    (v) => (v === '' ? undefined : v),
+    z.string().min(50).optional(),
+  ),
+  GA4_PROPERTY_ID: z.preprocess(
+    (v) => (v === '' ? undefined : v),
+    z.string().regex(/^\d+$/).optional(),
+  ),
+  GSC_SITE_URL: z.preprocess(
+    (v) => (v === '' ? undefined : v),
+    z.string().min(3).optional(),
+  ),
 })
 
 export type Env = z.infer<typeof EnvSchema>
@@ -86,9 +101,13 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
   if (cached) return cached
   const parsed = EnvSchema.safeParse(source)
   if (!parsed.success) {
-    console.error('[@sa/config] Invalid environment:')
-    console.error(parsed.error.flatten().fieldErrors)
-    throw new Error('Invalid environment')
+    const fieldErrors = parsed.error.flatten().fieldErrors
+    console.error('[@sa/config] Invalid environment:', fieldErrors)
+    // Include the offending field names in the thrown message so ops
+    // logs (and error responses that surface the message) can pinpoint
+    // the misconfig without needing to open runtime logs.
+    const fields = Object.keys(fieldErrors).join(', ') || '(unknown)'
+    throw new Error(`Invalid environment: ${fields}`)
   }
   cached = parsed.data
   return cached
