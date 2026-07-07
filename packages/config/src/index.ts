@@ -75,19 +75,24 @@ const EnvSchema = z.object({
   // the .optional() branch never fires and the whole EnvSchema fails
   // validation, throwing "Invalid environment" everywhere loadEnv is
   // called. Mirrors the SUPABASE_ANON_KEY pattern above.
-  GOOGLE_SERVICE_ACCOUNT_KEY: z.preprocess(
-    (v) => (v === '' ? undefined : v),
-    z.string().min(50).optional(),
-  ),
-  GA4_PROPERTY_ID: z.preprocess(
-    (v) => (v === '' ? undefined : v),
-    z.string().regex(/^\d+$/).optional(),
-  ),
-  GSC_SITE_URL: z.preprocess(
-    (v) => (v === '' ? undefined : v),
-    z.string().min(3).optional(),
-  ),
+  GOOGLE_SERVICE_ACCOUNT_KEY: z.preprocess(trimOrUndefined, z.string().min(50).optional()),
+  GA4_PROPERTY_ID: z.preprocess(trimOrUndefined, z.string().regex(/^\d+$/).optional()),
+  GSC_SITE_URL: z.preprocess(trimOrUndefined, z.string().min(3).optional()),
 })
+
+/**
+ * Trim whitespace and treat empty strings as undefined. Vercel's env
+ * store round-trips values through shell heredocs; a stray trailing
+ * newline in the CLI created here (or on the dashboard) sneaks a "\n"
+ * into the actual runtime value and blows regex-based checks like
+ * `^\d+$`. Same class of bug we hit on NEXT_PUBLIC_MARKETING_URL
+ * for the marketing sitemap.
+ */
+function trimOrUndefined(v: unknown): unknown {
+  if (typeof v !== 'string') return v
+  const trimmed = v.trim()
+  return trimmed === '' ? undefined : trimmed
+}
 
 export type Env = z.infer<typeof EnvSchema>
 
