@@ -31,8 +31,9 @@ export class InsightsCronController {
       return { ok: true, ...result }
     } catch (err) {
       const reason = (err as Error).message
-      console.error('[insights-cron] refresh failed', { err: reason })
-      return { ok: false, error: reason }
+      const stack = (err as Error).stack ?? ''
+      console.error('[insights-cron] refresh failed', { err: reason, stack })
+      return { ok: false, error: reason, stack: stack.slice(0, 600) }
     }
   }
 }
