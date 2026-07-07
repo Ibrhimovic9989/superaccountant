@@ -64,6 +64,14 @@ const EnvSchema = z.object({
   // Ports
   WEB_PORT: z.coerce.number().int().positive().default(3000),
   API_PORT: z.coerce.number().int().positive().default(4000),
+
+  // Blog insights (GA4 Data API + GSC Search Analytics). Optional —
+  // if the SA key is absent the aggregator no-ops and the writer agent
+  // runs without the "state of the blog" briefing (so a missing
+  // credential can never crash the daily post cron).
+  GOOGLE_SERVICE_ACCOUNT_KEY: z.string().min(50).optional(),
+  GA4_PROPERTY_ID: z.string().regex(/^\d+$/).optional(),
+  GSC_SITE_URL: z.string().min(3).optional(),
 })
 
 export type Env = z.infer<typeof EnvSchema>

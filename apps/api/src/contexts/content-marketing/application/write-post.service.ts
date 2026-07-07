@@ -16,7 +16,7 @@
  * controller never does.
  */
 
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { azureOpenAI } from '@sa/ai'
 import { z } from 'zod'
 import { AUDIENCE_SEGMENTS } from '../domain/audience'
@@ -26,6 +26,7 @@ import type {
   Market,
   ResearchedTopic,
 } from '../domain/types'
+import { GetInsightsBriefingService } from './get-insights-briefing.service'
 
 /** Minimum body length we'll accept — guards against the model producing a stub. */
 const MIN_CONTENT_LEN = 2_000 // ~400 words of MDX, far short of the 1200-word target
@@ -55,9 +56,15 @@ export type WritePostArgs = {
 
 @Injectable()
 export class WritePostService {
+  constructor(
+    @Inject(GetInsightsBriefingService)
+    private readonly briefing: GetInsightsBriefingService,
+  ) {}
+
   async execute(args: WritePostArgs): Promise<BlogPostDraft> {
+    const insightsBriefing = await this.briefing.execute()
     const system = buildSystemPrompt(args)
-    const userFirst = buildUserPrompt(args)
+    const userFirst = buildUserPrompt(args, insightsBriefing)
 
     // First attempt.
     const first = await this.callModel([
@@ -179,7 +186,7 @@ function buildSystemPrompt(args: WritePostArgs): string {
   ].join('\n')
 }
 
-function buildUserPrompt(args: WritePostArgs): string {
+function buildUserPrompt(args: WritePostArgs, insightsBriefing = ''): string {
   const lines = [
     `TOPIC: ${args.topic.topic}`,
     `WHY IT MATTERS THIS WEEK: ${args.topic.summary}`,
@@ -188,6 +195,16 @@ function buildUserPrompt(args: WritePostArgs): string {
   ]
   if (args.topic.competitorCoverageGap) {
     lines.push(`COMPETITOR GAP TO EXPLOIT: ${args.topic.competitorCoverageGap}`)
+  }
+  if (insightsBriefing.trim().length > 0) {
+    lines.push('')
+    lines.push(insightsBriefing.trim())
+    lines.push('')
+    lines.push(
+      'Lean the copy toward the queries already ranking on page 2 (breakout candidates) —',
+      'work those exact phrasings into H2 headings and the meta description where they fit',
+      'naturally. Do NOT stuff. Do NOT reference the analytics briefing in the post itself.',
+    )
   }
   lines.push(
     '',

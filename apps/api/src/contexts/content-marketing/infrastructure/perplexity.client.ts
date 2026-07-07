@@ -60,6 +60,13 @@ export type ResearchTopicsArgs = {
   count?: number
   /** Used as the {this_week} substitution in seed prompts. */
   weekLabel: string
+  /**
+   * Optional markdown briefing derived from GA4 + GSC (see
+   * insights-briefing.ts). When present, we drop it into the user
+   * message so Perplexity can prefer topics that align with breakout
+   * queries or refresh under-performing pages.
+   */
+  insightsBriefing?: string
 }
 
 /**
@@ -80,16 +87,27 @@ export async function researchTopics(args: ResearchTopicsArgs): Promise<Research
     .join('\n')
 
   const systemPrompt = buildSystemPrompt({ audience: args.audience, market: args.market, count })
-  const userPrompt = [
+  const userLines: string[] = [
     `Audience: ${segment.displayName}`,
     `Market: ${args.market.toUpperCase()}`,
     `Week: ${args.weekLabel}`,
-    '',
+  ]
+  if (args.insightsBriefing && args.insightsBriefing.trim().length > 0) {
+    userLines.push('')
+    userLines.push(args.insightsBriefing.trim())
+    userLines.push('')
+    userLines.push(
+      'Use the above analytics briefing when prioritising: prefer topic ideas that (a) target the same query intents where we already rank on page 2, (b) cluster around our best-performing pages so we can build internal-link authority, and (c) freshen topics whose pages have declined WoW. Do NOT reproduce URLs from the briefing verbatim — use the signal, generate original topics.',
+    )
+  }
+  userLines.push('')
+  userLines.push(
     'Seed prompts to consider (use as inspiration — do not parrot verbatim):',
-    seedsSample,
-    '',
-    `Return STRICT JSON: { "topics": [ ... ] } with exactly up to ${count} items.`,
-  ].join('\n')
+  )
+  userLines.push(seedsSample)
+  userLines.push('')
+  userLines.push(`Return STRICT JSON: { "topics": [ ... ] } with exactly up to ${count} items.`)
+  const userPrompt = userLines.join('\n')
 
   const env = loadEnv()
   const controller = new AbortController()
