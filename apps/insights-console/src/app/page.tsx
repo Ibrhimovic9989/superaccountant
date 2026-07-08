@@ -38,6 +38,7 @@ import {
   ga4Totals,
 } from '@/lib/ga4'
 import { gscPagePerformance, gscTotals } from '@/lib/gsc'
+import { batchInspect } from '@/lib/gsc-inspect'
 import { compactNumber, percent, timeAgo } from '@/lib/ui'
 
 // Don't ever cache — the dashboard should reflect the exact moment the
@@ -87,11 +88,34 @@ export default async function Dashboard() {
     }),
   ])
 
+  // Indexation status comes from GSC's URL Inspection API. Done after
+  // the main fan-out because we can't inspect until we know which URLs
+  // the posts sit at, and inspecting 20 URLs at once (~2s parallel)
+  // isn't worth threading through the initial batch.
+  const indexStatuses = await batchInspect(
+    posts.map((p) => `https://blog.superaccountant.in/${p.slug}`),
+  )
+
   const blogPerformance = joinBlogPerformance({
     posts,
     ga4Rows: blogHostViews,
     gscRows: blogPageQueries,
+    indexStatuses,
   })
+
+  // Aggregate indexation for the top-line stat tile. If none of the
+  // posts have been indexed yet — the most likely state for a fresh
+  // blog — surface that as the headline number, not a footnote.
+  const indexStats = {
+    indexed: blogPerformance.filter((r) => r.indexation.bucket === 'indexed').length,
+    crawledNotIndexed: blogPerformance.filter(
+      (r) => r.indexation.bucket === 'crawled-not-indexed',
+    ).length,
+    discovered: blogPerformance.filter(
+      (r) => r.indexation.bucket === 'discovered-not-indexed',
+    ).length,
+    unknown: blogPerformance.filter((r) => r.indexation.bucket === 'unknown').length,
+  }
 
   const autoGenCron = cronJobs.find((j) => j.jobname === 'blog-auto-generate-am')
   const nextPostCron = autoGenCron ? parseCron(autoGenCron.schedule) : null
@@ -146,10 +170,15 @@ export default async function Dashboard() {
             icon={Eye}
           />
           <StatTile
-            label="Posts published"
-            value={compactNumber(postsSummary.totalPublished)}
-            hint={`${postsSummary.publishedLast7d} in last 7d · ${postsSummary.agentAuthored} by agent`}
+            label="Indexed on Google"
+            value={`${indexStats.indexed}/${blogPerformance.length}`}
+            hint={
+              indexStats.indexed === 0
+                ? `${indexStats.discovered + indexStats.crawledNotIndexed} awaiting Google · ${postsSummary.publishedLast7d} new in last 7d`
+                : `${postsSummary.publishedLast7d} new in last 7d · ${postsSummary.agentAuthored} by agent`
+            }
             icon={Newspaper}
+            accent={indexStats.indexed > 0 ? 'success' : 'default'}
           />
           <StatTile
             label="Next post in"

@@ -2,6 +2,7 @@ import 'server-only'
 import type { PublishedPostRow } from './db'
 import type { GscPagePerf } from './gsc'
 import type { Ga4HostPageRow } from './ga4'
+import { type IndexBucket, type UrlIndexStatus, bucketFromStatus } from './gsc-inspect'
 
 /**
  * Joins BlogPost rows to their GA4 traffic (per blog URL) and their
@@ -34,6 +35,11 @@ export type BlogPerfRow = {
       position: number
     }>
   }
+  indexation: {
+    bucket: IndexBucket
+    coverageState: string
+    lastCrawlTime: string | null
+  }
 }
 
 const BLOG_HOST = 'blog.superaccountant.in'
@@ -50,6 +56,12 @@ export function joinBlogPerformance(args: {
   posts: PublishedPostRow[]
   ga4Rows: Ga4HostPageRow[]
   gscRows: GscPagePerf[]
+  /**
+   * Optional — URL Inspection results keyed by full blog URL. When
+   * absent (e.g. inspection call skipped) every row falls back to
+   * `unknown`, which the chip renders as a muted grey badge.
+   */
+  indexStatuses?: Map<string, UrlIndexStatus>
 }): BlogPerfRow[] {
   const ga4ByPath = new Map<string, Ga4HostPageRow>()
   for (const r of args.ga4Rows) ga4ByPath.set(canonicalisePath(r.pagePath), r)
@@ -59,11 +71,13 @@ export function joinBlogPerformance(args: {
 
   return args.posts.map((post) => {
     const path = canonicalisePath(`/${post.slug}`)
+    const blogUrl = `https://${BLOG_HOST}/${post.slug}`
     const ga = ga4ByPath.get(path)
     const gsc = gscByPath.get(path)
+    const indexStatus = args.indexStatuses?.get(blogUrl)
     return {
       post,
-      blogUrl: `https://${BLOG_HOST}/${post.slug}`,
+      blogUrl,
       ga4: {
         views: ga?.views ?? 0,
         activeUsers: ga?.activeUsers ?? 0,
@@ -75,6 +89,11 @@ export function joinBlogPerformance(args: {
         ctr: gsc?.ctr ?? 0,
         position: gsc?.position ?? 0,
         topQueries: gsc?.topQueries ?? [],
+      },
+      indexation: {
+        bucket: bucketFromStatus(indexStatus),
+        coverageState: indexStatus?.coverageState ?? 'Unknown',
+        lastCrawlTime: indexStatus?.lastCrawlTime ?? null,
       },
     }
   })

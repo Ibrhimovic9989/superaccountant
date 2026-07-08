@@ -1,4 +1,5 @@
 import { Bot, ExternalLink } from 'lucide-react'
+import { IndexationChip } from '@/components/indexation-chip'
 import type { BlogPerfRow } from '@/lib/blog-performance'
 import { compactNumber, percent, timeAgo } from '@/lib/ui'
 
@@ -26,14 +27,14 @@ export function BlogPerformanceList({ rows }: { rows: BlogPerfRow[] }) {
 
   return (
     <ul className="space-y-3">
-      {rows.map(({ post, blogUrl, ga4, gsc }) => {
+      {rows.map(({ post, blogUrl, ga4, gsc, indexation }) => {
         const hasSignal = ga4.views > 0 || gsc.impressions > 0
         return (
           <li
             key={post.id}
             className="rounded-lg border border-white/5 bg-white/[0.02] p-4 transition-colors hover:border-white/15"
           >
-            {/* Header row: title + market + agent flag + link */}
+            {/* Header row: title + market + agent flag + indexation chip + link */}
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0 flex-1">
                 <a
@@ -60,6 +61,7 @@ export function BlogPerformanceList({ rows }: { rows: BlogPerfRow[] }) {
                   )}
                 </div>
               </div>
+              <IndexationChip bucket={indexation.bucket} />
             </div>
 
             {/* Metrics row */}
