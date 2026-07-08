@@ -27,7 +27,11 @@ const MARKETING_URL = 'https://www.superaccountant.in'
 
 const ORG_ID = `${MARKETING_URL}/#org`
 const WEBSITE_ID = `${SITE_URL}/#website`
-const DEFAULT_IMAGE = `${MARKETING_URL}/icon.png`
+
+/** Dynamic OG image route — Next.js exposes it at /[slug]/opengraph-image. */
+function ogImageUrl(slug: string): string {
+  return `${SITE_URL}/${slug}/opengraph-image`
+}
 
 export function ArticleJsonLd({ post }: { post: BlogPost }) {
   const url = `${SITE_URL}/${post.slug}`
@@ -46,7 +50,13 @@ export function ArticleJsonLd({ post }: { post: BlogPost }) {
     dateModified: modified,
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     url,
-    image: post.heroImageUrl ?? DEFAULT_IMAGE,
+    image: {
+      '@type': 'ImageObject',
+      url: post.heroImageUrl ?? ogImageUrl(post.slug),
+      width: 1200,
+      height: 630,
+      caption: post.titleEn,
+    },
     author: {
       '@type': 'Organization',
       name: 'SuperAccountant Editorial Team',

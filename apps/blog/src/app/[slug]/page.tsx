@@ -7,6 +7,7 @@ import {
 } from '@/lib/blog/store'
 import { ArticleView } from '@/components/article-view'
 import { ArticleJsonLd } from '@/components/article-jsonld'
+import { FaqJsonLd } from '@/components/faq-jsonld'
 
 type Params = { slug: string }
 
@@ -23,6 +24,10 @@ export async function generateMetadata({
   const { slug } = await params
   const post = await getPublishedPostBySlug(slug, 'en')
   if (!post) return { title: 'Not found' }
+  // OG image — prefer the explicitly-uploaded hero, else the dynamic
+  // `/[slug]/opengraph-image` route (Next.js auto-generates the URL
+  // from the file). Every post gets a real social card either way.
+  const ogImage = post.heroImageUrl ?? `/${post.slug}/opengraph-image`
   return {
     title: `${post.titleEn} — SuperAccountant`,
     description: post.metaDescriptionEn,
@@ -30,8 +35,14 @@ export async function generateMetadata({
       title: post.titleEn,
       description: post.metaDescriptionEn,
       type: 'article',
-      ...(post.heroImageUrl ? { images: [post.heroImageUrl] } : {}),
+      images: [{ url: ogImage, width: 1200, height: 630, alt: post.titleEn }],
       ...(post.publishedAt ? { publishedTime: post.publishedAt.toISOString() } : {}),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.titleEn,
+      description: post.metaDescriptionEn,
+      images: [ogImage],
     },
     alternates: { canonical: `/${post.slug}` },
   }
@@ -55,6 +66,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
   return (
     <>
       <ArticleJsonLd post={post} />
+      <FaqJsonLd mdx={post.contentEnMdx} />
       <ArticleView post={post} related={related} />
     </>
   )

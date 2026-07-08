@@ -1,11 +1,29 @@
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import rehypeSlug from 'rehype-slug'
 import { Clock, MapPin } from 'lucide-react'
 import type { BlogPost } from '@/lib/blog/types'
 import { marketLabel, readingTimeMinutes, relativeDate } from '@/lib/blog/format'
 import { CtaStrip } from './cta-strip'
 import { PostCard } from './post-card'
+import { TableOfContents } from './table-of-contents'
+
+/**
+ * Alt-text builder for the hero image. Combines the post title with
+ * the primary target keyword when they don't already overlap. Google
+ * reads `alt` as content — this is a real (small) SEO signal, not
+ * just an accessibility line item.
+ */
+function buildHeroAlt(post: BlogPost): string {
+  const title = post.titleEn
+  const primary = post.targetKeywords[0]
+  if (!primary) return `${title} — SuperAccountant Journal illustration`
+  if (title.toLowerCase().includes(primary.toLowerCase())) {
+    return `${title} — SuperAccountant Journal illustration`
+  }
+  return `${title} · ${primary} — SuperAccountant Journal illustration`
+}
 
 /**
  * Rendered article body — split out from the route so the route stays
@@ -53,17 +71,26 @@ export function ArticleView({
           </p>
         </header>
 
-        {post.heroImageUrl && (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
-            src={post.heroImageUrl}
-            alt=""
-            className="mb-8 w-full rounded-2xl border border-border"
-          />
-        )}
+        {/* Hero image — prefer an explicitly-uploaded heroImageUrl, else
+              fall back to the dynamic OG image route so every post gets
+              a real, keyword-relevant illustration instead of a text
+              wall. `alt` combines title + primary keyword so it's
+              accessible AND carries an SEO signal. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={post.heroImageUrl ?? `/${post.slug}/opengraph-image`}
+          alt={buildHeroAlt(post)}
+          width={1200}
+          height={630}
+          loading="eager"
+          className="mb-8 w-full rounded-2xl border border-border"
+        />
+        <TableOfContents mdx={post.contentEnMdx} />
 
         <div className="article-prose">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.contentEnMdx}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSlug]}>
+            {post.contentEnMdx}
+          </ReactMarkdown>
         </div>
 
         {post.targetKeywords.length > 0 && (
