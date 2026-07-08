@@ -34,17 +34,10 @@ const SCOPES = [
  * Returns a fresh JWT client, or `null` if the env is not configured.
  * Callers should treat null as "insights disabled, skip".
  */
-// Populated on every miss so callers (currently the debug leak in
-// search-console.client.ts) can surface a specific reason for the null.
-export let lastAuthFailReason: string | null = null
-
 export async function getAuthClient(): Promise<JWT | null> {
   const env = loadEnv()
   const raw = env.GOOGLE_SERVICE_ACCOUNT_KEY
-  if (!raw) {
-    lastAuthFailReason = 'env-missing'
-    return null
-  }
+  if (!raw) return null
 
   if (cached && Date.now() - cachedAt < CLIENT_MAX_AGE_MS) return cached
 
@@ -52,15 +45,18 @@ export async function getAuthClient(): Promise<JWT | null> {
   try {
     key = JSON.parse(raw)
   } catch (err) {
+    // Watch this line if you ever see silent GSC/GA4 zeros: the most
+    // common cause is a Vercel env value whose private_key contains
+    // real newlines instead of escaped `\n`, which JSON.parse rejects
+    // with "Bad control character in string literal". Set the env from
+    // `json.dumps(json.load(open(sa.json)))` — never paste the raw JSON.
     console.error('[google-auth] GOOGLE_SERVICE_ACCOUNT_KEY is not valid JSON', {
       err: (err as Error).message,
     })
-    lastAuthFailReason = `json-parse: ${(err as Error).message.slice(0, 80)} · rawLen=${raw.length} · first=${JSON.stringify(raw.slice(0, 40))}`
     return null
   }
   if (!key.client_email || !key.private_key) {
     console.error('[google-auth] JSON missing client_email or private_key')
-    lastAuthFailReason = `json-shape · hasEmail=${!!key.client_email} · hasPk=${!!key.private_key} · keys=${Object.keys(key).join(',')}`
     return null
   }
 
@@ -78,10 +74,9 @@ export async function getAuthClient(): Promise<JWT | null> {
     const client = (await auth.getClient()) as JWT
     cached = client
     cachedAt = Date.now()
-    lastAuthFailReason = null
     return client
   } catch (err) {
-    lastAuthFailReason = `getClient-throw: ${(err as Error).message.slice(0, 200)}`
+    console.error('[google-auth] getClient failed', { err: (err as Error).message })
     return null
   }
 }
