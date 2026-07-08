@@ -11,7 +11,7 @@
  */
 
 import { loadEnv } from '@sa/config'
-import { getAuthClient } from './google-auth'
+import { getAuthClient, lastAuthFailReason } from './google-auth'
 import type { InsightsQueryRow } from '../domain/insights-types'
 
 const REQUEST_TIMEOUT_MS = 20_000
@@ -44,7 +44,7 @@ export async function fetchSearchAnalytics(args: {
   const site = env.GSC_SITE_URL
   if (!site) return { rows: [], totalImpressions: 0, totalClicks: 0, _debug: { reason: 'no site' } }
   const auth = await getAuthClient()
-  if (!auth) return { rows: [], totalImpressions: 0, totalClicks: 0, _debug: { reason: 'no auth', siteLen: site.length, siteRaw: JSON.stringify(site).slice(0, 80) } }
+  if (!auth) return { rows: [], totalImpressions: 0, totalClicks: 0, _debug: { reason: 'no auth', authFail: lastAuthFailReason, siteLen: site.length } }
 
   // GSC data lags ~2–3 days. Pinning endDate to today returns an empty
   // result set even when the property clearly has traffic — GSC replies
