@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react'
 import { listRecentPublished } from '@/lib/blog/store'
 import { PostCard } from '@/components/post-card'
 import { CtaStrip } from '@/components/cta-strip'
+import { BlogJsonLd } from '@/components/blog-jsonld'
 
 export const revalidate = 300
 
@@ -12,6 +13,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <BlogJsonLd posts={[...featured, ...recent]} />
       {/* Hero — polished landing that visually pairs with apps/marketing */}
       <section className="relative isolate overflow-hidden">
         <div className="pointer-events-none absolute inset-0 -z-10 bg-dots opacity-70" />
