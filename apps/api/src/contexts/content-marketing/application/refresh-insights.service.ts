@@ -123,10 +123,9 @@ export class RefreshInsightsService {
       breakoutCount: snapshot.breakoutCandidates.length,
       decliningCount: snapshot.decliningPages.length,
       _debug: {
+        gsc: (gsc as { _debug?: unknown })._debug ?? null,
         gscRawRowCount: gsc.rows.length,
-        gscFirstRow: gsc.rows[0] ?? null,
         topPagesRowCount: topPagesResult.rows.length,
-        topPagesFirstRow: topPagesResult.rows[0] ?? null,
       },
     }
   }

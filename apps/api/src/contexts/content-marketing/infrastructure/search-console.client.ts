@@ -29,15 +29,22 @@ type GscResponse = {
   }>
 }
 
+export type FetchSearchAnalyticsResult = {
+  rows: InsightsQueryRow[]
+  totalImpressions: number
+  totalClicks: number
+  _debug?: unknown
+}
+
 export async function fetchSearchAnalytics(args: {
   windowDays: number
   limit: number
-}): Promise<{ rows: InsightsQueryRow[]; totalImpressions: number; totalClicks: number }> {
+}): Promise<FetchSearchAnalyticsResult> {
   const env = loadEnv()
   const site = env.GSC_SITE_URL
-  if (!site) return { rows: [], totalImpressions: 0, totalClicks: 0 }
+  if (!site) return { rows: [], totalImpressions: 0, totalClicks: 0, _debug: { reason: 'no site' } }
   const auth = await getAuthClient()
-  if (!auth) return { rows: [], totalImpressions: 0, totalClicks: 0 }
+  if (!auth) return { rows: [], totalImpressions: 0, totalClicks: 0, _debug: { reason: 'no auth', siteLen: site.length, siteRaw: JSON.stringify(site).slice(0, 80) } }
 
   // GSC data lags ~2–3 days. Pinning endDate to today returns an empty
   // result set even when the property clearly has traffic — GSC replies
@@ -77,9 +84,9 @@ export async function fetchSearchAnalytics(args: {
     token = t.token
   } catch (err) {
     console.error('[gsc] access-token failed', { err: (err as Error).message })
-    return { rows: [], totalImpressions: 0, totalClicks: 0 }
+    return { rows: [], totalImpressions: 0, totalClicks: 0, _debug: { reason: 'no token', err: (err as Error).message } }
   }
-  if (!token) return { rows: [], totalImpressions: 0, totalClicks: 0 }
+  if (!token) return { rows: [], totalImpressions: 0, totalClicks: 0, _debug: { reason: 'empty token' } }
 
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
@@ -98,7 +105,7 @@ export async function fetchSearchAnalytics(args: {
       const txt = await res.text().catch(() => '')
       const level = res.status === 403 ? 'warn' : 'error'
       console[level](`[gsc] HTTP ${res.status}`, { body: txt.slice(0, 400) })
-      return { rows: [], totalImpressions: 0, totalClicks: 0 }
+      return { rows: [], totalImpressions: 0, totalClicks: 0, _debug: { reason: `http-${res.status}`, siteLen: site.length, siteRaw: JSON.stringify(site).slice(0, 80), body: txt.slice(0, 300), start, end, url: GSC_URL(site) } }
     }
     data = (await res.json()) as GscResponse
     console.log('[gsc] response', { rowCount: data?.rows?.length ?? 0 })
@@ -129,5 +136,5 @@ export async function fetchSearchAnalytics(args: {
       position: r.position ?? 0,
     })
   }
-  return { rows, totalImpressions, totalClicks }
+  return { rows, totalImpressions, totalClicks, _debug: { reason: 'ok', siteLen: site.length, siteRaw: JSON.stringify(site).slice(0, 80), start, end, apiRowCount: data?.rows?.length ?? 0 } }
 }
