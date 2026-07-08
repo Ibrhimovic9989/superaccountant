@@ -18,7 +18,8 @@ import { getPublishedPostBySlug } from '@/lib/blog/store'
  * covers Latin and looks clean.
  */
 
-export const runtime = 'edge'
+// Node runtime — edge would be faster but Prisma / @sa/db needs Node.
+// The route is cached by Next's dynamic-route cache anyway.
 export const contentType = 'image/png'
 export const size = { width: 1200, height: 630 }
 export const alt = 'SuperAccountant Journal article cover'
@@ -29,8 +30,13 @@ const MARKET_COPY: Record<string, { label: string; accent: string }> = {
   global: { label: 'ACCOUNTING JOURNAL', accent: '#a78bfa' },
 }
 
-export default async function BlogOgImage({ params }: { params: { slug: string } }) {
-  const post = await getPublishedPostBySlug(params.slug, 'en')
+export default async function BlogOgImage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const post = await getPublishedPostBySlug(slug, 'en')
   if (!post) {
     // 404 fallback — still return a valid PNG so any accidental crawl
     // doesn't 500 in the Sitemap.
