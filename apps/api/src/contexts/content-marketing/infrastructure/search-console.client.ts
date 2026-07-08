@@ -39,9 +39,16 @@ export async function fetchSearchAnalytics(args: {
   const auth = await getAuthClient()
   if (!auth) return { rows: [], totalImpressions: 0, totalClicks: 0 }
 
+  // GSC data lags ~2–3 days. Pinning endDate to today returns an empty
+  // result set even when the property clearly has traffic — GSC replies
+  // "no rows" for date ranges that spill into the pending-processing
+  // window. Backing off to today - 3 days is the safe interval that
+  // still gives us "yesterday-ish" data.
   const today = new Date()
-  const end = today.toISOString().slice(0, 10)
-  const startD = new Date(today)
+  const endD = new Date(today)
+  endD.setDate(endD.getDate() - 3)
+  const end = endD.toISOString().slice(0, 10)
+  const startD = new Date(endD)
   startD.setDate(startD.getDate() - args.windowDays)
   const start = startD.toISOString().slice(0, 10)
 

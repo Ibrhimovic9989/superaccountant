@@ -74,6 +74,13 @@ function isoDaysAgo(days: number): string {
   return d.toISOString().slice(0, 10)
 }
 
+/**
+ * GSC data lags 2–3 days. Anchor the end of every window at today - 3
+ * so we get non-empty results — endDate = today would come back with
+ * zero rows during the pending-processing window.
+ */
+const GSC_LAG_DAYS = 3
+
 // ── Totals ──────────────────────────────────────────────────
 
 export type GscTotals = {
@@ -85,8 +92,8 @@ export type GscTotals = {
 
 export async function gscTotals(windowDays: number): Promise<GscTotals> {
   const data = await post<GscResponse>({
-    startDate: isoDaysAgo(windowDays),
-    endDate: isoDaysAgo(1),
+    startDate: isoDaysAgo(windowDays + GSC_LAG_DAYS),
+    endDate: isoDaysAgo(GSC_LAG_DAYS),
     dimensions: [],
     type: 'web',
   })
@@ -112,8 +119,8 @@ export type GscQueryRow = {
 
 export async function gscTopQueries(windowDays: number, limit: number): Promise<GscQueryRow[]> {
   const data = await post<GscResponse>({
-    startDate: isoDaysAgo(windowDays),
-    endDate: isoDaysAgo(1),
+    startDate: isoDaysAgo(windowDays + GSC_LAG_DAYS),
+    endDate: isoDaysAgo(GSC_LAG_DAYS),
     dimensions: ['query', 'page'],
     rowLimit: limit,
     type: 'web',
