@@ -18,6 +18,7 @@ import { Empty } from '@/components/empty'
 import { Panel } from '@/components/panel'
 import { StatTile } from '@/components/stat-tile'
 import { TrafficChart } from '@/components/traffic-chart'
+import { ViewsByPageChart } from '@/components/views-by-page-chart'
 import { formatDuration, parseCron } from '@/lib/cron'
 import {
   latestInsights,
@@ -27,7 +28,7 @@ import {
   listRecentPosts,
   postSummary,
 } from '@/lib/db'
-import { ga4DailyUsers, ga4Totals } from '@/lib/ga4'
+import { ga4DailyUsers, ga4DailyViewsByTitle, ga4TopPages, ga4Totals } from '@/lib/ga4'
 import { gscTotals } from '@/lib/gsc'
 import { compactNumber, percent, timeAgo } from '@/lib/ui'
 
@@ -44,6 +45,8 @@ export default async function Dashboard() {
     gaTotals,
     gscT,
     daily,
+    topPages,
+    dailyByTitle,
     posts,
     postsSummary,
     insights,
@@ -54,6 +57,10 @@ export default async function Dashboard() {
     ga4Totals(WINDOW_DAYS),
     gscTotals(WINDOW_DAYS),
     ga4DailyUsers(WINDOW_DAYS),
+    ga4TopPages(WINDOW_DAYS, 10),
+    // Chart shows top 5 titles — anything past that turns the legend
+    // into a wall of names and lines overlap into mush.
+    ga4DailyViewsByTitle(WINDOW_DAYS, 5),
     listRecentPosts(20),
     postSummary(),
     latestInsights(),
@@ -164,49 +171,72 @@ export default async function Dashboard() {
           />
         </div>
 
-        {/* ── Two-column: top pages + top queries ─────────────── */}
-        <div className="grid gap-6 lg:grid-cols-2">
-          <Panel
-            title="Top pages · sessions"
-            subtitle="From GA4 · last 30 days"
-            icon={FileText}
-          >
-            {snap && snap.topPages.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs">
-                  <thead className="text-white/40">
-                    <tr className="border-b border-white/10">
-                      <th className="pb-2 text-left font-mono uppercase tracking-wider">Path</th>
-                      <th className="pb-2 text-right font-mono uppercase tracking-wider">Sess</th>
-                      <th className="pb-2 text-right font-mono uppercase tracking-wider">Eng</th>
-                      <th className="pb-2 text-right font-mono uppercase tracking-wider">Conv</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5">
-                    {snap.topPages.slice(0, 10).map((p) => (
-                      <tr key={p.pagePath} className="hover:bg-white/[0.02]">
-                        <td className="max-w-[280px] truncate py-2 pr-3 font-mono text-[11px] text-white/70">
-                          {p.pagePath}
-                        </td>
-                        <td className="py-2 text-right tabular-nums text-white/80">
-                          {compactNumber(p.sessions)}
-                        </td>
-                        <td className="py-2 text-right tabular-nums text-white/60">
-                          {percent(p.engagementRate)}
-                        </td>
-                        <td className="py-2 text-right tabular-nums text-white/60">
-                          {p.conversions}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <Empty text="no page data yet" />
-            )}
-          </Panel>
+        {/* ── Views-by-page timeseries (matches GA4 Pages chart) ── */}
+        <Panel
+          title="Views by page title · over time"
+          subtitle={`Top ${dailyByTitle.series.length} pages by views · last ${WINDOW_DAYS} days`}
+          icon={FileText}
+        >
+          <ViewsByPageChart data={dailyByTitle} />
+        </Panel>
 
+        {/* ── Pages and screens table (matches the GA4 report) ── */}
+        <Panel
+          title="Pages and screens"
+          subtitle="Page title · views · active users · views/user · engagement · events"
+          icon={FileText}
+        >
+          {topPages.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead className="text-white/40">
+                  <tr className="border-b border-white/10">
+                    <th className="pb-2 text-left font-mono uppercase tracking-wider">Page title</th>
+                    <th className="pb-2 pr-2 text-right font-mono uppercase tracking-wider">Views</th>
+                    <th className="pb-2 pr-2 text-right font-mono uppercase tracking-wider">Users</th>
+                    <th className="pb-2 pr-2 text-right font-mono uppercase tracking-wider">V/User</th>
+                    <th className="pb-2 pr-2 text-right font-mono uppercase tracking-wider">Eng time</th>
+                    <th className="pb-2 text-right font-mono uppercase tracking-wider">Events</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {topPages.map((p) => (
+                    <tr key={`${p.pageTitle}-${p.pagePath}`} className="hover:bg-white/[0.02]">
+                      <td className="max-w-[340px] py-2 pr-3">
+                        <p className="truncate text-[12px] text-white/90">{p.pageTitle}</p>
+                        <p className="mt-0.5 truncate font-mono text-[10px] text-white/40">
+                          {p.pagePath || '/'}
+                        </p>
+                      </td>
+                      <td className="py-2 pr-2 text-right tabular-nums text-white/90">
+                        {compactNumber(p.views)}
+                      </td>
+                      <td className="py-2 pr-2 text-right tabular-nums text-white/70">
+                        {compactNumber(p.activeUsers)}
+                      </td>
+                      <td className="py-2 pr-2 text-right tabular-nums text-white/60">
+                        {p.viewsPerActiveUser > 0 ? p.viewsPerActiveUser.toFixed(2) : '—'}
+                      </td>
+                      <td className="py-2 pr-2 text-right tabular-nums text-white/60">
+                        {p.avgEngagementTimeSec > 0
+                          ? `${Math.round(p.avgEngagementTimeSec)}s`
+                          : '—'}
+                      </td>
+                      <td className="py-2 text-right tabular-nums text-white/60">
+                        {compactNumber(p.eventCount)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <Empty text="no page data yet" />
+          )}
+        </Panel>
+
+        {/* ── Top queries (kept as its own single-column panel) ── */}
+        <div className="grid gap-6">
           <Panel
             title="Top queries · impressions"
             subtitle="From GSC · last 28 days"
