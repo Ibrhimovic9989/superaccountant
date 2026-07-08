@@ -52,6 +52,7 @@ export async function fetchSearchAnalytics(args: {
   startD.setDate(startD.getDate() - args.windowDays)
   const start = startD.toISOString().slice(0, 10)
 
+  console.log('[gsc] request', { site, start, end, rowLimit: args.limit })
   const body = {
     startDate: start,
     endDate: end,
@@ -100,6 +101,7 @@ export async function fetchSearchAnalytics(args: {
       return { rows: [], totalImpressions: 0, totalClicks: 0 }
     }
     data = (await res.json()) as GscResponse
+    console.log('[gsc] response', { rowCount: data?.rows?.length ?? 0 })
   } catch (err) {
     console.error('[gsc] fetch failed', { err: (err as Error).message })
     return { rows: [], totalImpressions: 0, totalClicks: 0 }
