@@ -26,7 +26,9 @@ import { getAuthClient } from './google-auth'
 
 const INSPECT_URL = 'https://searchconsole.googleapis.com/v1/urlInspection/index:inspect'
 const REQUEST_TIMEOUT_MS = 15_000
-const PARALLEL_CAP = 6
+// 10 keeps us well under GSC's 600 req/min limit while cutting the
+// dashboard load from ~20s to ~6s for 20 posts.
+const PARALLEL_CAP = 10
 
 export type IndexVerdict = 'PASS' | 'PARTIAL' | 'FAIL' | 'NEUTRAL' | 'VERDICT_UNSPECIFIED'
 
@@ -166,19 +168,28 @@ export type IndexBucket =
   | 'indexed'
   | 'crawled-not-indexed'
   | 'discovered-not-indexed'
+  /** GSC's literal string: "URL is unknown to Google". Worst case. */
+  | 'not-in-index'
   | 'excluded'
   | 'unknown'
 
 export function bucketFromStatus(s: UrlIndexStatus | undefined): IndexBucket {
   if (!s || s.error) return 'unknown'
   const cov = s.coverageState.toLowerCase()
-  if (s.verdict === 'PASS' || cov.includes('indexed') && !cov.includes('not indexed')) {
+  if (s.verdict === 'PASS' || (cov.includes('indexed') && !cov.includes('not indexed'))) {
     return 'indexed'
   }
   if (cov.includes('crawled') && cov.includes('not indexed')) return 'crawled-not-indexed'
   if (cov.includes('discovered') && cov.includes('not indexed')) return 'discovered-not-indexed'
   if (cov.includes('excluded') || cov.includes('blocked') || cov.includes('noindex')) {
     return 'excluded'
+  }
+  // "URL is unknown to Google" — Google has never crawled, never seen
+  // in a sitemap, never followed a link here. Treat as its own bucket
+  // because the remediation (submit sitemap + build inbound links) is
+  // different from "we know about it, just haven't crawled".
+  if (cov.includes('unknown to google') || cov.includes('not on google')) {
+    return 'not-in-index'
   }
   return 'unknown'
 }

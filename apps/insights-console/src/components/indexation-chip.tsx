@@ -31,6 +31,11 @@ const VARIANTS: Record<IndexBucket, { label: string; cls: string; icon: typeof C
     cls: 'border-sky-500/40 bg-sky-500/10 text-sky-300',
     icon: Clock,
   },
+  'not-in-index': {
+    label: 'Not on Google',
+    cls: 'border-rose-500/40 bg-rose-500/10 text-rose-300',
+    icon: XCircle,
+  },
   excluded: {
     label: 'Excluded',
     cls: 'border-rose-500/40 bg-rose-500/10 text-rose-300',

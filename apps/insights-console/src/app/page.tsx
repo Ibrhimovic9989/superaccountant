@@ -103,9 +103,9 @@ export default async function Dashboard() {
     indexStatuses,
   })
 
-  // Aggregate indexation for the top-line stat tile. If none of the
-  // posts have been indexed yet — the most likely state for a fresh
-  // blog — surface that as the headline number, not a footnote.
+  // Aggregate indexation for the top-line stat tile. "Not on Google"
+  // is the honest headline for a brand-new site: Google doesn't
+  // even know the URLs exist yet.
   const indexStats = {
     indexed: blogPerformance.filter((r) => r.indexation.bucket === 'indexed').length,
     crawledNotIndexed: blogPerformance.filter(
@@ -114,6 +114,7 @@ export default async function Dashboard() {
     discovered: blogPerformance.filter(
       (r) => r.indexation.bucket === 'discovered-not-indexed',
     ).length,
+    notInIndex: blogPerformance.filter((r) => r.indexation.bucket === 'not-in-index').length,
     unknown: blogPerformance.filter((r) => r.indexation.bucket === 'unknown').length,
   }
 
@@ -174,7 +175,9 @@ export default async function Dashboard() {
             value={`${indexStats.indexed}/${blogPerformance.length}`}
             hint={
               indexStats.indexed === 0
-                ? `${indexStats.discovered + indexStats.crawledNotIndexed} awaiting Google · ${postsSummary.publishedLast7d} new in last 7d`
+                ? indexStats.notInIndex > 0
+                  ? `${indexStats.notInIndex} not on Google · submit sitemap to GSC`
+                  : `${indexStats.discovered + indexStats.crawledNotIndexed} awaiting Google`
                 : `${postsSummary.publishedLast7d} new in last 7d · ${postsSummary.agentAuthored} by agent`
             }
             icon={Newspaper}
