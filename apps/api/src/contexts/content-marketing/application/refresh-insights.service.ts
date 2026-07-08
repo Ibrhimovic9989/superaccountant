@@ -49,6 +49,7 @@ export type RefreshInsightsResult = {
   totalSessions: number
   totalImpressions: number
   totalClicks: number
+  _debug?: unknown
   topPageCount: number
   topQueryCount: number
   breakoutCount: number
@@ -121,6 +122,12 @@ export class RefreshInsightsService {
       topQueryCount: snapshot.topQueries.length,
       breakoutCount: snapshot.breakoutCandidates.length,
       decliningCount: snapshot.decliningPages.length,
+      _debug: {
+        gscRawRowCount: gsc.rows.length,
+        gscFirstRow: gsc.rows[0] ?? null,
+        topPagesRowCount: topPagesResult.rows.length,
+        topPagesFirstRow: topPagesResult.rows[0] ?? null,
+      },
     }
   }
 }
