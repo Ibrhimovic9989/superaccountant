@@ -14,11 +14,13 @@ import {
   TrendingUp,
   Users,
 } from 'lucide-react'
+import { BlogPerformanceList } from '@/components/blog-performance-list'
 import { Empty } from '@/components/empty'
 import { Panel } from '@/components/panel'
 import { StatTile } from '@/components/stat-tile'
 import { TrafficChart } from '@/components/traffic-chart'
 import { ViewsByPageChart } from '@/components/views-by-page-chart'
+import { joinBlogPerformance } from '@/lib/blog-performance'
 import { formatDuration, parseCron } from '@/lib/cron'
 import {
   latestInsights,
@@ -28,8 +30,14 @@ import {
   listRecentPosts,
   postSummary,
 } from '@/lib/db'
-import { ga4DailyUsers, ga4DailyViewsByTitle, ga4TopPages, ga4Totals } from '@/lib/ga4'
-import { gscTotals } from '@/lib/gsc'
+import {
+  ga4DailyUsers,
+  ga4DailyViewsByTitle,
+  ga4PagesByHost,
+  ga4TopPages,
+  ga4Totals,
+} from '@/lib/ga4'
+import { gscPagePerformance, gscTotals } from '@/lib/gsc'
 import { compactNumber, percent, timeAgo } from '@/lib/ui'
 
 // Don't ever cache — the dashboard should reflect the exact moment the
@@ -53,6 +61,10 @@ export default async function Dashboard() {
     queued,
     cronJobs,
     cronRuns,
+    // Per-blog joins — pulled in the same fan-out so the dashboard
+    // still lands in one round of parallel HTTP.
+    blogHostViews,
+    blogPageQueries,
   ] = await Promise.all([
     ga4Totals(WINDOW_DAYS),
     gscTotals(WINDOW_DAYS),
@@ -67,7 +79,19 @@ export default async function Dashboard() {
     listQueuedTopics(10),
     listCronJobs(),
     listRecentCronRuns(10),
+    ga4PagesByHost(WINDOW_DAYS, 'blog.superaccountant.in'),
+    gscPagePerformance({
+      windowDays: WINDOW_DAYS,
+      queriesPerPage: 8,
+      pagePrefix: 'blog.superaccountant.in',
+    }),
   ])
+
+  const blogPerformance = joinBlogPerformance({
+    posts,
+    ga4Rows: blogHostViews,
+    gscRows: blogPageQueries,
+  })
 
   const autoGenCron = cronJobs.find((j) => j.jobname === 'blog-auto-generate-am')
   const nextPostCron = autoGenCron ? parseCron(autoGenCron.schedule) : null
@@ -356,51 +380,22 @@ export default async function Dashboard() {
           </Panel>
         </div>
 
-        {/* ── Recently published + queued ─────────────────────── */}
-        <div className="grid gap-6 lg:grid-cols-3">
-          <Panel
-            title="Recently published"
-            subtitle="Latest 10 posts from BlogPost"
-            icon={Newspaper}
-            className="lg:col-span-2"
-          >
-            {posts.length > 0 ? (
-              <ul className="divide-y divide-white/5">
-                {posts.slice(0, 10).map((p) => (
-                  <li key={p.id} className="py-3">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0 flex-1">
-                        <a
-                          href={`https://blog.superaccountant.in/${p.slug}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="truncate text-sm text-white/90 hover:text-violet-300"
-                        >
-                          {p.titleEn}
-                        </a>
-                        <div className="mt-1 flex items-center gap-3 font-mono text-[10px] uppercase tracking-wider text-white/40">
-                          <span>{p.market}</span>
-                          {p.authorAgentId && (
-                            <span className="inline-flex items-center gap-1 text-violet-300/70">
-                              <Bot className="h-3 w-3" /> agent
-                            </span>
-                          )}
-                          <span>{timeAgo(p.publishedAt ?? p.createdAt)}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <Empty text="no posts yet" />
-            )}
-          </Panel>
+        {/* ── Per-blog performance — views + queries per post ── */}
+        <Panel
+          title="Blog performance"
+          subtitle="Each published post · GA4 views + GSC queries people searched to find it"
+          icon={Newspaper}
+        >
+          <BlogPerformanceList rows={blogPerformance} />
+        </Panel>
 
+        {/* ── Queued topics + next-agent-run info ─────────────── */}
+        <div className="grid gap-6 lg:grid-cols-3">
           <Panel
             title="Queued topics"
             subtitle="Researched but not yet written"
             icon={Target}
+            className="lg:col-span-2"
           >
             {queued.length > 0 ? (
               <ul className="space-y-2">

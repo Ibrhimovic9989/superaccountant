@@ -228,6 +228,55 @@ export async function ga4TopPages(windowDays: number, limit: number): Promise<Ga
   return rows.slice(0, limit)
 }
 
+// ── Per-hostname performance (for the blog drilldown) ──────
+
+export type Ga4HostPageRow = {
+  hostname: string
+  pagePath: string
+  views: number
+  activeUsers: number
+  eventCount: number
+}
+
+/**
+ * Pulls (hostname, pagePath) with views/users/events for the whole
+ * window — used to join GA4 traffic onto BlogPost rows on the console.
+ * Kept separate from ga4TopPages so the "Pages and screens" report can
+ * stay title-grouped while the blog drilldown joins on URL exactly.
+ */
+export async function ga4PagesByHost(
+  windowDays: number,
+  hostname: string,
+): Promise<Ga4HostPageRow[]> {
+  const data = await post<Ga4Response>({
+    dateRanges: [{ startDate: `${windowDays}daysAgo`, endDate: 'today' }],
+    dimensions: [{ name: 'hostName' }, { name: 'pagePath' }],
+    metrics: [
+      { name: 'screenPageViews' },
+      { name: 'activeUsers' },
+      { name: 'eventCount' },
+    ],
+    dimensionFilter: {
+      filter: {
+        fieldName: 'hostName',
+        stringFilter: { matchType: 'EXACT', value: hostname },
+      },
+    },
+    orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }],
+    limit: '500',
+    keepEmptyRows: false,
+  })
+  return (data?.rows ?? [])
+    .map((r) => ({
+      hostname: r.dimensionValues?.[0]?.value ?? '',
+      pagePath: r.dimensionValues?.[1]?.value ?? '',
+      views: Number(r.metricValues?.[0]?.value ?? 0),
+      activeUsers: Number(r.metricValues?.[1]?.value ?? 0),
+      eventCount: Number(r.metricValues?.[2]?.value ?? 0),
+    }))
+    .filter((r) => r.pagePath)
+}
+
 // ── Per-page daily views (for the multi-series chart) ────────
 
 export type Ga4DailyByTitle = {
