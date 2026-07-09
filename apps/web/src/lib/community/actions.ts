@@ -9,6 +9,7 @@ import { auth } from '@/lib/auth'
 import { createComposedPost } from './post-store'
 import { ensureProfile } from './profile-store'
 import { validateHandleEdit } from './handle'
+import { pushNotification } from './notification-store'
 import type { PostKind } from './types'
 
 /**
@@ -99,9 +100,36 @@ export async function toggleLikeAction(raw: {
     return rows[0] ?? { likeCount: 0, liked: false }
   })
 
+  // Push a notification to the post's author. Fire-and-forget — the
+  // notification store swallows errors so a bell hiccup can't fail
+  // a like. Only push on the transition to `liked=true` so unlike +
+  // re-like doesn't spam.
+  if (result.liked) {
+    void notifyOnLike(postId, userId).catch(() => {})
+  }
   revalidatePath(`/en/p/${postId}`)
   revalidatePath(`/ar/p/${postId}`)
   return { liked: result.liked, likeCount: result.likeCount }
+}
+
+async function notifyOnLike(postId: string, actorId: string): Promise<void> {
+  const rows = await prisma.$queryRawUnsafe<
+    { authorId: string; snippet: string }[]
+  >(
+    `SELECT "authorId", LEFT("body", 60) AS "snippet"
+       FROM "CommunityPost" WHERE id = $1 LIMIT 1`,
+    postId,
+  )
+  const p = rows[0]
+  if (!p) return
+  await pushNotification({
+    recipientId: p.authorId,
+    actorId,
+    type: 'like',
+    subjectType: 'post',
+    subjectId: postId,
+    snippet: p.snippet,
+  })
 }
 
 // ── save / unsave ────────────────────────────────────────────
@@ -201,6 +229,16 @@ export async function toggleFollowAction(raw: {
           WHERE "userId" = $1`,
         userId,
       )
+      // Notify the followed user. Silently no-ops if the recipient
+      // has already been notified about this specific follow (dedupe
+      // handled by the partial UNIQUE on CommunityNotification).
+      void pushNotification({
+        recipientId: followedId,
+        actorId: userId,
+        type: 'follow',
+        subjectType: 'profile',
+        subjectId: followedId,
+      }).catch(() => {})
     }
     const rows = await tx.$queryRawUnsafe<{ followerCount: number; following: boolean }[]>(
       `SELECT
@@ -251,9 +289,32 @@ export async function createCommentAction(
     return rows[0]?.commentCount ?? 0
   })
 
+  // Notify the post's author (unless it's their own comment).
+  void notifyOnComment(postId, userId, body).catch(() => {})
   revalidatePath(`/en/p/${postId}`)
   revalidatePath(`/ar/p/${postId}`)
   return { id, commentCount }
+}
+
+async function notifyOnComment(
+  postId: string,
+  actorId: string,
+  body: string,
+): Promise<void> {
+  const rows = await prisma.$queryRawUnsafe<{ authorId: string }[]>(
+    `SELECT "authorId" FROM "CommunityPost" WHERE id = $1 LIMIT 1`,
+    postId,
+  )
+  const p = rows[0]
+  if (!p) return
+  await pushNotification({
+    recipientId: p.authorId,
+    actorId,
+    type: 'comment',
+    subjectType: 'post',
+    subjectId: postId,
+    snippet: body.slice(0, 80),
+  })
 }
 
 // ── compose post ────────────────────────────────────────────
@@ -292,6 +353,47 @@ export async function createPostAction(raw: unknown): Promise<{ id: string; hand
   revalidatePath(`/en/u/${profile.handle}`)
   revalidatePath(`/ar/u/${profile.handle}`)
   return { id, handle: profile.handle }
+}
+
+// ── update profile bio / tone / visibility ─────────────────
+
+const UpdateProfileMetaSchema = z.object({
+  bio: z.string().max(200).optional().nullable(),
+  tone: z.enum(['accent', 'brand', 'grape', 'coral', 'mint', 'blush', 'ink']).optional(),
+  visibility: z.enum(['public', 'members', 'hidden']).optional(),
+})
+
+export async function updateProfileMetaAction(raw: unknown): Promise<{ ok: true }> {
+  const parsed = UpdateProfileMetaSchema.parse(raw)
+  const userId = await requireUserId()
+
+  // Coalesce to existing values so a partial update doesn't null out
+  // unrelated columns.
+  await prisma.$executeRawUnsafe(
+    `UPDATE "CommunityProfile"
+        SET "bio" = COALESCE($2, "bio"),
+            "tone" = COALESCE($3, "tone"),
+            "publicVisibility" = COALESCE($4, "publicVisibility"),
+            "updatedAt" = NOW()
+      WHERE "userId" = $1`,
+    userId,
+    parsed.bio ?? null,
+    parsed.tone ?? null,
+    parsed.visibility ?? null,
+  )
+
+  // Bust the profile page cache. We don't know the handle up-front,
+  // so read + revalidate both locales for the current one.
+  const rows = await prisma.$queryRawUnsafe<{ handle: string }[]>(
+    `SELECT handle FROM "CommunityProfile" WHERE "userId" = $1 LIMIT 1`,
+    userId,
+  )
+  const handle = rows[0]?.handle
+  if (handle) {
+    revalidatePath(`/en/u/${handle}`)
+    revalidatePath(`/ar/u/${handle}`)
+  }
+  return { ok: true }
 }
 
 // ── update handle (one edit) ────────────────────────────────

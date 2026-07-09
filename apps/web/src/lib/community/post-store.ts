@@ -2,6 +2,7 @@ import 'server-only'
 import { randomUUID } from 'node:crypto'
 import { prisma } from '@sa/db'
 import { ensureProfile } from './profile-store'
+import { pushNotification } from './notification-store'
 import type { PostKind, PostSource } from './types'
 
 /**
@@ -113,5 +114,19 @@ export async function createAutoPost(args: {
       throw err
     }
   })
+
+  // Ping the recipient — "your achievement just landed on your
+  // profile" so they see it in the bell before spotting it in the
+  // feed. Silent on error; the post is already saved.
+  if (result.created) {
+    void pushNotification({
+      recipientId: args.authorId,
+      actorId: null,
+      type: 'milestone-post',
+      subjectType: 'post',
+      subjectId: id,
+      snippet: args.body.slice(0, 80),
+    }).catch(() => {})
+  }
   return result
 }

@@ -1,3 +1,4 @@
+import { NotificationBell } from '@/components/community/notification-bell'
 import {
   BookOpen,
   Command,
@@ -105,6 +106,7 @@ export function AppNav({ locale, userName, userEmail }: Props) {
             <Command className="h-3 w-3" />
             <span>K</span>
           </button>
+          <NotificationBell locale={locale} />
           <LocaleToggle locale={locale} />
           <ThemeToggle />
           <UserMenu locale={locale} userName={userName} userEmail={userEmail} />
