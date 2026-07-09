@@ -92,7 +92,7 @@ export default async function ProfilePage({
       />
 
       <main className="relative mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-10">
-        <ProfileHeader view={view} locale={locale} />
+        <ProfileHeader view={view} locale={locale} viewerId={session?.user?.id ?? null} />
         {view.achievements.length > 0 && (
           <div className="mt-8">
             <AchievementRail achievements={view.achievements} />

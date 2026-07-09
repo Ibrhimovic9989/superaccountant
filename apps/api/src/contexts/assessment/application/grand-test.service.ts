@@ -242,6 +242,20 @@ export class GrandTestService {
           err: (err as Error).message,
         })
       }
+
+      // Fire an auto-milestone post into the community feed. Same
+      // internal-endpoint pattern as the cohort bundle — apps/web owns
+      // the CommunityPost writes. Idempotent (partial-UNIQUE catches
+      // retries) so a retry from any code path is safe.
+      try {
+        await postCommunityMilestone({ kind: 'grand-test-pass', attemptId: attempt.id })
+      } catch (err) {
+        console.error('[grand-test] community milestone post failed', {
+          userId: args.userId,
+          attemptId: attempt.id,
+          err: (err as Error).message,
+        })
+      }
     }
 
     return {
@@ -285,6 +299,36 @@ async function issueCohortBundle(args: {
   if (!res.ok) {
     const text = await res.text().catch(() => '')
     throw new Error(`web /api/internal/issue-cohort-credentials returned ${res.status}: ${text.slice(0, 300)}`)
+  }
+}
+
+/**
+ * POSTs an auto-milestone community post to apps/web. Same auth story
+ * as issueCohortBundle above so ops only manages one shared secret.
+ */
+async function postCommunityMilestone(
+  args: { kind: 'grand-test-pass'; attemptId: string } | { kind: 'cohort-complete'; enrollmentId: string },
+): Promise<void> {
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL ??
+    process.env.WEB_APP_URL ??
+    'https://app.superaccountant.in'
+  const token = process.env.INTERNAL_ISSUE_TOKEN ?? process.env.NEXTAUTH_SECRET
+  if (!token) {
+    console.warn('[grand-test] INTERNAL_ISSUE_TOKEN missing — skipping community milestone')
+    return
+  }
+  const url = `${baseUrl.replace(/\/$/, '')}/api/internal/community-milestone-post`
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(args),
+  })
+  if (!res.ok) {
+    const text = await res.text().catch(() => '')
+    throw new Error(
+      `web /api/internal/community-milestone-post returned ${res.status}: ${text.slice(0, 300)}`,
+    )
   }
 }
 

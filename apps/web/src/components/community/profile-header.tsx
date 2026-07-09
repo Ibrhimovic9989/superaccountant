@@ -1,6 +1,7 @@
 import { BadgeCheck, MapPin, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import type { ProfileView } from '@/lib/community/types'
+import { FollowButton } from './follow-button'
 
 /**
  * The top slab of a profile page. Cover image (falls back to a tone-
@@ -29,9 +30,11 @@ const TONE_GRADIENTS: Record<string, string> = {
 export function ProfileHeader({
   view,
   locale,
+  viewerId,
 }: {
   view: ProfileView
   locale: 'en' | 'ar'
+  viewerId: string | null
 }) {
   const { author, bio, coverImageUrl, followerCount, followingCount, postCount } = view
   const gradient = TONE_GRADIENTS[author.tone] ?? TONE_GRADIENTS.accent
@@ -64,17 +67,12 @@ export function ProfileHeader({
                 Edit profile
               </Link>
             ) : (
-              // TODO(week 2): FollowButton — client action that toggles
-              // the follow state via a server action and refreshes the
-              // count in place. Kept as a placeholder link for now so
-              // the header ships in this slice.
-              <button
-                type="button"
-                disabled
-                className="cursor-not-allowed rounded-full bg-accent/30 px-4 py-1.5 text-sm font-medium text-accent-fg opacity-70"
-              >
-                {view.viewerFollowing ? 'Following' : 'Follow'}
-              </button>
+              <FollowButton
+                followedId={view.author.id}
+                initialFollowing={view.viewerFollowing}
+                signedIn={!!viewerId}
+                locale={locale}
+              />
             )}
           </div>
         </div>
