@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Fragment } from 'react'
-import { Compass, Film, Filter, Sparkles } from 'lucide-react'
-import { AppNav } from '@/components/app-nav'
-import { PageBackdrop } from '@/components/page-backdrop'
+import { Film } from 'lucide-react'
+import { CommunityNav } from '@/components/community/community-nav'
 import { auth } from '@/lib/auth'
 import { listActiveAuthors, listGlobalFeed } from '@/lib/community/feed-store'
 import { FeedCard } from '@/components/community/feed-card'
 import { StoryRow } from '@/components/community/story-row'
 import { AnonCtaCard } from '@/components/community/anon-cta-card'
+import { Sticker } from '@/components/community/su/primitives'
 import type { PostKind } from '@/lib/community/types'
 
 /**
@@ -19,13 +19,18 @@ import type { PostKind } from '@/lib/community/types'
  */
 export const revalidate = 60
 
-const KIND_TABS: Array<{ key: PostKind | 'all'; label: string }> = [
-  { key: 'all', label: 'All' },
-  { key: 'milestone', label: 'Milestones' },
-  { key: 'win', label: 'Wins' },
-  { key: 'ask', label: 'Asks' },
-  { key: 'tip', label: 'Tips' },
-  { key: 'showcase', label: 'Showcases' },
+const KIND_TABS: Array<{
+  key: PostKind | 'all'
+  label: string
+  emoji: string
+  tone: 'ink' | 'brand' | 'coral' | 'mint' | 'grape' | 'sky'
+}> = [
+  { key: 'all', label: 'All', emoji: '✨', tone: 'ink' },
+  { key: 'milestone', label: 'Milestones', emoji: '⭐', tone: 'sky' },
+  { key: 'win', label: 'Wins', emoji: '🏆', tone: 'mint' },
+  { key: 'ask', label: 'Asks', emoji: '💬', tone: 'coral' },
+  { key: 'tip', label: 'Tips', emoji: '💡', tone: 'brand' },
+  { key: 'showcase', label: 'Showcases', emoji: '🎨', tone: 'grape' },
 ]
 
 export const metadata: Metadata = {
@@ -62,15 +67,12 @@ export default async function CommunityFeed({
       kind: kind === 'all' ? null : (kind as PostKind),
       limit: 30,
     }),
-    // Only show the "who's active" rail on the un-filtered feed —
-    // it's a cross-cutting signal, not a kind view.
     kind === 'all' ? listActiveAuthors(7, 12) : Promise.resolve([]),
   ])
 
   return (
-    <div className="relative min-h-screen bg-bg text-fg">
-      <PageBackdrop />
-      <AppNav
+    <div className="relative min-h-screen bg-cream text-ink">
+      <CommunityNav
         locale={locale}
         userName={session?.user?.name ?? null}
         userEmail={session?.user?.email ?? ''}
@@ -78,54 +80,53 @@ export default async function CommunityFeed({
 
       <main className="relative mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">
         {/* Header */}
-        <header className="mb-6 flex items-center justify-between">
+        <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-fg-subtle">
-              <Sparkles className="mr-1 inline h-3 w-3" />
-              Community
-            </p>
-            <h1 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">
-              What's happening
+            <span className="mb-2 inline-block font-mono text-xs font-bold uppercase tracking-[0.18em] text-coral">
+              ✨ The community
+            </span>
+            <h1 className="font-display text-3xl font-extrabold leading-none tracking-tight text-ink sm:text-5xl">
+              What&apos;s happening.
             </h1>
+            <p className="mt-2 text-sm font-medium text-ink/60">
+              Verified students &amp; grads. India + KSA. Learn out loud.
+            </p>
           </div>
           <div className="flex items-center gap-2">
             <Link
               href={`/${locale}/reels`}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-bg-elev px-3 py-1.5 text-sm text-fg-muted hover:border-accent hover:text-fg"
+              className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-white px-4 py-2 text-sm font-bold text-ink shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
             >
-              <Film className="h-3.5 w-3.5" />
+              <Film className="h-4 w-4" />
               Reels
             </Link>
             {viewerId && (
               <Link
                 href={`/${locale}/community/compose`}
-                className="inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-accent-fg hover:opacity-90"
+                className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-brand px-5 py-2 text-sm font-bold text-white shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
               >
-                + Post
+                + New Post
               </Link>
             )}
           </div>
         </header>
 
-        {/* Kind tabs — scrolls horizontally on mobile */}
-        <div className="mb-4 flex items-center gap-2 overflow-x-auto pb-1 font-mono text-[11px] uppercase tracking-wider">
-          <Filter className="h-3 w-3 shrink-0 text-fg-subtle" />
+        {/* Kind tabs — sticker chips */}
+        <div className="mb-6 -mx-2 flex items-center gap-2 overflow-x-auto px-2 pb-2">
           {KIND_TABS.map((t) => {
             const active = t.key === kind
-            const href = t.key === 'all'
-              ? `/${locale}/community`
-              : `/${locale}/community?kind=${t.key}`
+            const href = t.key === 'all' ? `/${locale}/community` : `/${locale}/community?kind=${t.key}`
             return (
               <Link
                 key={t.key}
                 href={href}
-                className={
+                className={`shrink-0 rounded-full border-2 border-ink px-3.5 py-1.5 font-mono text-[11px] font-extrabold uppercase tracking-wider transition-all ${
                   active
-                    ? 'shrink-0 rounded-full border border-accent bg-accent-soft px-3 py-1 text-accent'
-                    : 'shrink-0 rounded-full border border-border bg-bg-elev px-3 py-1 text-fg-muted hover:border-border-strong hover:text-fg'
-                }
+                    ? 'bg-ink text-cream shadow-pop-xs'
+                    : 'bg-white text-ink hover:-translate-y-0.5 hover:shadow-pop-xs'
+                }`}
               >
-                {t.label}
+                {t.emoji} {t.label}
               </Link>
             )
           })}
@@ -140,13 +141,10 @@ export default async function CommunityFeed({
         {posts.length === 0 ? (
           <EmptyState locale={locale} signedIn={!!viewerId} />
         ) : (
-          <div className="space-y-5">
+          <div className="space-y-6">
             {posts.map((p, i) => (
               <Fragment key={p.id}>
                 <FeedCard post={p} locale={locale} signedIn={!!viewerId} />
-                {/* Anon-only CTA slotted between real posts. Position
-                    3 keeps it above the fold on desktop, below the
-                    first two social proofs on mobile. */}
                 {!viewerId && i === 2 && <AnonCtaCard locale={locale} />}
               </Fragment>
             ))}
@@ -159,12 +157,16 @@ export default async function CommunityFeed({
 
 function EmptyState({ locale, signedIn }: { locale: 'en' | 'ar'; signedIn: boolean }) {
   return (
-    <div className="rounded-2xl border border-dashed border-border bg-bg-elev p-10 text-center">
-      <Compass className="mx-auto h-6 w-6 text-fg-subtle" />
-      <p className="mt-4 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-        Nothing yet
-      </p>
-      <p className="mt-2 text-sm text-fg-muted">
+    <div className="rounded-3xl border-2 border-dashed border-ink bg-white p-10 text-center shadow-pop-sm">
+      <div className="mx-auto mb-3 flex justify-center">
+        <Sticker tone="coral" rotate="-4deg">
+          🌱 Fresh page
+        </Sticker>
+      </div>
+      <h2 className="font-display text-2xl font-extrabold text-ink">
+        Nothing yet — this is your moment.
+      </h2>
+      <p className="mt-2 text-sm font-medium text-ink/60">
         {signedIn
           ? 'Be the first to share a win, an ask, or a workpaper.'
           : 'The community is warming up. Check back soon.'}
@@ -172,7 +174,7 @@ function EmptyState({ locale, signedIn }: { locale: 'en' | 'ar'; signedIn: boole
       {signedIn && (
         <Link
           href={`/${locale}/community/compose`}
-          className="mt-5 inline-flex rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg hover:opacity-90"
+          className="mt-6 inline-flex rounded-full border-2 border-ink bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
         >
           Compose the first post
         </Link>

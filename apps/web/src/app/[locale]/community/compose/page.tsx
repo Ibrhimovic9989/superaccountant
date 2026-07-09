@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { AppNav } from '@/components/app-nav'
-import { PageBackdrop } from '@/components/page-backdrop'
+import { CommunityNav } from '@/components/community/community-nav'
 import { auth } from '@/lib/auth'
 import { ComposeForm } from '@/components/community/compose-form'
+import { Sticker } from '@/components/community/su/primitives'
 
 export const metadata: Metadata = {
   title: 'Compose · SuperAccountant Community',
@@ -23,30 +23,34 @@ export default async function ComposePage({
   if (!session?.user?.id) redirect(`/${locale}/sign-in`)
 
   return (
-    <div className="relative min-h-screen bg-bg text-fg">
-      <PageBackdrop />
-      <AppNav
+    <div className="relative min-h-screen bg-cream text-ink">
+      <CommunityNav
         locale={locale}
         userName={session.user.name ?? null}
         userEmail={session.user.email ?? ''}
       />
 
       <main className="relative mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-fg-subtle">
-              Compose
-            </p>
-            <h1 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">
-              What's on your mind?
+            <span className="mb-2 inline-block font-mono text-xs font-bold uppercase tracking-[0.18em] text-coral">
+              ✍️ Compose
+            </span>
+            <h1 className="font-display text-3xl font-extrabold leading-none tracking-tight text-ink sm:text-4xl">
+              What&apos;s on your mind?
             </h1>
           </div>
-          <Link
-            href={`/${locale}/community`}
-            className="rounded-full border border-border bg-bg-elev px-3 py-1.5 text-xs text-fg-muted hover:border-border-strong hover:text-fg"
-          >
-            Cancel
-          </Link>
+          <div className="flex items-center gap-3">
+            <Sticker tone="butter" rotate="3deg" className="hidden sm:inline-flex">
+              🔥 Post something real
+            </Sticker>
+            <Link
+              href={`/${locale}/community`}
+              className="rounded-full border-2 border-ink bg-white px-4 py-2 text-sm font-bold text-ink transition-all hover:bg-ink hover:text-cream"
+            >
+              Cancel
+            </Link>
+          </div>
         </div>
         <ComposeForm locale={locale} />
       </main>

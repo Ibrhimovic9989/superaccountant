@@ -1,6 +1,6 @@
 import { LOCALES, type SupportedLocale, dirFor } from '@sa/i18n'
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono } from 'next/font/google'
+import { Bricolage_Grotesque, Instrument_Serif, Inter, JetBrains_Mono } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import Script from 'next/script'
 import '../globals.css'
@@ -21,6 +21,23 @@ const inter = Inter({
 const mono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-jetbrains-mono',
+  display: 'swap',
+})
+
+// Display font for the community surface (neobrutal aesthetic).
+// Only loaded on pages that use it via var(--font-display).
+const display = Bricolage_Grotesque({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['600', '700', '800'],
+  display: 'swap',
+})
+
+const serif = Instrument_Serif({
+  subsets: ['latin'],
+  variable: '--font-serif',
+  weight: '400',
+  style: ['normal', 'italic'],
   display: 'swap',
 })
 
@@ -101,7 +118,7 @@ export default async function LocaleLayout({
       lang={locale}
       dir={dir}
       suppressHydrationWarning
-      className={`${inter.variable} ${mono.variable}`}
+      className={`${inter.variable} ${mono.variable} ${display.variable} ${serif.variable}`}
     >
       <body className="overflow-x-hidden">
         {children}

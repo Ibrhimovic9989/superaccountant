@@ -100,12 +100,12 @@ export function LikeButton({
       <a
         href={`/${locale}/sign-in`}
         className={cn(
-          'inline-flex items-center gap-1.5 text-fg-muted transition-colors hover:text-fg',
+          'inline-flex items-center gap-1.5 font-semibold text-ink/60 transition-colors hover:text-ink',
           textClass,
         )}
       >
         <Heart className={iconClass} />
-        {count}
+        <span className="tabular-nums">{count}</span>
       </a>
     )
   }
@@ -136,8 +136,8 @@ export function LikeButton({
       aria-pressed={liked}
       aria-label={liked ? 'Unlike' : 'Like'}
       className={cn(
-        'inline-flex items-center gap-1.5 transition-colors',
-        liked ? 'text-rose-400 hover:text-rose-300' : 'text-fg-muted hover:text-fg',
+        'inline-flex items-center gap-1.5 font-semibold transition-colors',
+        liked ? 'text-coral' : 'text-ink/60 hover:text-ink',
         textClass,
       )}
     >

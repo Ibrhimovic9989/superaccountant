@@ -1,8 +1,7 @@
 import { AtSign, Award, Heart, MessageSquare, UserPlus } from 'lucide-react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { AppNav } from '@/components/app-nav'
-import { PageBackdrop } from '@/components/page-backdrop'
+import { CommunityNav } from '@/components/community/community-nav'
 import { auth } from '@/lib/auth'
 import { listNotifications, markAllRead } from '@/lib/community/notification-store'
 import type { NotificationRow, NotificationType } from '@/lib/community/notification-store'
@@ -22,31 +21,11 @@ const TYPE_META: Record<
   NotificationType,
   { icon: typeof Heart; label: string; tone: string }
 > = {
-  like: {
-    icon: Heart,
-    label: 'liked your post',
-    tone: 'text-rose-300 bg-rose-500/10',
-  },
-  comment: {
-    icon: MessageSquare,
-    label: 'commented on your post',
-    tone: 'text-blue-300 bg-blue-500/10',
-  },
-  follow: {
-    icon: UserPlus,
-    label: 'started following you',
-    tone: 'text-emerald-300 bg-emerald-500/10',
-  },
-  'milestone-post': {
-    icon: Award,
-    label: 'Your achievement went live',
-    tone: 'text-indigo-300 bg-indigo-500/10',
-  },
-  mention: {
-    icon: AtSign,
-    label: 'mentioned you',
-    tone: 'text-orange-300 bg-orange-500/10',
-  },
+  like: { icon: Heart, label: 'liked your post', tone: 'bg-coral text-white' },
+  comment: { icon: MessageSquare, label: 'commented on your post', tone: 'bg-brand text-white' },
+  follow: { icon: UserPlus, label: 'started following you', tone: 'bg-mint text-white' },
+  'milestone-post': { icon: Award, label: 'Your achievement went live', tone: 'bg-sky text-ink' },
+  mention: { icon: AtSign, label: 'mentioned you', tone: 'bg-grape text-white' },
 }
 
 function timeAgo(iso: string): string {
@@ -74,20 +53,19 @@ export default async function NotificationsPage({
   markAllRead(session.user.id).catch(() => {})
 
   return (
-    <div className="relative min-h-screen bg-bg text-fg">
-      <PageBackdrop />
-      <AppNav
+    <div className="relative min-h-screen bg-cream text-ink">
+      <CommunityNav
         locale={locale}
         userName={session.user.name ?? null}
         userEmail={session.user.email ?? ''}
       />
 
       <main className="relative mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">
-        <header className="mb-6">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-fg-subtle">
-            Inbox
-          </p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">
+        <header className="mb-8">
+          <span className="mb-2 inline-block font-mono text-xs font-bold uppercase tracking-[0.18em] text-coral">
+            📬 Inbox
+          </span>
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
             Notifications
           </h1>
         </header>
@@ -95,7 +73,7 @@ export default async function NotificationsPage({
         {notifications.length === 0 ? (
           <EmptyState />
         ) : (
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {notifications.map((n) => (
               <NotificationItem key={n.id} n={n} locale={locale} />
             ))}
@@ -128,34 +106,38 @@ function NotificationItem({
     <li>
       <Link
         href={href}
-        className={`group flex items-start gap-3 rounded-xl border border-border bg-bg-elev p-4 transition-colors hover:border-border-strong ${
-          !n.read ? 'ring-1 ring-accent/30' : ''
+        className={`group flex items-start gap-3 rounded-2xl border-2 border-ink bg-white p-4 shadow-pop-xs transition-transform hover:-translate-y-0.5 hover:shadow-pop-sm ${
+          !n.read ? 'ring-4 ring-brand/25' : ''
         }`}
       >
-        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${meta.tone}`}>
+        <span
+          className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl border-2 border-ink ${meta.tone}`}
+        >
           <Icon className="h-4 w-4" />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-sm text-fg">
+          <p className="text-[14px] leading-snug text-ink">
             {n.type === 'milestone-post' ? (
-              <span className="font-medium">{meta.label}</span>
+              <span className="font-display font-extrabold">{meta.label}</span>
             ) : (
               <>
-                <span className="font-medium">
+                <span className="font-display font-extrabold">
                   {n.actorName ?? (n.actorHandle ? `@${n.actorHandle}` : 'Someone')}
                 </span>{' '}
-                {meta.label}
+                <span className="font-medium">{meta.label}</span>
               </>
             )}
           </p>
           {n.snippet && (
-            <p className="mt-1 line-clamp-1 text-xs text-fg-muted">"{n.snippet}"</p>
+            <p className="mt-1 line-clamp-1 text-xs italic text-ink/60">&ldquo;{n.snippet}&rdquo;</p>
           )}
-          <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+          <p className="mt-1 font-mono text-[10px] font-bold uppercase tracking-wider text-ink/50">
             {timeAgo(n.createdAt)}
           </p>
         </div>
-        {!n.read && <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-accent" />}
+        {!n.read && (
+          <span className="mt-2 h-3 w-3 shrink-0 rounded-full border-2 border-ink bg-brand" />
+        )}
       </Link>
     </li>
   )
@@ -163,12 +145,16 @@ function NotificationItem({
 
 function EmptyState() {
   return (
-    <div className="rounded-2xl border border-dashed border-border bg-bg-elev p-10 text-center">
-      <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+    <div className="rounded-3xl border-2 border-dashed border-ink bg-white p-10 text-center shadow-pop-xs">
+      <p className="text-3xl">🌙</p>
+      <p className="mt-3 font-mono text-[10px] font-bold uppercase tracking-wider text-ink/60">
         All quiet
       </p>
-      <p className="mt-2 text-sm text-fg-muted">
-        When someone likes, comments, or follows you, it'll show up here.
+      <p className="mt-2 font-display text-lg font-extrabold text-ink">
+        Nothing to catch up on.
+      </p>
+      <p className="mt-1 text-sm font-medium text-ink/60">
+        When someone likes, comments, or follows you, it&apos;ll show up here.
       </p>
     </div>
   )

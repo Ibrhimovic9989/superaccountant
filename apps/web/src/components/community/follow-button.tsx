@@ -33,14 +33,14 @@ export function FollowButton({
     return (
       <a
         href={`/${locale}/sign-in`}
-        className="rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-accent-fg hover:opacity-90"
+        className="rounded-full border-2 border-ink bg-brand px-5 py-2 text-sm font-bold text-white shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
       >
         Follow
       </a>
     )
   }
 
-  const label = following ? (hover ? 'Unfollow' : 'Following') : 'Follow'
+  const label = following ? (hover ? 'Unfollow' : 'Following ✓') : 'Follow'
 
   const onClick = () => {
     const next = !following
@@ -63,10 +63,12 @@ export function FollowButton({
       onMouseLeave={() => setHover(false)}
       disabled={pending}
       className={cn(
-        'rounded-full px-4 py-1.5 text-sm font-medium transition-colors',
+        'rounded-full border-2 border-ink px-5 py-2 text-sm font-bold transition-all active:translate-y-[2px]',
         following
-          ? 'border border-border bg-bg text-fg-muted hover:border-danger/50 hover:text-danger'
-          : 'bg-accent text-accent-fg hover:opacity-90',
+          ? hover
+            ? 'bg-coral text-white shadow-pop-xs'
+            : 'bg-white text-ink shadow-pop-xs hover:-translate-y-0.5'
+          : 'bg-brand text-white shadow-pop-sm hover:-translate-y-0.5 hover:shadow-pop-md active:shadow-pop-xs',
       )}
     >
       {label}

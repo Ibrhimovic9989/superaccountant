@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { AppNav } from '@/components/app-nav'
-import { PageBackdrop } from '@/components/page-backdrop'
+import { CommunityNav } from '@/components/community/community-nav'
 import { auth } from '@/lib/auth'
 import { getPostById, listComments } from '@/lib/community/feed-store'
 import { FeedCard } from '@/components/community/feed-card'
@@ -68,9 +67,8 @@ export default async function PostDetail({
   const comments = await listComments(post.id, 100)
 
   return (
-    <div className="relative min-h-screen bg-bg text-fg">
-      <PageBackdrop />
-      <AppNav
+    <div className="relative min-h-screen bg-cream text-ink">
+      <CommunityNav
         locale={locale}
         userName={session?.user?.name ?? null}
         userEmail={session?.user?.email ?? ''}
@@ -79,8 +77,8 @@ export default async function PostDetail({
       <main className="relative mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">
         <FeedCard post={post} locale={locale} signedIn={!!viewerId} />
         <section className="mt-8">
-          <h2 className="mb-4 font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
-            Comments · {comments.length}
+          <h2 className="mb-4 font-display text-lg font-extrabold tracking-tight text-ink">
+            💬 Comments · {comments.length}
           </h2>
           <CommentThread
             postId={post.id}

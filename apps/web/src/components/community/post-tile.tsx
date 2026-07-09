@@ -1,49 +1,24 @@
-import { Award, HelpCircle, ImageIcon, Lightbulb, Play, Sparkles, Trophy } from 'lucide-react'
+import { Play } from 'lucide-react'
 import Link from 'next/link'
 import { isVideoUrl } from '@/lib/community/media'
 import type { FeedPostView, PostKind } from '@/lib/community/types'
 
 /**
- * Square post tile — the Instagram-style grid unit on a profile.
+ * Square post tile — the profile-grid unit.
  *
- * When the post has media it renders as a photo tile with a subtle
- * gradient overlay + kind badge. When it doesn't, it renders as a
- * text tile with a big kind emoji + line-clamped body. This mixed
- * grid — media-heavy and text-heavy tiles side by side — is what
- * gives the page its "LinkedIn in Instagram clothing" feel without
- * making every post require a photo.
+ * Neobrutal treatment: 2px ink border, hard offset shadow, emoji +
+ * kind label as a rotated corner sticker. Text posts use a kind-tinted
+ * paper block; media posts show the image/video with an ink-tone
+ * gradient at the bottom carrying the caption. Video posts get a
+ * play chip in the corner.
  */
 
-// Kind palettes stay inside the brand family:
-//   win / milestone → emerald + blue (growth signals)
-//   tip / showcase  → blue + indigo (knowledge)
-//   ask             → orange + amber (energy / attention)
-const KIND_META: Record<PostKind, { label: string; icon: typeof Sparkles; tone: string }> = {
-  win: {
-    label: 'Win',
-    icon: Trophy,
-    tone: 'from-emerald-500/25 via-blue-500/15 to-emerald-600/25 text-emerald-50',
-  },
-  tip: {
-    label: 'Tip',
-    icon: Lightbulb,
-    tone: 'from-blue-500/30 via-cyan-500/15 to-blue-600/30 text-blue-50',
-  },
-  showcase: {
-    label: 'Showcase',
-    icon: ImageIcon,
-    tone: 'from-indigo-500/30 via-blue-500/15 to-indigo-600/30 text-indigo-50',
-  },
-  ask: {
-    label: 'Ask',
-    icon: HelpCircle,
-    tone: 'from-orange-500/30 via-amber-500/15 to-orange-600/30 text-orange-50',
-  },
-  milestone: {
-    label: 'Milestone',
-    icon: Award,
-    tone: 'from-blue-600/30 via-emerald-500/15 to-cyan-500/30 text-blue-50',
-  },
+const KIND_PAPER: Record<PostKind, { paper: string; emoji: string; label: string }> = {
+  win: { paper: 'bg-mint text-white', emoji: '🏆', label: 'Win' },
+  tip: { paper: 'bg-brand text-white', emoji: '💡', label: 'Tip' },
+  showcase: { paper: 'bg-grape text-white', emoji: '🎨', label: 'Show' },
+  ask: { paper: 'bg-coral text-white', emoji: '💬', label: 'Ask' },
+  milestone: { paper: 'bg-sky text-ink', emoji: '⭐', label: 'Milestone' },
 }
 
 export function PostTile({
@@ -53,20 +28,17 @@ export function PostTile({
   post: FeedPostView
   locale: 'en' | 'ar'
 }) {
-  const meta = KIND_META[post.kind]
-  const Icon = meta.icon
+  const meta = KIND_PAPER[post.kind]
   const isVideo = post.mediaUrl ? isVideoUrl(post.mediaUrl) : false
 
   return (
     <Link
       href={`/${locale}/p/${post.id}`}
-      className="group relative block aspect-square overflow-hidden rounded-xl border border-border bg-bg-overlay transition-transform hover:-translate-y-0.5 hover:border-border-strong"
+      className="group relative block aspect-square overflow-hidden rounded-2xl border-2 border-ink bg-white shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
     >
       {post.mediaUrl ? (
         <>
           {isVideo ? (
-            // <video preload="metadata"> renders the first frame as
-            // the poster — cheap thumbnail without a separate upload.
             <video
               src={`${post.mediaUrl}#t=0.1`}
               muted
@@ -83,47 +55,41 @@ export function PostTile({
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70" />
-          <KindBadge kind={post.kind} className="absolute left-2 top-2" />
+          <span
+            style={{ rotate: '-3deg' }}
+            className={`absolute left-2 top-2 inline-flex items-center gap-1 rounded-full border-2 border-ink px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide shadow-pop-xs ${meta.paper}`}
+          >
+            {meta.emoji} {meta.label}
+          </span>
           {isVideo && (
-            <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-black/55 text-white backdrop-blur-sm">
+            <span className="absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-full border-2 border-ink bg-white text-ink shadow-pop-xs">
               <Play className="h-3 w-3 fill-current" />
             </span>
           )}
-          <p className="absolute inset-x-2 bottom-2 line-clamp-2 text-[11px] font-medium text-white/90">
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-ink/85 to-transparent" />
+          <p className="absolute inset-x-2 bottom-2 line-clamp-2 text-[11px] font-bold text-white">
             {post.body}
           </p>
         </>
       ) : (
-        <div className={`flex h-full w-full flex-col justify-between bg-gradient-to-br p-3 ${meta.tone}`}>
+        <div className={`flex h-full w-full flex-col justify-between p-3 ${meta.paper}`}>
           <div className="flex items-center justify-between">
-            <Icon className="h-5 w-5 opacity-90" />
-            <span className="rounded-full bg-black/25 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider">
-              {meta.label}
+            <span
+              style={{ rotate: '-4deg' }}
+              className="inline-flex items-center gap-1 rounded-full border-2 border-ink bg-cream px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-ink shadow-pop-xs"
+            >
+              {meta.emoji} {meta.label}
             </span>
           </div>
-          <p className="line-clamp-5 text-[12px] font-medium leading-snug">
+          <p className="line-clamp-5 font-display text-[13px] font-extrabold leading-snug">
             {post.body}
           </p>
-          <div className="flex items-center justify-between font-mono text-[10px] opacity-80">
+          <div className="flex items-center justify-between font-mono text-[10px] font-bold">
             <span>♡ {post.likeCount}</span>
             <span>💬 {post.commentCount}</span>
           </div>
         </div>
       )}
     </Link>
-  )
-}
-
-function KindBadge({ kind, className = '' }: { kind: PostKind; className?: string }) {
-  const meta = KIND_META[kind]
-  const Icon = meta.icon
-  return (
-    <span
-      className={`inline-flex items-center gap-1 rounded-full bg-black/45 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-white ${className}`}
-    >
-      <Icon className="h-3 w-3" />
-      {meta.label}
-    </span>
   )
 }

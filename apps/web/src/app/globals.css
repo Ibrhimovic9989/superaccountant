@@ -18,6 +18,8 @@
 @theme {
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-display: var(--font-display), var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-serif), Georgia, serif;
 
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
@@ -39,6 +41,29 @@
   --color-warning: var(--warning);
   --color-danger: var(--danger);
 
+  /* Neobrutalism palette — used by the community + reels surface.
+   *
+   * The rest of the app (lessons, dashboard) uses the neutral OKLCH
+   * tokens above. The community is a distinct social product — a
+   * cream page with ink borders and sticker badges — because the job
+   * is different: it needs to feel playful, tactile, and instant.
+   *
+   * Palette matches SuperAccountant's logomark: royal blue is brand,
+   * emerald is mint, orange-red is coral. Grape/sky/blush from the
+   * studentunion-v2 reference to give tone variety without adding
+   * new brand hues. */
+  --color-cream: #fffce9;
+  --color-ink: #1a1a1a;
+  --color-muted: #757b62;
+  --color-brand: #0040a0;      /* SA royal blue */
+  --color-brand-dark: #002d70;
+  --color-mint: #20a020;       /* SA emerald */
+  --color-coral: #e08000;      /* SA orange */
+  --color-grape: #6c4cff;
+  --color-sky: #57c4ff;
+  --color-blush: #ff8ab3;
+  --color-butter: #ffcc00;
+
   /* Theme-aware shadow utilities — invisible in dark mode where the
    *  bg-elev contrast already lifts cards; subtle in light mode where
    *  cards need help separating from the background. */
@@ -54,6 +79,59 @@
 }
 .lift:hover {
   box-shadow: var(--shadow-card-hover);
+}
+
+/* ─── Neobrutalism utilities (community + reels) ────────────────────
+ * Hard offset shadows with no blur — the signature look. Paired with
+ * a 2px ink border, they read as "sticker on a page". Hover grows
+ * the offset; press collapses it. */
+.shadow-pop {
+  box-shadow: 6px 6px 0 0 var(--color-ink);
+}
+.shadow-pop-md {
+  box-shadow: 4px 4px 0 0 var(--color-ink);
+}
+.shadow-pop-sm {
+  box-shadow: 3px 3px 0 0 var(--color-ink);
+}
+.shadow-pop-xs {
+  box-shadow: 2px 2px 0 0 var(--color-ink);
+}
+
+/* Sticker button: grows on hover, presses on click. */
+.btn-pop {
+  border-width: 2px;
+  border-color: var(--color-ink);
+  box-shadow: 3px 3px 0 0 var(--color-ink);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-pop:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 0 var(--color-ink);
+}
+.btn-pop:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--color-ink);
+}
+
+/* Highlighter marker behind inline text — for the "moat" phrases in
+ * hero copy. */
+.marker {
+  background-image: linear-gradient(120deg, transparent 0, transparent 8%, currentColor 8%, currentColor 92%, transparent 92%);
+  background-repeat: no-repeat;
+  background-size: 100% 42%;
+  background-position: 0 78%;
+  padding: 0 0.1em;
+}
+
+@keyframes sa-heartpop {
+  0%   { opacity: 0; transform: scale(0.4); }
+  30%  { opacity: 0.95; transform: scale(1.15); }
+  70%  { opacity: 0.95; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+.heart-pop {
+  animation: sa-heartpop 0.8s ease-out forwards;
 }
 
 :root {

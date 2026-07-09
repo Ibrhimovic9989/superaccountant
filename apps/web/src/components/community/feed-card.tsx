@@ -1,73 +1,49 @@
-import {
-  Award,
-  BadgeCheck,
-  HelpCircle,
-  ImageIcon,
-  Lightbulb,
-  MessageCircle,
-  Trophy,
-} from 'lucide-react'
+import { Award, HelpCircle, ImageIcon, Lightbulb, MessageCircle, Trophy } from 'lucide-react'
 import Link from 'next/link'
 import { isVideoUrl } from '@/lib/community/media'
 import type { FeedPostView, PostKind } from '@/lib/community/types'
 import { FeedVideo } from './feed-video'
 import { LikeButton } from './like-button'
+import { Sticker } from './su/primitives'
 
 /**
- * Feed card — Instagram-flavored on top of LinkedIn semantics.
+ * Neobrutal feed card.
  *
- * Two shapes, chosen by whether the post has media:
+ * White paper, 2px ink border, hard offset shadow that grows on
+ * hover. Kind indicated by a rotated sticker in the top-right —
+ * emoji-forward. Media (image or video) sits edge-to-edge with its
+ * own ink divider. Author strip up top, big body copy, action row
+ * at the bottom.
  *
- *   - IMAGE POSTS: hero the image edge-to-edge under the author strip.
- *     Actions row (heart, comment) sits directly under the image, IG
- *     style. Caption + kind chip go below the actions. This is the
- *     shape that makes the feed feel like a photo feed instead of a
- *     blog.
- *
- *   - TEXT POSTS: kind-tinted gradient card with the body as the
- *     "content". Still image-adjacent in weight thanks to the
- *     gradient wash, but doesn't require a photo.
- *
- * Auto-generated milestone posts get a "Verified via X" chip so
- * readers know it's a system attestation, not a user claim.
+ * Two shapes underneath:
+ *   - MEDIA POSTS: image/video hero right below the author strip.
+ *   - TEXT POSTS: kind-tinted paper block with the body as the
+ *     content — no photo required, still reads as a card.
  */
 
-const KIND_META: Record<PostKind, {
-  label: string
-  icon: typeof Trophy
-  chip: string
-  wash: string
-}> = {
-  win: {
-    label: 'Win',
-    icon: Trophy,
-    chip: 'text-emerald-300 bg-emerald-500/10 border-emerald-500/30',
-    wash: 'from-emerald-500/25 via-blue-500/10 to-emerald-600/20',
-  },
-  tip: {
-    label: 'Tip',
-    icon: Lightbulb,
-    chip: 'text-blue-300 bg-blue-500/10 border-blue-500/30',
-    wash: 'from-blue-500/25 via-cyan-500/10 to-blue-600/20',
-  },
-  showcase: {
-    label: 'Showcase',
-    icon: ImageIcon,
-    chip: 'text-indigo-300 bg-indigo-500/10 border-indigo-500/30',
-    wash: 'from-indigo-500/25 via-blue-500/10 to-indigo-600/20',
-  },
-  ask: {
-    label: 'Ask',
-    icon: HelpCircle,
-    chip: 'text-orange-300 bg-orange-500/10 border-orange-500/30',
-    wash: 'from-orange-500/25 via-amber-500/10 to-orange-600/20',
-  },
-  milestone: {
-    label: 'Milestone',
-    icon: Award,
-    chip: 'text-blue-300 bg-blue-500/10 border-blue-500/30',
-    wash: 'from-blue-600/25 via-emerald-500/10 to-cyan-500/20',
-  },
+const KIND: Record<
+  PostKind,
+  {
+    label: string
+    emoji: string
+    tone: 'mint' | 'coral' | 'grape' | 'brand' | 'sky'
+    ring: string
+    icon: typeof Trophy
+  }
+> = {
+  win: { label: 'Win', emoji: '🏆', tone: 'mint', ring: 'ring-mint', icon: Trophy },
+  tip: { label: 'Tip', emoji: '💡', tone: 'brand', ring: 'ring-brand', icon: Lightbulb },
+  showcase: { label: 'Showcase', emoji: '🎨', tone: 'grape', ring: 'ring-grape', icon: ImageIcon },
+  ask: { label: 'Ask', emoji: '💬', tone: 'coral', ring: 'ring-coral', icon: HelpCircle },
+  milestone: { label: 'Milestone', emoji: '⭐', tone: 'sky', ring: 'ring-sky', icon: Award },
+}
+
+const KIND_PAPER: Record<PostKind, string> = {
+  win: 'bg-mint/10',
+  tip: 'bg-brand/10',
+  showcase: 'bg-grape/10',
+  ask: 'bg-coral/10',
+  milestone: 'bg-sky/20',
 }
 
 function timeAgo(iso: string): string {
@@ -91,108 +67,104 @@ export function FeedCard({
   locale: 'en' | 'ar'
   signedIn: boolean
 }) {
-  const meta = KIND_META[post.kind]
-  const Icon = meta.icon
+  const meta = KIND[post.kind]
   const isAuto = post.source.startsWith('auto:')
   const hasMedia = !!post.mediaUrl
   const isVideo = hasMedia && isVideoUrl(post.mediaUrl)
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-border bg-bg-elev transition-colors hover:border-border-strong">
+    <article className="relative overflow-hidden rounded-3xl border-2 border-ink bg-white shadow-pop-md transition-transform hover:-translate-y-1 hover:shadow-pop">
+      {/* Sticker in the top-right */}
+      <div className="pointer-events-none absolute end-3 top-3 z-10">
+        <Sticker tone={meta.tone} rotate="4deg">
+          {meta.emoji} {meta.label}
+        </Sticker>
+      </div>
+
       {/* Author strip */}
-      <div className="flex items-center justify-between gap-3 px-4 pt-4 sm:px-5 sm:pt-5">
+      <div className="flex items-center gap-3 px-5 pt-5 pe-24">
         <Link
           href={`/${locale}/u/${post.author.handle}`}
           className="group inline-flex min-w-0 items-center gap-3"
         >
-          <div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full border border-border bg-bg-overlay text-sm font-semibold">
+          <span className={`relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-2xl border-2 border-ink bg-cream text-lg font-extrabold text-ink`}>
             {post.author.avatarUrl ? (
               /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={post.author.avatarUrl}
-                alt=""
-                className="h-full w-full object-cover"
-              />
+              <img src={post.author.avatarUrl} alt="" className="h-full w-full object-cover" />
             ) : (
               <span>{(post.author.name || post.author.handle).slice(0, 1).toUpperCase()}</span>
             )}
-          </div>
-          <div className="min-w-0 leading-tight">
-            <div className="flex items-center gap-1">
-              <span className="truncate text-sm font-medium group-hover:text-accent">
+          </span>
+          <span className="min-w-0 leading-tight">
+            <span className="flex items-center gap-1.5">
+              <span className="truncate font-display text-base font-extrabold text-ink group-hover:text-brand">
                 {post.author.name}
               </span>
               {post.author.verified && (
-                <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-accent" aria-label="Verified" />
+                <span
+                  aria-label="Verified"
+                  className="grid h-4 w-4 place-items-center rounded-full border-2 border-ink bg-brand text-[9px] font-black text-white"
+                >
+                  ✓
+                </span>
               )}
-            </div>
-            <p className="truncate font-mono text-[11px] text-fg-subtle">
+            </span>
+            <span className="block truncate text-[12px] font-medium text-ink/55">
               @{post.author.handle}
               {post.author.headline && (
                 <>
-                  <span className="mx-1 text-fg-subtle/60">·</span>
+                  <span className="mx-1 text-ink/30">·</span>
                   {post.author.headline}
                 </>
               )}
-              <span className="mx-1 text-fg-subtle/60">·</span>
+              <span className="mx-1 text-ink/30">·</span>
               {timeAgo(post.publishedAt)}
-            </p>
-          </div>
+            </span>
+          </span>
         </Link>
-        <span
-          className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider ${meta.chip}`}
-        >
-          <Icon className="h-3 w-3" />
-          {meta.label}
-        </span>
       </div>
 
       {hasMedia ? (
-        // ── MEDIA-FIRST LAYOUT (image OR video) ──────────────────
+        // ── MEDIA-FIRST LAYOUT ───────────────────────────────────
         <>
-          {isVideo ? (
-            <div className="mt-3">
+          <div className="mt-4 border-y-2 border-ink bg-cream">
+            {isVideo ? (
               <FeedVideo src={post.mediaUrl!} />
-            </div>
-          ) : (
-            <Link
-              href={`/${locale}/p/${post.id}`}
-              className="mt-3 block bg-bg-overlay"
-              aria-label="Open post"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={post.mediaUrl!}
-                alt={post.body.slice(0, 100)}
-                loading="lazy"
-                className="max-h-[560px] w-full object-cover"
-              />
-            </Link>
-          )}
+            ) : (
+              <Link
+                href={`/${locale}/p/${post.id}`}
+                className="block"
+                aria-label="Open post"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={post.mediaUrl!}
+                  alt={post.body.slice(0, 100)}
+                  loading="lazy"
+                  className="max-h-[560px] w-full object-cover"
+                />
+              </Link>
+            )}
+          </div>
 
-          <ActionRow
-            post={post}
-            signedIn={signedIn}
-            locale={locale}
-            isAuto={isAuto}
-          />
+          <ActionRow post={post} signedIn={signedIn} locale={locale} isAuto={isAuto} />
 
-          <Link href={`/${locale}/p/${post.id}`} className="block px-4 pb-4 sm:px-5 sm:pb-5">
+          <Link href={`/${locale}/p/${post.id}`} className="block px-5 pb-5">
             {post.likeCount > 0 && (
-              <p className="font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
+              <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-ink/60">
                 {post.likeCount} {post.likeCount === 1 ? 'like' : 'likes'}
               </p>
             )}
-            <p className="mt-1 line-clamp-3 whitespace-pre-wrap text-[14px] leading-relaxed text-fg">
-              <span className="me-1.5 font-semibold">{post.author.name}</span>
+            <p className="mt-1 line-clamp-3 whitespace-pre-wrap text-[15px] leading-relaxed text-ink">
+              <span className="me-1.5 font-extrabold">{post.author.name}</span>
               {post.body}
             </p>
             {post.commentCount > 0 && (
-              <p className="mt-1.5 text-xs text-fg-subtle">
+              <p className="mt-1.5 text-xs font-semibold text-ink/50 hover:text-ink">
                 View {post.commentCount === 1 ? '1 comment' : `all ${post.commentCount} comments`}
               </p>
             )}
-            <TagRow tags={post.tags} />
+            <TagRow tags={post.tags} locale={locale} />
           </Link>
         </>
       ) : (
@@ -200,20 +172,15 @@ export function FeedCard({
         <>
           <Link
             href={`/${locale}/p/${post.id}`}
-            className={`mx-4 mt-3 block rounded-xl bg-gradient-to-br p-5 ${meta.wash} sm:mx-5`}
+            className={`mx-5 mt-4 block rounded-2xl border-2 border-ink px-5 py-6 ${KIND_PAPER[post.kind]}`}
           >
-            <p className="whitespace-pre-wrap text-[15px] leading-relaxed text-fg">
+            <p className="whitespace-pre-wrap font-display text-[18px] font-bold leading-snug text-ink">
               {post.body}
             </p>
-            <TagRow tags={post.tags} />
+            <TagRow tags={post.tags} locale={locale} />
           </Link>
 
-          <ActionRow
-            post={post}
-            signedIn={signedIn}
-            locale={locale}
-            isAuto={isAuto}
-          />
+          <ActionRow post={post} signedIn={signedIn} locale={locale} isAuto={isAuto} />
         </>
       )}
     </article>
@@ -232,7 +199,7 @@ function ActionRow({
   isAuto: boolean
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
+    <div className="flex items-center justify-between gap-3 border-t-2 border-ink/10 px-5 py-3">
       <div className="flex items-center gap-5">
         <LikeButton
           postId={post.id}
@@ -243,33 +210,34 @@ function ActionRow({
         />
         <Link
           href={`/${locale}/p/${post.id}`}
-          className="inline-flex items-center gap-1.5 text-sm text-fg-muted transition-colors hover:text-fg"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink/60 transition-colors hover:text-ink"
         >
           <MessageCircle className="h-5 w-5" />
-          <span className="tabular-nums text-xs">{post.commentCount}</span>
+          <span className="tabular-nums">{post.commentCount}</span>
         </Link>
       </div>
       {isAuto && (
-        <span className="inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-fg-subtle">
-          <BadgeCheck className="h-3 w-3 text-accent" />
-          Verified · {post.linkedEntityType ?? 'system'}
-        </span>
+        <Sticker tone="ink" rotate="-2deg" size="sm">
+          ✓ Verified
+        </Sticker>
       )}
     </div>
   )
 }
 
-function TagRow({ tags }: { tags: string[] }) {
+function TagRow({ tags, locale }: { tags: string[]; locale: 'en' | 'ar' }) {
   if (tags.length === 0) return null
   return (
-    <div className="mt-2 flex flex-wrap gap-1.5">
+    <div className="mt-3 flex flex-wrap gap-1.5">
       {tags.slice(0, 6).map((t) => (
-        <span
+        <Link
           key={t}
-          className="rounded-full border border-border bg-bg-overlay/70 px-2 py-0.5 font-mono text-[10px] text-fg-muted"
+          href={`/${locale}/tag/${t}`}
+          onClick={(e) => e.stopPropagation()}
+          className="rounded-full border-2 border-ink bg-white px-2.5 py-0.5 font-mono text-[10px] font-bold text-ink hover:bg-brand hover:text-white"
         >
           #{t}
-        </span>
+        </Link>
       ))}
     </div>
   )

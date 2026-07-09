@@ -51,21 +51,21 @@ export default async function ReelsPage({
 
   return (
     <div className="h-[100dvh] w-full overflow-hidden bg-black">
-      {/* Close chrome — top-right */}
+      {/* Close chrome — top corners */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex justify-between p-4 sm:p-5">
-        <Link
-          href={`/${locale}/community`}
-          className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white backdrop-blur-md hover:bg-black/70"
+        <span
+          style={{ rotate: '-2deg' }}
+          className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-cream px-3 py-1.5 font-mono text-[10px] font-extrabold uppercase tracking-wider text-ink shadow-pop-xs"
         >
           <Film className="h-3.5 w-3.5" />
           Reels
-        </Link>
+        </span>
         <Link
           href={`/${locale}/community`}
-          className="pointer-events-auto grid h-9 w-9 place-items-center rounded-full bg-black/50 text-white backdrop-blur-md hover:bg-black/70"
+          className="pointer-events-auto grid h-10 w-10 place-items-center rounded-full border-2 border-ink bg-cream text-ink shadow-pop-xs transition-all hover:-translate-y-0.5 hover:shadow-pop-sm active:translate-y-[2px]"
           aria-label="Close"
         >
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5" />
         </Link>
       </div>
 
@@ -86,26 +86,33 @@ export default async function ReelsPage({
 
 function EmptyState({ locale }: { locale: 'en' | 'ar' }) {
   return (
-    <div className="grid min-h-[100dvh] w-full place-items-center bg-black text-white">
-      <div className="max-w-sm px-6 text-center">
-        <Film className="mx-auto h-6 w-6 opacity-70" />
-        <p className="mt-4 font-mono text-[10px] uppercase tracking-wider text-white/60">
+    <div className="grid min-h-[100dvh] w-full place-items-center bg-cream text-ink">
+      <div className="max-w-sm rounded-3xl border-2 border-ink bg-white p-8 text-center shadow-pop">
+        <span className="text-4xl">🎬</span>
+        <p className="mt-3 font-mono text-[10px] font-bold uppercase tracking-wider text-ink/60">
           No reels yet
         </p>
-        <h1 className="mt-2 text-lg font-semibold">The first reel lands here.</h1>
-        <p className="mt-2 text-sm text-white/70">
-          Post a short video from{' '}
-          <Link href={`/${locale}/community/compose`} className="underline hover:opacity-90">
-            /community/compose
-          </Link>{' '}
-          — up to 50 MB, ~90 seconds — and it&apos;ll show up here.
+        <h1 className="mt-2 font-display text-2xl font-extrabold tracking-tight text-ink">
+          The first reel lands here.
+        </h1>
+        <p className="mt-3 text-sm font-medium text-ink/60">
+          Post a short video from the composer — up to 50 MB,
+          ~90 seconds — and it&apos;ll show up here.
         </p>
-        <Link
-          href={`/${locale}/community`}
-          className="mt-6 inline-flex rounded-full bg-white px-4 py-2 text-sm font-medium text-black hover:opacity-90"
-        >
-          Back to feed
-        </Link>
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
+          <Link
+            href={`/${locale}/community/compose`}
+            className="inline-flex rounded-full border-2 border-ink bg-brand px-5 py-2 text-sm font-bold text-white shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
+          >
+            Post a reel
+          </Link>
+          <Link
+            href={`/${locale}/community`}
+            className="inline-flex rounded-full border-2 border-ink bg-white px-5 py-2 text-sm font-bold text-ink transition-colors hover:bg-ink hover:text-cream"
+          >
+            Back to feed
+          </Link>
+        </div>
       </div>
     </div>
   )

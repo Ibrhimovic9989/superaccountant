@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { AppNav } from '@/components/app-nav'
-import { PageBackdrop } from '@/components/page-backdrop'
+import { CommunityNav } from '@/components/community/community-nav'
 import { auth } from '@/lib/auth'
 import { getProfileByHandle } from '@/lib/community/profile-store'
 import { PostTile } from '@/components/community/post-tile'
@@ -83,9 +82,8 @@ export default async function ProfilePage({
   const view: ProfileView = result.view
 
   return (
-    <div className="relative min-h-screen bg-bg text-fg">
-      <PageBackdrop />
-      <AppNav
+    <div className="relative min-h-screen bg-cream text-ink">
+      <CommunityNav
         locale={locale}
         userName={session?.user?.name ?? null}
         userEmail={session?.user?.email ?? ''}
@@ -100,13 +98,13 @@ export default async function ProfilePage({
         )}
         <div className="mt-10">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
+            <h2 className="font-display text-xl font-extrabold tracking-tight text-ink">
               Posts · {view.postCount}
             </h2>
             {view.viewerIsOwner && (
               <Link
                 href={`/${locale}/community/compose`}
-                className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-accent hover:bg-accent/20"
+                className="rounded-full border-2 border-ink bg-brand px-3.5 py-1.5 font-mono text-[10px] font-extrabold uppercase tracking-wider text-white shadow-pop-xs transition-all hover:-translate-y-0.5 hover:shadow-pop-sm"
               >
                 + New post
               </Link>
@@ -115,7 +113,7 @@ export default async function ProfilePage({
           {view.posts.length === 0 ? (
             <EmptyPosts isOwner={view.viewerIsOwner} locale={locale} />
           ) : (
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {view.posts.map((p) => (
                 <PostTile key={p.id} post={p} locale={locale} />
               ))}
@@ -129,19 +127,19 @@ export default async function ProfilePage({
 
 function EmptyPosts({ isOwner, locale }: { isOwner: boolean; locale: 'en' | 'ar' }) {
   return (
-    <div className="rounded-2xl border border-dashed border-border bg-bg-elev p-10 text-center">
-      <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+    <div className="rounded-3xl border-2 border-dashed border-ink bg-white p-10 text-center shadow-pop-xs">
+      <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-ink/60">
         No posts yet
       </p>
-      <p className="mt-2 text-sm text-fg-muted">
+      <p className="mt-3 font-display text-lg font-extrabold text-ink">
         {isOwner
-          ? "Share your first win, view, question, or workpaper — it takes 30 seconds."
-          : "This person hasn't shared anything publicly yet. Pass a grand-test and your first milestone shows up automatically."}
+          ? 'Kick things off. Post your first win.'
+          : "This person hasn't shared anything publicly yet."}
       </p>
       {isOwner && (
         <Link
           href={`/${locale}/community/compose`}
-          className="mt-5 inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg hover:opacity-90"
+          className="mt-5 inline-flex items-center gap-2 rounded-full border-2 border-ink bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
         >
           Compose first post
         </Link>
@@ -152,20 +150,21 @@ function EmptyPosts({ isOwner, locale }: { isOwner: boolean; locale: 'en' | 'ar'
 
 function PrivateProfile({ locale, handle }: { locale: 'en' | 'ar'; handle: string }) {
   return (
-    <div className="relative min-h-screen bg-bg text-fg">
-      <PageBackdrop />
+    <div className="relative min-h-screen bg-cream text-ink">
       <main className="mx-auto grid min-h-[60vh] max-w-lg place-items-center px-6 text-center">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+        <div className="rounded-3xl border-2 border-ink bg-white p-8 shadow-pop-md">
+          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-ink/60">
             @{handle}
           </p>
-          <h1 className="mt-4 text-2xl font-semibold">This profile is member-only.</h1>
-          <p className="mt-3 text-sm text-fg-muted">
+          <h1 className="mt-4 font-display text-2xl font-extrabold text-ink">
+            This profile is member-only.
+          </h1>
+          <p className="mt-3 text-sm font-medium text-ink/60">
             Sign in with your SuperAccountant account to view it.
           </p>
           <Link
             href={`/${locale}/sign-in`}
-            className="mt-6 inline-flex rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg hover:opacity-90"
+            className="mt-6 inline-flex rounded-full border-2 border-ink bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
           >
             Sign in
           </Link>

@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Hash } from 'lucide-react'
-import { AppNav } from '@/components/app-nav'
-import { PageBackdrop } from '@/components/page-backdrop'
+import { CommunityNav } from '@/components/community/community-nav'
 import { auth } from '@/lib/auth'
 import { prisma } from '@sa/db'
 import { FeedCard } from '@/components/community/feed-card'
@@ -129,43 +128,48 @@ export default async function TagPage({
   }))
 
   return (
-    <div className="relative min-h-screen bg-bg text-fg">
-      <PageBackdrop />
-      <AppNav
+    <div className="relative min-h-screen bg-cream text-ink">
+      <CommunityNav
         locale={locale}
         userName={session?.user?.name ?? null}
         userEmail={session?.user?.email ?? ''}
       />
 
       <main className="relative mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">
-        <header className="mb-6">
-          <p className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-fg-subtle">
+        <header className="mb-8">
+          <span className="mb-2 inline-flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-[0.18em] text-coral">
             <Hash className="h-3 w-3" />
             Tag
-          </p>
-          <h1 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+          </span>
+          <h1 className="font-display text-4xl font-extrabold tracking-tight text-ink sm:text-5xl">
             #{decoded}
           </h1>
-          <p className="mt-2 font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
+          <p className="mt-2 inline-flex rounded-full border-2 border-ink bg-white px-3 py-1 font-mono text-[11px] font-bold uppercase tracking-wider text-ink shadow-pop-xs">
             {posts.length === 40 ? '40+' : posts.length} posts
           </p>
         </header>
 
         {posts.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-border bg-bg-elev p-10 text-center">
-            <p className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+          <div className="rounded-3xl border-2 border-dashed border-ink bg-white p-10 text-center shadow-pop-xs">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-ink/60">
               No posts yet
             </p>
-            <p className="mt-2 text-sm text-fg-muted">
-              Nothing tagged with #{decoded}. Try{' '}
-              <Link href={`/${locale}/community`} className="text-accent hover:underline">
+            <p className="mt-3 font-display text-lg font-extrabold text-ink">
+              Nothing tagged with #{decoded}.
+            </p>
+            <p className="mt-2 text-sm font-medium text-ink/60">
+              Try{' '}
+              <Link
+                href={`/${locale}/community`}
+                className="font-bold text-brand underline decoration-2 underline-offset-4"
+              >
                 the main feed
               </Link>
               .
             </p>
           </div>
         ) : (
-          <div className="space-y-5">
+          <div className="space-y-6">
             {posts.map((p) => (
               <FeedCard key={p.id} post={p} locale={locale} signedIn={!!viewerId} />
             ))}

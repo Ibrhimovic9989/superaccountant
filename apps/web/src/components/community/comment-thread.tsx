@@ -79,7 +79,7 @@ export function CommentThread({
   return (
     <div className="space-y-4">
       {items.length === 0 && (
-        <p className="rounded-xl border border-dashed border-border bg-bg-elev p-6 text-center text-sm text-fg-muted">
+        <p className="rounded-2xl border-2 border-dashed border-ink bg-white p-6 text-center text-sm font-semibold text-ink/60">
           Be the first to reply.
         </p>
       )}
@@ -87,28 +87,30 @@ export function CommentThread({
         {items.map((c) => (
           <li
             key={c.id}
-            className={`rounded-xl border border-border bg-bg-elev p-4 ${
+            className={`rounded-2xl border-2 border-ink bg-white p-4 shadow-pop-xs ${
               pending === c.id ? 'opacity-60' : ''
             }`}
           >
             <div className="flex items-center gap-2 text-xs">
               <Link
                 href={`/${locale}/u/${c.author.handle}`}
-                className="font-medium text-fg hover:text-accent"
+                className="font-display font-extrabold text-ink hover:text-brand"
               >
                 {c.author.name}
               </Link>
-              <span className="font-mono text-[10px] text-fg-subtle">
+              <span className="font-mono text-[10px] font-bold text-ink/50">
                 @{c.author.handle} · {timeAgo(c.createdAt)}
               </span>
             </div>
-            <p className="mt-2 whitespace-pre-wrap text-sm text-fg">{c.body}</p>
+            <p className="mt-2 whitespace-pre-wrap text-[14px] leading-relaxed text-ink">
+              {c.body}
+            </p>
           </li>
         ))}
       </ul>
 
       {signedIn ? (
-        <form action={onSubmit} className="rounded-xl border border-border bg-bg-elev p-4">
+        <form action={onSubmit} className="rounded-2xl border-2 border-ink bg-white p-4 shadow-pop-sm">
           <label htmlFor="comment-body" className="sr-only">
             Comment
           </label>
@@ -119,29 +121,29 @@ export function CommentThread({
             maxLength={1000}
             rows={2}
             placeholder="Add a comment…"
-            className="w-full resize-y bg-transparent text-sm text-fg outline-none placeholder:text-fg-subtle"
+            className="w-full resize-y bg-transparent text-sm text-ink outline-none placeholder:text-ink/40"
           />
           <div className="mt-2 flex items-center justify-between">
             {error ? (
-              <span className="font-mono text-[10px] uppercase tracking-wider text-danger">
+              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-coral">
                 {error}
               </span>
             ) : (
-              <span className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-ink/50">
                 Max 1000 characters
               </span>
             )}
             <button
               type="submit"
-              className="rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-fg hover:opacity-90"
+              className="rounded-full border-2 border-ink bg-brand px-4 py-1.5 text-xs font-bold text-white shadow-pop-xs transition-all hover:-translate-y-0.5 hover:shadow-pop-sm active:translate-y-[2px]"
             >
               Post comment
             </button>
           </div>
         </form>
       ) : (
-        <p className="rounded-xl border border-border bg-bg-elev p-4 text-center text-sm text-fg-muted">
-          <Link href={`/${locale}/sign-in`} className="text-accent hover:underline">
+        <p className="rounded-2xl border-2 border-ink bg-white p-4 text-center text-sm font-semibold text-ink/60 shadow-pop-xs">
+          <Link href={`/${locale}/sign-in`} className="font-bold text-brand underline decoration-2 underline-offset-4">
             Sign in
           </Link>{' '}
           to add a comment.
