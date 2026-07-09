@@ -73,7 +73,9 @@ export async function signCommunityUploadAction(raw: unknown): Promise<SignedUpl
   const path = `${session.user.id}/${cuid}.${ext}`
 
   // Supabase Storage: mint a signed upload token so the client can
-  // PUT directly. Docs: /storage/v1/object/upload/sign/{bucket}/{path}
+  // PUT directly. Docs: /storage/v1/object/upload/sign/{bucket}/{path}.
+  // Fastify (which Supabase Storage runs on) rejects `Content-Type:
+  // application/json` with an empty body, so send `{}`.
   const res = await fetch(
     `${SUPABASE_URL}/storage/v1/object/upload/sign/${BUCKET}/${path}`,
     {
@@ -83,6 +85,7 @@ export async function signCommunityUploadAction(raw: unknown): Promise<SignedUpl
         Authorization: `Bearer ${SERVICE_ROLE}`,
         'Content-Type': 'application/json',
       },
+      body: '{}',
     },
   )
   if (!res.ok) {
@@ -90,16 +93,16 @@ export async function signCommunityUploadAction(raw: unknown): Promise<SignedUpl
     console.error('[community-upload] sign failed', { status: res.status, body: body.slice(0, 200) })
     return { ok: false, error: 'Could not prepare upload right now.' }
   }
-  // Supabase returns { url, token } — url is the RELATIVE path we
-  // append to SUPABASE_URL. We compose the absolute URL here so the
-  // client can PUT to it with a single fetch.
+  // Supabase returns { url, token } — url is RELATIVE to /storage/v1
+  // (e.g. "/object/upload/sign/…?token=…"). We compose the absolute
+  // URL here so the client can PUT to it with a single fetch.
   const data = (await res.json()) as { url?: string; token?: string }
   if (!data.url || !data.token) {
     return { ok: false, error: 'Signed URL response missing fields.' }
   }
   const uploadUrl = data.url.startsWith('http')
     ? data.url
-    : `${SUPABASE_URL}${data.url}`
+    : `${SUPABASE_URL}/storage/v1${data.url}`
   const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`
 
   return { ok: true, uploadUrl, token: data.token, publicUrl, path }
