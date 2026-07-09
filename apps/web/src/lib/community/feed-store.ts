@@ -143,6 +143,79 @@ export async function listFollowingFeed(args: {
   return rows.map(rowToFeedPost)
 }
 
+// ── active authors (story-row on /community) ─────────────────
+
+export type ActiveAuthor = {
+  userId: string
+  handle: string
+  name: string
+  avatarUrl: string | null
+  headline: string | null
+  mostRecentKind: PostKind
+  postedAt: string
+}
+
+/**
+ * Distinct authors who posted in the last N days, ordered by their
+ * most recent post. Powers the Instagram-style "who's active" avatar
+ * strip at the top of /community.
+ *
+ * DISTINCT ON to collapse to one row per author, then re-sort. Cheap
+ * enough to run on every request — the whole strip is <20 rows.
+ */
+export async function listActiveAuthors(
+  windowDays = 7,
+  limit = 12,
+): Promise<ActiveAuthor[]> {
+  const rows = await prisma.$queryRawUnsafe<
+    Array<{
+      userId: string
+      handle: string
+      name: string | null
+      avatarUrl: string | null
+      track: 'india' | 'ksa' | null
+      mostRecentKind: PostKind
+      postedAt: Date
+    }>
+  >(
+    `SELECT DISTINCT ON (p."authorId")
+       p."authorId"     AS "userId",
+       cp."handle"      AS "handle",
+       iu."name"        AS "name",
+       iu."image"       AS "avatarUrl",
+       iu."preferredTrack"::text AS "track",
+       p."kind"         AS "mostRecentKind",
+       p."publishedAt"  AS "postedAt"
+     FROM "CommunityPost" p
+     JOIN "IdentityUser" iu ON iu."id" = p."authorId"
+     JOIN "CommunityProfile" cp ON cp."userId" = p."authorId"
+     WHERE p."deletedAt" IS NULL
+       AND cp."publicVisibility" = 'public'
+       AND p."publishedAt" > NOW() - ($1 || ' days')::interval
+     ORDER BY p."authorId", p."publishedAt" DESC
+     LIMIT $2`,
+    String(windowDays),
+    limit * 3,
+  )
+  return rows
+    .sort((a, b) => b.postedAt.getTime() - a.postedAt.getTime())
+    .slice(0, limit)
+    .map((r) => ({
+      userId: r.userId,
+      handle: r.handle,
+      name: r.name ?? r.handle,
+      avatarUrl: r.avatarUrl,
+      headline:
+        r.track === 'india'
+          ? 'India'
+          : r.track === 'ksa'
+            ? 'KSA'
+            : null,
+      mostRecentKind: r.mostRecentKind,
+      postedAt: r.postedAt.toISOString(),
+    }))
+}
+
 // ── single post ──────────────────────────────────────────────
 
 export async function getPostById(

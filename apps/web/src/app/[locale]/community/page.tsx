@@ -1,11 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { Fragment } from 'react'
 import { Compass, Filter, Sparkles } from 'lucide-react'
 import { AppNav } from '@/components/app-nav'
 import { PageBackdrop } from '@/components/page-backdrop'
 import { auth } from '@/lib/auth'
-import { listGlobalFeed } from '@/lib/community/feed-store'
+import { listActiveAuthors, listGlobalFeed } from '@/lib/community/feed-store'
 import { FeedCard } from '@/components/community/feed-card'
+import { StoryRow } from '@/components/community/story-row'
+import { AnonCtaCard } from '@/components/community/anon-cta-card'
 import type { PostKind } from '@/lib/community/types'
 
 /**
@@ -53,11 +56,16 @@ export default async function CommunityFeed({
   const session = await auth()
   const viewerId = session?.user?.id ?? null
 
-  const posts = await listGlobalFeed({
-    viewerId,
-    kind: kind === 'all' ? null : (kind as PostKind),
-    limit: 30,
-  })
+  const [posts, activeAuthors] = await Promise.all([
+    listGlobalFeed({
+      viewerId,
+      kind: kind === 'all' ? null : (kind as PostKind),
+      limit: 30,
+    }),
+    // Only show the "who's active" rail on the un-filtered feed —
+    // it's a cross-cutting signal, not a kind view.
+    kind === 'all' ? listActiveAuthors(7, 12) : Promise.resolve([]),
+  ])
 
   return (
     <div className="relative min-h-screen bg-bg text-fg">
@@ -114,13 +122,24 @@ export default async function CommunityFeed({
           })}
         </div>
 
+        {/* Story rail — active authors this week */}
+        {activeAuthors.length > 0 && (
+          <StoryRow authors={activeAuthors} locale={locale} />
+        )}
+
         {/* Feed */}
         {posts.length === 0 ? (
           <EmptyState locale={locale} signedIn={!!viewerId} />
         ) : (
           <div className="space-y-5">
-            {posts.map((p) => (
-              <FeedCard key={p.id} post={p} locale={locale} signedIn={!!viewerId} />
+            {posts.map((p, i) => (
+              <Fragment key={p.id}>
+                <FeedCard post={p} locale={locale} signedIn={!!viewerId} />
+                {/* Anon-only CTA slotted between real posts. Position
+                    3 keeps it above the fold on desktop, below the
+                    first two social proofs on mobile. */}
+                {!viewerId && i === 2 && <AnonCtaCard locale={locale} />}
+              </Fragment>
             ))}
           </div>
         )}
