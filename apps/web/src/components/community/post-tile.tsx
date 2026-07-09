@@ -1,5 +1,6 @@
-import { Award, HelpCircle, ImageIcon, Lightbulb, Sparkles, Trophy } from 'lucide-react'
+import { Award, HelpCircle, ImageIcon, Lightbulb, Play, Sparkles, Trophy } from 'lucide-react'
 import Link from 'next/link'
+import { isVideoUrl } from '@/lib/community/media'
 import type { FeedPostView, PostKind } from '@/lib/community/types'
 
 /**
@@ -54,6 +55,7 @@ export function PostTile({
 }) {
   const meta = KIND_META[post.kind]
   const Icon = meta.icon
+  const isVideo = post.mediaUrl ? isVideoUrl(post.mediaUrl) : false
 
   return (
     <Link
@@ -62,15 +64,32 @@ export function PostTile({
     >
       {post.mediaUrl ? (
         <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={post.mediaUrl}
-            alt=""
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+          {isVideo ? (
+            // <video preload="metadata"> renders the first frame as
+            // the poster — cheap thumbnail without a separate upload.
+            <video
+              src={`${post.mediaUrl}#t=0.1`}
+              muted
+              playsInline
+              preload="metadata"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={post.mediaUrl}
+              alt=""
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70" />
           <KindBadge kind={post.kind} className="absolute left-2 top-2" />
+          {isVideo && (
+            <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-black/55 text-white backdrop-blur-sm">
+              <Play className="h-3 w-3 fill-current" />
+            </span>
+          )}
           <p className="absolute inset-x-2 bottom-2 line-clamp-2 text-[11px] font-medium text-white/90">
             {post.body}
           </p>

@@ -6,11 +6,11 @@ import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
 
 /**
- * Signed-upload flow for community post images.
+ * Signed-upload flow for community post media (images + short videos).
  *
  * The client uploads DIRECTLY to Supabase Storage — the server just
  * mints a short-lived signed URL and returns it. That saves the
- * ~500 KB → 5 MB round-trip through the Vercel serverless function
+ * ~500 KB → 50 MB round-trip through the Vercel serverless function
  * (which is both slow and expensive on Fluid Compute per-request).
  *
  * Storage layout:
@@ -20,22 +20,33 @@ import { auth } from '@/lib/auth'
  * asset even in the (unlikely) event of a cuid collision, and makes
  * moderation cleanup trivial ("delete everything under this user").
  *
- * Bucket policy: `community-media` is public-read, 5 MB file-size
- * cap, mime-type allowlist limited to jpeg/png/webp/gif. Set at the
- * DB level so a compromised service key still can't upload a PDF or
- * 100 MB video.
+ * Bucket policy: `community-media` is public-read, 50 MB file-size
+ * cap, mime-type allowlist limited to jpeg/png/webp/gif + mp4/webm/
+ * quicktime. Set at the DB level so a compromised service key still
+ * can't upload a PDF or a 500 MB video.
+ *
+ * The client detects whether the URL points at an image or video from
+ * the extension — see `isVideoUrl()` in @/lib/community/media. Keeping
+ * the "kind" derivable from the URL means we don't need a schema
+ * migration to add a media_kind column.
  */
 
 const BUCKET = 'community-media'
-const MAX_BYTES = 5 * 1024 * 1024 // 5 MB — matches the bucket policy
+const IMAGE_MAX_BYTES = 5 * 1024 * 1024 // 5 MB — matches bucket policy for images
+const VIDEO_MAX_BYTES = 50 * 1024 * 1024 // 50 MB — reels-length clips (~90s at ~500 kb/s)
 
 // Allowlist + extension we'll write to disk. Kept as a small map so
 // the client and server agree on the exact ext for a given mime.
-const ALLOWED: Record<string, string> = {
+const IMAGE_EXT: Record<string, string> = {
   'image/jpeg': 'jpg',
   'image/png': 'png',
   'image/webp': 'webp',
   'image/gif': 'gif',
+}
+const VIDEO_EXT: Record<string, string> = {
+  'video/mp4': 'mp4',
+  'video/webm': 'webm',
+  'video/quicktime': 'mov',
 }
 
 const SUPABASE_URL = process.env.SUPABASE_URL
@@ -47,7 +58,14 @@ const SignSchema = z.object({
 })
 
 export type SignedUploadResult =
-  | { ok: true; uploadUrl: string; token: string; publicUrl: string; path: string }
+  | {
+      ok: true
+      uploadUrl: string
+      token: string
+      publicUrl: string
+      path: string
+      kind: 'image' | 'video'
+    }
   | { ok: false; error: string }
 
 export async function signCommunityUploadAction(raw: unknown): Promise<SignedUploadResult> {
@@ -55,12 +73,24 @@ export async function signCommunityUploadAction(raw: unknown): Promise<SignedUpl
   if (!parsed.success) return { ok: false, error: 'Invalid payload' }
   const { contentType, size } = parsed.data
 
-  const ext = ALLOWED[contentType]
-  if (!ext) {
-    return { ok: false, error: 'Only JPG / PNG / WebP / GIF images are supported.' }
+  // Resolve extension + per-kind size cap in one step.
+  const imageExt = IMAGE_EXT[contentType]
+  const videoExt = VIDEO_EXT[contentType]
+  const ext = imageExt ?? videoExt
+  const kind: 'image' | 'video' | null = imageExt ? 'image' : videoExt ? 'video' : null
+  if (!ext || !kind) {
+    return {
+      ok: false,
+      error: 'Only JPG / PNG / WebP / GIF images and MP4 / WebM / MOV videos are supported.',
+    }
   }
-  if (size > MAX_BYTES) {
-    return { ok: false, error: `File is larger than the 5 MB limit (${(size / 1024 / 1024).toFixed(1)} MB).` }
+  const maxBytes = kind === 'video' ? VIDEO_MAX_BYTES : IMAGE_MAX_BYTES
+  if (size > maxBytes) {
+    const mb = (maxBytes / 1024 / 1024).toFixed(0)
+    return {
+      ok: false,
+      error: `File is larger than the ${mb} MB ${kind} limit (${(size / 1024 / 1024).toFixed(1)} MB).`,
+    }
   }
 
   const session = await auth()
@@ -105,5 +135,5 @@ export async function signCommunityUploadAction(raw: unknown): Promise<SignedUpl
     : `${SUPABASE_URL}/storage/v1${data.url}`
   const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`
 
-  return { ok: true, uploadUrl, token: data.token, publicUrl, path }
+  return { ok: true, uploadUrl, token: data.token, publicUrl, path, kind }
 }

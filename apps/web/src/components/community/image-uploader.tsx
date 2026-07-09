@@ -1,12 +1,16 @@
 'use client'
 
-import { ImagePlus, Loader2, Trash2, Upload } from 'lucide-react'
+import { Film, ImagePlus, Loader2, Trash2, Upload } from 'lucide-react'
 import { useRef, useState, useTransition } from 'react'
 import { signCommunityUploadAction } from '@/lib/community/upload-actions'
+import { mediaKind } from '@/lib/community/media'
 import { cn } from '@/lib/utils'
 
 /**
- * Drop-in image uploader for the compose form.
+ * Drop-in media uploader for the compose form — images AND short
+ * videos. The file input keeps its "ImageUploader" name because it's
+ * imported everywhere; the class handles both kinds under the hood
+ * (see the `contentType` allowlist below).
  *
  * Flow:
  *   1. User picks a file (drag/drop or click).
@@ -14,7 +18,7 @@ import { cn } from '@/lib/utils'
  *   3. Ask the server to mint a signed upload URL.
  *   4. PUT the file straight to Supabase Storage using the returned
  *      token — no proxy through Vercel.
- *   5. Once uploaded, call onUploaded(publicUrl) so the parent form
+ *   5. Once uploaded, call onChange(publicUrl) so the parent form
  *      can persist the URL on submit.
  *
  * Preview shown from a local object URL until the upload finishes,
@@ -22,8 +26,21 @@ import { cn } from '@/lib/utils'
  * memory.
  */
 
-const MAX_MB = 5
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+const IMAGE_MAX_MB = 5
+const VIDEO_MAX_MB = 50
+const ALLOWED_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+  'video/mp4',
+  'video/webm',
+  'video/quicktime',
+]
+
+function limitForType(type: string): number {
+  return type.startsWith('video/') ? VIDEO_MAX_MB : IMAGE_MAX_MB
+}
 
 export function ImageUploader({
   value,
@@ -35,6 +52,7 @@ export function ImageUploader({
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [preview, setPreview] = useState<string | null>(value)
+  const [previewKind, setPreviewKind] = useState<'image' | 'video' | null>(mediaKind(value))
   const [error, setError] = useState<string | null>(null)
   const [progress, setProgress] = useState<number>(0)
   const [pending, startTransition] = useTransition()
@@ -44,17 +62,20 @@ export function ImageUploader({
   const handleFile = (file: File) => {
     setError(null)
     if (!ALLOWED_TYPES.includes(file.type)) {
-      setError('Only JPG, PNG, WebP, or GIF images are supported.')
+      setError('Only JPG, PNG, WebP, GIF images or MP4 / WebM / MOV videos are supported.')
       return
     }
-    if (file.size > MAX_MB * 1024 * 1024) {
-      setError(`File is ${(file.size / 1024 / 1024).toFixed(1)} MB — the limit is ${MAX_MB} MB.`)
+    const cap = limitForType(file.type)
+    if (file.size > cap * 1024 * 1024) {
+      setError(`File is ${(file.size / 1024 / 1024).toFixed(1)} MB — the limit is ${cap} MB.`)
       return
     }
 
     // Show a local preview immediately.
     const localUrl = URL.createObjectURL(file)
+    const kind = file.type.startsWith('video/') ? 'video' : 'image'
     setPreview(localUrl)
+    setPreviewKind(kind)
     setProgress(1)
 
     startTransition(async () => {
@@ -65,6 +86,7 @@ export function ImageUploader({
       if (!signed.ok) {
         setError(signed.error)
         setPreview(null)
+        setPreviewKind(null)
         setProgress(0)
         URL.revokeObjectURL(localUrl)
         return
@@ -78,12 +100,14 @@ export function ImageUploader({
         })
         // Switch preview to the CDN URL so we can drop the blob.
         setPreview(signed.publicUrl)
+        setPreviewKind(signed.kind)
         URL.revokeObjectURL(localUrl)
         onChange(signed.publicUrl)
         setProgress(100)
       } catch (err) {
         setError((err as Error).message || 'Upload failed. Try again.')
         setPreview(null)
+        setPreviewKind(null)
         setProgress(0)
         URL.revokeObjectURL(localUrl)
       }
@@ -92,6 +116,7 @@ export function ImageUploader({
 
   const clear = () => {
     setPreview(null)
+    setPreviewKind(null)
     setError(null)
     setProgress(0)
     onChange(null)
@@ -101,7 +126,7 @@ export function ImageUploader({
   return (
     <div>
       <p className="mb-2 font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
-        Image (optional) — JPG / PNG / WebP / GIF · max {MAX_MB} MB
+        Media (optional) — image (≤{IMAGE_MAX_MB} MB) · video (≤{VIDEO_MAX_MB} MB)
       </p>
 
       <input
@@ -117,10 +142,21 @@ export function ImageUploader({
 
       {preview ? (
         <div className="relative overflow-hidden rounded-xl border border-border bg-bg-elev">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={preview} alt="Preview" className="max-h-72 w-full object-cover" />
+          {previewKind === 'video' ? (
+            <video
+              src={preview}
+              className="max-h-72 w-full object-cover"
+              controls
+              playsInline
+              muted
+            />
+          ) : (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img src={preview} alt="Preview" className="max-h-72 w-full object-cover" />
+          )}
           <div className="flex items-center justify-between border-t border-border bg-bg-elev p-2">
-            <span className="ms-1 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+            <span className="ms-1 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+              {previewKind === 'video' && <Film className="h-3 w-3" />}
               {progress > 0 && progress < 100 ? `Uploading ${progress}%` : 'Uploaded'}
             </span>
             <button
@@ -157,8 +193,12 @@ export function ImageUploader({
             </>
           ) : (
             <>
-              <ImagePlus className="h-6 w-6" />
-              <span className="text-sm">Drop an image or click to select</span>
+              <div className="flex items-center gap-3">
+                <ImagePlus className="h-6 w-6" />
+                <span className="text-fg-subtle">/</span>
+                <Film className="h-6 w-6" />
+              </div>
+              <span className="text-sm">Drop an image or video, or click to select</span>
               <span className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
                 <Upload className="me-1 inline h-3 w-3" />
                 Direct upload · never touches our servers

@@ -8,7 +8,9 @@ import {
   Trophy,
 } from 'lucide-react'
 import Link from 'next/link'
+import { isVideoUrl } from '@/lib/community/media'
 import type { FeedPostView, PostKind } from '@/lib/community/types'
+import { FeedVideo } from './feed-video'
 import { LikeButton } from './like-button'
 
 /**
@@ -92,7 +94,8 @@ export function FeedCard({
   const meta = KIND_META[post.kind]
   const Icon = meta.icon
   const isAuto = post.source.startsWith('auto:')
-  const hasImage = !!post.mediaUrl
+  const hasMedia = !!post.mediaUrl
+  const isVideo = hasMedia && isVideoUrl(post.mediaUrl)
 
   return (
     <article className="overflow-hidden rounded-2xl border border-border bg-bg-elev transition-colors hover:border-border-strong">
@@ -144,22 +147,28 @@ export function FeedCard({
         </span>
       </div>
 
-      {hasImage ? (
-        // ── IMAGE-FIRST LAYOUT ───────────────────────────────────
+      {hasMedia ? (
+        // ── MEDIA-FIRST LAYOUT (image OR video) ──────────────────
         <>
-          <Link
-            href={`/${locale}/p/${post.id}`}
-            className="mt-3 block bg-bg-overlay"
-            aria-label="Open post"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={post.mediaUrl!}
-              alt={post.body.slice(0, 100)}
-              loading="lazy"
-              className="max-h-[560px] w-full object-cover"
-            />
-          </Link>
+          {isVideo ? (
+            <div className="mt-3">
+              <FeedVideo src={post.mediaUrl!} />
+            </div>
+          ) : (
+            <Link
+              href={`/${locale}/p/${post.id}`}
+              className="mt-3 block bg-bg-overlay"
+              aria-label="Open post"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={post.mediaUrl!}
+                alt={post.body.slice(0, 100)}
+                loading="lazy"
+                className="max-h-[560px] w-full object-cover"
+              />
+            </Link>
+          )}
 
           <ActionRow
             post={post}
