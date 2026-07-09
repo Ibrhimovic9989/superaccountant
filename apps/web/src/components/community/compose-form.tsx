@@ -6,15 +6,12 @@ import { Award, HelpCircle, ImageIcon, Lightbulb, Loader2, Trophy } from 'lucide
 import { createPostAction } from '@/lib/community/actions'
 import type { PostKind } from '@/lib/community/types'
 import { cn } from '@/lib/utils'
+import { ImageUploader } from './image-uploader'
 
 /**
  * Client-side compose form. Kind picker across the top, textarea in
- * the middle, tags input at the bottom.
- *
- * Deliberately no image upload in this slice — we don't have Supabase
- * Storage wired for community posts yet. Users can paste a URL for
- * now; a proper uploader lands in Week 3 alongside the recruiter
- * portal (both need the same signed-upload primitive).
+ * the middle, tags input, then the image uploader (direct-to-Supabase
+ * via a signed URL — see [image-uploader.tsx]).
  */
 
 const KINDS: Array<{ key: PostKind; label: string; helper: string; icon: typeof Trophy; tone: string }> = [
@@ -62,7 +59,7 @@ export function ComposeForm({ locale }: { locale: 'en' | 'ar' }) {
   const [kind, setKind] = useState<PostKind>('win')
   const [body, setBody] = useState('')
   const [tagsStr, setTagsStr] = useState('')
-  const [mediaUrl, setMediaUrl] = useState('')
+  const [mediaUrl, setMediaUrl] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
@@ -79,7 +76,6 @@ export function ComposeForm({ locale }: { locale: 'en' | 'ar' }) {
       .map((t) => t.trim().toLowerCase())
       .filter(Boolean)
       .slice(0, 6)
-    const media = mediaUrl.trim() || null
 
     startTransition(async () => {
       try {
@@ -87,7 +83,7 @@ export function ComposeForm({ locale }: { locale: 'en' | 'ar' }) {
           kind,
           body: trimmed,
           tags,
-          mediaUrl: media,
+          mediaUrl: mediaUrl,
         })
         router.push(`/${locale}/u/${handle}`)
       } catch (err) {
@@ -170,26 +166,8 @@ export function ComposeForm({ locale }: { locale: 'en' | 'ar' }) {
         />
       </div>
 
-      {/* Media URL */}
-      <div>
-        <label
-          htmlFor="mediaUrl"
-          className="mb-2 block font-mono text-[11px] uppercase tracking-wider text-fg-subtle"
-        >
-          Image URL (optional) — direct hotlink for now
-        </label>
-        <input
-          id="mediaUrl"
-          value={mediaUrl}
-          onChange={(e) => setMediaUrl(e.target.value)}
-          type="url"
-          placeholder="https://…"
-          className="w-full rounded-xl border border-border bg-bg-elev p-3 text-sm text-fg outline-none placeholder:text-fg-subtle focus:border-accent"
-        />
-        <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-          Uploader lands next week — paste any public image URL for now.
-        </p>
-      </div>
+      {/* Image upload */}
+      <ImageUploader value={mediaUrl} onChange={setMediaUrl} />
 
       {error && (
         <div className="rounded-xl border border-danger/40 bg-danger/10 p-3 text-sm text-danger">
