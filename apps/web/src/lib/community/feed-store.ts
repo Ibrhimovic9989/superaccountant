@@ -20,6 +20,7 @@ type FeedRow = {
   body: string
   tags: string[]
   mediaUrl: string | null
+  mediaBlurhash: string | null
   source: string
   linkedEntityType: string | null
   linkedEntityId: string | null
@@ -57,7 +58,7 @@ export async function listGlobalFeed(args: {
   const rows = await prisma.$queryRawUnsafe<FeedRow[]>(
     `SELECT
        p."id", p."authorId", p."kind", p."body", p."tags", p."mediaUrl",
-       p."source", p."linkedEntityType", p."linkedEntityId",
+       p."mediaBlurhash", p."source", p."linkedEntityType", p."linkedEntityId",
        p."publishedAt", p."likeCount", p."commentCount",
        iu."name" AS "authorName",
        iu."image" AS "authorImage",
@@ -108,7 +109,7 @@ export async function listFollowingFeed(args: {
   const rows = await prisma.$queryRawUnsafe<FeedRow[]>(
     `SELECT
        p."id", p."authorId", p."kind", p."body", p."tags", p."mediaUrl",
-       p."source", p."linkedEntityType", p."linkedEntityId",
+       p."mediaBlurhash", p."source", p."linkedEntityType", p."linkedEntityId",
        p."publishedAt", p."likeCount", p."commentCount",
        iu."name" AS "authorName",
        iu."image" AS "authorImage",
@@ -166,7 +167,7 @@ export async function listReelsFeed(args: {
   const rows = await prisma.$queryRawUnsafe<FeedRow[]>(
     `SELECT
        p."id", p."authorId", p."kind", p."body", p."tags", p."mediaUrl",
-       p."source", p."linkedEntityType", p."linkedEntityId",
+       p."mediaBlurhash", p."source", p."linkedEntityType", p."linkedEntityId",
        p."publishedAt", p."likeCount", p."commentCount",
        iu."name" AS "authorName",
        iu."image" AS "authorImage",
@@ -287,7 +288,7 @@ export async function getPostById(
   const rows = await prisma.$queryRawUnsafe<FeedRow[]>(
     `SELECT
        p."id", p."authorId", p."kind", p."body", p."tags", p."mediaUrl",
-       p."source", p."linkedEntityType", p."linkedEntityId",
+       p."mediaBlurhash", p."source", p."linkedEntityType", p."linkedEntityId",
        p."publishedAt", p."likeCount", p."commentCount",
        iu."name" AS "authorName",
        iu."image" AS "authorImage",
@@ -383,6 +384,7 @@ function rowToFeedPost(row: FeedRow): FeedPostView {
     body: row.body,
     tags: row.tags,
     mediaUrl: row.mediaUrl,
+    mediaBlurhash: row.mediaBlurhash,
     source: row.source as FeedPostView['source'],
     linkedEntityType: row.linkedEntityType,
     linkedEntityId: row.linkedEntityId,

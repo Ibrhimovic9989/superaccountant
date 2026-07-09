@@ -2,6 +2,7 @@
 
 import { Film, ImagePlus, Loader2, Trash2, Upload } from 'lucide-react'
 import { useRef, useState, useTransition } from 'react'
+import { encodeBlurhashFromFile } from '@/lib/community/blurhash-encode'
 import { signCommunityUploadAction } from '@/lib/community/upload-actions'
 import { mediaKind } from '@/lib/community/media'
 import { cn } from '@/lib/utils'
@@ -48,7 +49,12 @@ export function ImageUploader({
 }: {
   /** Current public URL (or null when nothing uploaded). */
   value: string | null
-  onChange: (url: string | null) => void
+  /**
+   * Fires with the CDN URL and (for images) the encoded blurhash so
+   * the parent form can persist both. blurhash is null for videos
+   * and for images where encoding fails.
+   */
+  onChange: (url: string | null, blurhash: string | null) => void
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [preview, setPreview] = useState<string | null>(value)
@@ -79,10 +85,13 @@ export function ImageUploader({
     setProgress(1)
 
     startTransition(async () => {
-      const signed = await signCommunityUploadAction({
-        contentType: file.type,
-        size: file.size,
-      })
+      // Kick off blurhash encoding + sign call in parallel — the
+      // hash typically resolves in <50ms and we don't want to add
+      // that to the critical path.
+      const [signed, blurhash] = await Promise.all([
+        signCommunityUploadAction({ contentType: file.type, size: file.size }),
+        encodeBlurhashFromFile(file),
+      ])
       if (!signed.ok) {
         setError(signed.error)
         setPreview(null)
@@ -102,7 +111,7 @@ export function ImageUploader({
         setPreview(signed.publicUrl)
         setPreviewKind(signed.kind)
         URL.revokeObjectURL(localUrl)
-        onChange(signed.publicUrl)
+        onChange(signed.publicUrl, blurhash)
         setProgress(100)
       } catch (err) {
         setError((err as Error).message || 'Upload failed. Try again.')
@@ -119,7 +128,7 @@ export function ImageUploader({
     setPreviewKind(null)
     setError(null)
     setProgress(0)
-    onChange(null)
+    onChange(null, null)
     if (inputRef.current) inputRef.current.value = ''
   }
 

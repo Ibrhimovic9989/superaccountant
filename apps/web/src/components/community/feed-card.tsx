@@ -2,6 +2,7 @@ import { Award, HelpCircle, ImageIcon, Lightbulb, MessageCircle, Trophy } from '
 import Link from 'next/link'
 import { isVideoUrl } from '@/lib/community/media'
 import type { FeedPostView, PostKind } from '@/lib/community/types'
+import { BlurredImage } from './blurred-image'
 import { FeedVideo } from './feed-video'
 import { LikeButton } from './like-button'
 import { Sticker } from './su/primitives'
@@ -133,15 +134,14 @@ export function FeedCard({
             ) : (
               <Link
                 href={`/${locale}/p/${post.id}`}
-                className="block"
+                className="block max-h-[560px]"
                 aria-label="Open post"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <BlurredImage
                   src={post.mediaUrl!}
+                  blurhash={post.mediaBlurhash}
                   alt={post.body.slice(0, 100)}
-                  loading="lazy"
-                  className="max-h-[560px] w-full object-cover"
+                  className="max-h-[560px] w-full"
                 />
               </Link>
             )}

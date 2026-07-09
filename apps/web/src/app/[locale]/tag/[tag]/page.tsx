@@ -42,6 +42,7 @@ type Row = {
   body: string
   tags: string[]
   mediaUrl: string | null
+  mediaBlurhash: string | null
   source: string
   linkedEntityType: string | null
   linkedEntityId: string | null
@@ -71,7 +72,7 @@ export default async function TagPage({
   const rows = await prisma.$queryRawUnsafe<Row[]>(
     `SELECT
        p."id", p."authorId", p."kind", p."body", p."tags", p."mediaUrl",
-       p."source", p."linkedEntityType", p."linkedEntityId",
+       p."mediaBlurhash", p."source", p."linkedEntityType", p."linkedEntityId",
        p."publishedAt", p."likeCount", p."commentCount",
        iu."name" AS "authorName",
        iu."image" AS "authorImage",
@@ -104,6 +105,7 @@ export default async function TagPage({
     body: r.body,
     tags: r.tags,
     mediaUrl: r.mediaUrl,
+    mediaBlurhash: r.mediaBlurhash,
     source: r.source as FeedPostView['source'],
     linkedEntityType: r.linkedEntityType,
     linkedEntityId: r.linkedEntityId,

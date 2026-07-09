@@ -34,6 +34,7 @@ export function ComposeForm({ locale }: { locale: 'en' | 'ar' }) {
   const [body, setBody] = useState('')
   const [tagsStr, setTagsStr] = useState('')
   const [mediaUrl, setMediaUrl] = useState<string | null>(null)
+  const [mediaBlurhash, setMediaBlurhash] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
@@ -58,6 +59,7 @@ export function ComposeForm({ locale }: { locale: 'en' | 'ar' }) {
           body: trimmed,
           tags,
           mediaUrl: mediaUrl,
+          mediaBlurhash,
         })
         router.push(`/${locale}/u/${handle}`)
       } catch (err) {
@@ -143,7 +145,13 @@ export function ComposeForm({ locale }: { locale: 'en' | 'ar' }) {
       </div>
 
       {/* Image upload */}
-      <ImageUploader value={mediaUrl} onChange={setMediaUrl} />
+      <ImageUploader
+        value={mediaUrl}
+        onChange={(url, hash) => {
+          setMediaUrl(url)
+          setMediaBlurhash(hash)
+        }}
+      />
 
       {error && (
         <div className="rounded-2xl border-2 border-coral bg-coral/10 p-3 text-sm font-medium text-coral">

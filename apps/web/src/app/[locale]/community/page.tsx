@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Fragment } from 'react'
+import { Fragment, Suspense } from 'react'
 import { Film } from 'lucide-react'
 import { CommunityNav } from '@/components/community/community-nav'
 import { auth } from '@/lib/auth'
@@ -8,6 +8,7 @@ import { listActiveAuthors, listGlobalFeed } from '@/lib/community/feed-store'
 import { FeedCard } from '@/components/community/feed-card'
 import { StoryRow } from '@/components/community/story-row'
 import { AnonCtaCard } from '@/components/community/anon-cta-card'
+import { FeedSkeleton, StoryRowSkeleton } from '@/components/community/skeletons'
 import { Sticker } from '@/components/community/su/primitives'
 import type { PostKind } from '@/lib/community/types'
 
@@ -16,6 +17,10 @@ import type { PostKind } from '@/lib/community/types'
  * Public read (no auth required) so prospects can browse the community
  * without needing an account. That's the marketing flywheel: a stranger
  * lands here from Google, sees real students posting real wins, converts.
+ *
+ * Uses <Suspense> streaming to paint the shell + skeletons before the
+ * DB round-trips complete. On a warm-cache request that's a ~30ms
+ * first paint vs. waiting for the full render.
  */
 export const revalidate = 60
 
@@ -58,17 +63,12 @@ export default async function CommunityFeed({
   const { locale } = await params
   const { kind: kindParam } = await searchParams
   const kind = KIND_TABS.find((t) => t.key === kindParam)?.key ?? 'all'
+
+  // We resolve session once here so the header can render the "+ New
+  // Post" button without waiting on feed data. Session is fast
+  // (<10ms) and blocking on it doesn't hurt streaming.
   const session = await auth()
   const viewerId = session?.user?.id ?? null
-
-  const [posts, activeAuthors] = await Promise.all([
-    listGlobalFeed({
-      viewerId,
-      kind: kind === 'all' ? null : (kind as PostKind),
-      limit: 30,
-    }),
-    kind === 'all' ? listActiveAuthors(7, 12) : Promise.resolve([]),
-  ])
 
   return (
     <div className="relative min-h-screen bg-cream text-ink">
@@ -111,7 +111,7 @@ export default async function CommunityFeed({
           </div>
         </header>
 
-        {/* Kind tabs — sticker chips */}
+        {/* Kind tabs — sticker chips (server-rendered, no data dep) */}
         <div className="mb-6 -mx-2 flex items-center gap-2 overflow-x-auto px-2 pb-2">
           {KIND_TABS.map((t) => {
             const active = t.key === kind
@@ -132,25 +132,64 @@ export default async function CommunityFeed({
           })}
         </div>
 
-        {/* Story rail — active authors this week */}
-        {activeAuthors.length > 0 && (
-          <StoryRow authors={activeAuthors} locale={locale} />
+        {/* Story rail — streams independently. `key` on Suspense so
+            switching kind resets the boundary. */}
+        {kind === 'all' && (
+          <Suspense fallback={<StoryRowSkeleton />} key={`story-${kind}`}>
+            <ActiveAuthorsRail locale={locale} />
+          </Suspense>
         )}
 
-        {/* Feed */}
-        {posts.length === 0 ? (
-          <EmptyState locale={locale} signedIn={!!viewerId} />
-        ) : (
-          <div className="space-y-6">
-            {posts.map((p, i) => (
-              <Fragment key={p.id}>
-                <FeedCard post={p} locale={locale} signedIn={!!viewerId} />
-                {!viewerId && i === 2 && <AnonCtaCard locale={locale} />}
-              </Fragment>
-            ))}
-          </div>
-        )}
+        {/* Feed — streams independently. `key` on the boundary so a
+            filter change resets both fallback + content. */}
+        <Suspense fallback={<FeedSkeleton count={3} />} key={`feed-${kind}`}>
+          <FeedSection
+            kind={kind === 'all' ? null : (kind as PostKind)}
+            locale={locale}
+            viewerId={viewerId}
+          />
+        </Suspense>
       </main>
+    </div>
+  )
+}
+
+/**
+ * Async data section — only awaits the story-row query. Streams
+ * independently of the main feed so a slow author query never blocks
+ * the posts.
+ */
+async function ActiveAuthorsRail({ locale }: { locale: 'en' | 'ar' }) {
+  const authors = await listActiveAuthors(7, 12)
+  if (authors.length === 0) return null
+  return <StoryRow authors={authors} locale={locale} />
+}
+
+/**
+ * Async data section — only awaits the feed query. Renders directly
+ * into the streamed response as soon as Postgres returns.
+ */
+async function FeedSection({
+  kind,
+  locale,
+  viewerId,
+}: {
+  kind: PostKind | null
+  locale: 'en' | 'ar'
+  viewerId: string | null
+}) {
+  const posts = await listGlobalFeed({ viewerId, kind, limit: 30 })
+  if (posts.length === 0) {
+    return <EmptyState locale={locale} signedIn={!!viewerId} />
+  }
+  return (
+    <div className="space-y-6">
+      {posts.map((p, i) => (
+        <Fragment key={p.id}>
+          <FeedCard post={p} locale={locale} signedIn={!!viewerId} />
+          {!viewerId && i === 2 && <AnonCtaCard locale={locale} />}
+        </Fragment>
+      ))}
     </div>
   )
 }

@@ -42,6 +42,12 @@ export type FeedPostView = {
   body: string
   tags: string[]
   mediaUrl: string | null
+  /**
+   * ~30-char blurhash of the mediaUrl (image posts only). Rendered as
+   * an instant blurred placeholder before the real image loads —
+   * the "Instagram feel". Null for videos and pre-blurhash posts.
+   */
+  mediaBlurhash: string | null
   source: PostSource
   linkedEntityType: string | null
   linkedEntityId: string | null

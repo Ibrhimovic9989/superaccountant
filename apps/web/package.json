@@ -21,6 +21,7 @@
     "@sa/i18n": "workspace:*",
     "@sa/types": "workspace:*",
     "@sa/ui": "workspace:*",
+    "blurhash": "^2.0.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.469.0",

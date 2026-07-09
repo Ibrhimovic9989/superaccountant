@@ -2,6 +2,7 @@ import { Play } from 'lucide-react'
 import Link from 'next/link'
 import { isVideoUrl } from '@/lib/community/media'
 import type { FeedPostView, PostKind } from '@/lib/community/types'
+import { BlurredImage } from './blurred-image'
 
 /**
  * Square post tile — the profile-grid unit.
@@ -47,12 +48,11 @@ export function PostTile({
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
+            <BlurredImage
               src={post.mediaUrl}
+              blurhash={post.mediaBlurhash}
               alt=""
-              loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="h-full w-full transition-transform duration-500 group-hover:scale-105"
             />
           )}
           <span

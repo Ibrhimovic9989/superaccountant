@@ -324,6 +324,9 @@ const CreatePostSchema = z.object({
   body: z.string().trim().min(4).max(2000),
   tags: z.array(z.string().min(1).max(40)).max(6).optional(),
   mediaUrl: z.string().url().optional().nullable(),
+  // Blurhash strings are usually 6–30 chars of URL-safe base83.
+  // Cap generously so a rogue client can't wedge a novel in here.
+  mediaBlurhash: z.string().max(60).optional().nullable(),
 })
 
 export async function createPostAction(raw: unknown): Promise<{ id: string; handle: string }> {
@@ -344,6 +347,7 @@ export async function createPostAction(raw: unknown): Promise<{ id: string; hand
     body: parsed.body,
     tags: parsed.tags ?? [],
     mediaUrl: parsed.mediaUrl ?? undefined,
+    mediaBlurhash: parsed.mediaBlurhash ?? undefined,
   })
 
   // Feed + profile pages are the two surfaces that need a bust — leave

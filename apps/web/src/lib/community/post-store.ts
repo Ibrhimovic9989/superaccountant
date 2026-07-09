@@ -28,19 +28,21 @@ export async function createComposedPost(args: {
   body: string
   tags?: string[]
   mediaUrl?: string
+  mediaBlurhash?: string
 }): Promise<{ id: string }> {
   const id = newPostId()
   await prisma.$transaction(async (tx) => {
     await tx.$executeRawUnsafe(
       `INSERT INTO "CommunityPost"
-         ("id", "authorId", "kind", "body", "tags", "mediaUrl", "source")
-       VALUES ($1, $2, $3, $4, $5, $6, 'composed')`,
+         ("id", "authorId", "kind", "body", "tags", "mediaUrl", "mediaBlurhash", "source")
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 'composed')`,
       id,
       args.authorId,
       args.kind,
       args.body,
       args.tags ?? [],
       args.mediaUrl ?? null,
+      args.mediaBlurhash ?? null,
     )
     await tx.$executeRawUnsafe(
       `UPDATE "CommunityProfile" SET "postCount" = "postCount" + 1
