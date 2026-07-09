@@ -23,6 +23,11 @@ const COPY = {
       { label: 'India · Chartered Path', href: '/features#india' },
       { label: "KSA · Mu'tamad Path", href: '/features#ksa' },
       { label: 'How the agent works', href: '/features#agent' },
+      // Cross-origin link to the blog. Kept in the footer specifically
+      // because Google's crawler follows every footer link on every
+      // page — cheapest way to give the blog subdomain the internal
+      // link authority it currently doesn't have from the marketing site.
+      { label: 'Journal', href: 'https://blog.superaccountant.in', external: true },
     ],
     contactLabel: 'Contact',
     addressLabel: 'Address',
@@ -45,6 +50,7 @@ const COPY = {
       { label: 'الهند · المسار المعتمد', href: '/features#india' },
       { label: 'السعودية · مسار مُعتمَد', href: '/features#ksa' },
       { label: 'كيف يعمل المدرس الذكي', href: '/features#agent' },
+      { label: 'المجلة', href: 'https://blog.superaccountant.in', external: true },
     ],
     contactLabel: 'تواصل',
     addressLabel: 'العنوان',
@@ -150,23 +156,34 @@ function FooterColumn({
   locale,
 }: {
   label: string
-  items: readonly { label: string; href: string }[]
+  items: readonly { label: string; href: string; external?: boolean }[]
   locale: 'en' | 'ar'
 }) {
   return (
     <div>
       <p className="mb-4 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">{label}</p>
       <ul className="space-y-2.5">
-        {items.map((i) => (
-          <li key={i.href}>
-            <Link
-              href={`/${locale}${i.href}`}
-              className="text-sm text-fg-muted transition-colors hover:text-fg"
-            >
-              {i.label}
-            </Link>
-          </li>
-        ))}
+        {items.map((i) =>
+          i.external ? (
+            <li key={i.href}>
+              <a
+                href={i.href}
+                className="text-sm text-fg-muted transition-colors hover:text-fg"
+              >
+                {i.label}
+              </a>
+            </li>
+          ) : (
+            <li key={i.href}>
+              <Link
+                href={`/${locale}${i.href}`}
+                className="text-sm text-fg-muted transition-colors hover:text-fg"
+              >
+                {i.label}
+              </Link>
+            </li>
+          ),
+        )}
       </ul>
     </div>
   )

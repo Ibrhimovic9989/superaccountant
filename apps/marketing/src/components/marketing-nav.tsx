@@ -18,6 +18,7 @@ const COPY = {
   en: {
     pricing: 'Pricing',
     features: 'Features',
+    journal: 'Journal',
     about: 'About',
     signIn: 'Sign in',
     getStarted: 'Get started',
@@ -27,6 +28,7 @@ const COPY = {
   ar: {
     pricing: 'الأسعار',
     features: 'الميزات',
+    journal: 'المجلة',
     about: 'من نحن',
     signIn: 'تسجيل الدخول',
     getStarted: 'ابدأ الآن',
@@ -34,6 +36,10 @@ const COPY = {
     close: 'إغلاق القائمة',
   },
 } as const
+
+// External blog URL. Kept as a plain <a> (not next/link) so the crawler
+// treats it as a genuine cross-origin link — that's the SEO signal.
+const BLOG_URL = 'https://blog.superaccountant.in'
 
 export function MarketingNav({ locale }: Props) {
   const t = COPY[locale]
@@ -62,6 +68,7 @@ export function MarketingNav({ locale }: Props) {
   const links = [
     { label: t.features, href: `/${locale}/features` },
     { label: t.pricing, href: `/${locale}/pricing` },
+    { label: t.journal, href: BLOG_URL, external: true },
     { label: t.about, href: `/${locale}/about` },
   ]
 
@@ -74,15 +81,25 @@ export function MarketingNav({ locale }: Props) {
 
       {/* Desktop links */}
       <nav className="hidden items-center gap-1 md:flex">
-        {links.map((l) => (
-          <Link
-            key={l.href}
-            href={l.href}
-            className="rounded-md px-3 py-1.5 text-sm text-fg-muted transition-colors hover:bg-bg-elev hover:text-fg"
-          >
-            {l.label}
-          </Link>
-        ))}
+        {links.map((l) =>
+          l.external ? (
+            <a
+              key={l.href}
+              href={l.href}
+              className="rounded-md px-3 py-1.5 text-sm text-fg-muted transition-colors hover:bg-bg-elev hover:text-fg"
+            >
+              {l.label}
+            </a>
+          ) : (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="rounded-md px-3 py-1.5 text-sm text-fg-muted transition-colors hover:bg-bg-elev hover:text-fg"
+            >
+              {l.label}
+            </Link>
+          ),
+        )}
       </nav>
 
       {/* Right cluster — desktop */}
@@ -124,16 +141,27 @@ export function MarketingNav({ locale }: Props) {
             className="absolute inset-x-2 top-14 z-40 origin-top overflow-hidden rounded-2xl border border-border bg-bg-elev/95 shadow-2xl shadow-black/40 backdrop-blur-xl md:hidden"
           >
             <div className="flex flex-col p-2">
-              {links.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className="rounded-xl px-4 py-3 text-base font-medium text-fg transition-colors hover:bg-bg-overlay"
-                >
-                  {l.label}
-                </Link>
-              ))}
+              {links.map((l) =>
+                l.external ? (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => setOpen(false)}
+                    className="rounded-xl px-4 py-3 text-base font-medium text-fg transition-colors hover:bg-bg-overlay"
+                  >
+                    {l.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => setOpen(false)}
+                    className="rounded-xl px-4 py-3 text-base font-medium text-fg transition-colors hover:bg-bg-overlay"
+                  >
+                    {l.label}
+                  </Link>
+                ),
+              )}
               <a
                 href={appLink(locale, '/sign-in')}
                 className="rounded-xl px-4 py-3 text-base font-medium text-fg-muted transition-colors hover:bg-bg-overlay"
