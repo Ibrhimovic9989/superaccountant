@@ -13,31 +13,35 @@ import type { FeedPostView, PostKind } from '@/lib/community/types'
  * making every post require a photo.
  */
 
+// Kind palettes stay inside the brand family:
+//   win / milestone → emerald + blue (growth signals)
+//   tip / showcase  → blue + indigo (knowledge)
+//   ask             → orange + amber (energy / attention)
 const KIND_META: Record<PostKind, { label: string; icon: typeof Sparkles; tone: string }> = {
   win: {
     label: 'Win',
     icon: Trophy,
-    tone: 'from-amber-500/25 via-orange-500/15 to-rose-500/25 text-amber-100',
+    tone: 'from-emerald-500/25 via-blue-500/15 to-emerald-600/25 text-emerald-50',
   },
   tip: {
     label: 'Tip',
     icon: Lightbulb,
-    tone: 'from-cyan-500/25 via-teal-500/15 to-emerald-500/25 text-cyan-100',
+    tone: 'from-blue-500/30 via-cyan-500/15 to-blue-600/30 text-blue-50',
   },
   showcase: {
     label: 'Showcase',
     icon: ImageIcon,
-    tone: 'from-violet-500/25 via-fuchsia-500/15 to-pink-500/25 text-violet-100',
+    tone: 'from-indigo-500/30 via-blue-500/15 to-indigo-600/30 text-indigo-50',
   },
   ask: {
     label: 'Ask',
     icon: HelpCircle,
-    tone: 'from-rose-500/25 via-pink-500/15 to-fuchsia-500/25 text-rose-100',
+    tone: 'from-orange-500/30 via-amber-500/15 to-orange-600/30 text-orange-50',
   },
   milestone: {
     label: 'Milestone',
     icon: Award,
-    tone: 'from-emerald-500/25 via-teal-500/15 to-cyan-500/25 text-emerald-100',
+    tone: 'from-blue-600/30 via-emerald-500/15 to-cyan-500/30 text-blue-50',
   },
 }
 

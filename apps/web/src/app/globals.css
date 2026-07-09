@@ -2,7 +2,17 @@
 
 /**
  * SuperAccountant design system — Linear / Vercel inspired.
- * Dark + light parity. Zinc base, single violet accent.
+ * Dark + light parity. Neutral base with a three-colour brand system
+ * pulled directly from the logomark:
+ *
+ *   accent  — royal blue     #0040a0   → oklch(0.42 0.19 264)   (trust, finance)
+ *   success — emerald green  #20a020   → oklch(0.60 0.19 145)   (growth)
+ *   warning — warm orange    #e08000   → oklch(0.70 0.18 60)    (energy)
+ *
+ * Hue axis: 264 (blue) → 145 (green) → 60 (orange) forms a wide
+ * separation so callouts never look like a shade of the accent.
+ * Chroma held in the 0.18–0.20 range so the palette stays saturated
+ * without going neon.
  */
 
 @theme {
@@ -51,24 +61,33 @@
    *  can pop against it with a real lift instead of disappearing into
    *  the page. accent-soft + success/warning/danger soft variants are
    *  saturated enough to read as colour, not as 'white with a hint'.  */
-  --bg: oklch(0.975 0.005 280);
+  /* Base neutrals — tinted very slightly toward the accent hue (264,
+     blue) so the whole surface reads as "part of the same family"
+     as the brand accent instead of a random gray. Barely visible in
+     isolation; makes a huge difference in aggregate. */
+  --bg: oklch(0.975 0.005 264);
   --bg-elev: oklch(1 0 0);
-  --bg-overlay: oklch(0.95 0.006 280);
-  --fg: oklch(0.13 0 0);
-  --fg-muted: oklch(0.45 0 0);
-  --fg-subtle: oklch(0.6 0 0);
-  --border: oklch(0.9 0.005 280);
-  --border-strong: oklch(0.82 0.008 280);
-  --accent: oklch(0.55 0.22 280);
+  --bg-overlay: oklch(0.95 0.008 264);
+  --fg: oklch(0.15 0.02 264);
+  --fg-muted: oklch(0.45 0.02 264);
+  --fg-subtle: oklch(0.6 0.02 264);
+  --border: oklch(0.9 0.01 264);
+  --border-strong: oklch(0.82 0.015 264);
+  /* Royal blue — matches #0040a0 from the logomark. */
+  --accent: oklch(0.42 0.19 264);
   --accent-fg: oklch(0.99 0 0);
-  --accent-soft: oklch(0.93 0.07 280);
-  --success: oklch(0.58 0.18 145);
-  --warning: oklch(0.7 0.16 75);
+  --accent-soft: oklch(0.94 0.05 264);
+  /* Emerald green — matches #20a020 from the logomark. */
+  --success: oklch(0.60 0.19 145);
+  /* Warm orange — matches #e08000 from the logomark. */
+  --warning: oklch(0.70 0.18 60);
   --danger: oklch(0.58 0.22 25);
   /* Subtle floating-card shadow — only visible in light mode, ignored
-     in dark mode where the bg-elev contrast already does the work. */
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 4px 12px -4px rgb(0 0 0 / 0.06);
-  --shadow-card-hover: 0 2px 4px rgb(0 0 0 / 0.06), 0 12px 24px -8px rgb(0 0 0 / 0.1);
+     in dark mode where the bg-elev contrast already does the work.
+     Blue-tinted shadow (matching the accent) so cards feel like they
+     belong to the brand rather than floating on a neutral drop-shadow. */
+  --shadow-card: 0 1px 2px oklch(0.15 0.05 264 / 0.06), 0 4px 12px -4px oklch(0.15 0.05 264 / 0.08);
+  --shadow-card-hover: 0 2px 4px oklch(0.15 0.05 264 / 0.08), 0 12px 24px -8px oklch(0.15 0.05 264 / 0.12);
   /* PageBackdrop opacity — light mode needs more to cut through near-white. */
   --backdrop-blob-opacity: 0.18;
   --backdrop-dots-opacity: 0.18;
@@ -78,19 +97,25 @@
 /* Auto dark mode for users with system preference, until they toggle. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: oklch(0.13 0 0);
-    --bg-elev: oklch(0.16 0 0);
-    --bg-overlay: oklch(0.18 0 0);
+    /* Dark base tinted toward the accent hue, so the whole surface
+       feels like a deep-blue midnight rather than plain zinc gray.
+       Chroma is low enough (0.01–0.02) that it reads as a neutral. */
+    --bg: oklch(0.13 0.02 264);
+    --bg-elev: oklch(0.17 0.025 264);
+    --bg-overlay: oklch(0.20 0.03 264);
     --fg: oklch(0.97 0 0);
-    --fg-muted: oklch(0.65 0 0);
-    --fg-subtle: oklch(0.5 0 0);
-    --border: oklch(0.22 0 0);
-    --border-strong: oklch(0.3 0 0);
-    --accent: oklch(0.68 0.22 280);
-    --accent-fg: oklch(0.13 0 0);
-    --accent-soft: oklch(0.22 0.06 280);
-    --success: oklch(0.7 0.2 145);
-    --warning: oklch(0.78 0.18 75);
+    --fg-muted: oklch(0.65 0.01 264);
+    --fg-subtle: oklch(0.5 0.015 264);
+    --border: oklch(0.24 0.03 264);
+    --border-strong: oklch(0.32 0.04 264);
+    /* Brighter royal blue in dark mode so the accent still pops
+       against a dark background. */
+    --accent: oklch(0.65 0.20 264);
+    --accent-fg: oklch(0.13 0.05 264);
+    --accent-soft: oklch(0.24 0.08 264);
+    /* Success + warning brightened for dark mode contrast. */
+    --success: oklch(0.72 0.20 145);
+    --warning: oklch(0.78 0.18 60);
     --danger: oklch(0.68 0.24 25);
     /* Dark mode relies on bg-elev contrast, no drop shadow needed. */
     --shadow-card: 0 0 0 0 transparent;
@@ -104,20 +129,21 @@
 
 [data-theme="dark"],
 .dark {
-  /* Manual dark — set by ThemeToggle */
-  --bg: oklch(0.13 0 0);
-  --bg-elev: oklch(0.16 0 0);
-  --bg-overlay: oklch(0.18 0 0);
+  /* Manual dark — set by ThemeToggle. Must stay in sync with the
+     prefers-color-scheme branch above. */
+  --bg: oklch(0.13 0.02 264);
+  --bg-elev: oklch(0.17 0.025 264);
+  --bg-overlay: oklch(0.20 0.03 264);
   --fg: oklch(0.97 0 0);
-  --fg-muted: oklch(0.65 0 0);
-  --fg-subtle: oklch(0.5 0 0);
-  --border: oklch(0.22 0 0);
-  --border-strong: oklch(0.3 0 0);
-  --accent: oklch(0.68 0.22 280);
-  --accent-fg: oklch(0.13 0 0);
-  --accent-soft: oklch(0.22 0.06 280);
-  --success: oklch(0.7 0.2 145);
-  --warning: oklch(0.78 0.18 75);
+  --fg-muted: oklch(0.65 0.01 264);
+  --fg-subtle: oklch(0.5 0.015 264);
+  --border: oklch(0.24 0.03 264);
+  --border-strong: oklch(0.32 0.04 264);
+  --accent: oklch(0.65 0.20 264);
+  --accent-fg: oklch(0.13 0.05 264);
+  --accent-soft: oklch(0.24 0.08 264);
+  --success: oklch(0.72 0.20 145);
+  --warning: oklch(0.78 0.18 60);
   --danger: oklch(0.68 0.24 25);
   --shadow-card: 0 0 0 0 transparent;
   --shadow-card-hover: 0 0 0 0 transparent;

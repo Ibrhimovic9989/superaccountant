@@ -8,16 +8,21 @@
 
 :root {
   color-scheme: dark;
-  --bg: 240 10% 5%;
-  --bg-elev: 240 8% 8%;
-  --bg-panel: 240 8% 10%;
-  --border: 240 6% 18%;
+  /* Neutrals tinted toward the accent hue (220, royal blue) so the
+     whole console feels part of the SuperAccountant brand family. */
+  --bg: 224 32% 6%;
+  --bg-elev: 224 26% 10%;
+  --bg-panel: 224 24% 12%;
+  --border: 224 20% 20%;
   --fg: 0 0% 96%;
-  --fg-muted: 240 5% 65%;
-  --fg-subtle: 240 4% 45%;
-  --accent: 258 90% 66%;
-  --success: 142 71% 45%;
-  --warn: 38 92% 50%;
+  --fg-muted: 224 12% 65%;
+  --fg-subtle: 224 10% 45%;
+  /* Royal blue #0040a0 — matches the logomark's dominant colour. */
+  --accent: 220 100% 55%;
+  /* Emerald green #20a020 */
+  --success: 120 67% 40%;
+  /* Warm orange #e08000 */
+  --warn: 34 100% 44%;
   --danger: 0 84% 60%;
 }
 

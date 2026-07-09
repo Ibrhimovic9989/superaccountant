@@ -13,14 +13,17 @@ import type { ProfileView } from '@/lib/community/types'
  * a client child so the header stays server-rendered for SEO.
  */
 
+// Gradient palettes routed through the brand hues: royal blue,
+// emerald, warm orange. Each tone starts on-brand and drifts to a
+// neighbour so covers feel varied without ever going off-palette.
 const TONE_GRADIENTS: Record<string, string> = {
-  accent: 'from-violet-500/30 via-fuchsia-500/20 to-indigo-500/30',
-  brand: 'from-amber-500/30 via-orange-500/20 to-rose-500/30',
-  grape: 'from-purple-500/30 via-fuchsia-500/20 to-pink-500/30',
-  coral: 'from-rose-500/30 via-orange-500/20 to-amber-500/30',
-  mint: 'from-emerald-500/30 via-teal-500/20 to-cyan-500/30',
-  blush: 'from-pink-500/30 via-rose-500/20 to-fuchsia-500/30',
-  ink: 'from-slate-700/40 via-slate-800/20 to-slate-900/40',
+  accent: 'from-blue-600/35 via-indigo-500/20 to-sky-500/30',
+  brand:  'from-blue-700/35 via-cyan-500/20 to-emerald-500/30',
+  grape:  'from-indigo-600/35 via-violet-500/20 to-blue-500/30',
+  coral:  'from-orange-500/35 via-amber-500/20 to-rose-500/30',
+  mint:   'from-emerald-500/35 via-teal-500/20 to-cyan-500/30',
+  blush:  'from-rose-500/30 via-amber-500/20 to-orange-500/30',
+  ink:    'from-slate-800/50 via-blue-900/30 to-slate-900/50',
 }
 
 export function ProfileHeader({

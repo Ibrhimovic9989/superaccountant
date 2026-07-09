@@ -9,6 +9,9 @@ import type { ProfileAchievement } from '@/lib/community/types'
  * that a user can just claim.
  */
 
+// Achievement cards use the brand hues at ~15% chroma so the rail
+// reads as three cool blues + a warm orange (cohort) — mirrors the
+// logomark palette exactly.
 const KIND_META: Record<
   ProfileAchievement['kind'],
   { icon: typeof Award; label: string; tone: string }
@@ -21,17 +24,17 @@ const KIND_META: Record<
   'cohort-complete': {
     icon: Medal,
     label: 'Cohort',
-    tone: 'border-amber-500/40 bg-amber-500/10 text-amber-200',
+    tone: 'border-orange-500/40 bg-orange-500/10 text-orange-200',
   },
   certificate: {
     icon: ScrollText,
     label: 'Certificate',
-    tone: 'border-violet-500/40 bg-violet-500/10 text-violet-200',
+    tone: 'border-blue-500/40 bg-blue-500/10 text-blue-200',
   },
   badge: {
     icon: Award,
     label: 'Badge',
-    tone: 'border-cyan-500/40 bg-cyan-500/10 text-cyan-200',
+    tone: 'border-indigo-500/40 bg-indigo-500/10 text-indigo-200',
   },
 }
 
