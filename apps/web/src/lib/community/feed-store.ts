@@ -143,6 +143,68 @@ export async function listFollowingFeed(args: {
   return rows.map(rowToFeedPost)
 }
 
+// ── reels feed (video-only) ──────────────────────────────────
+
+/**
+ * Video-only slice of the feed. Powers /reels — the TikTok-style
+ * vertical swipe view. Same shape as listGlobalFeed, filtered to
+ * posts whose mediaUrl ends in a video extension.
+ *
+ * Keep the extension list in lockstep with `VIDEO_EXTS` in
+ * @/lib/community/media so the client-side detector agrees with
+ * what we serve.
+ */
+export async function listReelsFeed(args: {
+  viewerId: string | null
+  before?: string | null
+  limit?: number
+}): Promise<FeedPostView[]> {
+  const limit = args.limit ?? 20
+  const viewerId = args.viewerId ?? ''
+  const before = args.before ? new Date(args.before) : null
+
+  const rows = await prisma.$queryRawUnsafe<FeedRow[]>(
+    `SELECT
+       p."id", p."authorId", p."kind", p."body", p."tags", p."mediaUrl",
+       p."source", p."linkedEntityType", p."linkedEntityId",
+       p."publishedAt", p."likeCount", p."commentCount",
+       iu."name" AS "authorName",
+       iu."image" AS "authorImage",
+       cp."handle" AS "authorHandle",
+       cp."tone" AS "authorTone",
+       cp."verified" AS "authorVerified",
+       iu."preferredTrack"::text AS "authorTrack",
+       COALESCE(
+         (SELECT true FROM "CommunityPostReaction" r
+           WHERE r."postId" = p."id" AND r."userId" = $1 AND r."kind" = 'like' LIMIT 1),
+         false
+       ) AS "viewerLiked",
+       COALESCE(
+         (SELECT true FROM "CommunityPostReaction" r
+           WHERE r."postId" = p."id" AND r."userId" = $1 AND r."kind" = 'save' LIMIT 1),
+         false
+       ) AS "viewerSaved"
+     FROM "CommunityPost" p
+     JOIN "IdentityUser" iu ON iu."id" = p."authorId"
+     LEFT JOIN "CommunityProfile" cp ON cp."userId" = p."authorId"
+     WHERE p."deletedAt" IS NULL
+       AND p."mediaUrl" IS NOT NULL
+       AND (
+         LOWER(p."mediaUrl") LIKE '%.mp4'
+         OR LOWER(p."mediaUrl") LIKE '%.webm'
+         OR LOWER(p."mediaUrl") LIKE '%.mov'
+         OR LOWER(p."mediaUrl") LIKE '%.m4v'
+       )
+       AND ($2::timestamp IS NULL OR p."publishedAt" < $2::timestamp)
+     ORDER BY p."publishedAt" DESC
+     LIMIT $3`,
+    viewerId,
+    before,
+    limit,
+  )
+  return rows.map(rowToFeedPost)
+}
+
 // ── active authors (story-row on /community) ─────────────────
 
 export type ActiveAuthor = {

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Fragment } from 'react'
-import { Compass, Filter, Sparkles } from 'lucide-react'
+import { Compass, Film, Filter, Sparkles } from 'lucide-react'
 import { AppNav } from '@/components/app-nav'
 import { PageBackdrop } from '@/components/page-backdrop'
 import { auth } from '@/lib/auth'
@@ -88,14 +88,23 @@ export default async function CommunityFeed({
               What's happening
             </h1>
           </div>
-          {viewerId && (
+          <div className="flex items-center gap-2">
             <Link
-              href={`/${locale}/community/compose`}
-              className="inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-accent-fg hover:opacity-90"
+              href={`/${locale}/reels`}
+              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-bg-elev px-3 py-1.5 text-sm text-fg-muted hover:border-accent hover:text-fg"
             >
-              + Post
+              <Film className="h-3.5 w-3.5" />
+              Reels
             </Link>
-          )}
+            {viewerId && (
+              <Link
+                href={`/${locale}/community/compose`}
+                className="inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-accent-fg hover:opacity-90"
+              >
+                + Post
+              </Link>
+            )}
+          </div>
         </header>
 
         {/* Kind tabs — scrolls horizontally on mobile */}
