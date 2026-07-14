@@ -73,6 +73,18 @@ export const metadata: Metadata = {
 }
 
 /**
+ * Enumerate the locale segment at build time. Without this, Next has
+ * no finite set of valid `[locale]` values and every page under this
+ * layout falls back to on-demand rendering — `Cache-Control: no-store`
+ * on every response, invisible to Googlebot. That was the actual
+ * reason /community, /reels, /u/…, /p/…, /tag/… were all un-cacheable
+ * even after we removed `auth()` from the render path.
+ */
+export function generateStaticParams() {
+  return LOCALES.map((locale) => ({ locale }))
+}
+
+/**
  * Locale-aware <html> shell. Owns lang + dir, fonts, and imports the global
  * Tailwind stylesheet. Each locale segment renders this — public no-locale
  * routes (e.g. /verify/[hash]) render their own <html>.

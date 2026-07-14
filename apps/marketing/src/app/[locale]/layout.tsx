@@ -82,6 +82,19 @@ export const metadata: Metadata = {
   },
 }
 
+/**
+ * Enumerate the locale segment at build time so Next can pre-render
+ * every page under [locale] as static HTML per locale. Without this,
+ * Next has no way to know the finite set of valid locales and falls
+ * back to on-demand rendering — which ships `Cache-Control: no-store`
+ * on every response. That was the actual reason the marketing pages
+ * (even /en/terms) were being served un-cacheable, blocking indexing
+ * for the whole domain.
+ */
+export function generateStaticParams() {
+  return LOCALES.map((locale) => ({ locale }))
+}
+
 export default async function LocaleLayout({
   children,
   params,
