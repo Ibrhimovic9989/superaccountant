@@ -1,3 +1,4 @@
+import { FeaturedPosts } from '@/components/featured-posts'
 import { Footer } from '@/components/footer'
 import { BlurFade } from '@/components/magicui/blur-fade'
 import { BorderBeam } from '@/components/magicui/border-beam'
@@ -1305,6 +1306,9 @@ export default async function Landing({
           </div>
         </div>
       </section>
+
+      {/* ─── From the Journal (SEO — internal links → blog) ── */}
+      <FeaturedPosts locale={locale} />
 
       {/* ─── Final CTA ─────────────────────────────────────── */}
       <section className="relative z-10 mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-28">

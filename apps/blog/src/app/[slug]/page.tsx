@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { after } from 'next/server'
 import {
   getPublishedPostBySlug,
+  listAllPublishedSlugs,
   incrementViewCount,
   listRelatedByKeywords,
 } from '@/lib/blog/store'
@@ -15,6 +17,24 @@ type Params = { slug: string }
 // edits force-revalidate via the dashboard (Phase 2). 5 min is a safe
 // default that won't drown Postgres in scrapers.
 export const revalidate = 300
+
+// Slugs not in the prerender list still render (new posts don't wait
+// for a rebuild) — they just get ISR on first hit instead of a
+// build-time snapshot.
+export const dynamicParams = true
+
+/**
+ * Pre-render every published slug at build time. This is the piece
+ * that flips `Cache-Control` from `no-store` to `public, max-age=0,
+ * s-maxage=300` — Googlebot needs a cacheable response, and without
+ * `generateStaticParams` Next kept falling back to fully-dynamic
+ * (see the incident: 0/57 blog URLs discovered by Google as of
+ * 2026-07-14).
+ */
+export async function generateStaticParams(): Promise<Params[]> {
+  const slugs = await listAllPublishedSlugs()
+  return slugs.map((s) => ({ slug: s.slug }))
+}
 
 export async function generateMetadata({
   params,
@@ -53,13 +73,19 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
   const post = await getPublishedPostBySlug(slug, 'en')
   if (!post) notFound()
 
-  // Best-effort view count. Wrapped because a failure here must never
-  // 500 the public surface — analytics is best-effort, not load-bearing.
-  try {
-    await incrementViewCount(post.id)
-  } catch {
-    /* swallow */
-  }
+  // View count is a mutation, and running it inside the render path
+  // was pushing Next's inference to treat this route as fully-dynamic
+  // (Cache-Control: no-store) instead of ISR. `after()` fires *after*
+  // the response has been streamed, so the render itself stays pure
+  // and cacheable — which is what Googlebot needs to actually index
+  // these pages.
+  after(async () => {
+    try {
+      await incrementViewCount(post.id)
+    } catch {
+      /* best-effort — analytics is never load-bearing */
+    }
+  })
 
   const related = await listRelatedByKeywords(post.id, post.targetKeywords, 3)
 
