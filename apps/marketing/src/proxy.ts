@@ -19,7 +19,10 @@ export async function proxy(req: NextRequest) {
   if (!hasLocalePrefix(pathname)) {
     const url = req.nextUrl.clone()
     url.pathname = `/${DEFAULT_LOCALE}${pathname === '/' ? '' : pathname}`
-    return NextResponse.redirect(url)
+    // 308 (permanent) rather than the default 307 (temporary) so
+    // Google consolidates PageRank onto the /en URL instead of
+    // splitting authority between the bare and prefixed forms.
+    return NextResponse.redirect(url, 308)
   }
 
   return NextResponse.next()

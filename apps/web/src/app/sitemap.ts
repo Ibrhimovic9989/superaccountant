@@ -14,7 +14,12 @@ import type { MetadataRoute } from 'next'
  * catalogue (gated).
  */
 
-const SITE_URL = (process.env.NEXTAUTH_URL ?? 'https://app.superaccountant.in').replace(/\/$/, '')
+// Strip trailing whitespace AND slashes — same trailing-newline
+// trap that broke the marketing sitemap and this app's robots.txt.
+const SITE_URL = (process.env.NEXTAUTH_URL ?? 'https://app.superaccountant.in').replace(
+  /[\s/]+$/,
+  '',
+)
 
 type StaticEntry = {
   path: string
@@ -24,9 +29,17 @@ type StaticEntry = {
 
 // Public marketing + product pages. /[locale] root redirects to
 // /dashboard so we leave it out — only "real" public surfaces ship.
+//
+// Community routes were added 2026-07-14 after GSC audit showed the
+// app subdomain had zero pages discovered by Google — the community
+// feed, reels, and public profiles are exactly the long-tail-SEO
+// surfaces we want indexed.
 const STATIC_PUBLIC: StaticEntry[] = [
   { path: '/cohort', changeFrequency: 'weekly', priority: 1.0 },
   { path: '/jobs', changeFrequency: 'daily', priority: 0.9 },
+  { path: '/community', changeFrequency: 'daily', priority: 0.9 },
+  { path: '/reels', changeFrequency: 'daily', priority: 0.8 },
+  { path: '/recruiters', changeFrequency: 'weekly', priority: 0.7 },
   { path: '/quiz', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/rewards', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/terms', changeFrequency: 'yearly', priority: 0.2 },
@@ -84,5 +97,72 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   )
 
-  return [...staticEntries, ...jobEntries]
+  // Community surfaces — public profiles, tag pages, and individual
+  // posts. Same soft-fail pattern as jobs. Capped so a spam wave
+  // can't blow up the sitemap.
+  let profiles: Array<{ handle: string; updatedAt: Date }> = []
+  let posts: Array<{ id: string; updatedAt: Date }> = []
+  let tags: Array<{ tag: string }> = []
+  try {
+    profiles = await prisma.$queryRaw<Array<{ handle: string; updatedAt: Date }>>`
+      SELECT "handle", "updatedAt" FROM "CommunityProfile"
+      WHERE "publicVisibility" = 'public'
+        AND "postCount" > 0
+      ORDER BY "updatedAt" DESC
+      LIMIT 5000
+    `
+    posts = await prisma.$queryRaw<Array<{ id: string; updatedAt: Date }>>`
+      SELECT "id", "publishedAt" AS "updatedAt" FROM "CommunityPost"
+      WHERE "deletedAt" IS NULL
+      ORDER BY "publishedAt" DESC
+      LIMIT 10000
+    `
+    // Distinct tags actually present on published posts — no dead
+    // tag pages that Google would 404 on.
+    tags = await prisma.$queryRaw<Array<{ tag: string }>>`
+      SELECT DISTINCT unnest("tags") AS "tag" FROM "CommunityPost"
+      WHERE "deletedAt" IS NULL
+      LIMIT 2000
+    `
+  } catch (err) {
+    console.error('[sitemap] failed to load community entries', err)
+  }
+
+  const profileEntries: MetadataRoute.Sitemap = profiles.flatMap((p) =>
+    LOCALES.map((locale) => ({
+      url: `${SITE_URL}/${locale}/u/${p.handle}`,
+      lastModified: p.updatedAt,
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+      alternates: { languages: buildAlternates(`/u/${p.handle}`) },
+    })),
+  )
+  const postEntries: MetadataRoute.Sitemap = posts.flatMap((post) =>
+    LOCALES.map((locale) => ({
+      url: `${SITE_URL}/${locale}/p/${post.id}`,
+      lastModified: post.updatedAt,
+      changeFrequency: 'weekly' as const,
+      priority: 0.5,
+      alternates: { languages: buildAlternates(`/p/${post.id}`) },
+    })),
+  )
+  const tagEntries: MetadataRoute.Sitemap = tags.flatMap((t) =>
+    LOCALES.map((locale) => ({
+      url: `${SITE_URL}/${locale}/tag/${encodeURIComponent(t.tag)}`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.5,
+      alternates: {
+        languages: buildAlternates(`/tag/${encodeURIComponent(t.tag)}`),
+      },
+    })),
+  )
+
+  return [
+    ...staticEntries,
+    ...jobEntries,
+    ...profileEntries,
+    ...postEntries,
+    ...tagEntries,
+  ]
 }

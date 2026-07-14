@@ -8,7 +8,15 @@ import type { MetadataRoute } from 'next'
  * of URLs lives.
  */
 
-const SITE_URL = (process.env.NEXTAUTH_URL ?? 'https://app.superaccountant.in').replace(/\/$/, '')
+// Strip trailing SLASHES *and* WHITESPACE. A production incident on
+// the marketing app traced back to a Vercel env var with a literal
+// newline at the end — the old `/\/$/` regex only handled slashes,
+// so `robots.txt` shipped a broken `Sitemap: https://app…\n/sitemap.xml`
+// line that Google could not parse. Same trap here.
+const SITE_URL = (process.env.NEXTAUTH_URL ?? 'https://app.superaccountant.in').replace(
+  /[\s/]+$/,
+  '',
+)
 
 // Anything under these path tails is gated. We list them twice
 // (without and with the locale prefix) so the rules match whether the
