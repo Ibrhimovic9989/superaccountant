@@ -19,6 +19,25 @@ import { ViewerStateProvider } from '@/components/community/viewer-state'
 
 export const revalidate = 60
 
+// Prerender the top posts at build. Same trap as /tag/[tag] and
+// /u/[handle] — without generateStaticParams() Next opts the
+// whole slug space out of caching and ships no-store.
+// dynamicParams=true lets brand-new posts render on-demand via
+// ISR without waiting for a rebuild.
+export const dynamicParams = true
+
+export async function generateStaticParams() {
+  const { prisma } = await import('@sa/db')
+  const rows = await prisma.$queryRawUnsafe<Array<{ id: string }>>(
+    `SELECT "id" FROM "CommunityPost"
+     WHERE "deletedAt" IS NULL
+     ORDER BY "publishedAt" DESC
+     LIMIT 1000`,
+  )
+  const locales = ['en', 'ar'] as const
+  return rows.flatMap((r) => locales.map((locale) => ({ locale, postId: r.id })))
+}
+
 type PageParams = { locale: 'en' | 'ar'; postId: string }
 
 export async function generateMetadata({

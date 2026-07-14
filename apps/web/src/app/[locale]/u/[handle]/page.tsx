@@ -19,6 +19,26 @@ import type { ProfileView } from '@/lib/community/types'
  */
 export const revalidate = 300
 
+// Prerender the top public profiles at build. Without
+// generateStaticParams(), Next treats the whole `[handle]` slug
+// space as fully dynamic and ships `Cache-Control: no-store` —
+// which was blocking Googlebot from indexing any profile page as
+// of 2026-07-14. dynamicParams=true lets new handles still render
+// on-demand via ISR.
+export const dynamicParams = true
+
+export async function generateStaticParams() {
+  const { prisma } = await import('@sa/db')
+  const rows = await prisma.$queryRawUnsafe<Array<{ handle: string }>>(
+    `SELECT "handle" FROM "CommunityProfile"
+     WHERE "publicVisibility" = 'public' AND "postCount" > 0
+     ORDER BY "updatedAt" DESC
+     LIMIT 500`,
+  )
+  const locales = ['en', 'ar'] as const
+  return rows.flatMap((r) => locales.map((locale) => ({ locale, handle: r.handle })))
+}
+
 type PageParams = { locale: 'en' | 'ar'; handle: string }
 
 async function loadProfile(handle: string) {

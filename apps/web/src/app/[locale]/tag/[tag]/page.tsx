@@ -20,6 +20,23 @@ import type { FeedPostView, PostKind, ProfileTone } from '@/lib/community/types'
 
 export const revalidate = 60
 
+// Same trap as the blog fix: without generateStaticParams() Next
+// treats every dynamic-slug hit as on-demand rendering AND ships
+// `Cache-Control: no-store` on every response — invisible to
+// Googlebot. Prerender the top tags at build; unseen tags still
+// render via ISR because dynamicParams=true.
+export const dynamicParams = true
+
+export async function generateStaticParams() {
+  const rows = await prisma.$queryRawUnsafe<Array<{ tag: string }>>(
+    `SELECT DISTINCT unnest("tags") AS "tag" FROM "CommunityPost"
+     WHERE "deletedAt" IS NULL
+     LIMIT 500`,
+  )
+  const locales = ['en', 'ar'] as const
+  return rows.flatMap((r) => locales.map((locale) => ({ locale, tag: r.tag })))
+}
+
 type PageParams = { locale: 'en' | 'ar'; tag: string }
 
 export async function generateMetadata({
