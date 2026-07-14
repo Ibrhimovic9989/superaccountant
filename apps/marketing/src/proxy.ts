@@ -29,5 +29,16 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  // Only match paths that ACTUALLY need the middleware (bare or
+  // no-locale paths — everything else already has the /en or /ar
+  // prefix and needs no rewrite).
+  //
+  // Why this matters: Vercel treats any route matched by middleware
+  // as un-cacheable — the response ships `Cache-Control: no-store`
+  // regardless of what the middleware body does. Before this fix
+  // every marketing page (even /en/terms) was being served no-store
+  // and Googlebot refused to index the domain. Excluding /en/* and
+  // /ar/* from the matcher lets the CDN cache them and lets Google
+  // see the intended `Cache-Control: public, max-age=…`.
+  matcher: ['/((?!en(?:/|$)|ar(?:/|$)|api|_next|_vercel|.*\\..*).*)'],
 }

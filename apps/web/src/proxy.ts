@@ -63,6 +63,27 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  // Skip Next internals + static assets + the NextAuth API route.
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  // Every route matched by middleware is un-cacheable on Vercel —
+  // the response ships `Cache-Control: no-store` no matter what the
+  // middleware body actually does. That was silently killing SEO on
+  // every public route on the app subdomain (GSC audit 2026-07-14).
+  //
+  // We narrow the matcher to only the routes that actually need
+  // middleware processing:
+  //   1. Bare / no-locale paths — need locale rewrite.
+  //   2. Locale-prefixed protected segments (`/en/dashboard`,
+  //      `/ar/lessons/…`, …) — need the auth guard.
+  //
+  // Everything else (public community pages, tag pages, profiles,
+  // reels, /en/pricing, /en/terms, and so on) bypasses middleware
+  // entirely and stays cacheable by the CDN.
+  matcher: [
+    // Bare paths without locale prefix — locale rewrite runs here.
+    // Non-capturing `(?:…)` groups only — Next's matcher parser
+    // rejects capturing groups.
+    '/((?!en(?:/|$)|ar(?:/|$)|api|_next|_vercel|.*\\..*).*)',
+    // Locale-prefixed protected segments — auth guard runs here.
+    '/:locale(en|ar)/:seg(dashboard|tutor|assignments|grand-test|certificate|lessons)/:path*',
+    '/:locale(en|ar)/:seg(dashboard|tutor|assignments|grand-test|certificate|lessons)',
+  ],
 }
