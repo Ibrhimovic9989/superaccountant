@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Hash } from 'lucide-react'
 import { CommunityNav } from '@/components/community/community-nav'
-import { auth } from '@/lib/auth'
 import { prisma } from '@sa/db'
 import { FeedCard } from '@/components/community/feed-card'
+import { ViewerStateProvider } from '@/components/community/viewer-state'
 import type { FeedPostView, PostKind, ProfileTone } from '@/lib/community/types'
 
 /**
@@ -66,9 +66,10 @@ export default async function TagPage({
 }) {
   const { locale, tag } = await params
   const decoded = decodeURIComponent(tag).toLowerCase()
-  const session = await auth()
-  const viewerId = session?.user?.id ?? null
 
+  // Anonymous SSG — viewerLiked/viewerSaved always false. The client
+  // <ViewerStateProvider/> below hydrates the real state after mount
+  // so signed-in users see filled hearts within ~200ms of paint.
   const rows = await prisma.$queryRawUnsafe<Row[]>(
     `SELECT
        p."id", p."authorId", p."kind", p."body", p."tags", p."mediaUrl",
@@ -80,16 +81,8 @@ export default async function TagPage({
        cp."tone" AS "authorTone",
        cp."verified" AS "authorVerified",
        iu."preferredTrack"::text AS "authorTrack",
-       COALESCE(
-         (SELECT true FROM "CommunityPostReaction" r
-           WHERE r."postId" = p."id" AND r."userId" = $2 AND r."kind" = 'like' LIMIT 1),
-         false
-       ) AS "viewerLiked",
-       COALESCE(
-         (SELECT true FROM "CommunityPostReaction" r
-           WHERE r."postId" = p."id" AND r."userId" = $2 AND r."kind" = 'save' LIMIT 1),
-         false
-       ) AS "viewerSaved"
+       false AS "viewerLiked",
+       false AS "viewerSaved"
      FROM "CommunityPost" p
      JOIN "IdentityUser" iu ON iu."id" = p."authorId"
      LEFT JOIN "CommunityProfile" cp ON cp."userId" = p."authorId"
@@ -97,7 +90,6 @@ export default async function TagPage({
      ORDER BY p."publishedAt" DESC
      LIMIT 40`,
     decoded,
-    viewerId ?? '',
   )
   const posts: FeedPostView[] = rows.map((r) => ({
     id: r.id,
@@ -131,11 +123,7 @@ export default async function TagPage({
 
   return (
     <div className="relative min-h-screen bg-cream text-ink">
-      <CommunityNav
-        locale={locale}
-        userName={session?.user?.name ?? null}
-        userEmail={session?.user?.email ?? ''}
-      />
+      <CommunityNav locale={locale} />
 
       <main className="relative mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">
         <header className="mb-8">
@@ -171,11 +159,13 @@ export default async function TagPage({
             </p>
           </div>
         ) : (
-          <div className="space-y-6">
-            {posts.map((p) => (
-              <FeedCard key={p.id} post={p} locale={locale} signedIn={!!viewerId} />
-            ))}
-          </div>
+          <ViewerStateProvider postIds={posts.map((p) => p.id)}>
+            <div className="space-y-6">
+              {posts.map((p) => (
+                <FeedCard key={p.id} post={p} locale={locale} signedIn={false} />
+              ))}
+            </div>
+          </ViewerStateProvider>
         )}
       </main>
     </div>

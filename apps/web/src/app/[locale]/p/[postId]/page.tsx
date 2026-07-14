@@ -1,18 +1,20 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { CommunityNav } from '@/components/community/community-nav'
-import { auth } from '@/lib/auth'
 import { getPostById, listComments } from '@/lib/community/feed-store'
 import { FeedCard } from '@/components/community/feed-card'
 import { CommentThread } from '@/components/community/comment-thread'
+import { ViewerStateProvider } from '@/components/community/viewer-state'
 
 /**
  * Public post detail. Reader lands here from the feed, a profile grid
  * tile, or a share link. Comments load with the page — no separate
  * request — so the perceived latency stays close to zero.
  *
- * Server-rendered, indexable. Ask posts especially are long-tail SEO
- * gold: a question + a good answer = a page that ranks.
+ * Anonymous SSG so Google indexes the page. Ask posts especially are
+ * long-tail SEO gold: a question + a good answer = a page that ranks.
+ * Viewer state (heart filled/empty, comment composer signed-in-ness)
+ * hydrates on the client via ViewerStateProvider + /api/me.
  */
 
 export const revalidate = 60
@@ -25,11 +27,9 @@ export async function generateMetadata({
   params: Promise<PageParams>
 }): Promise<Metadata> {
   const { postId, locale } = await params
-  const session = await auth()
-  const post = await getPostById(postId, session?.user?.id ?? null)
+  const post = await getPostById(postId, null)
   if (!post) return { title: 'Post not found · SuperAccountant', robots: { index: false, follow: false } }
 
-  // First 160 chars of the body as the description.
   const description = post.body.trim().slice(0, 160)
   return {
     title: `${post.author.name} on SuperAccountant — ${post.kind}`,
@@ -59,34 +59,34 @@ export default async function PostDetail({
   params: Promise<PageParams>
 }) {
   const { locale, postId } = await params
-  const session = await auth()
-  const viewerId = session?.user?.id ?? null
 
-  const post = await getPostById(postId, viewerId)
+  // Anonymous read — the client-side ViewerStateProvider fills in
+  // viewer state after mount. This is what keeps `Cache-Control:
+  // public` on the response and lets Googlebot actually index the
+  // page (see /api/me for the incident this fixes).
+  const post = await getPostById(postId, null)
   if (!post) notFound()
   const comments = await listComments(post.id, 100)
 
   return (
     <div className="relative min-h-screen bg-cream text-ink">
-      <CommunityNav
-        locale={locale}
-        userName={session?.user?.name ?? null}
-        userEmail={session?.user?.email ?? ''}
-      />
+      <CommunityNav locale={locale} />
 
       <main className="relative mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">
-        <FeedCard post={post} locale={locale} signedIn={!!viewerId} />
-        <section className="mt-8">
-          <h2 className="mb-4 font-display text-lg font-extrabold tracking-tight text-ink">
-            💬 Comments · {comments.length}
-          </h2>
-          <CommentThread
-            postId={post.id}
-            comments={comments}
-            locale={locale}
-            signedIn={!!viewerId}
-          />
-        </section>
+        <ViewerStateProvider postIds={[post.id]}>
+          <FeedCard post={post} locale={locale} signedIn={false} />
+          <section className="mt-8">
+            <h2 className="mb-4 font-display text-lg font-extrabold tracking-tight text-ink">
+              💬 Comments · {comments.length}
+            </h2>
+            <CommentThread
+              postId={post.id}
+              comments={comments}
+              locale={locale}
+              signedIn={false}
+            />
+          </section>
+        </ViewerStateProvider>
       </main>
     </div>
   )

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useState, useTransition } from 'react'
 import { createCommentAction } from '@/lib/community/actions'
 import type { CommentView } from '@/lib/community/types'
+import { useViewerState } from './viewer-state'
 
 /**
  * Comment thread with an inline composer at the bottom for signed-in
@@ -34,8 +35,15 @@ export function CommentThread({
   postId: string
   comments: CommentView[]
   locale: 'en' | 'ar'
+  /**
+   * Best-effort — public pages are now anonymous SSG and pass
+   * `false` here regardless of the real viewer. ViewerStateContext
+   * fills in the true value after hydration.
+   */
   signedIn: boolean
 }) {
+  const viewer = useViewerState()
+  const effectiveSignedIn = viewer.signedIn ?? signedIn
   const [items, setItems] = useState(comments)
   const [pending, setPending] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -109,7 +117,7 @@ export function CommentThread({
         ))}
       </ul>
 
-      {signedIn ? (
+      {effectiveSignedIn ? (
         <form action={onSubmit} className="rounded-2xl border-2 border-ink bg-white p-4 shadow-pop-sm">
           <label htmlFor="comment-body" className="sr-only">
             Comment

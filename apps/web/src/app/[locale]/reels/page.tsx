@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Film, X } from 'lucide-react'
-import { auth } from '@/lib/auth'
 import { listReelsFeed } from '@/lib/community/feed-store'
 import { ReelPlayer } from '@/components/community/reel-player'
+import { ViewerStateProvider } from '@/components/community/viewer-state'
 
 /**
  * TikTok-style vertical reels feed. Full viewport, snap-scroll.
@@ -41,9 +41,9 @@ export default async function ReelsPage({
   params: Promise<PageParams>
 }) {
   const { locale } = await params
-  const session = await auth()
-  const viewerId = session?.user?.id ?? null
-  const posts = await listReelsFeed({ viewerId, limit: 20 })
+  // Anonymous SSG — viewer state hydrates on the client via
+  // ViewerStateProvider below. See /api/me for the incident.
+  const posts = await listReelsFeed({ viewerId: null, limit: 20 })
 
   if (posts.length === 0) {
     return <EmptyState locale={locale} />
@@ -70,16 +70,18 @@ export default async function ReelsPage({
       </div>
 
       {/* Vertical snap container */}
-      <div className="h-[100dvh] w-full snap-y snap-mandatory overflow-y-scroll">
-        {posts.map((post) => (
-          <ReelPlayer
-            key={post.id}
-            post={post}
-            locale={locale}
-            signedIn={!!viewerId}
-          />
-        ))}
-      </div>
+      <ViewerStateProvider postIds={posts.map((p) => p.id)}>
+        <div className="h-[100dvh] w-full snap-y snap-mandatory overflow-y-scroll">
+          {posts.map((post) => (
+            <ReelPlayer
+              key={post.id}
+              post={post}
+              locale={locale}
+              signedIn={false}
+            />
+          ))}
+        </div>
+      </ViewerStateProvider>
     </div>
   )
 }

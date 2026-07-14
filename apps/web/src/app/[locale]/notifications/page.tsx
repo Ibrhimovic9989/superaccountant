@@ -54,11 +54,7 @@ export default async function NotificationsPage({
 
   return (
     <div className="relative min-h-screen bg-cream text-ink">
-      <CommunityNav
-        locale={locale}
-        userName={session.user.name ?? null}
-        userEmail={session.user.email ?? ''}
-      />
+      <CommunityNav locale={locale} />
 
       <main className="relative mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">
         <header className="mb-8">

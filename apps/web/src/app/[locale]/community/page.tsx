@@ -3,24 +3,33 @@ import Link from 'next/link'
 import { Fragment, Suspense } from 'react'
 import { Film } from 'lucide-react'
 import { CommunityNav } from '@/components/community/community-nav'
-import { auth } from '@/lib/auth'
 import { listActiveAuthors, listGlobalFeed } from '@/lib/community/feed-store'
 import { FeedCard } from '@/components/community/feed-card'
 import { StoryRow } from '@/components/community/story-row'
 import { AnonCtaCard } from '@/components/community/anon-cta-card'
 import { FeedSkeleton, StoryRowSkeleton } from '@/components/community/skeletons'
 import { Sticker } from '@/components/community/su/primitives'
+import { ViewerStateProvider } from '@/components/community/viewer-state'
 import type { PostKind } from '@/lib/community/types'
 
 /**
  * Community feed — global chronological, optionally filtered by kind.
- * Public read (no auth required) so prospects can browse the community
- * without needing an account. That's the marketing flywheel: a stranger
- * lands here from Google, sees real students posting real wins, converts.
+ * Public read, deliberately anonymous SSG.
  *
- * Uses <Suspense> streaming to paint the shell + skeletons before the
- * DB round-trips complete. On a warm-cache request that's a ~30ms
- * first paint vs. waiting for the full render.
+ * The old build called `await auth()` at the top of this file, which
+ * forced Next into fully-dynamic mode and shipped `Cache-Control:
+ * no-store` on every response — so Googlebot refused to index it. As
+ * of 2026-07-14 GSC reported zero of the app subdomain's public
+ * pages were discovered.
+ *
+ * Now: we render the "logged-out" version of every card. The client
+ * <ViewerStateProvider/> hits /api/community/viewer-state after mount
+ * and fills in per-viewer state (liked / saved) without blocking the
+ * static render. CommunityNav's <UserChrome/> does the same for the
+ * user menu + notification bell.
+ *
+ * Perceived-speed impact: unchanged. The Suspense boundaries around
+ * StoryRow and FeedSection still stream data in as it lands.
  */
 export const revalidate = 60
 
@@ -64,19 +73,9 @@ export default async function CommunityFeed({
   const { kind: kindParam } = await searchParams
   const kind = KIND_TABS.find((t) => t.key === kindParam)?.key ?? 'all'
 
-  // We resolve session once here so the header can render the "+ New
-  // Post" button without waiting on feed data. Session is fast
-  // (<10ms) and blocking on it doesn't hurt streaming.
-  const session = await auth()
-  const viewerId = session?.user?.id ?? null
-
   return (
     <div className="relative min-h-screen bg-cream text-ink">
-      <CommunityNav
-        locale={locale}
-        userName={session?.user?.name ?? null}
-        userEmail={session?.user?.email ?? ''}
-      />
+      <CommunityNav locale={locale} />
 
       <main className="relative mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">
         {/* Header */}
@@ -100,14 +99,15 @@ export default async function CommunityFeed({
               <Film className="h-4 w-4" />
               Reels
             </Link>
-            {viewerId && (
-              <Link
-                href={`/${locale}/community/compose`}
-                className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-brand px-5 py-2 text-sm font-bold text-white shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
-              >
-                + New Post
-              </Link>
-            )}
+            {/* Always rendered — the compose page redirects to sign-in
+                for anon viewers, so the button works for everyone and
+                the SSG shell doesn't need to know auth state. */}
+            <Link
+              href={`/${locale}/community/compose`}
+              className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-brand px-5 py-2 text-sm font-bold text-white shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
+            >
+              + New Post
+            </Link>
           </div>
         </header>
 
@@ -146,7 +146,6 @@ export default async function CommunityFeed({
           <FeedSection
             kind={kind === 'all' ? null : (kind as PostKind)}
             locale={locale}
-            viewerId={viewerId}
           />
         </Suspense>
       </main>
@@ -154,11 +153,6 @@ export default async function CommunityFeed({
   )
 }
 
-/**
- * Async data section — only awaits the story-row query. Streams
- * independently of the main feed so a slow author query never blocks
- * the posts.
- */
 async function ActiveAuthorsRail({ locale }: { locale: 'en' | 'ar' }) {
   const authors = await listActiveAuthors(7, 12)
   if (authors.length === 0) return null
@@ -166,35 +160,38 @@ async function ActiveAuthorsRail({ locale }: { locale: 'en' | 'ar' }) {
 }
 
 /**
- * Async data section — only awaits the feed query. Renders directly
- * into the streamed response as soon as Postgres returns.
+ * Fetches the feed as anonymous (viewerId=null), wraps it in a
+ * client ViewerStateProvider so LikeButton hydrates the true liked
+ * state per-viewer after paint.
  */
 async function FeedSection({
   kind,
   locale,
-  viewerId,
 }: {
   kind: PostKind | null
   locale: 'en' | 'ar'
-  viewerId: string | null
 }) {
-  const posts = await listGlobalFeed({ viewerId, kind, limit: 30 })
+  const posts = await listGlobalFeed({ viewerId: null, kind, limit: 30 })
   if (posts.length === 0) {
-    return <EmptyState locale={locale} signedIn={!!viewerId} />
+    return <EmptyState locale={locale} />
   }
   return (
-    <div className="space-y-6">
-      {posts.map((p, i) => (
-        <Fragment key={p.id}>
-          <FeedCard post={p} locale={locale} signedIn={!!viewerId} />
-          {!viewerId && i === 2 && <AnonCtaCard locale={locale} />}
-        </Fragment>
-      ))}
-    </div>
+    <ViewerStateProvider postIds={posts.map((p) => p.id)}>
+      <div className="space-y-6">
+        {posts.map((p, i) => (
+          <Fragment key={p.id}>
+            <FeedCard post={p} locale={locale} signedIn={false} />
+            {/* AnonCtaCard renders null for signed-in viewers after
+                hydration, so we can always slot it in. */}
+            {i === 2 && <AnonCtaCard locale={locale} />}
+          </Fragment>
+        ))}
+      </div>
+    </ViewerStateProvider>
   )
 }
 
-function EmptyState({ locale, signedIn }: { locale: 'en' | 'ar'; signedIn: boolean }) {
+function EmptyState({ locale }: { locale: 'en' | 'ar' }) {
   return (
     <div className="rounded-3xl border-2 border-dashed border-ink bg-white p-10 text-center shadow-pop-sm">
       <div className="mx-auto mb-3 flex justify-center">
@@ -206,18 +203,14 @@ function EmptyState({ locale, signedIn }: { locale: 'en' | 'ar'; signedIn: boole
         Nothing yet — this is your moment.
       </h2>
       <p className="mt-2 text-sm font-medium text-ink/60">
-        {signedIn
-          ? 'Be the first to share a win, an ask, or a workpaper.'
-          : 'The community is warming up. Check back soon.'}
+        Be the first to share a win, an ask, or a workpaper.
       </p>
-      {signedIn && (
-        <Link
-          href={`/${locale}/community/compose`}
-          className="mt-6 inline-flex rounded-full border-2 border-ink bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
-        >
-          Compose the first post
-        </Link>
-      )}
+      <Link
+        href={`/${locale}/community/compose`}
+        className="mt-6 inline-flex rounded-full border-2 border-ink bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
+      >
+        Compose the first post
+      </Link>
     </div>
   )
 }

@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CommunityNav } from '@/components/community/community-nav'
-import { auth } from '@/lib/auth'
 import { getProfileByHandle } from '@/lib/community/profile-store'
 import { PostTile } from '@/components/community/post-tile'
 import { AchievementRail } from '@/components/community/achievement-rail'
@@ -10,23 +9,24 @@ import { ProfileHeader } from '@/components/community/profile-header'
 import type { ProfileView } from '@/lib/community/types'
 
 /**
- * Public profile page for a community member. Server-rendered so
- * Google can index it — this is the recruiter-facing testimonial
- * surface. Auth is optional: signed-in viewers see the follow button
- * + like counts, anonymous viewers get a clean read-only view.
+ * Public profile page. Anonymous SSG so Google can index the
+ * recruiter-facing testimonial surface. Signed-in state (follow
+ * button, owner-only "+ New post") hydrates on the client via
+ * /api/me and the FollowButton's first click.
  *
- * ISR — profiles change on post/like/follow, but we re-validate at
- * mutation time via revalidatePath. 5-min fallback so a page whose
- * revalidate never fires still refreshes at least once every 5 min.
+ * ISR at 5 min so a page whose mutation-based revalidation never
+ * fires still refreshes at least once every 5 min.
  */
 export const revalidate = 300
 
 type PageParams = { locale: 'en' | 'ar'; handle: string }
 
 async function loadProfile(handle: string) {
-  const session = await auth()
-  const result = await getProfileByHandle(handle, session?.user?.id ?? null)
-  return { session, result }
+  // viewerId=null — this page ignores the caller's session so the
+  // route stays static (cacheable, indexable). ProfileHeader's follow
+  // button and the "+ New post" chrome hydrate on the client.
+  const result = await getProfileByHandle(handle, null)
+  return { result }
 }
 
 export async function generateMetadata({
@@ -72,7 +72,7 @@ export default async function ProfilePage({
   params: Promise<PageParams>
 }) {
   const { handle, locale } = await params
-  const { session, result } = await loadProfile(handle)
+  const { result } = await loadProfile(handle)
 
   if (!result) notFound()
   if ('blocked' in result) {
@@ -83,14 +83,10 @@ export default async function ProfilePage({
 
   return (
     <div className="relative min-h-screen bg-cream text-ink">
-      <CommunityNav
-        locale={locale}
-        userName={session?.user?.name ?? null}
-        userEmail={session?.user?.email ?? ''}
-      />
+      <CommunityNav locale={locale} />
 
       <main className="relative mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-10">
-        <ProfileHeader view={view} locale={locale} viewerId={session?.user?.id ?? null} />
+        <ProfileHeader view={view} locale={locale} viewerId={null} />
         {view.achievements.length > 0 && (
           <div className="mt-8">
             <AchievementRail achievements={view.achievements} />
@@ -101,17 +97,18 @@ export default async function ProfilePage({
             <h2 className="font-display text-xl font-extrabold tracking-tight text-ink">
               Posts · {view.postCount}
             </h2>
-            {view.viewerIsOwner && (
-              <Link
-                href={`/${locale}/community/compose`}
-                className="rounded-full border-2 border-ink bg-brand px-3.5 py-1.5 font-mono text-[10px] font-extrabold uppercase tracking-wider text-white shadow-pop-xs transition-all hover:-translate-y-0.5 hover:shadow-pop-sm"
-              >
-                + New post
-              </Link>
-            )}
+            {/* Always rendered — /community/compose redirects to sign-in
+                for anon. Owners see a familiar affordance whether or
+                not their session is hydrated yet. */}
+            <Link
+              href={`/${locale}/community/compose`}
+              className="rounded-full border-2 border-ink bg-brand px-3.5 py-1.5 font-mono text-[10px] font-extrabold uppercase tracking-wider text-white shadow-pop-xs transition-all hover:-translate-y-0.5 hover:shadow-pop-sm"
+            >
+              + New post
+            </Link>
           </div>
           {view.posts.length === 0 ? (
-            <EmptyPosts isOwner={view.viewerIsOwner} locale={locale} />
+            <EmptyPosts locale={locale} />
           ) : (
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {view.posts.map((p) => (
@@ -125,25 +122,21 @@ export default async function ProfilePage({
   )
 }
 
-function EmptyPosts({ isOwner, locale }: { isOwner: boolean; locale: 'en' | 'ar' }) {
+function EmptyPosts({ locale }: { locale: 'en' | 'ar' }) {
   return (
     <div className="rounded-3xl border-2 border-dashed border-ink bg-white p-10 text-center shadow-pop-xs">
       <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-ink/60">
         No posts yet
       </p>
       <p className="mt-3 font-display text-lg font-extrabold text-ink">
-        {isOwner
-          ? 'Kick things off. Post your first win.'
-          : "This person hasn't shared anything publicly yet."}
+        No posts to show.
       </p>
-      {isOwner && (
-        <Link
-          href={`/${locale}/community/compose`}
-          className="mt-5 inline-flex items-center gap-2 rounded-full border-2 border-ink bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
-        >
-          Compose first post
-        </Link>
-      )}
+      <Link
+        href={`/${locale}/community/compose`}
+        className="mt-5 inline-flex items-center gap-2 rounded-full border-2 border-ink bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-pop-sm transition-all hover:-translate-y-0.5 hover:shadow-pop-md active:translate-y-[2px] active:shadow-pop-xs"
+      >
+        Compose a post
+      </Link>
     </div>
   )
 }

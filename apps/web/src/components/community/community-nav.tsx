@@ -1,26 +1,21 @@
-import { NotificationBell } from '@/components/community/notification-bell'
 import { LayoutDashboard, LineChart } from 'lucide-react'
 import Link from 'next/link'
 import { Logomark, Wordmark } from '../brand/logo'
 import { LocaleToggle } from '../locale-toggle'
-import { UserMenu } from '../user-menu'
+import { UserChrome } from './user-chrome'
 
 /**
  * Neobrutal top nav for the community surface.
  *
- * Same responsibilities as AppNav — brand mark, primary links,
- * notifications, locale, user menu — but rendered in the cream +
- * ink language so it stops fighting the community-page aesthetic.
+ * ZERO server-side session reads. That's the whole point — pages
+ * using this nav can render as anonymous SSG so Googlebot gets a
+ * cacheable, indexable response. Session-dependent chrome
+ * (notification bell + user menu) lives in the client-side
+ * <UserChrome/> which hits /api/me after mount.
  *
  * Lives ONLY on community routes. Lessons + dashboard still use the
  * neutral AppNav until we decide to widen the redesign.
  */
-
-type Props = {
-  locale: 'en' | 'ar'
-  userName: string | null
-  userEmail: string
-}
 
 const COPY = {
   en: {
@@ -37,7 +32,7 @@ const COPY = {
   },
 } as const
 
-export function CommunityNav({ locale, userName, userEmail }: Props) {
+export function CommunityNav({ locale }: { locale: 'en' | 'ar' }) {
   const t = COPY[locale]
   return (
     <header className="sticky top-0 z-40 border-b-2 border-ink bg-cream/95 backdrop-blur">
@@ -82,13 +77,10 @@ export function CommunityNav({ locale, userName, userEmail }: Props) {
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          <div className="[&_svg]:text-ink [&_a]:text-ink [&_button]:text-ink">
-            <NotificationBell locale={locale} />
-          </div>
           <div className="[&_button]:text-ink [&_span]:text-ink">
             <LocaleToggle locale={locale} />
           </div>
-          <UserMenu locale={locale} userName={userName} userEmail={userEmail} />
+          <UserChrome locale={locale} />
         </div>
       </div>
     </header>
